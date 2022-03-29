@@ -14,15 +14,15 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=alert_status)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
 
 
-# rapiddweller 'Benerator'
+# rapiddweller BENERATOR
 
-[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to
+**[rapiddweller Benerator](https://www.benerator.de)** is a software solution to
 **generate**, **obfuscate** (**anonymize** / **pseudonymize**) and **migrate** data for development,
 testing and training purposes.
 
 ## Summary
 
-[rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, 
+**[rapiddweller Benerator](https://www.benerator.de)** allows creating realistic and valid high-volume test data, 
 used for testing (unit/integration/load), training and showcase setup.
 
 ###Generate data synthetically
@@ -37,17 +37,19 @@ Stay GDPR compliant with your data and protect the privacy of your customers.
 anonymize sensitive data for BI, test, development or training purposes
 Combine data from various sources (subsetting) and keep the data integrity
 
-###Migrate data
+### Migrate data
 Migrate and transform your data in multisystem landscapes.
 Reuse your testing data models to migrate production environments.
 Keep your data consistent and reliable in a microsystem architecture
 
 
-###requirements
+### Requirements
 
-rapiddweller 'Benerator' is built for Java 11.
+**rapiddweller Benerator** is built for Java 11.
 
-If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
+!!! note
+
+    If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
 
 ## Preface of this manual
 
@@ -67,15 +69,15 @@ detailed use cases to ease your start into more complex scenarios.
 
 Since you can do quite a lot of different things with Benerator but surely are interested in just a part of it, here's some guidance:
 
-**'[Goals and Features](introduction_to_benerator.md)'**, introduces you to the goals and features of Benerator. 
+**[Goals and Features](introduction_to_benerator.md)**, introduces you to the goals and features of Benerator. 
 
 Find advise on how to install a binary distribution and how to get
-the sources and set up an IntelliJ/Eclipse project for using, debugging, and customizing Benerator in **'[Installation](installation.md)'**.
+the sources and set up an IntelliJ/Eclipse project for using, debugging, and customizing Benerator in **[Installation](installation.md)**.
 
-**'[Data Generation Concepts](data_generation_concepts.md)'**, **'[Descriptor File Format](quick_tour_through_the_descriptor_file_format.md)'** and **'[Advanced Topics](advanced_topics.md)'** then provide you with a structured and complete introduction
+**[Data Generation Concepts](data_generation_concepts.md)**, **[Descriptor File Format](quick_tour_through_the_descriptor_file_format.md)** and **[Advanced Topics](advanced_topics.md)** then provide you with a structured and complete introduction
 into the Benerator descriptor file setup.
 
-Benerator supports a multitude of service provider interfaces (SPIs). It comes along with some implementations for specific business domains (**'
-[Domains](domains.md)'**) and general-purpose classes in **'[Component Reference](component_reference.md)'**.
+Benerator supports a multitude of service provider interfaces (SPIs). It comes along with some implementations for specific business domains 
+(**[Domains](domains.md)**) and general-purpose classes in **[Component Reference](component_reference.md)**.
 
-Finally, you are instructed how to write custom SPI implementations in **'[Extending Benerator](extending_benerator.md)'**.
+Finally, you are instructed how to write custom SPI implementations in **[Extending Benerator](extending_benerator.md)**.

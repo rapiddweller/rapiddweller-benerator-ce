@@ -65,7 +65,7 @@ For nested XML elements use the following consumer:
 A consumer which is more powerful than the DbUnitEntityExporter: 
 It renders each simple-type entity attribute as an XML attribute 
 and each sub-entity as a nested XML element.
-See the '[Component Reference](component_reference.md)' for more information.
+See the [Component Reference](component_reference.md) for more information.
 
 The example shows how to nest generation configuration:
 
@@ -367,6 +367,7 @@ You can import settings from properties files by placing `<include>`s in the sch
 
 
 ### Current Limitations
+
 The current XML schema limitations are:
 
 - No support for recursion of the same element type, e.g. categories containing other categories
@@ -381,12 +382,12 @@ The current XML schema limitations are:
 ## Conclusion
 
 Almost the full feature set of Benerator descriptor files is available for XML Schema-based file generation. 
-If you know the Benerator descriptor file syntax well, it is a straightforward and relatively simple process 
+If you know the [Benerator descriptor file](quick_tour_through_the_descriptor_file_format.md) syntax well, it is a straightforward and relatively simple process 
 to annotate XML Schema files. 
 
 However, if you just need to export XML-formatted data and write your own XML parser for importing the data 
-somewhere else, you might prefer to use the DbUnitEntityExporter (flat structure) or 
-XMLEntityExporter (hierarchical structure), possibly in combination with an XSL transformation.
+somewhere else, you might prefer to use the [DbUnitEntityExporter](component_reference.md#dbunitentityexporter) (flat structure) or 
+[XMLEntityExporter](component_reference.md#xmlentityexporter) (hierarchical structure), possibly in combination with an XSL transformation.
 
 You can as well combine the approaches: Annotating the XML Schema with Benerator descriptors and using its 
-internal type definition in a Benerator setup with an XMLEntityExporter.
+internal type definition in a Benerator setup with an [XMLEntityExporter](component_reference.md#xmlentityexporter).

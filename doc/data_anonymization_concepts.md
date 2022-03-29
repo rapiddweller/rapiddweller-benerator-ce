@@ -4,7 +4,7 @@
 
 The approach for anonymizing (also obfuscating) production data is to `<iterate>` over existing data and
 overwrite data fields with privacy concerns making use of all the features you learned
-in '[Data Generation Concepts](data_generation_concepts.md)'.
+in [Data Generation Concepts](data_generation_concepts.md).
 
 ### Prototype-based anonymization
 
@@ -14,12 +14,12 @@ prototypes that are generated or imported from another source. Benerator comes w
 prototype generators for different domains, and you can easily set up custom prototype-based anonymization approaches.
 
 When importing data for functional and performance testing, you may need to add
-a '[Data Postprocessing Stage](data_generation_concepts.md#data-postprocessing-stage)'.
+a [Data Postprocessing Stage](data_generation_concepts.md#data-postprocessing-stage).
 
 In the following example, customers are imported from a database table in a production database (prod_db),
 anonymized and exported to a test database (test_db). All attributes that are not overwritten, will be exported as is.
 Since customer names and birthdates need to be anonymized, a prototype generator
-('[PersonGenerator](domains.md#persongenerator)') is used to generate prototypes (named person)
+([PersonGenerator](domains.md#persongenerator)) is used to generate prototypes (named person)
 whose attributes are used to overwrite production customer attributes:
 
 ```xml
@@ -227,8 +227,10 @@ Then your report may look like this (when combined with field reduction):
 
 Which approach performs better is heavily dependent on the properties of your individual data structures.
 
-A rule of thumb: For projects with large data structures, the fields restriction approach performs better,
-for projects with smaller data structures the sampling approach.
+!!! tip
+
+    A rule of thumb: For projects with large data structures, the fields restriction approach performs better,
+    for projects with smaller data structures the sampling approach.
 
 A non-representative example project with large data objects of which only a small number of fields 
 needed to be anonymized, exhibited the following performance:
@@ -241,17 +243,20 @@ needed to be anonymized, exhibited the following performance:
 | Restricted fields tracking         |     65 ME/h |
 | Restricted fields and 10% samples  |     75 ME/h |
 
-ME/h stands for a million entities per hour.
+!!! note
+
+    ME/h stands for a million entities per hour.
 
 
 ## 'condition'
 
 When anonymizing or importing data, you may need to match multi-field constraints of the form 
-"if field A is set then field B must be set and field C must be null“. In many cases, 
+__"if field A is set then field B must be set and field C must be null“__. In many cases, 
 an easy solution is to import data, mutate only non-null fields and leave null-valued fields 
 as they are. 
 
-A shorter syntax element to do so is the ```condition``` attribute. 
+A shorter syntax element to do so is the `condition` attribute. 
+
 It contains a condition and when added to a component generator, the generator is only
 applied if the condition resolves to true:
 

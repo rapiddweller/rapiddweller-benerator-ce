@@ -7,7 +7,14 @@ Download Benerator from:
 [https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/)
 
 You should download the most recent version of the rapiddweller-benerator-dist archive from the download page, e.g.
-_rapiddweller-benerator-ce-1.3.0-jdk-11-dist.zip_ .
+_rapiddweller-benerator-ce-2.0.0-jdk-11-dist.zip_ .
+
+!!! warning
+
+      We highly recommend downloading a prebuild binary from our release tags as above to ease your start. 
+      If you clone our GitHub repository, there are no binaries included and you need to build benerator yourself. 
+      Building benerator requires a proper java/maven setup on your system. Learn more below 
+      **[Development Quick Start](installation.md#development-quick-start-advanced)**.
 
 ## Unzip Benerator
 
@@ -77,12 +84,65 @@ On any OS, open a console window (shell,cmd or powershell) and type ...
 ```shell
 $ benerator -–version
 
-Benerator 2.0.0-jdk-11 build 1
-Java version 11.0.9
-JVM OpenJDK 64-Bit Server VM 11.0.9+11 (AdoptOpenJDK)
-OS Linux 5.9.16-050916-generic (amd64)
+Benerator Community Edition 2.1.0-jdk-11
+Java version:  11.0.11
+JVM product:   OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)
+System:        Mac OS X 10.16 x86_64
+CPU & RAM:     8 cores and 8 GB RAM, max 2 GB of RAM for this process
 ```
 </div>
 
 Benerator will then launch and print out version information about itself,
 the Java version it uses, the operating system.
+
+## Development Quick Start (Advanced)
+
+If you want to start development or use the maven project to build Benerator by yourself,
+on Linux or Mac OS X you can also try the quickstart by using the helper scripts. 
+Checkout the project from [https://github.com/rapiddweller/rapiddweller-benerator-ce/](https://github.com/rapiddweller/rapiddweller-benerator-ce/).
+
+!!! warning
+
+    Following instructions only work on Linux or Mac OS X. Scripts are not supported on Windows.
+
+!!! tip
+
+    It might be required to run the scripts with `sudo`.
+
+If you want to use the command `benerator` in your shell session, you have to execute `source script/2_setup_benerator.sh`  
+If you want to install Benerator permanently into your system, you have to modify your environment file or your `~/.profile`  
+and add ENV variable `BENERATOR_HOME` and `PATH=$BENERATOR_HOME/bin:$PATH`
+
+to execute the scripts you can do ...
+
+```term
+$ bash script/1_install_mvn_dependencies.sh
+$ source script/2_setup_benerator.sh
+$ bash script/3_execute_demos.sh
+```
+
+
+... alternatively, you can also set execute permissions like ...
+
+```term
+$ chmod +x script/1_install_mvn_dependencies.sh
+$ chmod +x script/2_setup_benerator.sh
+$ chmod +x script/3_execute_demos.sh
+```
+
+... and execute scripts like this
+
+```term
+$ .script/1_install_mvn_dependencies.sh
+$ .script/2_setup_benerator.sh
+$ .script/3_execute_demos.sh
+```
+
+- _1_install_mvn_dependencies.sh_ : This script is checking prerequisites for you, 
+  cloning all rapiddweller-benerator-ce sub-projects and installing them via maven locally.
+
+- _2_setup_benerator.sh_ : This script is building on script no. 1 and using installed dependencies and packed jar, assembling it to a
+  rapiddweller-benerator-ce.tar.gz and is setting up Benerator locally into your user home directory.
+
+- _3_execute_demos.sh_ : This script is building on script no. 2 and is using the unpacked and configured 
+   rapiddweller-benerator-ce application to execute existing demo files.

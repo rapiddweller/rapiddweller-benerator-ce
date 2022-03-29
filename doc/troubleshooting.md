@@ -78,8 +78,8 @@ Usually can fix this by choosing the right schema for your database, e.g.
 <database id="db" ... schema="PUBLIC" />
 ```
 
-If you are not sure which schema is applicable in your case, edit the logging configuration in log4j.xml (as described above) and set the category **
-`com.rapiddweller.platform.db`** to **debug**.
+If you are not sure which schema is applicable in your case, edit the logging configuration in log4j.xml (as described above) and set the category 
+**`com.rapiddweller.platform.db`** to **debug**.
 
 You will then get a list of schemas as Benerator scans the database metadata, e.g. for an Oracle system:
 
@@ -110,7 +110,7 @@ You will then get a list of schemas as Benerator scans the database metadata, e.
 
 Cross-checking this with your access information should make it easy to figure out which one is appropriate in your case.
 
-See the '[Usual Database Settings](using_relational_databases.md#usual-database-settings)'.
+See the [Usual Database Settings](using_relational_databases.md#usual-database-settings).
 
 
 ## Constraint Violations
@@ -213,7 +213,9 @@ db_catalog=main
 db_schema=Z
 ```
 
-Note: On most systems (e.g. Oracle, HSQL) no catalog needs to be specified.
+!!! note
+
+    Note: On most systems (e.g. Oracle, HSQL) no catalog needs to be specified.
 
 
 ## Method isApplicationDetached() not found in class Xyz

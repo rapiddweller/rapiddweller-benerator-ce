@@ -40,10 +40,12 @@ The following attributes are available in the `<database>` element:
 | readOnly | indicates if only read access shall be allowed in order to protect sensitive data |
 | acceptUnknownColumnTypes | If set to true, Benerator accepts exotic database column types without complaining and relies on the user to take care of the appropriate data type when generating values for the column. |
 
-**Attention**: Benerator has some built-in knowledge about the most widely used database systems and their conventions.
-So in most cases, it is sufficient to provide url, driver, user, and password. In special cases, e.g. if you want to
-access a schema that is not the default schema of your user, you may have to set schema (and possibly catalog)
-explicitly.
+!!! note
+
+    Benerator has some built-in knowledge about the most widely used database systems and their conventions.
+    So in most cases, it is sufficient to provide url, driver, user, and password. In special cases, e.g. if you want to
+    access a schema that is not the default schema of your user, you may have to set schema (and possibly catalog)
+    explicitly.
 
 ## Usual Database Settings
 
@@ -132,7 +134,7 @@ this case, you can make use of the `metaCache` facility.
 
 Two preconditions exist for using meta data caching: You need to
 
-1. configure a database repository (environment) and
+1. configure a database repository ([environment](environment_files.md)) and
 
 2. set `metaCache` to `true`
 
@@ -154,9 +156,11 @@ notices the cache file and reads it within milliseconds.
 * **Cache time out**: If the cache file is older than twelve hours, Benerator throws it away just in case. If you are
   sure that the database has not changed meanwhile, you can perform a 'touch' on the cache file.
 
-**Warning**: If you change the database structure from another client system and Benerator is configured to cache 
-metadata, there is no way to become aware of it and the old metadata cache file is used which has become obsolete. You need
-to delete the cache file manually in such cases!
+!!! warning
+
+    If you change the database structure from another client system and Benerator is configured to cache 
+    metadata, there is no way to become aware of it and the old metadata cache file is used which has become obsolete. You need
+    to delete the cache file manually in such cases!
 
 ## Executing SQL statements
 
@@ -323,9 +327,10 @@ generateWithParams(...)** method:
 
 ## Handling of common Columns
 
-In many databases, you encounter common columns like auditing information 'created_by', 'created_at', 'updated_by', '
-updated_at' or optimistic locking columns.
-See '[Default Attribute Settings](data_generation_concepts.md#default-attribute-settings)' for instructions on how to
+In many databases, you encounter common columns like auditing information `created_by`, `created_at`, `updated_by`, `
+updated_at` or optimistic locking columns.
+
+See [Default Attribute Settings](data_generation_concepts.md#default-attribute-settings) for instructions on how to
 define common default generation settings for these.
 
 ## Determining attribute values by a database query
@@ -340,19 +345,21 @@ selector the SQL query to perform:
 
 You can use **source** and selector in `<attribute>`, `<id>`, `<reference>` and `<variable>` statements.
 
-**Attention**: With this syntax, the query's result set is iterated throughout the `<generate>` loop until its end is
-reached. In the example above, a result set with the rows [1], [2], [3] will result in the user_rank values 1 for the
-first generated entry, 2, for the second and 3 for the third. After that the end of the result set is reached, the
-component signals, that it is unavailable and Benerator will terminate the generation loop. If you configured more than
-3 objects to be generated, you will get an exception that Benerator was not able to provide the requested number of data
-sets. You have the following alternatives:
+!!! warning
 
-1. Cycling through the result set again and again (`cyclic="true"`)
+    With this syntax, the query's result set is iterated throughout the `<generate>` loop until its end is
+    reached. In the example above, a result set with the rows [1], [2], [3] will result in the user_rank values 1 for the
+    first generated entry, 2, for the second and 3 for the third. After that the end of the result set is reached, the
+    component signals, that it is unavailable and Benerator will terminate the generation loop. If you configured more than
+    3 objects to be generated, you will get an exception that Benerator was not able to provide the requested number of data
+    sets. You have the following alternatives:
 
-2. Apply a distribution choose a mode for selecting elements of the result set repeatedly or randomly
+    1. Cycling through the result set again and again (`cyclic="true"`)
 
-3. If the query should be performed for each generated entity and is supposed to provide a single result, this is called
-   sub-query and is supported by a 'subQuery' attribute
+    2. Apply a distribution choose a mode for selecting elements of the result set repeatedly or randomly
+
+    3. If the query should be performed for each generated entity and is supposed to provide a single result, this is called
+       sub-query and is supported by a 'subQuery' attribute
 
 ### Cycling through query result sets
 
@@ -369,7 +376,7 @@ result set is reached:
 When using a selector in combination with **distribution**, the query's result set is processed by the selected
 distribution algorithm. Depending on the distribution, the result set may be buffered. Result set elements may be
 provided uniquely or repeatedly in an ordered or a random fashion. See the 
-'[Distributions Reference](component_reference.md#distributions)'. The most common distribution is the `random` 
+[Distributions Reference](component_reference.md#distributions). The most common distribution is the `random` 
 distribution which buffers the full result set and then provides a
 randomly chosen entry on each invocation.
 
@@ -385,8 +392,8 @@ to first generate a random value and then to impose a database query with the va
 results are valid only for the currently generated entity, and in general only one query result row is expected. You
 have a kind of „sub-query“ which is handled best by using a **subSelector**. 
 
-For example, you might offer products (
-table 'product') in different geographical regions and have a cross-reference table product_region that describes, which
+For example, you might offer products (table 'product') 
+in different geographical regions and have a cross-reference table product_region that describes, which
 products are available in which region:
 
 ```xml
@@ -399,9 +406,11 @@ products are available in which region:
 </generate>
 ```
 
-**Attention**: In the example, you need double brackets {{…}} in order to signal that **this.region** should be
-reevaluated on each invocation. When using a single bracket, the query memorizes the value of **this.region** at the
-first invocation and reuses it on each subsequent call.
+!!! warning 
+
+    In the example, you need double brackets {{…}} in order to signal that **this.region** should be
+    reevaluated on each invocation. When using a single bracket, the query memorizes the value of **this.region** at the
+    first invocation and reuses it on each subsequent call.
 
 ## Resolving Database Relations
 
@@ -506,14 +515,14 @@ Benerator does not provide an **automated** composite key handling, but you can 
 ## Prototype Queries
 
 For the general idea of prototype-based generation,
-see '[Prototype-based Data Generation](data_generation_concepts.md#prototype-based-data-generation)'. In addition to the
+see [Prototype-based Data Generation](data_generation_concepts.md#prototype-based-data-generation). In addition to the
 core features, the prototype approach is a good way to handle composite primary keys and composite foreign keys, since
 their components are available in combination.
 
 ### Prototype Queries on Entities
 
-When querying entities, you specify the database to query as **source**, the where clause of the select as selector, and
-the table which is queried as **type**. After that, you can access the results' attributes by their names:
+When querying entities, you specify the database to query as **`source`**, the where clause of the select as **`selector`**, and
+the table which is queried as **`type`**. After that, you can access the results' attributes by their names:
 
 ```xml
 
@@ -530,8 +539,10 @@ the table which is queried as **type**. After that, you can access the results' 
 </generate>
 ```
 
-When aggregating data with a general query that is not (or cannot be) mapped to a type, you can access the results'
-column values as array elements (indices are 0-based):
+!!! note
+
+    When aggregating data with a general query that is not (or cannot be) mapped to a type, you can access the results'
+    column values as array elements (indices are 0-based):
 
 ```xml
 
@@ -554,14 +565,14 @@ file `users.csv`:
 
 ```xml
 
-<iterate source="db" type="db_user" consumer="new CSVEntityConsumer('users.csv')"/>
+<iterate source="db" type="db_user" consumer="new CSVEntityExporter('users.csv')"/>
 ```
 
 You can as well select a subset to iterate:
 
 ```xml
 
-<iterate source="db" type="db_user" selector="active = 1" consumer="new CSVEntityConsumer('users.csv')"/>
+<iterate source="db" type="db_user" selector="active = 1" consumer="new CSVEntityExporter('users.csv')"/>
 ```
 
 ## Updating Database Entries
@@ -583,7 +594,7 @@ db_order_items' total_price values and write it to the db_order's total_price co
 ```
 
 The described update mechanism can also be used to anonymize production data –
-see '[Production Data Anonymization](introduction_to_benerator.md#production-data-anonymization)'. For transferring user
+see [Production Data Anonymization](introduction_to_benerator.md#production-data-anonymization). For transferring user
 data from a source database `sourcedb` to a target database `testdb`, you would write
 
 ```xml
@@ -606,6 +617,8 @@ If you have duplicated the database and want to anonymize the copy by updating t
 </iterate>
 ```
 
+### Overwrite output table name with inserter
+
 If you want to read data from one table, anonymize it and write it to a different table in the same database, you can
 use a special inserter:
 
@@ -617,6 +630,15 @@ use a special inserter:
 
 </iterate>
 ```
+
+!!! note
+
+    db.inserter() is the only way to overwrite the target table name for the consumer. 
+    Otherwise, Benerator will always take the type as name and assumes both source and target 
+    table have the same name. 
+
+    Using db.inserter() might also be helpful for creating staging tables 
+    from multiple sources and persisting these in e.g. H2 databases. 
 
 ## Controlling Transactions
 
@@ -630,7 +652,7 @@ tasks, `pageSize="1000"` is a reasonable setting:
 <generate type="user" count="1000000" pageSize="1000" consumer="db"/>
 ```
 
-For further hints on improving performance, refer to the '[Performance](performance_tuning.md)' section.
+For further hints on improving performance, refer to the [Performance](performance_tuning.md) section.
 
 If you are nesting creation loops, you can set the transaction control for each level separately:
 
@@ -984,7 +1006,7 @@ mechanism is getting the foreign keys from your actual scope ...
 
 **schema1** in this case. It contains one foreign key into a foreign schema ('db_product') , based on this meta
 information, Benerator decides what else is necessary to import into your scope. In this case it would be **schema3**.
-_The flag includeTable="#all" is not necessary anymore!_
+_The flag `includeTable="#all"` is not necessary anymore!_
 
 #### Known issue
 

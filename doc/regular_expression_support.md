@@ -94,12 +94,12 @@ X|Y 	Either X or Y
 ## Frequently Asked Questions
 
 For generating characters which appear in your language, but not in English (like German umlauts), you can use their unicode representation (e.g.
-\u00FC for 'ü').
+`\u00FC` for `ü`).
 
 Different implementations of regular expression parsers exist and many have slight differences. So, if you take a regular expression that worked on
 one parser and run it on another one, you may get an error message. Benerator users that do not construct a regular expression by themselves, but
 simply take on 'from the internet' observe the same effect: The most frequent fault is if someone wants to generate a character that has a special
-meaning in a regular expression and does not escape it with a backslash, e.g. `\., \\, \-, \|, \[, \], \{, \}, …`
+meaning in a regular expression and does not escape it with a backslash, e.g. `\.`, `\\`, `\-`, `\|`, `\[`, `\]`, `\{`, `\}`, `…`
 
 An example: Some regex parsers recognize that the expression `[A-]X` could resolve to `AX` or `A-`. While others (like Benerator's parser) diagnose a
 malformed character class (a missing character behind the minus) and report an error. You can resolve this by escaping the minus sign: `[A\-]X`.
