@@ -184,7 +184,7 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <execute> -------------------------------------------------------------------------------
 
-  public static final String SYN_EXECUTE               = "BEN-0300";
+  public static final String SYN_EXECUTE_TEXT          = "BEN-0300";
   public static final String SYN_EXECUTE_ILLEGAL_ATTR  = "BEN-0301";
   public static final String SYN_EXECUTE_URI           = "BEN-0302";
   public static final String SYN_EXECUTE_ENCODING      = "BEN-0303";
@@ -198,18 +198,20 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <evaluate> ------------------------------------------------------------------------------
 
-  public static final String SYN_EVALUATE            = "BEN-0320";
-  public static final String SYN_EVALUATE_URI        = "BEN-0321";
-  public static final String SYN_EVALUATE_ENCODING   = "BEN-0322";
-  public static final String SYN_EVALUATE_TARGET     = "BEN-0323";
-  public static final String SYN_EVALUATE_SEPARATOR  = "BEN-0324";
-  public static final String SYN_EVALUATE_TYPE       = "BEN-0325";
-  public static final String SYN_EVALUATE_SHELL      = "BEN-0326";
-  public static final String SYN_EVALUATE_ON_ERROR   = "BEN-0327";
-  public static final String SYN_EVALUATE_OPTIMIZE   = "BEN-0328";
-  public static final String SYN_EVALUATE_INVALIDATE = "BEN-0329";
-  public static final String SYN_EVALUATE_ID         = "BEN-0330";
-  public static final String SYN_EVALUATE_ASSERT     = "BEN-0331";
+  public static final String SYN_EVALUATE_TEXT         = "BEN-0320";
+  public static final String SYN_EVALUATE_ILLEGAL_ATTR = "BEN-0321";
+  public static final String SYN_EVALUATE_URI          = "BEN-0322";
+  public static final String SYN_EVALUATE_ENCODING     = "BEN-0323";
+  public static final String SYN_EVALUATE_TARGET       = "BEN-0324";
+  public static final String SYN_EVALUATE_SEPARATOR    = "BEN-0325";
+  public static final String SYN_EVALUATE_TYPE         = "BEN-0326";
+  public static final String SYN_EVALUATE_SHELL        = "BEN-0327";
+  public static final String SYN_EVALUATE_ON_ERROR     = "BEN-0328";
+  public static final String SYN_EVALUATE_OPTIMIZE     = "BEN-0329";
+  public static final String SYN_EVALUATE_INVALIDATE   = "BEN-0330";
+  public static final String SYN_EVALUATE_ID           = "BEN-0331";
+  public static final String SYN_EVALUATE_ASSERT       = "BEN-0332";
+  public static final String SYN_EVALUATE_RESULT       = "BEN-0333";
 
   // Syntax Errors regarding <error> ---------------------------------------------------------------------------------
 

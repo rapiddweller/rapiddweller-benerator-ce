@@ -60,7 +60,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
   @Test
   public void testInlineJavaScript() {
     EvaluateStatement stmt = new EvaluateStatement(
-        true, constant("message"), constant("'Hello World'"), null, null,
+        true, "message", constant("'Hello World'"), null, null,
         null, null, null, constant("fatal"), constant(Encodings.UTF_8),
         constant(false), null, null);
     stmt.execute(context);
@@ -70,11 +70,11 @@ public class EvaluateStatementTest extends AbstractStatementTest {
   @Test
   public void testUriMapping() {
     EvaluateStatement stmt = new EvaluateStatement(
-        true, constant("message"), null, constant("/com/rapiddweller/benerator/engine/statement/HelloWorld.js"),
+        true, "message", null, constant("/com/rapiddweller/benerator/engine/statement/HelloWorld.js"),
         null, null, null, null, constant("fatal"),
         constant(Encodings.UTF_8), constant(false), null, null);
     stmt.execute(context);
-    assertEquals(context.get("message"), "Hello World");
+    assertEquals("Hello World", context.get("message"));
   }
 
   @Test
@@ -118,7 +118,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     StSys stSys = new StSys();
     Expression<StSys> stSysEx = ExpressionUtil.constant(stSys);
     EvaluateStatement stmt = new EvaluateStatement(
-        true, constant("message"), constant("HelloHi"), null,
+        true, "message", constant("HelloHi"), null,
         null, stSysEx, null, null, constant("fatal"),
         constant(Encodings.UTF_8), constant(false), null, null);
     stmt.execute(context);
@@ -128,7 +128,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
   @Test(expected = OperationFailed.class)
   public void testAssertFailed() {
     DefaultBeneratorContext context = new DefaultBeneratorContext();
-    EvaluateStatement s = new EvaluateStatement(true, null, new ConstantExpression<String>("1"),
+    EvaluateStatement s = new EvaluateStatement(true, null, new ConstantExpression<>("1"),
         null, null, null, null,
         null, new ConstantExpression<>("fatal"),
         null, null, null, new ScriptExpression<>("result == 2"));
@@ -141,8 +141,8 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     String expectedResult = System.getenv("JAVA_HOME");
     assertNotNull(expectedResult);
     EvaluateStatement stmt = new EvaluateStatement(
-        true, constant("result"), constant("echo $JAVA_HOME"), null,
-        constant("shell"), null, constant(shell), null, constant("fatal"),
+        true, "result", constant("echo $JAVA_HOME"), null,
+        "shell", null, constant(shell), null, constant("fatal"),
         constant(Encodings.UTF_8), constant(false), null, null);
     stmt.execute(context);
     assertEquals(expectedResult, context.get("result"));
@@ -153,8 +153,8 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     String expectedResult = System.getenv("JAVA_HOME");
     assertNotNull(expectedResult);
     EvaluateStatement stmt = new EvaluateStatement(
-        true, constant("result"), constant("echo %JAVA_HOME%"), null,
-        constant("shell"), null, null, null, constant("fatal"),
+        true, "result", constant("echo %JAVA_HOME%"), null,
+        "shell", null, null, null, constant("fatal"),
         constant(Encodings.UTF_8), constant(false), null, null);
     stmt.execute(context);
     assertEquals(expectedResult, context.get("result"));

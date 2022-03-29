@@ -71,7 +71,9 @@ public class EvaluateStatement extends AbstractStatement {
 
   private static final Logger logger = LoggerFactory.getLogger(EvaluateStatement.class);
 
-  private static final String TYPE_SHELL = "shell";
+  public static final String TYPE_SHELL = "shell";
+  public static final String TYPE_SQL = "sql";
+  public static final String EXECUTE_SQL = "execute_sql";
 
   private static final Map<String, String> extensionMap;
 
@@ -84,10 +86,10 @@ public class EvaluateStatement extends AbstractStatement {
   }
 
   protected final boolean evaluate;
-  protected final Expression<String> idEx;
+  protected final String id;
   protected final Expression<String> textEx;
   protected final Expression<String> uriEx;
-  protected final Expression<String> typeEx;
+  protected final String type;
   protected final Expression<?> targetObjectEx;
   protected final Expression<Character> separatorEx;
   protected final Expression<String> onErrorEx;
@@ -98,15 +100,15 @@ public class EvaluateStatement extends AbstractStatement {
   protected final Expression<String> shellEx;
 
   public EvaluateStatement(
-      boolean evaluate, Expression<String> idEx, Expression<String> textEx,
-     Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx, Expression<String> shellEx,
-     Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
-     Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx) {
+      boolean evaluate, String id, Expression<String> textEx,
+      Expression<String> uriEx, String type, Expression<?> targetObjectEx, Expression<String> shellEx,
+      Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
+      Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx) {
     this.evaluate = evaluate;
-    this.idEx = idEx;
+    this.id = id;
     this.textEx = textEx;
     this.uriEx = uriEx;
-    this.typeEx = typeEx;
+    this.type = type;
     this.targetObjectEx = targetObjectEx;
     this.shellEx = shellEx;
     this.separatorEx = separatorEx;
@@ -130,11 +132,11 @@ public class EvaluateStatement extends AbstractStatement {
 
       // run
       Object result;
-      if ("sql".equals(typeValue)) {
+      if (TYPE_SQL.equals(typeValue)) {
         result = evaluateAsSql(context, onErrorValue, uriValue, targetObject, encoding, text);
       } else if (TYPE_SHELL.equals(typeValue) || !StringUtil.isEmpty(shell)) {
         result = runShell(uriValue, text, shell, onErrorValue);
-      } else if ("execute".equals(typeValue)) {
+      } else if (EXECUTE_SQL.equals(typeValue)) {
         result = ((StorageSystem) targetObject).execute(text);
       } else {
         result = evaluateAsScript(context, onErrorValue, uriValue, typeValue, text);
@@ -151,9 +153,8 @@ public class EvaluateStatement extends AbstractStatement {
   // private helpers -------------------------------------------------------------------------------------------------
 
   private void exportResultWithId(Object result, BeneratorContext context) {
-    String idValue = ExpressionUtil.evaluate(idEx, context);
-    if (idValue != null) {
-      context.setGlobal(idValue, result);
+    if (id != null) {
+      context.setGlobal(id, result);
     }
   }
 
@@ -189,7 +190,8 @@ public class EvaluateStatement extends AbstractStatement {
     return result;
   }
 
-  private Object evaluateAsScript(BeneratorContext context, String onErrorValue, String uriValue, String typeValue, String text) {
+  private Object evaluateAsScript(
+      BeneratorContext context, String onErrorValue, String uriValue, String typeValue, String text) {
     Object result;
     if (typeValue == null) {
       typeValue = context.getDefaultScript();
@@ -210,16 +212,16 @@ public class EvaluateStatement extends AbstractStatement {
   }
 
   private String evaluateType(BeneratorContext context, String uriValue, Object targetObject) {
-    String typeValue = ExpressionUtil.evaluate(typeEx, context);
-    if (typeValue == null && uriEx != null) {
+    String typeValue = type;
+    if (type == null && uriEx != null) {
       typeValue = mapExtensionOf(uriValue); // if type is not defined, derive it from the file extension
       typeValue = checkOs(uriValue, typeValue); // for shell scripts, check the OS
     }
     if (typeValue == null) {
       if (targetObject instanceof AbstractDBSystem) {
-        typeValue = "sql";
+        typeValue = TYPE_SQL;
       } else if (targetObject instanceof StorageSystem) {
-        typeValue = "execute";
+        typeValue = EXECUTE_SQL;
       }
     }
     return typeValue;
