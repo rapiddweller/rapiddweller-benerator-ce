@@ -198,7 +198,7 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
   }
 
   public ScriptException scriptEvaluationFailed(
-          String message, Throwable cause, String scriptText,TextFileLocation location) {
+          String message, Throwable cause, String scriptText, TextFileLocation location) {
     return new ScriptException(message, cause, BeneratorErrorIds.SCRIPT_FAILED, scriptText, location);
   }
 

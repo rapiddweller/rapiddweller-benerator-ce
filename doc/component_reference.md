@@ -342,9 +342,9 @@ Inverse of the integral of the probability density `f(x) = a e^{-ax} (x > 0)`, w
 
 Benerator supports two different types of converter interfaces:
 
-* com.rapiddweller.common.Converter
+* [com.rapiddweller.common.Converter](https://github.com/rapiddweller/rd-lib-common/tree/development/src/main/java/com/rapiddweller/common/converter){: target="_blank" rel="noopener" .external }
 
-* java.text.Format
+* [java.text.Format](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/Format.html){: target="_blank" rel="noopener" .external }
 
 ### Converter Setup
 
@@ -374,6 +374,8 @@ with curly brackets notation looks like:
 The following converter classes are imported by default:
 
 * **ByteArrayToBase64Converter**: Converts byte arrays to strings which are base-64-encoded
+
+* **ByteArray2StringConverter**: Converts byte arrays to strings
 
 * **ToLowerCaseConverter**: Converts strings to lowercase
 
@@ -415,6 +417,8 @@ The following converter classes are imported by default:
 * **PrintfConverter**: formats objects using a pattern in printf format
 
 * **RegexReplacer**: Uses a regular expression to replace parts of the processed strings
+
+* **String2ByteArrayConverter**: Converts Strings to ByteArrays. Might be useful for writing JSON to raw data types (BLOB, BYTEA).
 
 * **SubstringExtractor**: Extracts substrings from strings. It has the properties `from` and `to`. If `to`
   is not set, it extracts from `from` until the end. If `to` or `from` is negative, it denotes a backwards
@@ -481,9 +485,15 @@ entity[x=104]
 entity[x=99]
 ```
 
+!!! tip
+    Find out more about built-in converters in the rapiddweller 
+    [rd-lib-common repository](https://github.com/rapiddweller/rd-lib-common/tree/development/src/main/java/com/rapiddweller/common/converter){: target="_blank" rel="noopener" .external }
+    and check the [available converter classes](https://github.com/rapiddweller/rd-lib-common/tree/development/src/main/java/com/rapiddweller/common/converter){: target="_blank" rel="noopener" .external }.
+
 ### Java Formats
 
-Beware that the java.text.Format classes are not thread-safe!
+Beware that the [java.text.Format](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/Format.html) 
+classes are not thread-safe!
 
 * **SimpleDateFormat**: Uses a pattern to format dates as strings
 

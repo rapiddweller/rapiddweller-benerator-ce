@@ -30,7 +30,20 @@ import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.ExceptionUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Level;
+import com.rapiddweller.common.LogCategoriesConstants;
+import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.ShellUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.TextFileLocation;
 import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.ui.ConsolePrinter;
@@ -39,6 +52,7 @@ import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBExecutionResult;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.platform.db.AbstractDBSystem;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -60,7 +74,9 @@ public class EvaluateStatement extends AbstractStatement {
 
   private static final Logger logger = LoggerFactory.getLogger(EvaluateStatement.class);
 
-  private static final String TYPE_SHELL = "shell";
+  public static final String TYPE_SHELL = "shell";
+  public static final String TYPE_SQL = "sql";
+  public static final String EXECUTE_SQL = "execute_sql";
 
   private static final Map<String, String> extensionMap;
 
@@ -73,10 +89,10 @@ public class EvaluateStatement extends AbstractStatement {
   }
 
   protected final boolean evaluate;
-  protected final Expression<String> idEx;
+  protected final String id;
   protected final Expression<String> textEx;
   protected final Expression<String> uriEx;
-  protected final Expression<String> typeEx;
+  protected final String type;
   protected final Expression<?> targetObjectEx;
   protected final Expression<Character> separatorEx;
   protected final Expression<String> onErrorEx;
@@ -88,16 +104,16 @@ public class EvaluateStatement extends AbstractStatement {
   protected final TextFileLocation location;
 
   public EvaluateStatement(
-      boolean evaluate, Expression<String> idEx, Expression<String> textEx,
-      Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx, Expression<String> shellEx,
+      boolean evaluate, String id, Expression<String> textEx,
+      Expression<String> uriEx, String type, Expression<?> targetObjectEx, Expression<String> shellEx,
       Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
       Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx,
       TextFileLocation location) {
     this.evaluate = evaluate;
-    this.idEx = idEx;
+    this.id = id;
     this.textEx = textEx;
     this.uriEx = uriEx;
-    this.typeEx = typeEx;
+    this.type = type;
     this.targetObjectEx = targetObjectEx;
     this.shellEx = shellEx;
     this.separatorEx = separatorEx;
@@ -122,11 +138,11 @@ public class EvaluateStatement extends AbstractStatement {
 
       // run
       Object result;
-      if ("sql".equals(typeValue)) {
+      if (TYPE_SQL.equals(typeValue)) {
         result = evaluateAsSql(context, onErrorValue, uriValue, targetObject, encoding, text);
       } else if (TYPE_SHELL.equals(typeValue) || !StringUtil.isEmpty(shell)) {
         result = runShell(uriValue, text, shell, onErrorValue);
-      } else if ("execute".equals(typeValue)) {
+      } else if (EXECUTE_SQL.equals(typeValue)) {
         result = ((StorageSystem) targetObject).execute(text);
       } else {
         result = evaluateAsScript(context, onErrorValue, uriValue, typeValue, text);
@@ -143,9 +159,8 @@ public class EvaluateStatement extends AbstractStatement {
   // private helpers -------------------------------------------------------------------------------------------------
 
   private void exportResultWithId(Object result, BeneratorContext context) {
-    String idValue = ExpressionUtil.evaluate(idEx, context);
-    if (idValue != null) {
-      context.setGlobal(idValue, result);
+    if (id != null) {
+      context.setGlobal(id, result);
     }
   }
 
@@ -181,7 +196,8 @@ public class EvaluateStatement extends AbstractStatement {
     return result;
   }
 
-  private Object evaluateAsScript(BeneratorContext context, String onErrorValue, String uriValue, String typeValue, String text) {
+  private Object evaluateAsScript(
+      BeneratorContext context, String onErrorValue, String uriValue, String typeValue, String text) {
     Object result;
     if (typeValue == null) {
       typeValue = context.getDefaultScript();
@@ -202,16 +218,16 @@ public class EvaluateStatement extends AbstractStatement {
   }
 
   private String evaluateType(BeneratorContext context, String uriValue, Object targetObject) {
-    String typeValue = ExpressionUtil.evaluate(typeEx, context);
-    if (typeValue == null && uriEx != null) {
+    String typeValue = type;
+    if (type == null && uriEx != null) {
       typeValue = mapExtensionOf(uriValue); // if type is not defined, derive it from the file extension
       typeValue = checkOs(uriValue, typeValue); // for shell scripts, check the OS
     }
     if (typeValue == null) {
       if (targetObject instanceof AbstractDBSystem) {
-        typeValue = "sql";
+        typeValue = TYPE_SQL;
       } else if (targetObject instanceof StorageSystem) {
-        typeValue = "execute";
+        typeValue = EXECUTE_SQL;
       }
     }
     return typeValue;
@@ -263,7 +279,7 @@ public class EvaluateStatement extends AbstractStatement {
         return null;
       } else {
         RuntimeException e2 = BeneratorExceptionFactory.getInstance().syntaxErrorForText(
-                "Error parsing script", e, BeneratorErrorIds.SYN_EVALUATE, location);
+                "Error parsing script", e, BeneratorErrorIds.SYN_EVALUATE_TEXT, location);
         errorHandler.handleError(e2.getMessage(), e2);
         return null;
       }

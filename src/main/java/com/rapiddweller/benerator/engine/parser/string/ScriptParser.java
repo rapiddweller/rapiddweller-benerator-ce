@@ -3,6 +3,7 @@
 package com.rapiddweller.benerator.engine.parser.string;
 
 import com.rapiddweller.benerator.engine.expression.TypedScriptExpression;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.parser.AbstractParser;
 import com.rapiddweller.common.Expression;
 
@@ -22,6 +23,9 @@ public class ScriptParser<E> extends AbstractParser<Expression<E>> {
   }
 
   protected Expression<E> parseImpl(String spec) {
+    if (spec.length() == 0) {
+      throw ExceptionFactory.getInstance().syntaxErrorForText("Empty " + getDescription(), "");
+    }
     return new TypedScriptExpression<>(spec, expressionResultType);
   }
 
