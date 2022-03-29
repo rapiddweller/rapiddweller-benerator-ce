@@ -29,22 +29,38 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.expression.ScriptExpression;
+import com.rapiddweller.benerator.engine.parser.attr.EncodingAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.IdAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.OnErrorAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SeparatorAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.UriAttribute;
+import com.rapiddweller.benerator.engine.parser.string.IdParser;
+import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.parser.AbstractTypedParser;
+import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.FilePathParser;
 import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.common.TextFileLocation;
-import com.rapiddweller.common.converter.String2CharConverter;
+import com.rapiddweller.format.script.ScriptUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.common.Expression;
-import com.rapiddweller.script.expression.ConvertingExpression;
 import com.rapiddweller.script.expression.FeatureAccessExpression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses an &lt;evaluate&gt; element in a Benerator descriptor file.<br/><br/>
@@ -53,6 +69,18 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  * @since 0.6.0
  */
 public abstract class AbstractEvaluateOrExecuteParser extends AbstractBeneratorDescriptorParser {
+
+  protected final AttrInfo<String> id = new IdAttribute(null, false);
+  protected final AttrInfo<Expression<String>> uri = new UriAttribute(null, false);
+  protected final AttrInfo<String> type = new AttrInfo<>(ATT_TYPE, false, null, new TypeParser(), null);
+  protected final AttrInfo<Expression<String>> shell = new AttrInfo<>(ATT_SHELL, false, null, new ScriptableParser<>(new FilePathParser("shell", false)));
+  protected final AttrInfo<String> target = new AttrInfo<>(ATT_TARGET, false, null, new IdParser());
+  protected final AttrInfo<Expression<Character>> separator = new SeparatorAttribute(null, ';');
+  protected final AttrInfo<Expression<String>> onError = new OnErrorAttribute(null);
+  protected final AttrInfo<Expression<String>> encoding = new EncodingAttribute(null);
+  protected final AttrInfo<Expression<Boolean>> optimize = new AttrInfo<>(ATT_OPTIMIZE, false, null, new ScriptableParser<>(new BooleanParser()));
+  protected final AttrInfo<Expression<Boolean>> invalidate = new AttrInfo<>(ATT_INVALIDATE, false, null, new ScriptableParser<>(new BooleanParser()));
+  protected final AttrInfo<Expression<Boolean>> assertAttr = new AttrInfo<>(ATT_ASSERT, false, null, new ScriptParser<>(Boolean.class));
 
   protected AbstractEvaluateOrExecuteParser(String elementName, AttrInfoSupport attrSupport, Class<?>... supportedParentTypes) {
     super(elementName, attrSupport, supportedParentTypes);
@@ -72,20 +100,65 @@ public abstract class AbstractEvaluateOrExecuteParser extends AbstractBeneratorD
       XMLAssert.assertAttributeIsNotSet(ATT_ID, element, BeneratorErrorIds.SYN_EXECUTE_ILLEGAL_ATTR);
       XMLAssert.assertAttributeIsNotSet(ATT_ASSERT, element, BeneratorErrorIds.SYN_EXECUTE_ILLEGAL_ATTR);
     }
-    Expression<String> id = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_ID, element);
-    Expression<String> text = new StringExpression(parseScriptableElementText(element, false));
-    Expression<String> uri = parseScriptableStringAttribute(ATT_URI, element);
-    Expression<String> type = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_TYPE, element);
-    Expression<?> targetObject = new FeatureAccessExpression<>(element.getAttribute(ATT_TARGET));
-    Expression<String> shell = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_SHELL, element);
-    Expression<Character> separator = new ConvertingExpression<>(parseScriptableStringAttribute(ATT_SEPARATOR, element), new String2CharConverter());
-    Expression<String> onError = parseScriptableStringAttribute(ATT_ON_ERROR, element);
-    Expression<String> encoding = parseScriptableStringAttribute(ATT_ENCODING, element);
-    Expression<Boolean> optimize = parseBooleanExpressionAttribute(ATT_OPTIMIZE, element, false);
-    Expression<Boolean> invalidate = parseBooleanExpressionAttribute(ATT_INVALIDATE, element, null);
-    Expression<?> assertion = new ScriptExpression<>(element.getAttribute(ATT_ASSERT));
+    String idVal = id.parse(element);
+    Expression<String> uriEx = uri.parse(element);
+    String typeVal = type.parse(element);
+    String targetSpec = target.parse(element);
+    Expression<?> targetEx = (targetSpec != null ? new FeatureAccessExpression<>(targetSpec) : null);
+    Expression<String> shellEx = shell.parse(element);
+    Expression<Character> separatorEx = separator.parse(element);
+    Expression<String> onErrorEx = onError.parse(element);
+    Expression<String> encodingEx = encoding.parse(element);
+    Expression<Boolean> optimizeEx = optimize.parse(element);
+    Expression<Boolean> invalidateEx = invalidate.parse(element);
+    Expression<?> assertionEx = assertAttr.parse(element);
+    Expression<String> textEx = new StringExpression(parseScriptableElementText(element, false));
     TextFileLocation location = TextFileLocation.of(element);
-    return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, shell, separator, onError, encoding, optimize, invalidate, assertion, location);
+    return new EvaluateStatement(evaluate, idVal, textEx, uriEx, typeVal, targetEx, shellEx, separatorEx, onErrorEx,
+        encodingEx, optimizeEx, invalidateEx, assertionEx, location);
+  }
+
+  static class TypeParser extends AbstractTypedParser<String> {
+
+    private final Set<String> supportedTypes;
+
+    protected TypeParser() {
+      super("type", String.class);
+      this.supportedTypes = new HashSet<>();
+      this.supportedTypes.add(EvaluateStatement.TYPE_SHELL);
+      this.supportedTypes.add(EvaluateStatement.TYPE_SQL);
+      this.supportedTypes.addAll(ScriptUtil.getFactoryIds());
+    }
+
+    @Override
+    protected String parseImpl(String spec) {
+      if (spec != null && !supportedTypes.contains(spec)) {
+        String help = "Choose one of these: " + CollectionUtil.formatCommaSeparatedList(supportedTypes, null);
+        throw ExceptionFactory.getInstance().illegalArgument(
+            null,
+            null, BeneratorErrorIds.SYN_EVALUATE_TYPE).withHelp(help);
+      }
+      return spec;
+    }
+  }
+
+  class ElementValidator implements Validator<Element> {
+
+    private final String errorId;
+
+    public ElementValidator(String errorId) {
+      this.errorId = errorId;
+    }
+
+    @Override
+    public boolean valid(Element element) {
+      if (StringUtil.isEmpty(element.getTextContent()) && uri.parse(element) == null) {
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "The script to execute must either be specified with a 'url' attribute or as XML element content",
+            null, errorId, element);
+      }
+      return true;
+    }
   }
 
 }

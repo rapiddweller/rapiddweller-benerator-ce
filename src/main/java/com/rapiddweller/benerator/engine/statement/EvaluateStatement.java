@@ -279,7 +279,7 @@ public class EvaluateStatement extends AbstractStatement {
         return null;
       } else {
         RuntimeException e2 = BeneratorExceptionFactory.getInstance().syntaxErrorForText(
-                "Error parsing script", e, BeneratorErrorIds.SYN_EVALUATE, location);
+                "Error parsing script", e, BeneratorErrorIds.SYN_EVALUATE_TEXT, location);
         errorHandler.handleError(e2.getMessage(), e2);
         return null;
       }
