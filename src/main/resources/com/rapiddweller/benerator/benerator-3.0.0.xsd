@@ -228,7 +228,7 @@
                 <xs:attribute name="shell" type="xs:string"/>
                 <xs:attribute name="onError" type="errorhandler-type"/>
                 <xs:attribute name="optimize" type="xs:string"/>
-                <xs:attribute name="INVALIDATE" type="xs:boolean"/>
+                <xs:attribute name="invalidate" type="xs:boolean"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

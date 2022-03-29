@@ -5,6 +5,7 @@ package com.rapiddweller.benerator.engine.parser.string;
 import com.rapiddweller.benerator.script.BeneratorScriptFactory;
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.exception.ScriptException;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.parser.Parser;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.common.Expression;
@@ -13,7 +14,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
 /**
@@ -65,16 +65,14 @@ public class ScriptParserTest {
     assertThrows(ScriptException.class, () -> expression.evaluate(context));
   }
 
-  @Test
+  @Test(expected = SyntaxError.class)
   public void testEmpty() {
-    Expression<Integer> expression = p.parse("");
-    assertNull(expression.evaluate(new DefaultContext()));
+    p.parse("");
   }
 
-  @Test
+  @Test(expected = SyntaxError.class)
   public void testNull() {
-    Expression<Integer> expression = p.parse(null);
-    assertNull(expression.evaluate(new DefaultContext()));
+    p.parse(null);
   }
 
 }
