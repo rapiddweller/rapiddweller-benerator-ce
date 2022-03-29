@@ -20,6 +20,7 @@ public class GlobalErrorHandlerParser extends AbstractTypedParser<ErrorHandler> 
   private static final Map<String, ErrorHandler> handlers = new HashMap<>();
 
   static {
+    createErrorHandler(Level.ignore);
     createErrorHandler(Level.trace);
     createErrorHandler(Level.debug);
     createErrorHandler(Level.info);
