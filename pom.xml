@@ -142,7 +142,7 @@
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
         <dependency_xml-apis.version>2.0.2</dependency_xml-apis.version>
         <dependency_slf4j.version>1.7.36</dependency_slf4j.version>
-        <dependency_log4j.version>2.17.0</dependency_log4j.version>
+        <dependency_log4j.version>2.17.2</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scriptengine_freemarker.version>2.3.31</scriptengine_freemarker.version>
         <scriptengine_graalvm.version>21.3.0</scriptengine_graalvm.version>
