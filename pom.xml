@@ -133,7 +133,7 @@
         <database_icu4j.version>69.1</database_icu4j.version>
         <database_jaybird.version>4.0.5.java11</database_jaybird.version>
         <database_mssqldb.version>9.4.0.jre11</database_mssqldb.version>
-        <database_mysql-connector-java.version>8.0.27</database_mysql-connector-java.version>
+        <database_mysql-connector-java.version>8.0.28</database_mysql-connector-java.version>
         <database_oracle.version>21.3.0.0</database_oracle.version>
         <database_postgresql.version>42.3.0</database_postgresql.version>
         <database_mariadb-java-client.version>3.0.4</database_mariadb-java-client.version>
@@ -535,7 +535,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.1</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
