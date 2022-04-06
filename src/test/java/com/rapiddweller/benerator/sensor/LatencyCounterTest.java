@@ -18,11 +18,13 @@ import com.rapiddweller.common.ThreadUtil;
 import com.rapiddweller.common.exception.IllegalOperationError;
 import com.rapiddweller.common.exception.ProgrammerStateError;
 import com.rapiddweller.common.ui.ConsolePrinter;
+import org.junit.Assume;
 import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import static com.rapiddweller.common.SystemInfo.isLinux;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -148,6 +150,7 @@ public class LatencyCounterTest {
 
 	@Test
 	public void testPrintSummary() {
+		Assume.assumeTrue(isLinux());
 		LatencyCounter counter = new LatencyCounter("test");
 		counter.start();
 		for (int i = 10; i <= 13; i++)
