@@ -31,14 +31,12 @@ import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.converter.ConverterManager;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.IOException;
 
 import static com.rapiddweller.benerator.main.Benerator.main;
+import static com.rapiddweller.common.SystemInfo.isLinux;
 
 /**
  * Integration test for Benerator's Demo Files.<br/><br/>
@@ -138,6 +136,7 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
    */
   @Test
   public void demoFilesCreateCSV() {
+    Assume.assumeTrue(isLinux());
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_csv.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
