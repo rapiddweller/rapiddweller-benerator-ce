@@ -9,12 +9,14 @@ import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.common.exception.ExitCodes;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 
+import static com.rapiddweller.common.SystemInfo.isLinux;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -169,6 +171,7 @@ public class BeneratorErrorIdIntegrationTest {
 
   @Test
   public void test_0111_syn_attr_ill_segment() {
+    Assume.assumeTrue(isLinux());
     BeneratorResult result = runFile("test_0111_syn_attr_ill_segment.ben.xml");
     assertResult(BeneratorErrorIds.SEGMENT_NOT_FOUND,
         "Segment not found: 'none' in 'data.xls'",
@@ -179,6 +182,7 @@ public class BeneratorErrorIdIntegrationTest {
 
   @Test
   public void test_0130_file_not_found_csv() {
+    Assume.assumeTrue(isLinux());
     BeneratorResult result = runFile("test_0130_file_not_found_csv.ben.xml");
     assertResult(BeneratorErrorIds.FILE_REF_NOT_FOUND, "File not found: 'nonexistent.csv'.",
         ExitCodes.FILE_NOT_FOUND, result);
@@ -186,6 +190,7 @@ public class BeneratorErrorIdIntegrationTest {
 
   @Test
   public void test_0130_file_not_found_xls() {
+    Assume.assumeTrue(isLinux());
     BeneratorResult result = runFile("test_0130_file_not_found_xls.ben.xml");
     assertResult(BeneratorErrorIds.FILE_REF_NOT_FOUND, "File not found: 'nonexistent.xls'.",
         ExitCodes.FILE_NOT_FOUND, result);

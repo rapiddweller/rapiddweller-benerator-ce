@@ -30,89 +30,47 @@ import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.exception.ScriptException;
 import com.rapiddweller.format.script.Script;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.platform.map.Entity2MapConverter;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Value;
-import org.graalvm.polyglot.proxy.ProxyObject;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Map;
 
 /**
  * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.<br/><br/>
  * Created at 30.12.2020
+ *
  * @author Alexander Kell
  * @since 1.1.0
  */
 public class GraalScript implements Script {
+    static final PolyglotContext globalPolyglotCtx = new PolyglotContext();
+    private final String text;
+    private final String language;
 
-  private static final org.graalvm.polyglot.Context polyglotCtx =
-      org.graalvm.polyglot.Context
-          .newBuilder("js", "python")
-          .allowAllAccess(true).build();
-  private static final Logger logger = LoggerFactory.getLogger(GraalScript.class);
-  private final String text;
-  private final String language;
-
-  public GraalScript(String text, Engine scriptEngine, String languageId) {
-    Assert.notEmpty(text, "text");
-    Assert.notNull(scriptEngine, "engine");
-    this.text = text;
-    this.language = languageId;
-  }
-
-  @Override
-  public Object evaluate(Context context) throws ScriptException {
-    migrateBeneratorContext2GraalVM(context);
-
-    Value returnValue = polyglotCtx.eval(this.language, text);
-    GraalValueConverter converter = new GraalValueConverter();
-    return converter.convert(returnValue);
-  }
-
-  private void migrateBeneratorContext2GraalVM(Context context) {
-    // add benerator context to graalvm script context
-    Object valueType;
-    try {
-      for (Map.Entry<String, Object> entry : context.entrySet()) {
-        try {
-          valueType = entry.getValue() != null ? entry.getValue().getClass() : null;
-        } catch (NullPointerException e) {
-          logger.error("Key {} produced NullPointerException, this should not happen!", entry.getKey());
-          continue;
-        }
-        if (valueType == null) {
-          continue;
-        }
-        // check if Entity Object
-        if (Entity.class.equals(valueType)) {
-          logger.debug("Entity found : {}", entry.getKey());
-          Map<String, Object> map = new Entity2MapConverter().convert((Entity) entry.getValue());
-          // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
-          // TODO: might should create an Entity2ProxyObjectConverter in 2.1.0
-          ProxyObject proxy = ProxyObject.fromMap(map);
-          polyglotCtx.getBindings(this.language).putMember(entry.getKey(), proxy);
-        } else {
-          logger.debug("{} found : {}", valueType.getClass(), entry.getKey());
-          polyglotCtx.getBindings(this.language).putMember(entry.getKey(), entry.getValue());
-        }
-      }
-    } catch (NullPointerException e) {
-      logger.error("Context {} was NULL, this should not happen!", context);
+    public GraalScript(String text, Engine scriptEngine, String languageId) {
+        Assert.notEmpty(text, "text");
+        Assert.notNull(scriptEngine, "engine");
+        this.text = text;
+        this.language = languageId;
     }
-  }
 
-  @Override
-  public void execute(Context context, Writer out) throws ScriptException, IOException {
-    out.write(String.valueOf(evaluate(context)));
-  }
+    @Override
+    public Object evaluate(Context context) throws ScriptException {
+        Value returnValue = globalPolyglotCtx.evalScript(context, text, language);
+        GraalValueConverter converter = new GraalValueConverter();
+        return converter.convert(returnValue);
+    }
 
-  @Override
-  public String toString() {
-    return text;
-  }
+    @Override
+    public void execute(Context context, Writer out) throws ScriptException, IOException {
+        out.write(String.valueOf(evaluate(context)));
+    }
+
+    @Override
+    public String toString() {
+        return text;
+    }
 }
+
+

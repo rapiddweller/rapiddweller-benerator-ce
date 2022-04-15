@@ -128,22 +128,22 @@
         <_rd_jdbacl_version>1.1.12-jdk-11-SNAPSHOT</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11-SNAPSHOT</_rd_script_version>
         <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
-        <database_h2.version>1.4.200</database_h2.version>
+        <database_h2.version>2.1.210</database_h2.version>
         <database_hsqldb.version>1.8.0.10</database_hsqldb.version>
         <mongodb.version>3.12.10</mongodb.version>
         <database_icu4j.version>69.1</database_icu4j.version>
-        <database_jaybird.version>4.0.4.java11</database_jaybird.version>
-        <database_mssqldb.version>9.4.0.jre11</database_mssqldb.version>
-        <database_mysql-connector-java.version>8.0.27</database_mysql-connector-java.version>
+        <database_jaybird.version>4.0.5.java11</database_jaybird.version>
+        <database_mssqldb.version>9.4.1.jre11</database_mssqldb.version>
+        <database_mysql-connector-java.version>8.0.28</database_mysql-connector-java.version>
         <database_oracle.version>21.3.0.0</database_oracle.version>
-        <database_postgresql.version>42.3.0</database_postgresql.version>
-        <database_mariadb-java-client.version>2.7.4</database_mariadb-java-client.version>
+        <database_postgresql.version>42.3.3</database_postgresql.version>
+        <database_mariadb-java-client.version>3.0.4</database_mariadb-java-client.version>
         <dependency_antlr-runtime.version>3.5.2</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
         <dependency_xml-apis.version>2.0.2</dependency_xml-apis.version>
-        <dependency_slf4j.version>1.7.32</dependency_slf4j.version>
-        <dependency_log4j.version>2.17.0</dependency_log4j.version>
+        <dependency_slf4j.version>1.7.36</dependency_slf4j.version>
+        <dependency_log4j.version>2.17.2</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scriptengine_freemarker.version>2.3.31</scriptengine_freemarker.version>
         <scriptengine_graalvm.version>21.3.0</scriptengine_graalvm.version>
@@ -249,7 +249,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.12.4</version>
+            <version>4.4.0</version>
             <scope>test</scope>
         </dependency>
         <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
@@ -399,7 +399,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.8</version>
                 <executions>
                     <execution>
                         <id>before-unit-test-execution</id>
@@ -488,7 +488,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M6</version>
                 <configuration>
                     <skipTests>${skipUTs}</skipTests>
                     <useSystemClassLoader>false</useSystemClassLoader>
@@ -501,7 +501,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M6</version>
                 <configuration>
                     <includes>
                         <include>**/*ShopDemoIntegrationExtDBTest.class</include>
@@ -525,7 +525,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.2</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -542,7 +542,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.1</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -554,7 +554,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.3.2</version>
                 <configuration>
                     <doclint>none</doclint>
                     <source>${maven.compiler.source}</source>
@@ -571,7 +571,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.9.1</version>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <id>create-site</id>
@@ -596,13 +596,13 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.10.0</version>
             </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.4</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <phase>validate</phase>
@@ -628,7 +628,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M6</version>
                 <reportSets>
                     <reportSet>
                         <!-- defines aggregate unit test report -->
@@ -666,7 +666,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.8</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -745,7 +745,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.12</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
