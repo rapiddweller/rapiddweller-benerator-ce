@@ -62,6 +62,7 @@ public class DescriptorConstants {
   public static final String EL_WHILE = "while";
   public static final String EL_BEAN = "bean";
   public static final String EL_PROPERTY = "property";
+  public static final String EL_PRE_PARSE_GENERATE = "pre-parse-generate";
   public static final String EL_GENERATE = "generate";
   public static final String EL_ITERATE = "iterate";
   public static final String EL_CONSUMER = "consumer";
@@ -69,6 +70,7 @@ public class DescriptorConstants {
   public static final String EL_DEFAULT_COMPONENTS = "defaultComponents";
   public static final String EL_EVALUATE = "evaluate";
   public static final String EL_EXECUTE = "execute";
+  public static final String EL_STORAGE_SYSTEM = "storage-system";
   public static final String EL_DATABASE = "database";
   public static final String EL_MEMSTORE = "memstore";
   public static final String EL_DOMTREE = "domtree";

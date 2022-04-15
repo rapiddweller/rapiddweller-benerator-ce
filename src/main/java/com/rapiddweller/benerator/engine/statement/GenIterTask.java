@@ -70,7 +70,7 @@ public class GenIterTask implements Task, PageListener, ResourceManager, Message
 
   private BeneratorContext context;
   protected List<Statement> statements;
-  private final List<ScopedLifeCycleHolder> scopeds;
+  private final List<ScopedLifeCycleHolder> scopes;
   private Expression<Consumer> consumerExpr;
   private final AtomicBoolean initialized;
   private Consumer consumer;
@@ -85,7 +85,7 @@ public class GenIterTask implements Task, PageListener, ResourceManager, Message
     this.resourceManager = new ResourceManagerSupport();
     this.initialized = new AtomicBoolean(false);
     this.statements = new ArrayList<>();
-    this.scopeds = new ArrayList<>();
+    this.scopes = new ArrayList<>();
   }
 
 
@@ -311,7 +311,7 @@ public class GenIterTask implements Task, PageListener, ResourceManager, Message
         ScopedLifeCycleHolder holder = (ScopedLifeCycleHolder) statement;
         String scope = holder.getScope();
         if (scope == null || productName.equals(scope)) {
-          scopeds.add(holder);
+          scopes.add(holder);
         }
       } else if (statement instanceof GenIterStatement) {
         GenIterStatement subGenerate = (GenIterStatement) statement;
@@ -321,7 +321,7 @@ public class GenIterTask implements Task, PageListener, ResourceManager, Message
   }
 
   private void enqueueResets() {
-    for (ScopedLifeCycleHolder scoped : scopeds) {
+    for (ScopedLifeCycleHolder scoped : scopes) {
       scoped.setResetNeeded(true);
     }
   }

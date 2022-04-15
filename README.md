@@ -148,6 +148,7 @@ Navigate to the sources for our generated mkdocs:
 - [Maven Benerator Plugin](doc/maven_benerator_plugin.md)
 - [Extending Benerator](doc/extending_benerator.md)
 - [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
+- [NoSQL Support](doc/no_sql_support.md)
 - [Troubleshooting](doc/troubleshooting.md)
 - [Monitoring Benerator](doc/monitoring_benerator.md)
 - [Benerator Performance Tuning](doc/performance_tuning.md)
