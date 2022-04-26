@@ -137,6 +137,7 @@
         <database_oracle.version>21.3.0.0</database_oracle.version>
         <database_postgresql.version>42.3.4</database_postgresql.version>
         <database_mariadb-java-client.version>3.0.4</database_mariadb-java-client.version>
+        <mongodb.version>3.12.10</mongodb.version>
         <dependency_antlr-runtime.version>3.5.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
@@ -199,6 +200,12 @@
             <version>${database_hsqldb.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongodb.version}</version>
+        </dependency>
+
 
         <!-- rapiddweller dependencies -->
         <dependency>

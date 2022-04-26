@@ -62,6 +62,8 @@ public class DescriptorConstants {
   public static final String EL_WHILE = "while";
   public static final String EL_BEAN = "bean";
   public static final String EL_PROPERTY = "property";
+  public static final String EL_META_MODEL = "meta-model";
+  public static final String EL_PRE_PARSE_GENERATE = "pre-parse-generate";
   public static final String EL_GENERATE = "generate";
   public static final String EL_ITERATE = "iterate";
   public static final String EL_CONSUMER = "consumer";
@@ -69,6 +71,7 @@ public class DescriptorConstants {
   public static final String EL_DEFAULT_COMPONENTS = "defaultComponents";
   public static final String EL_EVALUATE = "evaluate";
   public static final String EL_EXECUTE = "execute";
+  public static final String EL_MONGO_DB = "mongodb";
   public static final String EL_DATABASE = "database";
   public static final String EL_MEMSTORE = "memstore";
   public static final String EL_DOMTREE = "domtree";
@@ -116,6 +119,10 @@ public class DescriptorConstants {
   public static final String ATT_THREADS = "threads";
   public static final String ATT_PAGESIZE = "pageSize";
   public static final String ATT_PAGER = "pager";
+  public static final String ATT_HOST = "host";
+  public static final String ATT_PORT = "port";
+  public static final String ATT_DATABASE = "database";
+  public static final String ATT_CLEAN = "clean";
 
   public static final String ATT_COUNT = "count";
   public static final String ATT_MIN_COUNT = "minCount";
