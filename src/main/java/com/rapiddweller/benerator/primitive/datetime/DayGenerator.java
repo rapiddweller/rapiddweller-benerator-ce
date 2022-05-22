@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -36,6 +36,7 @@ import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.model.data.Uniqueness;
 
 import java.util.Calendar;
@@ -112,6 +113,9 @@ public class DayGenerator extends ThreadSafeNonNullGenerator<Date> {
 
   @Override
   public synchronized void init(GeneratorContext context) {
+    if (max.before(min)) {
+      throw ExceptionFactory.getInstance().configurationError("max date is before min date");
+    }
     this.minCalendar = TimeUtil.calendar(min);
     int count = 0;
     Calendar calendar = (Calendar) minCalendar.clone();
