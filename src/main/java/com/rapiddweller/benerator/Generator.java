@@ -64,42 +64,29 @@ import java.io.Closeable;
  */
 public interface Generator<E> extends ThreadAware, Resettable, Closeable {
 
-  /**
-   * Declares the type of the objects returned by the generate() method.
-   *
-   * @return the generated type
-   */
+  /** Declares the type of the objects returned by the generate() method.
+   *  @return the generated type */
   Class<E> getGeneratedType();
 
-  /**
-   * Init.
-   *
-   * @param context the context
-   */
+  /** Initializes the Generator object.
+   *  @param context the context */
   void init(GeneratorContext context);
 
-  /**
-   * Was initialized boolean.
-   *
-   * @return the boolean
-   */
+  /** Tells if the Generator instance was initialized.
+   *  @return true if it was initialized, false otherwise. */
   boolean wasInitialized();
 
-  /**
-   * Returns an instance of the generic type E, using the {@link ProductWrapper}
-   * instance provided as argument.
-   * The wrapper may wrap a null value as a regular generator product.
-   * If the generator is not available (any more), it returns null instead of
-   * the ProductWrapper instance.
-   *
-   * @param wrapper the wrapper
-   * @return the product wrapper
+  /** Returns an instance of the generic type E, using the {@link ProductWrapper}
+   *  instance provided as argument.
+   *  The wrapper may wrap a null value as a regular generator product.
+   *  If the generator is not available (any more), it returns null instead of
+   *  the ProductWrapper instance.
+   *  @param wrapper the wrapper to receive the generated data
+   *  @return the product wrapper if generation was possible, otherwise null
    */
   ProductWrapper<E> generate(ProductWrapper<E> wrapper);
 
-  /**
-   * Closes the generator. After invocation the state is <i>unavailable</i>.
-   */
+  /** Closes the generator. After invocation the state is <i>unavailable</i>. */
   @Override
   void close();
 
