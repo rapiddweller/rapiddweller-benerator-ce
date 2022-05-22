@@ -63,7 +63,7 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
 
   @Override
   public boolean wasInitialized() {
-    return (state != GeneratorState.CREATED);
+    return (getState() != GeneratorState.CREATED);
   }
 
   @Override
@@ -76,25 +76,31 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
     this.state = GeneratorState.CLOSED;
   }
 
+  public GeneratorState getState() {
+    return state;
+  }
+
+
   // internal helpers ------------------------------------------------------------------------------------------------
 
   protected final void assertNotInitialized() {
-    if (state != GeneratorState.CREATED) {
-      if (state == GeneratorState.RUNNING) {
+    GeneratorState currentState = getState();
+    if (currentState != GeneratorState.CREATED) {
+      if (currentState == GeneratorState.RUNNING) {
         throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
             "Trying to initialize generator a 2nd time: " + this);
       } else {
         throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
-            "Trying to initialize generator in '" + state + "' state: " + this);
+            "Trying to initialize generator in '" + currentState + "' state: " + this);
       }
     }
   }
 
   protected final void assertInitialized() {
-    if (state == GeneratorState.CREATED) {
+    if (getState() == GeneratorState.CREATED) {
       throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generator has not been initialized: " + this);
     }
-    if (state == GeneratorState.CLOSED) {
+    if (getState() == GeneratorState.CLOSED) {
       throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generator has already been closed: " + this);
     }
   }
