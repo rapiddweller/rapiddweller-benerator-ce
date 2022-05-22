@@ -46,6 +46,8 @@ import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.common.Expression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +61,8 @@ import java.util.Map;
  */
 public class MemStore extends AbstractStorageSystem {
 
+  private static final Logger logger = LoggerFactory.getLogger(MemStore.class);
+
   static boolean ignoreClose = false; // for testing
 
   private final String id;
@@ -71,6 +75,8 @@ public class MemStore extends AbstractStorageSystem {
     this.entitiesByType = OrderedNameMap.createCaseInsensitiveMap();
     this.id = id;
   }
+
+  // interface -------------------------------------------------------------------------------------------------------
 
   @Override
   public String getId() {
@@ -132,11 +138,13 @@ public class MemStore extends AbstractStorageSystem {
 
   @Override
   public DataSource<?> query(String selector, boolean simplify, Context context) {
+    logger.debug("query({})", selector);
     throw BeneratorExceptionFactory.getInstance().programmerUnsupported(getClass() + " does not support query(String, Context)");
   }
 
   @Override
   public void store(Entity entity) {
+    logger.debug("Storing entity {}", entity);
     String entityType = entity.type();
     // store entity
     EntityStore entityStore = entitiesByType.computeIfAbsent(entityType, k -> createEntityStore(entity.descriptor()));
@@ -162,22 +170,15 @@ public class MemStore extends AbstractStorageSystem {
 
   @Override
   public void flush() {
+    logger.debug("flush()");
     // nothing to do for here for a MemStore
   }
 
   @Override
   public void close() {
+    logger.debug("close()");
     if (!ignoreClose) {
       entitiesByType.clear();
-    }
-  }
-
-  private EntityStore createEntityStore(ComplexTypeDescriptor type) {
-    String[] idComponentNames = type.getIdComponentNames();
-    if (ArrayUtil.isEmpty(idComponentNames)) {
-      return new UnidentifiedEntityStore(type);
-    } else {
-      return new IdEntityStore(type);
     }
   }
 
@@ -194,6 +195,17 @@ public class MemStore extends AbstractStorageSystem {
   public List<Entity> getEntities(String entityType) {
     EntityStore entityStore = entitiesByType.get(entityType);
     return (entityStore != null ? entityStore.entities() : new ArrayList<>());
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private EntityStore createEntityStore(ComplexTypeDescriptor type) {
+    String[] idComponentNames = type.getIdComponentNames();
+    if (ArrayUtil.isEmpty(idComponentNames)) {
+      return new UnidentifiedEntityStore(type);
+    } else {
+      return new IdEntityStore(type);
+    }
   }
 
 }
