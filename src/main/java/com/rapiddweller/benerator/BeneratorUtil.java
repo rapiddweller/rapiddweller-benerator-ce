@@ -64,7 +64,7 @@ public class BeneratorUtil {
   private static final Logger configLogger = LoggerFactory.getLogger(LogCategoriesConstants.CONFIG);
 
   public static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
-  public static final String EE_BENERATOR_FACTORY = "com.rapiddweller.benerator_ee.EEBeneratorFactory";
+  public static final String MT_BENERATOR_FACTORY = "com.rapiddweller.platform_ee.multithread.MTBeneratorFactory";
 
   private BeneratorUtil() {
     // private constructor to prevent instantiation
@@ -73,6 +73,15 @@ public class BeneratorUtil {
   public static boolean isEEAvailable() {
     try {
       Class.forName(EE_BENERATOR);
+      return true;
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
+  }
+
+  public static boolean isMTAvailable() {
+    try {
+      Class.forName(MT_BENERATOR_FACTORY);
       return true;
     } catch (ClassNotFoundException e) {
       return false;

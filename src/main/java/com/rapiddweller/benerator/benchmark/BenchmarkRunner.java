@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.rapiddweller.benerator.BeneratorUtil.EE_BENERATOR_FACTORY;
+import static com.rapiddweller.benerator.BeneratorUtil.MT_BENERATOR_FACTORY;
 
 /**
  * Runs all test configurations as defined in a {@link BenchmarkToolConfig}.<br/><br/>
@@ -159,7 +159,7 @@ public class BenchmarkRunner {
           filePath, (executionMode.isEe() ? "EE" : "CE"), HF.format(count), HF.pluralize(threadCount, "thread"));
     }
     if (executionMode.isEe()) {
-      BeneratorFactory.setInstance((BeneratorFactory) BeanUtil.newInstance(EE_BENERATOR_FACTORY));
+      BeneratorFactory.setInstance((BeneratorFactory) BeanUtil.newInstance(MT_BENERATOR_FACTORY));
     } else {
       BeneratorFactory.setInstance(new DefaultBeneratorFactory());
     }
