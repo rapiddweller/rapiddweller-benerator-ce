@@ -86,6 +86,8 @@ import static com.rapiddweller.model.data.SimpleTypeDescriptor.PATTERN;
  */
 public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeDescriptor> {
 
+  // singleton code --------------------------------------------------------------------------------------------------
+
   private static final SimpleTypeGeneratorFactory INSTANCE = new SimpleTypeGeneratorFactory();
 
   public static SimpleTypeGeneratorFactory getInstance() {
@@ -94,6 +96,8 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 
   protected SimpleTypeGeneratorFactory() {
   }
+
+  // methods which can be overwritten --------------------------------------------------------------------------------
 
   @Override
   protected Generator<?> createExplicitGenerator(SimpleTypeDescriptor descriptor, Uniqueness uniqueness,
@@ -123,55 +127,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     return generator;
   }
 
-  @Nullable
-  protected static Generator<?> createValuesGenerator(
-      SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
-    PrimitiveType primitiveType = descriptor.getPrimitiveType();
-    Class<?> targetType = (primitiveType != null ? primitiveType.getJavaType() : String.class);
-    String valueSpec = descriptor.getValues();
-    if (valueSpec == null) {
-      return null;
-    }
-    if ("".equals(valueSpec)) {
-      return new ConstantGenerator<>("");
-    }
-    try {
-      Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
-      return context.getGeneratorFactory().createFromWeightedLiteralList(valueSpec, targetType, distribution, uniqueness.isUnique());
-    } catch (ParseException e) {
-      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing samples: " + valueSpec, e);
-    }
-  }
-
-  protected static Generator<String> createPatternGenerator(SimpleTypeDescriptor type, Uniqueness uniqueness,
-                                                            BeneratorContext context) {
-    String pattern = type.getPattern();
-    if (pattern != null) {
-      return createStringGenerator(type, uniqueness, context);
-    } else {
-      return null;
-    }
-  }
-
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  @Nullable
-  protected static Generator<?> createConstantGenerator(SimpleTypeDescriptor descriptor, BeneratorContext context) {
-    Generator<?> generator = null;
-    // check for constant
-    String constant = descriptor.getConstant();
-    if ("".equals(constant)) {
-      generator = new ConstantGenerator<>("");
-    } else if (constant != null) {
-      Object value = LiteralParserConverter.parse(constant);
-      PrimitiveType primitiveType = descriptor.getPrimitiveType();
-      if (primitiveType != null) {
-        value = AnyConverter.convert(value, primitiveType.getJavaType());
-      }
-      generator = new ConstantGenerator(value);
-    }
-    return generator;
-  }
-
   @Override
   protected Generator<?> createHeuristicGenerator(
       SimpleTypeDescriptor descriptor, String instanceName, Uniqueness uniqueness, BeneratorContext context) {
@@ -197,10 +152,10 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       Object sourceObject = context.get(source);
       if (sourceObject instanceof StorageSystem) {
         if (!StringUtil.isEmpty(subSelector)) {
-          generator = new DataSourceGenerator(((StorageSystem) sourceObject).query(subSelector, true, context));
+          generator = createStorageSystemQueryGenerator(context, subSelector, (StorageSystem) sourceObject);
           generator = WrapperFactory.applyHeadCycler(generator);
         } else if (selector != null){
-          generator = new DataSourceGenerator(((StorageSystem) sourceObject).query(selector, true, context));
+          generator = createStorageSystemQueryGenerator(context, selector, (StorageSystem) sourceObject);
         } else {
           throw ExceptionFactory.getInstance().configurationError(
               "Referring to a simple-typed value without specifying a 'selector' or 'subSelector'");
@@ -233,6 +188,71 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       generator = distribution.applyTo(generator, uniqueness.isUnique());
     }
 
+    return generator;
+  }
+
+  protected Generator<?> createStorageSystemQueryGenerator(BeneratorContext context, String selector, StorageSystem storageSystem) {
+    return new DataSourceGenerator<>(storageSystem.query(selector, true, context));
+  }
+
+  @Override
+  protected Class<?> getGeneratedType(SimpleTypeDescriptor descriptor) {
+    PrimitiveType primitiveType = descriptor.getPrimitiveType();
+    if (primitiveType == null) {
+      throw BeneratorExceptionFactory.getInstance().configurationError("No type configured for " + descriptor.getName());
+    }
+    return primitiveType.getJavaType();
+  }
+
+
+  // methods not to override -----------------------------------------------------------------------------------------
+
+  @Nullable
+  protected static Generator<?> createValuesGenerator(
+      SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    PrimitiveType primitiveType = descriptor.getPrimitiveType();
+    Class<?> targetType = (primitiveType != null ? primitiveType.getJavaType() : String.class);
+    String valueSpec = descriptor.getValues();
+    if (valueSpec == null) {
+      return null;
+    }
+    if ("".equals(valueSpec)) {
+      return new ConstantGenerator<>("");
+    }
+    try {
+      Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
+      return context.getGeneratorFactory().createFromWeightedLiteralList(valueSpec, targetType, distribution, uniqueness.isUnique());
+    } catch (ParseException e) {
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing samples: " + valueSpec, e);
+    }
+  }
+
+  protected static Generator<String> createPatternGenerator(
+      SimpleTypeDescriptor type, Uniqueness uniqueness, BeneratorContext context) {
+    String pattern = type.getPattern();
+    if (pattern != null) {
+      return createStringGenerator(type, uniqueness, context);
+    } else {
+      return null;
+    }
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Nullable
+  protected static Generator<?> createConstantGenerator(SimpleTypeDescriptor descriptor, BeneratorContext context) {
+    Generator<?> generator = null;
+    // check for constant
+    String constant = descriptor.getConstant();
+    if ("".equals(constant)) {
+      generator = new ConstantGenerator<>("");
+    } else if (constant != null) {
+      Object value = LiteralParserConverter.parse(constant);
+      PrimitiveType primitiveType = descriptor.getPrimitiveType();
+      if (primitiveType != null) {
+        value = AnyConverter.convert(value, primitiveType.getJavaType());
+      }
+      generator = new ConstantGenerator(value);
+    }
     return generator;
   }
 
@@ -386,15 +406,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     }
   }
 
-  @Override
-  protected Class<?> getGeneratedType(SimpleTypeDescriptor descriptor) {
-    PrimitiveType primitiveType = descriptor.getPrimitiveType();
-    if (primitiveType == null) {
-      throw BeneratorExceptionFactory.getInstance().configurationError("No type configured for " + descriptor.getName());
-    }
-    return primitiveType.getJavaType();
-  }
-
   @SuppressWarnings({"unchecked", "rawtypes"})
   private Generator<?> createUnionTypeGenerator(
       UnionSimpleTypeDescriptor descriptor, BeneratorContext context) {
@@ -439,17 +450,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     return context.getGeneratorFactory().createDateGenerator(min, max, granularity, distribution);
   }
 
-  private static Generator<Character> createCharacterGenerator(
-      SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
-    String pattern = descriptor.getPattern();
-    if (pattern == null) {
-      pattern = ".";
-    }
-    Locale locale = descriptor.getLocale();
-    GeneratorFactory generatorFactory = context.getGeneratorFactory();
-    return generatorFactory.createCharacterGenerator(pattern, locale, uniqueness.isUnique());
-  }
-
   private Time parseTime(SimpleTypeDescriptor descriptor, String detailName, Time defaultTime) {
     String detail = (String) descriptor.getDeclaredDetailValue(detailName);
     try {
@@ -463,6 +463,17 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       logger.error("Error parsing date " + detail, e);
       return defaultTime;
     }
+  }
+
+  private static Generator<Character> createCharacterGenerator(
+      SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    String pattern = descriptor.getPattern();
+    if (pattern == null) {
+      pattern = ".";
+    }
+    Locale locale = descriptor.getLocale();
+    GeneratorFactory generatorFactory = context.getGeneratorFactory();
+    return generatorFactory.createCharacterGenerator(pattern, locale, uniqueness.isUnique());
   }
 
   private Date parseDate(SimpleTypeDescriptor descriptor, String detailName, Date defaultDate) {

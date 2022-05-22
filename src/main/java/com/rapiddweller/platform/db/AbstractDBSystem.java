@@ -139,9 +139,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   private boolean metaCache;
   private boolean lazy;
   private boolean acceptUnknownColumnTypes;
-  private int fetchSize;
+  protected int fetchSize;
   private OrderedNameMap<TypeDescriptor> typeDescriptors;
-  private boolean dynamicQuerySupported;
+  protected boolean dynamicQuerySupported;
   private boolean connectedBefore;
 
   protected AbstractDBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {

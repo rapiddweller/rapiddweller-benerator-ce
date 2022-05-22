@@ -27,7 +27,9 @@
 package com.rapiddweller.benerator.primitive.datetime;
 
 import com.rapiddweller.benerator.distribution.SequenceManager;
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.TimeUtil;
 import org.junit.Test;
 
@@ -42,22 +44,15 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Tests the {@link DayGenerator}.<br/><br/>
  * Created: 12.10.2010 21:31:12
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class DayGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Day generator test.
-   */
   public DayGeneratorTest() {
     super(DayGenerator.class);
   }
 
-  /**
-   * Test setup.
-   */
   @Test
   public void testSetup() {
     Date minDate = TimeUtil.date(2010, 7, 6);
@@ -73,9 +68,14 @@ public class DayGeneratorTest extends GeneratorClassTest {
     assertEquals(3, generator.dayGranularity);
   }
 
-  /**
-   * Test normal range.
-   */
+  @Test(expected = ConfigurationError.class)
+  public void testIllegalSetup() {
+    Date minDate = TimeUtil.date(2022, 3, 2);
+    Date maxDate = TimeUtil.date(2022, 3, 1);
+    DayGenerator g = new DayGenerator(minDate, maxDate, SequenceManager.STEP_SEQUENCE, false);
+    g.init(new DefaultBeneratorContext());
+  }
+
   @Test
   public void testNormalRange() {
     Date min = TimeUtil.date(2009, 2, 5);
@@ -96,9 +96,6 @@ public class DayGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test empty range.
-   */
   @Test
   public void testEmptyRange() {
     Date min = TimeUtil.date(2009, 2, 5);
@@ -112,9 +109,6 @@ public class DayGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test date distribution.
-   */
   @Test
   public void testDateDistribution() {
     Date minDate = TimeUtil.date(2010, 7, 6);
@@ -127,6 +121,21 @@ public class DayGeneratorTest extends GeneratorClassTest {
       assertNotNull("Generator unavailable after " + i + " generations", date);
       assertFalse("Generated date " + date + " is before min date: " + minDate, date.before(minDate));
       assertFalse(date.after(maxDate));
+    }
+    assertUnavailable(generator);
+  }
+
+  @Test
+  public void testIncrement() {
+    Date minDate = TimeUtil.date(2022, 3, 1);
+    Date maxDate = TimeUtil.date(2022, 3, 5);
+    DayGenerator generator = new DayGenerator(minDate, maxDate, SequenceManager.INCREMENT_SEQUENCE, false);
+    generator.init(context);
+    for (int i = 0; i < 5; i++) {
+      Date generatedDate = generator.generate();
+      assertNotNull("Generator unavailable after " + i + " generations", generatedDate);
+      Date expectedDate = TimeUtil.addDays(minDate, i);
+      assertEquals(expectedDate, generatedDate);
     }
     assertUnavailable(generator);
   }
