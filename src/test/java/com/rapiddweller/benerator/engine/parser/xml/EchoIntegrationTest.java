@@ -28,7 +28,6 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
-import com.rapiddweller.common.SystemInfo;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -67,16 +66,27 @@ public class EchoIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testScriptedMessageAttribute() {
-    EchoStatement statement = (EchoStatement) parse("<echo message='{ftl:Hello ${name}}'/>");
-    context.set("name", "Volker");
-    assertEquals("Hello Volker", statement.getExpression().evaluate(context));
+    checkNameResolution("<echo message='{ftl:Hello ${name}}'/>");
+  }
+
+  @Test
+  public void testScriptedMessageAttributeWithLangAttribute() {
+    checkNameResolution("<echo lang='ftl' message='Hello ${name}'/>");
   }
 
   @Test
   public void testScriptedMessageElementText() {
-    EchoStatement statement = (EchoStatement) parse("<echo>{ftl:Hello ${name}}</echo>");
-    context.set("name", "Volker");
-    assertEquals("Hello Volker", statement.getExpression().evaluate(context));
+    checkNameResolution("<echo>{ftl:Hello ${name}}</echo>");
+  }
+
+  @Test
+  public void testScriptedMessageElementTextWithLangAttribute() {
+    checkNameResolution("<echo lang='ftl'>Hello ${name}</echo>");
+  }
+
+  @Test
+  public void testScriptedMessageElementTextWithLineBreak() {
+    checkNameResolution("<echo>\n  {ftl:Hello ${name}}\n</echo>");
   }
 
   @Test
@@ -89,6 +99,12 @@ public class EchoIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testEmptyElement() {
     EchoStatement statement = (EchoStatement) parse("<echo></echo>");
     assertEquals("", statement.getExpression().evaluate(context));
+  }
+
+  private void checkNameResolution(String xmlText) {
+    EchoStatement statement = (EchoStatement) parse(xmlText);
+    context.set("name", "Volker");
+    assertEquals("Hello Volker", statement.getExpression().evaluate(context));
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,6 +28,8 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.expression.ScriptExpression;
+import com.rapiddweller.benerator.engine.parser.string.ScriptEngineIdParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
 import com.rapiddweller.benerator.engine.statement.EchoType;
@@ -36,6 +38,8 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.parser.EnumParser;
 import com.rapiddweller.common.parser.StringParser;
+import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.common.Expression;
@@ -43,7 +47,6 @@ import com.rapiddweller.script.expression.ConstantExpression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses an &lt;echo&gt; element in a Benerator descriptor file.<br/><br/>
@@ -63,8 +66,11 @@ public class EchoParser extends AbstractBeneratorDescriptorParser {
       ATT_TYPE, false, BeneratorErrorIds.SYN_ECHO_TYPE,
       new ScriptableParser<>(new EnumParser<>(EchoType.class)), "console");
 
+  private static final AttrInfo<String> LANG = new AttrInfo<>(
+      ATT_LANG, false, BeneratorErrorIds.SYN_ECHO_LANG, new ScriptEngineIdParser());
+
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
-      BeneratorErrorIds.SYN_ECHO_ILL_ATTR, new EchoValidator(), MESSAGE, TYPE);
+      BeneratorErrorIds.SYN_ECHO_ILL_ATTR, new EchoValidator(), MESSAGE, TYPE, LANG);
 
   public EchoParser() {
     super(EL_ECHO, ATTR_INFO);
@@ -74,19 +80,34 @@ public class EchoParser extends AbstractBeneratorDescriptorParser {
   public EchoStatement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     attrSupport.validate(element);
-    Expression<String> messageEx = parseMessage(element);
+    String scriptEngineId = LANG.parse(element);
+    Expression<String> messageEx = parseMessage(element, scriptEngineId);
     Expression<EchoType> typeEx = TYPE.parse(element);
     return new EchoStatement(messageEx, typeEx);
   }
 
-  private Expression<String> parseMessage(Element element) {
+  private Expression<String> parseMessage(Element element, String scriptEngineId) {
     Expression<String> messageEx;
-    if (!StringUtil.isEmpty(element.getAttribute(ATT_MESSAGE))) {
-      messageEx = MESSAGE.parse(element);
-    } else if (!StringUtil.isEmpty(element.getTextContent())) {
-      messageEx = MESSAGE_PARSER.parse(element.getTextContent());
-    } else { // Print a line feed for empty echo statements
-      messageEx = new ConstantExpression<>("");
+    if (scriptEngineId != null) {
+      // scriptEngineId != null
+      String message = StringUtil.nullToEmpty(XMLUtil.getAttribute(element, ATT_MESSAGE, false));
+      if (message.isEmpty()) {
+        message = StringUtil.nullToEmpty(XMLUtil.getText(element).trim());
+      }
+      if (!message.isEmpty()) {
+        messageEx = new ScriptExpression<>(ScriptUtil.parseScriptText(message, scriptEngineId));
+      } else {
+        messageEx = new ConstantExpression<>("");
+      }
+    } else {
+      // scriptEngineId == null
+      if (!StringUtil.isEmpty(element.getAttribute(ATT_MESSAGE))) {
+        messageEx = MESSAGE.parse(element);
+      } else if (!StringUtil.isEmpty(element.getTextContent())) {
+        messageEx = MESSAGE_PARSER.parse(element.getTextContent().trim());
+      } else { // Print a line feed for empty echo statements
+        messageEx = new ConstantExpression<>("");
+      }
     }
     return messageEx;
   }

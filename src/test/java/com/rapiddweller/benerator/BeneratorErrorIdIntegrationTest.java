@@ -380,6 +380,22 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
+  public void test_0236_syn_echo_message() {
+    BeneratorResult result = runFile("test_0236_syn_echo_message.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ECHO_MESSAGE,
+        "<echo> must contain either a message attribute or a text content, not both. File test_0236_syn_echo_message.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0237_syn_echo_lang() {
+    BeneratorResult result = runFile("test_0237_syn_echo_lang.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ECHO_LANG,
+        "Illegal attribute value for echo.lang: 'none'. File test_0237_syn_echo_lang.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
   public void test_0238_beep_with_content() {
     BeneratorResult result = runFile("test_0238_syn_beep_with_content.ben.xml");
     assertResult(BeneratorErrorIds.SYN_BEEP,
