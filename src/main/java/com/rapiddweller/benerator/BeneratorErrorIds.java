@@ -119,6 +119,7 @@ public class BeneratorErrorIds {
   public static final String SYN_ECHO_ILL_ATTR = "BEN-0234";
   public static final String SYN_ECHO_TYPE     = "BEN-0235";
   public static final String SYN_ECHO_MESSAGE  = "BEN-0236";
+  public static final String SYN_ECHO_LANG     = "BEN-0237";
 
   // Syntax Errors regarding <beep> ----------------------------------------------------------------------------------
 

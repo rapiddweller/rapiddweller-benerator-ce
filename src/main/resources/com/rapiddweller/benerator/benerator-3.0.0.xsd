@@ -89,6 +89,7 @@
             <xs:simpleContent>
                 <xs:extension base="xs:string">
                     <xs:attribute name="message" type="xs:string"/>
+                    <xs:attribute name="lang" type="xs:string"/>
                     <xs:attribute name="type" type="echo-type-type" default="console"/>
                 </xs:extension>
             </xs:simpleContent>

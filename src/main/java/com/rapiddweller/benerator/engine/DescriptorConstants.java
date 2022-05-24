@@ -124,6 +124,7 @@ public class DescriptorConstants {
   public static final String ATT_COUNT_DISTRIBUTION = "countDistribution";
 
   public static final String ATT_ASSERT = "assert";
+  public static final String ATT_LANG = "lang";
   public static final String ATT_TYPE = "type";
   public static final String ATT_SCOPE = "scope";
   public static final String ATT_EXIT_CODE = "exitCode";
