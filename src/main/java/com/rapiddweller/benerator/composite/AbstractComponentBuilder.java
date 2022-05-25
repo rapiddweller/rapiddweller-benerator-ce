@@ -34,6 +34,8 @@ import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Mutator;
 import com.rapiddweller.common.TextFileLocation;
+import com.rapiddweller.common.exception.ApplicationException;
+import com.rapiddweller.common.exception.DBQueryFailed;
 import com.rapiddweller.common.exception.ExitCodes;
 import com.rapiddweller.common.exception.ScriptException;
 import org.slf4j.LoggerFactory;
@@ -77,6 +79,14 @@ public abstract class AbstractComponentBuilder<E> extends SourcedGenerationStep<
     } catch (ScriptException e) {
       e.setLocation(fileLocation);
       e.setErrorId(BeneratorErrorIds.SCRIPT_FAILED);
+      throw e;
+    } catch (DBQueryFailed e) {
+      e.setLocation(fileLocation);
+      e.setErrorId(BeneratorErrorIds.DB_QUERY_FAILED);
+      throw e;
+    } catch (ApplicationException e) {
+      e.setLocation(fileLocation);
+      e.setErrorId(BeneratorErrorIds.UNSPECIFIC);
       throw e;
     } catch (Exception e) {
       throw BeneratorExceptionFactory.getInstance().operationFailed(
