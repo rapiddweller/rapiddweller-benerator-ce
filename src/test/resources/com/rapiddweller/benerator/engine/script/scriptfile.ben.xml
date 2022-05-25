@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
-<setup>
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <memstore id="mem"/>
     <execute type="js" uri="multiply.js"/>
 
-    <iterate type="person" name="person" source="person.ent.csv" consumer="ConsoleExporter">
+    <iterate type="person" source="person.ent.csv" consumer="ConsoleExporter,mem">
         <variable name="age" type="integer" script="this.age"/>
         <attribute name="multiply" type="int" script="{js:multiply(age)}"/>
     </iterate>
 
-    <generate type="script" count="5" consumer="ConsoleExporter">
+    <generate type="script" count="5" consumer="ConsoleExporter,mem">
         <variable name="count" type="integer" generator="IncrementalIdGenerator"/>
         <attribute name="multiply" type="int" script="{js:multiply(count)}"/>
     </generate>

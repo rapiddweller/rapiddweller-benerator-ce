@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.common.Mutator;
+import com.rapiddweller.common.TextFileLocation;
 import com.rapiddweller.common.exception.MutationFailed;
 
 /**
@@ -38,8 +39,8 @@ import com.rapiddweller.common.exception.MutationFailed;
  */
 public class ArrayElementBuilder extends AbstractComponentBuilder<Object[]> {
 
-  public ArrayElementBuilder(int index, Generator<?> source, String scope) {
-    super(source, new MutatorImpl(index), scope);
+  public ArrayElementBuilder(int index, Generator<?> source, String scope, TextFileLocation fileLocation) {
+    super(source, new MutatorImpl(index), scope, fileLocation);
   }
 
   private static class MutatorImpl implements Mutator {

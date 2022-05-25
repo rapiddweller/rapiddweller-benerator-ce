@@ -1,4 +1,4 @@
-/* (c) Copyright 2021 by Volker Bergmann. All rights reserved. */
+/* (c) Copyright 2021-2022 by Volker Bergmann. All rights reserved. */
 
 package com.rapiddweller.benerator;
 
@@ -10,12 +10,14 @@ package com.rapiddweller.benerator;
  */
 public class BeneratorErrorIds {
 
+  public static final String UNSPECIFIC = "BEN-0001";
+
   // BEN-0001...0009 Unspecific error ids concerning command line usage (mapped from CLI-xxxx) =======================
 
-  public static final String CLI_ILLEGAL_ARGUMENT = "BEN-0001";
-  public static final String CLI_ILLEGAL_OPTION = "BEN-0002";
-  public static final String CLI_MISSING_OPTION_VALUE = "BEN-0003";
-  public static final String CLI_ILLEGAL_OPTION_VALUE = "BEN-0004";
+  public static final String CLI_ILLEGAL_ARGUMENT = "BEN-0002";
+  public static final String CLI_ILLEGAL_OPTION = "BEN-0003";
+  public static final String CLI_MISSING_OPTION_VALUE = "BEN-0004";
+  public static final String CLI_ILLEGAL_OPTION_VALUE = "BEN-0005";
 
   // BEN-0010...0049 Specific error ids concerning command line usage ================================================
 

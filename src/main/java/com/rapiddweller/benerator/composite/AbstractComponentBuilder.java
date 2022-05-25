@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,11 +26,16 @@
 
 package com.rapiddweller.benerator.composite;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Mutator;
+import com.rapiddweller.common.TextFileLocation;
+import com.rapiddweller.common.exception.ExitCodes;
+import com.rapiddweller.common.exception.ScriptException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -46,10 +51,13 @@ public abstract class AbstractComponentBuilder<E> extends SourcedGenerationStep<
   protected final Mutator mutator;
   private final Logger logger = LoggerFactory.getLogger(getClass());
   private final WrapperProvider<Object> wrapperProvider = new WrapperProvider<>();
+  private final TextFileLocation fileLocation;
 
-  protected AbstractComponentBuilder(Generator<?> source, Mutator mutator, String scope) {
+  protected AbstractComponentBuilder(
+      Generator<?> source, Mutator mutator, String scope, TextFileLocation fileLocation) {
     super(source, scope);
     this.mutator = mutator;
+    this.fileLocation = fileLocation;
   }
 
   @Override
@@ -57,14 +65,23 @@ public abstract class AbstractComponentBuilder<E> extends SourcedGenerationStep<
   public boolean execute(BeneratorContext context) {
     message = null;
     Object target = context.getCurrentProduct().unwrap();
-    ProductWrapper<?> wrapper = source.generate((ProductWrapper) wrapperProvider.get());
-    logger.debug("execute(): {} := {}", mutator, wrapper);
-    if (wrapper == null) {
-      message = "Generator unavailable: " + source;
-      return false;
+    try {
+      ProductWrapper<?> wrapper = source.generate((ProductWrapper) wrapperProvider.get());
+      logger.debug("execute(): {} := {}", mutator, wrapper);
+      if (wrapper == null) {
+        message = "Generator unavailable: " + source;
+        return false;
+      }
+      mutator.setValue(target, wrapper.unwrap());
+      return true;
+    } catch (ScriptException e) {
+      e.setLocation(fileLocation);
+      e.setErrorId(BeneratorErrorIds.SCRIPT_FAILED);
+      throw e;
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().operationFailed(
+          e.getMessage(), e, BeneratorErrorIds.UNSPECIFIC, ExitCodes.MISCELLANEOUS_ERROR);
     }
-    mutator.setValue(target, wrapper.unwrap());
-    return true;
   }
 
 }

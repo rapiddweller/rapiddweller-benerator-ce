@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -32,6 +32,7 @@ import com.rapiddweller.common.Named;
 import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.Operation;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.TextFileLocation;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.common.converter.ToStringConverter;
@@ -51,6 +52,7 @@ public class FeatureDescriptor implements Named {
   protected OrderedNameMap<FeatureDetail<?>> details;
   protected DescriptorProvider provider;
   private String name;
+  private TextFileLocation fileLocation;
 
   // constructor -----------------------------------------------------------------------------------------------------
 
@@ -73,6 +75,14 @@ public class FeatureDescriptor implements Named {
   public void setName(String name) {
     this.name = name; // name is stored redundantly for better performance
     setDetailValue(NAME, name);
+  }
+
+  public TextFileLocation getFileLocation() {
+    return fileLocation;
+  }
+
+  public void setFileLocation(TextFileLocation fileLocation) {
+    this.fileLocation = fileLocation;
   }
 
   public DescriptorProvider getProvider() {

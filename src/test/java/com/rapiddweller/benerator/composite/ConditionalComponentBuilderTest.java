@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2021-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -59,7 +59,7 @@ public class ConditionalComponentBuilderTest {
 
   public void check(boolean condition) {
     ConstantGenerator<String> gen = new ConstantGenerator<>("XXXXX");
-    ComponentBuilder<Entity> source = new PlainEntityComponentBuilder("name", gen, null);
+    ComponentBuilder<Entity> source = new PlainEntityComponentBuilder("name", gen, null, null);
     ConditionalComponentBuilder<Entity> builder = new ConditionalComponentBuilder<>(source, new ConstantExpression<>(condition));
     DefaultBeneratorContext context = new DefaultBeneratorContext();
     builder.init(context);

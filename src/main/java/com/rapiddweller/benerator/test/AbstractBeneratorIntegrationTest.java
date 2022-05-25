@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -75,18 +75,20 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
 
   protected BeneratorContext parseAndExecuteFile(String filename) {
     Assert.notNull(filename, "file name");
-    String xml = IOUtil.getContentOfURI(filename);
     String contextUri = IOUtil.getParentUri(filename);
-    if (contextUri.length() > 1 && contextUri.endsWith("/")) {
+    if (contextUri != null && contextUri.length() > 1 && contextUri.endsWith("/")) {
       contextUri = contextUri.substring(0, contextUri.length() - 1);
     }
     context.setContextUri(contextUri);
-    return parseAndExecute(xml);
+    Element element = XMLUtil.parseWithLocators(filename).getDocumentElement();
+    Statement statement = parseElement(element);
+    statement.execute(context);
+    return context;
   }
 
   protected BeneratorContext parseAndExecuteRoot(String xml) {
-    context = BeneratorFactory.getInstance().createRootContext(".");
     Statement statement = parse(xml);
+    context = BeneratorFactory.getInstance().createRootContext(".");
     statement.execute(context);
     return context;
   }
@@ -98,7 +100,10 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
   }
 
   public Statement parse(String xml) {
-    Element element = XMLUtil.parseStringAsElement(xml);
+    return parseElement(XMLUtil.parseStringAsElement(xml));
+  }
+
+  private Statement parseElement(Element element) {
     BeneratorParseContext parsingContext = BeneratorFactory.getInstance().createParseContext(resourceManager);
     return parsingContext.parseElement(element, null, null);
   }

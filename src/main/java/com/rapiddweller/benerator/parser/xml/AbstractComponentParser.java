@@ -1,10 +1,11 @@
-/* (c) Copyright 2021 by Volker Bergmann. All rights reserved. */
+/* (c) Copyright 2021-2022 by Volker Bergmann. All rights reserved. */
 
 package com.rapiddweller.benerator.parser.xml;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.common.TextFileLocation;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -41,6 +42,7 @@ public abstract class AbstractComponentParser {
   }
 
   protected <T extends InstanceDescriptor> T mapInstanceDetails(Element element, boolean complexType, T descriptor) {
+    descriptor.setFileLocation(TextFileLocation.of(element));
     TypeDescriptor localType = descriptor.getLocalType();
     Map<String, String> attributes = XMLUtil.getAttributes(element);
     for (Map.Entry<String, String> entry : attributes.entrySet()) {

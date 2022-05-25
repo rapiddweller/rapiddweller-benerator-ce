@@ -1,4 +1,4 @@
-/* (c) Copyright 2021 by Volker Bergmann. All rights reserved. */
+/* (c) Copyright 2021-2022 by Volker Bergmann. All rights reserved. */
 
 package com.rapiddweller.benerator.composite;
 
@@ -39,7 +39,7 @@ public class PartModifierTest {
     dp = new DefaultDescriptorProvider("default", dataModel);
     List<GenerationStep<Entity>> steps = new ArrayList<>();
     SequenceGenerator<String> makerGen = new SequenceGenerator<>(String.class, "BMW", "BMW");
-    steps.add(new PlainEntityComponentBuilder("maker", makerGen, null));
+    steps.add(new PlainEntityComponentBuilder("maker", makerGen, null, null));
     context = new DefaultBeneratorContext();
     modifier = new PartModifier("cars", steps, null);
     modifier.init(context);

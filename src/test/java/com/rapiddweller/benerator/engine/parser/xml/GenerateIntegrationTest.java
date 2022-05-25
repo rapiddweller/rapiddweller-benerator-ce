@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,27 +26,17 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
-import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.common.converter.UnsafeConverter;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.validator.AbstractValidator;
-import com.rapiddweller.format.DataIterator;
-import com.rapiddweller.format.DataSource;
-import com.rapiddweller.format.util.DataIteratorTestCase;
-import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.platform.db.DefaultDBSystem;
 import org.junit.Test;
 
 import java.util.List;
