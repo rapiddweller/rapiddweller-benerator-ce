@@ -87,19 +87,19 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
   }
 
   protected BeneratorContext parseAndExecuteRoot(String xml) {
-    Statement statement = parse(xml);
+    Statement statement = parseXmlString(xml);
     context = BeneratorFactory.getInstance().createRootContext(".");
     statement.execute(context);
     return context;
   }
 
-  public BeneratorContext parseAndExecute(String xml) {
-    Statement statement = parse(xml);
+  public BeneratorContext parseAndExecuteXmlString(String xml) {
+    Statement statement = parseXmlString(xml);
     statement.execute(context);
     return context;
   }
 
-  public Statement parse(String xml) {
+  public Statement parseXmlString(String xml) {
     return parseElement(XMLUtil.parseStringAsElement(xml));
   }
 

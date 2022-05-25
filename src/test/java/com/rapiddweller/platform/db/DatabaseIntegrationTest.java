@@ -102,14 +102,14 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testScriptResolution() {
     context.setGlobal("tblName", "referee");
-    parseAndExecute("<evaluate id='refCount' target='db'>{'select count(*) from ' + tblName}</evaluate>");
+    parseAndExecuteXmlString("<evaluate id='refCount' target='db'>{'select count(*) from ' + tblName}</evaluate>");
     assertEquals(2, ((Number) context.get("refCount")).intValue());
     closeAndCheckCleanup();
   }
 
   @Test
   public void testDefaultColumnValue() {
-    parseAndExecute("<generate type='referee' count='3' consumer='cons'/>");
+    parseAndExecuteXmlString("<generate type='referee' count='3' consumer='cons'/>");
     List<Entity> products = getConsumedEntities();
     assertEquals(3, products.size());
     for (Entity product : products) {
@@ -120,7 +120,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDbRef_default_nullable() {
-    parseAndExecute("<generate type='referer' count='3' consumer='cons'/>");
+    parseAndExecuteXmlString("<generate type='referer' count='3' consumer='cons'/>");
     List<Entity> products = getConsumedEntities();
     assertEquals(3, products.size());
     for (Entity product : products) {
@@ -132,7 +132,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDbRef_default_not_null_defaultOneToOne() {
     context.setDefaultOneToOne(true);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='unbounded' consumer='cons'>" +
             "  <reference name='referee_id' nullable='false' source='db' targetType='REFEREE'/>" +
             "</generate>");
@@ -148,7 +148,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDbRef_default_not_null_defaultManyToOne() {
     context.setDefaultOneToOne(false);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <reference name='referee_id' nullable='false' source='db' targetType='REFEREE'/>" +
             "</generate>");
@@ -164,7 +164,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDbRef_distribution() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <reference name='referee_id' targetType='REFEREE' source='db' " +
             "    distribution='new com.rapiddweller.benerator.distribution.function.ExponentialFunction(-0.5)' />" +
@@ -180,7 +180,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDbRef_values() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <reference name='referee_id' values='1' />" +
             "</generate>");
@@ -194,7 +194,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDbRef_constant() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <reference name='referee_id' constant='1' />" +
             "</generate>");
@@ -210,7 +210,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testDbRef_constant_script() {
     long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
     context.setGlobal("rid", 2);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <reference name='referee_id' constant='{rid}' />" +
             "</generate>");
@@ -226,7 +226,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDbRef_attribute_constant_script() {
     context.setGlobal("rid", 2);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <attribute name='referee_id' constant='{rid}' />" +
             "</generate>");
@@ -241,7 +241,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDbRef_script() {
     context.setGlobal("rid", 2);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <reference name='referee_id' script='rid + 1' />" +
             "</generate>");
@@ -256,7 +256,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDbRef_explicit_selector() {
     context.setGlobal("key", 2);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='unbounded' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
             "     selector=\"{ftl:select id from referee where id=${key}}\" " +
@@ -271,7 +271,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDbRef_explicit_subSelector() {
     context.setGlobal("key", 2);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' consumer='cons' count='3'>" +
             "  <reference name='referee_id' source='db' " +
             "     subSelector='{ftl:select id from referee order by id}' " +
@@ -288,7 +288,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDbRef_entity_selector() {
     context.setGlobal("key", 2);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='unbounded' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
             "     selector='{ftl:id=${key}}' " +
@@ -305,7 +305,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDb_iterate_this() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<iterate type='referee' source='db' consumer='cons'>" +
             "  <attribute name='n' source='db' " +
             "     selector=\"{{'select n+1 from referee where id = ' + this.id}}\" cyclic='true' />" +
@@ -322,7 +322,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void test_datetime_resolution() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='3' consumer='cons'>" +
             "  <attribute name='the_date' generator='" + CurrentDateTimeGenerator.class.getName() + "' />" +
             "</generate>");
@@ -340,7 +340,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testTx_default() {
     context.setDefaultOneToOne(false);
     db.execute("delete from referee");
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referee' count='2' consumer='cons'>" +
             "   <generate type='referer' count='2' consumer='cons'>" +
             "   </generate>" +
@@ -372,7 +372,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testTx_subPageSize0() {
     context.setDefaultOneToOne(false);
     db.execute("delete from referee");
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referee' count='2' consumer='cons'>" +
             "   <generate type='referer' count='2' pageSize='0' consumer='cons'>" +
             "   </generate>" +
@@ -400,7 +400,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testTx_allPageSizes0() {
     context.setDefaultOneToOne(false);
     db.execute("delete from referee");
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referee' count='2' pageSize='0' consumer='cons'>" +
             "   <generate type='referer' count='2' pageSize='0' consumer='cons'>" +
             "   </generate>" +
@@ -429,7 +429,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testStaticEntitySelector_partial() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='e' type='REFEREE' source='db' subSelector='id=3' />" +
             "  <reference name='referee_id' script='e.id' />" +
@@ -443,7 +443,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testStaticEntitySelector_complete() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='e' type='referee' source='db' subSelector='select * from referee where id=3' />" +
             "  <reference name='referee_id' script='e.id' />" +
@@ -457,7 +457,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDynamicEntitySelector_partial() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='n' type='int' min='2' max='3' " +
             "    distribution='new com.rapiddweller.benerator.distribution.sequence.StepSequence(-1)'/>" +
@@ -473,7 +473,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDynamicEntitySelector_complete() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='n' type='int' min='2' max='3' " +
             "    distribution='new com.rapiddweller.benerator.distribution.sequence.StepSequence(-1)'/>" +
@@ -489,7 +489,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testStaticArraySelector() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='a' source='db' subSelector='select id, n from referee where n=3' />" +
             "  <reference name='referee_id' script='a[0]' />" +
@@ -503,7 +503,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDynamicArraySelector() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='n' type='int' min='2' max='3' distribution='new com.rapiddweller.benerator.distribution.sequence.StepSequence(-1)'/>" +
             "  <variable name='a' source='db' subSelector=\"{{'select id, n from referee where id=' + n}}\"/>" +
@@ -518,7 +518,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testStaticValueSelector() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='v' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
@@ -534,7 +534,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDynamicValueSelectorUsingContextValue() {
     context.setGlobal("key", 2);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <id name='id' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
@@ -549,7 +549,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDynamicValueSelectorUsingVariable() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='v' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
@@ -564,7 +564,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDynamicValueSelectorUsingAttribute() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <id name='id' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
@@ -579,7 +579,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testStaticValueSelectorWithEmptyResultSet() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' maxCount='2' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
             "     subSelector='select id from referee where id=5' />" +
@@ -591,7 +591,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testStaticValueSelectorWithNullResult() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <attribute name='referee_id' source='db' " +
             "     subSelector='select null from referee where id=2' />" +
@@ -605,7 +605,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testUpdater() throws Exception {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<iterate type='referee' source='db' consumer='db.updater(), cons'>" +
             "  <attribute name='n' constant='9' />" +
             "</iterate>");
@@ -624,7 +624,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test(expected = ServiceFailedException.class)
   public void testUpdateOnNonExistingPK() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<iterate type='referee' source='db' selector='id=2' consumer='db.updater(), cons'>" +
             "  <attribute name='id' constant='11' />" +
             "</iterate>");
@@ -635,14 +635,14 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
     db.setMetaCache(true);
     try {
-      parseAndExecute("<execute target='db'>drop table meta_test;</execute>");
+      parseAndExecuteXmlString("<execute target='db'>drop table meta_test;</execute>");
     } catch (Exception e) {
       // this is expected
     }
-    parseAndExecute("<execute target='db'>" +
+    parseAndExecuteXmlString("<execute target='db'>" +
         "create table meta_test ( id int, text varchar(20), primary key (id));" +
         "</execute>");
-    parseAndExecute("<generate type='meta_test' count='5' consumer='db'/>");
+    parseAndExecuteXmlString("<generate type='meta_test' count='5' consumer='db'/>");
     assertTrue(BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0 >= 5);
   }
 

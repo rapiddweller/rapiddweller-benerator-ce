@@ -41,13 +41,13 @@ public class EvaluateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testBeneratorScriptStringLiteral() {
-    parseAndExecute("<evaluate id='result'>'TEST'</evaluate>");
+    parseAndExecuteXmlString("<evaluate id='result'>'TEST'</evaluate>");
     assertEquals("TEST", context.get("result"));
   }
 
   @Test
   public void testBeneratorScriptStringLiteralWithQuotes() {
-    EvaluateStatement statement = (EvaluateStatement) parse("<evaluate id='result'>'\\'TEST\\''</evaluate>");
+    EvaluateStatement statement = (EvaluateStatement) parseXmlString("<evaluate id='result'>'\\'TEST\\''</evaluate>");
     assertEquals("'\\'TEST\\''", statement.textEx.evaluate(context));
     statement.execute(context);
     assertEquals("'TEST'", context.get("result"));

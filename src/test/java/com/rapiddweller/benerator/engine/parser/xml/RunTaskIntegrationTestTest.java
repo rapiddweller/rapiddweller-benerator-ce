@@ -60,7 +60,7 @@ public class RunTaskIntegrationTestTest extends AbstractBeneratorIntegrationTest
             "      pager='new com.rapiddweller.task.PageListenerMock(1)'>" +
             "  <property name='intProp' value='42' />" +
             "</run-task>";
-    RunTaskStatement statement = (RunTaskStatement) parse(xml);
+    RunTaskStatement statement = (RunTaskStatement) parseXmlString(xml);
     assertEquals(5L, statement.getCount().evaluate(context).longValue());
     assertEquals(2L, statement.getPageSize().evaluate(context).longValue());
     assertEquals(new PageListenerMock(1), statement.getPager().evaluate(context));
@@ -75,7 +75,7 @@ public class RunTaskIntegrationTestTest extends AbstractBeneratorIntegrationTest
             "      pager='new com.rapiddweller.task.PageListenerMock(1)'>" +
             "  <property name='intProp' value='42' />" +
             "</run-task>";
-    RunTaskStatement statement = (RunTaskStatement) parse(xml);
+    RunTaskStatement statement = (RunTaskStatement) parseXmlString(xml);
     assertEquals(5L, statement.getCount().evaluate(context).longValue());
     assertEquals(2L, statement.getPageSize().evaluate(context).longValue());
     assertEquals(new PageListenerMock(1), statement.getPager().evaluate(context));
@@ -93,7 +93,7 @@ public class RunTaskIntegrationTestTest extends AbstractBeneratorIntegrationTest
             "</run-task>" +
             "</setup>";
     BeneratorRootContext context = new DefaultBeneratorContext();
-    BeneratorRootStatement root = (BeneratorRootStatement) parse(xml);
+    BeneratorRootStatement root = (BeneratorRootStatement) parseXmlString(xml);
     root.execute(context);
     RunTaskStatement statement = (RunTaskStatement) root.getSubStatements().get(0);
     long pageSize = statement.getPageSize().evaluate(context);
@@ -110,7 +110,7 @@ public class RunTaskIntegrationTestTest extends AbstractBeneratorIntegrationTest
               "</run-task>" +
               "</setup>";
       BeneratorRootContext context = new DefaultBeneratorContext();
-      BeneratorRootStatement root = (BeneratorRootStatement) parse(xml);
+      BeneratorRootStatement root = (BeneratorRootStatement) parseXmlString(xml);
       root.execute(context);
       RunTaskStatement statement = (RunTaskStatement) root.getSubStatements().get(0);
       ErrorHandler errorHandler = statement.getErrorHandler(context);

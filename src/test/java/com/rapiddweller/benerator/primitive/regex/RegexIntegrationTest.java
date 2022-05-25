@@ -62,7 +62,7 @@ public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testShortRegexGeneration() {
     String regex = "[A-Z][A-Z ]{5,23}[A-Z]";
     // create by regex from XML descriptor
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='entity' count='100' consumer='cons'>" +
             "  <attribute name='text' pattern='" + regex + "'/>" +
             "</generate>");
@@ -78,7 +78,7 @@ public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testLongRegexGeneration() {
     String regex = "[A-Z][A-Z ]{100,2000}[A-Z]";
     // create by regex from XML descriptor
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='entity' count='100' consumer='cons'>" +
             "  <attribute name='text' pattern='" + regex + "'/>" +
             "</generate>");
@@ -97,7 +97,7 @@ public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testUniqueRegexGeneration() {
     String regex = "[A-Z][A-Z ]{10,12}[A-Z]";
     // create by regex from XML descriptor
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='entity' count='100' consumer='cons'>" +
             "  <attribute name='text' pattern='" + regex + "' unique='true' />" +
             "</generate>");

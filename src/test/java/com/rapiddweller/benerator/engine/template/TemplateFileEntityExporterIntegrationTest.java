@@ -47,7 +47,7 @@ public class TemplateFileEntityExporterIntegrationTest extends AbstractBenerator
   public void testCountries() {
     String uri = "target/" + getClass().getName() + ".txt";
     String templateUri = "com/rapiddweller/benerator/engine/template/countries.ftl";
-    BeneratorContext context = parseAndExecute(
+    BeneratorContext context = parseAndExecuteXmlString(
         "<setup>" +
             "<bean id='con' class='TemplateFileEntityExporter'>" +
             "	<property name='uri' value='" + uri + "'/>" +

@@ -47,21 +47,21 @@ public class IncludeParserAndStatementTest extends AbstractBeneratorIntegrationT
 
   @Test
   public void testIncludePropertiesFile() {
-    Statement statement = parse("<include uri='" + PROP_URI + "' />");
+    Statement statement = parseXmlString("<include uri='" + PROP_URI + "' />");
     statement.execute(context);
     assertEquals("done", context.get("incProp"));
   }
 
   @Test
   public void testIncludeDescriptorFile() {
-    Statement statement = parse("<include uri='" + DESC_URI + "' />");
+    Statement statement = parseXmlString("<include uri='" + DESC_URI + "' />");
     statement.execute(context);
     assertEquals("done", context.get("incProp"));
   }
 
   @Test(expected = SyntaxError.class)
   public void testAttributeTypo() {
-    parse("<include urr='bla.bla' />");
+    parseXmlString("<include urr='bla.bla' />");
   }
 
 }

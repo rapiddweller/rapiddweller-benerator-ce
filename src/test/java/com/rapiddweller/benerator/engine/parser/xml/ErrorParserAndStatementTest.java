@@ -45,7 +45,7 @@ public class ErrorParserAndStatementTest extends AbstractBeneratorIntegrationTes
 
   @Test
   public void testNoInfo() {
-    ErrorStatement statement = (ErrorStatement) parse("<error/>");
+    ErrorStatement statement = (ErrorStatement) parseXmlString("<error/>");
     assertNull(statement.id);
     assertEquals(ExitCodes.MISCELLANEOUS_ERROR, statement.exitCode);
     assertNull(statement.message);
@@ -60,7 +60,7 @@ public class ErrorParserAndStatementTest extends AbstractBeneratorIntegrationTes
 
   @Test
   public void testExecute() {
-    ErrorStatement statement = (ErrorStatement) parse(
+    ErrorStatement statement = (ErrorStatement) parseXmlString(
         "<error id='XXX-1234' exitCode='5'>Something bad happened</error>");
     try {
       statement.execute(context);

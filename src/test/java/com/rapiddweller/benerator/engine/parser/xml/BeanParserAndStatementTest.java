@@ -45,7 +45,7 @@ public class BeanParserAndStatementTest extends AbstractBeneratorIntegrationTest
   @Test
   public void testParseBeanClass() {
     String xml = "<bean id='id' class='" + BeanMock.class.getName() + "' />";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     Object bean = context.get("id");
     assertNotNull(bean);
     assertEquals(BeanMock.class, bean.getClass());
@@ -56,7 +56,7 @@ public class BeanParserAndStatementTest extends AbstractBeneratorIntegrationTest
   @Test
   public void testParseBeanSpec() {
     String xml = "<bean id='id' spec='new " + BeanMock.class.getName() + "(2)' />";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     Object bean = context.get("id");
     assertNotNull(bean);
     assertEquals(BeanMock.class, bean.getClass());
@@ -70,14 +70,14 @@ public class BeanParserAndStatementTest extends AbstractBeneratorIntegrationTest
         "<bean id='id' class='" + BeanMock.class.getName() + "'>" +
             "	<property name='text' value='xxx' />" +
             "</bean>";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     BeanMock bean = (BeanMock) context.get("id");
     assertEquals("xxx", bean.getText());
   }
 
   @Test(expected = SyntaxError.class)
   public void testNoId() {
-    parse("<bean class='" + BeanMock.class.getName() + "'/>");
+    parseXmlString("<bean class='" + BeanMock.class.getName() + "'/>");
   }
 
 }

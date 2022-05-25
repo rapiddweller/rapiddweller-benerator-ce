@@ -25,7 +25,7 @@ public class DBIssuesTest extends AbstractBeneratorIntegrationTest {
 			"    <generate type='customer' count='10' consumer='db'/>\n" +
 			"    <execute target='db'>drop table customer if exists;</execute>\n" +
 			"</setup>";
-		parseAndExecute(xml);
+		parseAndExecuteXmlString(xml);
 	}
 
 }

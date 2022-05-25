@@ -74,7 +74,7 @@ public class DateTimeGeneratorIntegrationTest extends AbstractBeneratorIntegrati
             "  <property name='timeGranularity'    value='00:00:01'  />" +
             "  <property name='timeDistribution' value='step'      />" +
             "</bean>";
-    BeanStatement statement = (BeanStatement) parse(xml);
+    BeanStatement statement = (BeanStatement) parseXmlString(xml);
     statement.execute(context);
     DateTimeGenerator generator = (DateTimeGenerator) GeneratorUtil.unwrap((Generator<?>) context.get(beanId));
 
@@ -114,7 +114,7 @@ public class DateTimeGeneratorIntegrationTest extends AbstractBeneratorIntegrati
         "        <attribute name='date' type='date' source='datetime_gen'/>\n" +
         "    </generate>\n" +
         "</setup>";
-    parseAndExecute(xml);
+    parseAndExecuteXmlString(xml);
     MemStore mem = (MemStore) context.get("mem");
     assertEquals(100, mem.totalEntityCount());
   }

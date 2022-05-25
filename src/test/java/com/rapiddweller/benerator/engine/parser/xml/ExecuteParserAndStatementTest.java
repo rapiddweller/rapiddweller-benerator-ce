@@ -49,7 +49,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
 
   @Test
   public void testBeanInvocation() {
-    Statement statement = parse("<execute>bean.invoke(2)</execute>");
+    Statement statement = parseXmlString("<execute>bean.invoke(2)</execute>");
     BeanMock bean = new BeanMock();
     context.set("bean", bean);
     statement.execute(context);
@@ -59,7 +59,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
 
   @Test
   public void testSimpleTypeVariableDefinition() {
-    Statement statement = parse("<execute>x = 3</execute>");
+    Statement statement = parseXmlString("<execute>x = 3</execute>");
     statement.execute(context);
     assertEquals(3, context.get("x"));
   }
@@ -67,14 +67,14 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
   @Test
   public void testSimpleTypeVariableAccess() {
     context.setGlobal("x", 3);
-    Statement statement = parse("<execute>x = x + 2</execute>");
+    Statement statement = parseXmlString("<execute>x = x + 2</execute>");
     statement.execute(context);
     assertEquals(5, context.get("x"));
   }
 
   @Test(expected = ConfigurationError.class)
   public void testSqlExecutionWithoutTarget() {
-    Statement statement = parse("<execute type='sql'>create sequence seq</execute>");
+    Statement statement = parseXmlString("<execute type='sql'>create sequence seq</execute>");
     statement.execute(context);
   }
 
@@ -86,7 +86,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     context.setGlobal("db", db);
     try {
       db.execute("create table epast_test (id int)");
-      Statement statement = parse("<execute target='db'>select * from epast_test where 1 = 0</execute>");
+      Statement statement = parseXmlString("<execute target='db'>select * from epast_test where 1 = 0</execute>");
       statement.execute(context);
     } finally {
       db.execute("drop table epast_test");
@@ -103,10 +103,10 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(0, db.invalidationCount());
     try {
       db.execute("create table epast_test (id int)");
-      Statement statement = parse("<execute target='db'>select * from epast_test where 1 = 0</execute>");
+      Statement statement = parseXmlString("<execute target='db'>select * from epast_test where 1 = 0</execute>");
       statement.execute(context);
       assertEquals(1, db.invalidationCount());
-      Statement statement2 = parse("<execute target='db'>create table BBB (id int)</execute>");
+      Statement statement2 = parseXmlString("<execute target='db'>create table BBB (id int)</execute>");
       statement2.execute(context);
       assertEquals(2, db.invalidationCount());
     } finally {
@@ -124,10 +124,10 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(0, db.invalidationCount());
     try {
       db.execute("create table epast_test (id int)");
-      Statement statement = parse("<execute target='db' invalidate='true'>select * from epast_test where 1 = 0</execute>");
+      Statement statement = parseXmlString("<execute target='db' invalidate='true'>select * from epast_test where 1 = 0</execute>");
       statement.execute(context);
       assertEquals(2, db.invalidationCount());
-      Statement statement2 = parse("<execute target='db' invalidate='false'>create table AAA (id int)</execute>");
+      Statement statement2 = parseXmlString("<execute target='db' invalidate='false'>create table AAA (id int)</execute>");
       statement2.execute(context);
       assertEquals(2, db.invalidationCount());
     } finally {

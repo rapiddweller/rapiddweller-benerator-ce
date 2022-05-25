@@ -69,7 +69,7 @@ public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegr
   @SuppressWarnings("unchecked")
   @Test
   public void testIterateThis() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<iterate type='referer' source='pit' consumer='cons'>" +
             "   <variable name='_n' script='this.name' converter='com.rapiddweller.common.converter.ToUpperCaseConverter' />" +
             "   <attribute name='name' script='_n' />" +
@@ -88,7 +88,7 @@ public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegr
   @SuppressWarnings("unchecked")
   @Test
   public void testAttributeFromVariable() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='testAttributeFromVariable' count='2' consumer='cons'>" +
             "   <variable name='_n' type='int' distribution='increment' />" +
             "   <attribute name='x' type='int' script='_n + 1' />" +
@@ -105,7 +105,7 @@ public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegr
   @SuppressWarnings("unchecked")
   @Test
   public void testVariableFromAttribute_refByThis() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='testVariableFromAttribute_refByThis' count='2' consumer='cons'>" +
             "   <attribute name='x' type='int' distribution='increment' />" +
             "   <attribute name='y' type='int' script='this.x + 3' />" +
@@ -124,7 +124,7 @@ public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegr
   @SuppressWarnings({"unchecked", "checkstyle:FileTabCharacter"})
   @Test
   public void testVariableFromAttribute_refByTypeName() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='testVariableFromAttribute_refByTypeName' count='2' consumer='cons'>" +
             "   <attribute name='x' type='int' distribution='increment' />" +
             "   <attribute name='y' type='int' script='testVariableFromAttribute_refByTypeName.x + 3' />" +
@@ -143,7 +143,7 @@ public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegr
   @SuppressWarnings({"unchecked", "checkstyle:FileTabCharacter"})
   @Test
   public void testVariableFromAttribute_refByInstanceName() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate name='xyz' type='testVariableFromAttribute_refByInstanceName' count='2' consumer='cons'>" +
             "   <attribute name='x' type='int' distribution='increment' />" +
             "   <attribute name='y' type='int' script='xyz.x + 3' />" +
@@ -162,7 +162,7 @@ public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegr
   @SuppressWarnings("checkstyle:FileTabCharacter")
   @Test
   public void testEvaluateBetweenAttributes() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate name='e' type='entity' count='1'>" +
             "   <evaluate id='val1' assert='result==null'>this.id</evaluate>" +
             "   <id name='id' type='int'/>" +
@@ -179,7 +179,7 @@ public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegr
   @SuppressWarnings("checkstyle:FileTabCharacter")
   @Test
   public void testAttributeAfterSubGen() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate count='5'>" +
             "   <generate count='3'/>" +
             "   <attribute name='y' type='int'/>" +
