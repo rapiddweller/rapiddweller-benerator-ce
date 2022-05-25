@@ -427,7 +427,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
         return null;
       }
     } catch (SQLException e) {
-      throw BeneratorExceptionFactory.getInstance().queryFailed("Error querying " + tableName, e);
+      throw BeneratorExceptionFactory.getInstance().dbQueryFailed("Error querying " + tableName, e);
     }
   }
 

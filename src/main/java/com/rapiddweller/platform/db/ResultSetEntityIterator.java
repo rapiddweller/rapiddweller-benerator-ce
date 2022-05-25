@@ -68,7 +68,7 @@ public class ResultSetEntityIterator implements DataIterator<Entity> {
       Entity result = ResultSet2EntityConverter.convert(resultSet, descriptor);
       return container.setData(result);
     } catch (SQLException e) {
-      throw BeneratorExceptionFactory.getInstance().queryFailed("Result set access failed", e);
+      throw BeneratorExceptionFactory.getInstance().dbQueryFailed("Result set access failed", e);
     }
   }
 
