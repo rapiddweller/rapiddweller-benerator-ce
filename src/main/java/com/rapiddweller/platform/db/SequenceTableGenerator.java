@@ -187,7 +187,7 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
       result = (E) resultSet.getObject(1);
       incrementorStrategy.run(result.longValue(), (BeneratorContext) context, params);
     } catch (SQLException e) {
-      throw BeneratorExceptionFactory.getInstance().queryFailed(
+      throw BeneratorExceptionFactory.getInstance().dbQueryFailed(
           "Error fetching value in " + getClass().getSimpleName(), e);
     } finally {
       DBUtil.close(resultSet);

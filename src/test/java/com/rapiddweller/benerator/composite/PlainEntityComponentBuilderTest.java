@@ -1,6 +1,6 @@
 /*
  *
- *  * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ *  * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *  *
  *  * Redistribution and use in source and binary forms, with or without
  *  * modification, is permitted under the terms of the
@@ -45,7 +45,7 @@ public class PlainEntityComponentBuilderTest {
   @Test
   public void testConstructor() {
     PlainEntityComponentBuilder actualPlainEntityComponentBuilder = new PlainEntityComponentBuilder("Name",
-        new CompositeDatasetGenerator<>("Nesting", "Dataset Name", true), "Scope");
+        new CompositeDatasetGenerator<>("Nesting", "Dataset Name", true), "Scope", null);
     assertTrue(actualPlainEntityComponentBuilder.isParallelizable());
     assertFalse(actualPlainEntityComponentBuilder.isResetNeeded());
     assertEquals("Scope", actualPlainEntityComponentBuilder.getScope());

@@ -52,7 +52,7 @@ public class FixedWidthFileIntegrationTest extends AbstractBeneratorIntegrationT
   @Test
   public void testNullColumns() throws Exception {
     String fileName = "target/" + getClass().getName() + ".fcw";
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<setup>" +
             "<bean id='fcw' class='FixedWidthEntityExporter'>" +
             "	<property name='uri' value='" + fileName + "'/>" +

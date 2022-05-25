@@ -36,7 +36,7 @@ public class SimpleTypeDescriptorIntegrationTest extends AbstractBeneratorIntegr
         "  </generate>\n" +
         "</setup>";
     // WHEN executing it
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     // THEN the generated data shall have the configured properties
     MemStore mem = (MemStore) context.get("mem");
     List<Entity> entities = mem.getEntities("data");

@@ -17,9 +17,9 @@ import com.rapiddweller.common.cli.CLIMissingOptionValueException;
 import com.rapiddweller.common.exception.ApplicationException;
 import com.rapiddweller.common.exception.ComponentInitializationFailure;
 import com.rapiddweller.common.exception.ConnectFailedException;
+import com.rapiddweller.common.exception.DBQueryFailed;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ExitCodes;
-import com.rapiddweller.common.exception.QueryFailed;
 import com.rapiddweller.common.exception.ScriptException;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.file.FileResourceNotFoundException;
@@ -188,8 +188,8 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
   }
 
   @Override
-  public QueryFailed queryFailed(String message, Throwable cause) {
-    return new QueryFailed(message, cause, BeneratorErrorIds.DB_QUERY_FAILED);
+  public DBQueryFailed dbQueryFailed(String message, Throwable cause) {
+    return new DBQueryFailed(message, cause, BeneratorErrorIds.DB_QUERY_FAILED);
   }
 
   @Override

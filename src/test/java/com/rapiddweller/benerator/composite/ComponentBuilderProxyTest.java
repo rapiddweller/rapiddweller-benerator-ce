@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2021-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -49,7 +49,7 @@ public class ComponentBuilderProxyTest {
   @Test
   public void test() {
     ConstantGenerator<String> gen = new ConstantGenerator<>("XXXXX");
-    ComponentBuilder<Entity> source = new PlainEntityComponentBuilder("name", gen, null);
+    ComponentBuilder<Entity> source = new PlainEntityComponentBuilder("name", gen, null, null);
     ComponentBuilder<Entity> builder = new ComponentBuilderProxy<>(source);
     DefaultBeneratorContext context = new DefaultBeneratorContext();
     builder.init(context);

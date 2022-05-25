@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,27 +26,17 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
-import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.common.converter.UnsafeConverter;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.validator.AbstractValidator;
-import com.rapiddweller.format.DataIterator;
-import com.rapiddweller.format.DataSource;
-import com.rapiddweller.format.util.DataIteratorTestCase;
-import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.platform.db.DefaultDBSystem;
 import org.junit.Test;
 
 import java.util.List;
@@ -69,7 +59,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test(expected = SyntaxError.class)
   public void testIllegalNullable() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='dummy' count='1' consumer='NoConsumer'>" +
             "   <attribute name='x' nullable='xxx'/>" +
             "</generate>");
@@ -79,7 +69,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test(expected = SyntaxError.class)
   public void test_no_count() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='dummy' consumer='NoConsumer'>" +
             "   <attribute name='x' values='1,2,3'/>" +
             "</generate>");
@@ -89,7 +79,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void test_unbounded_count() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='dummy' count='unbounded' consumer='NoConsumer'>" +
             "   <attribute name='x' generator=\"new OneShotGenerator('1')\"/>" +
             "</generate>");
@@ -99,7 +89,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testPaging() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='dummy' count='{c}' pageSize='{ps}' consumer='cons'/>");
     ConsumerMock consumer = new ConsumerMock(false);
     context.setGlobal("cons", consumer);
@@ -114,7 +104,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testConverter() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse("<generate type='dummy' count='3' converter='conv' consumer='cons'/>");
+    Statement statement = parseXmlString("<generate type='dummy' count='3' converter='conv' consumer='cons'/>");
     ConsumerMock consumer = new ConsumerMock(true);
     context.setGlobal("cons", consumer);
     context.setGlobal("conv", new UnsafeConverter<>(Entity.class, Entity.class) {
@@ -137,7 +127,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testValidator() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='dummy' count='3' validator='vali' consumer='cons'>" +
             "   <id name='id' type='int' />" +
             "</generate>");
@@ -161,7 +151,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testArray() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='array' count='5' consumer='cons'>" +
             "  <value pattern='ABC' />" +
             "  <value type='int' constant='42' />" +
@@ -186,7 +176,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     ConsumerMock cons = new ConsumerMock(false);
     context.setGlobal("cons", cons);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='top' count='4' pageSize='2' consumer='cons' />"
     );
     statement.execute(context);
@@ -208,7 +198,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     ConsumerMock cons = new ConsumerMock(false);
     context.setGlobal("cons", cons);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='top' count='4' pageSize='0' consumer='cons' />"
     );
     statement.execute(context);
@@ -225,7 +215,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testSimpleSubGenerate() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='top' count='3' consumer='cons1'>" +
             "    <generate type='sub' count='2' consumer='new " + ConsumerMock.class.getName() + "(false, 2)'/>" +
             "</generate>"
@@ -246,7 +236,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testSubGenerateLifeCycle() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='top' count='3'>" +
             "    <generate type='sub' count='2' consumer='new " + ConsumerMock.class.getName() + "(true)'>" +
             "      <attribute name='x' type='int' generator='" + IncrementGenerator.class.getName() + "' />" +
@@ -272,7 +262,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     ConsumerMock cons = new ConsumerMock(false);
     context.setGlobal("cons", cons);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='top' count='2' pageSize='1' consumer='cons'>" +
             "    <generate type='sub' count='4' pageSize='2' consumer='cons'/>" +
             "</generate>"
@@ -308,7 +298,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     ConsumerMock cons = new ConsumerMock(false);
     context.setGlobal("cons", cons);
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='top' count='2' pageSize='1' consumer='cons'>" +
             "    <generate type='sub' count='1' pageSize='0' consumer='cons'/>" +
             "</generate>"
@@ -333,7 +323,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   /** Tests a sub loop that derives its loop length from a parent attribute. */
   @Test
   public void testSubGenerateParentRef() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate name='pName' type='outer' count='3' consumer='cons'>" +
             "    <attribute name='n' type='int' distribution='step' />" +
             "    <generate type='inner' count='{pName.n}' consumer='cons'/>" +
@@ -356,7 +346,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   /** Tests a combination of variable and attribute with the same name. */
   @Test
   public void testVariableOfSameNameAsAttribute() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate name='pName' type='outer' count='3' consumer='cons'>" +
             "    <variable name='n' type='int' distribution='step' />" +
             "    <attribute name='n' type='int' script='n + 1' />" +
@@ -380,7 +370,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   /** Tests the nesting of an &lt;execute&gt; element within a &lt;generate&gt; element */
   @Test
   public void testSubExecute() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='dummy' count='3'>" +
             "   <execute>bean.invoke(2)</execute>" +
             "</generate>");
@@ -395,7 +385,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
   /** Tests pure {@link Entity} generation */
   @Test
   public void testGenerate() {
-    Statement statement = parse("<generate type='Person' count='2' consumer='cons' />");
+    Statement statement = parseXmlString("<generate type='Person' count='2' consumer='cons' />");
     ConsumerMock consumer = new ConsumerMock(false);
     context.setGlobal("cons", consumer);
     statement.execute(context);
@@ -405,7 +395,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testGenerateWithOffset() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate name='array' count='3' consumer='cons'>" +
             "    <value type='int' distribution='step' offset='2'/>" +
             "</generate>");
@@ -420,7 +410,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testScopeWithAttributes() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate name='a' count='2' consumer='NoConsumer'>" +
             "   <generate name='b' count='2' consumer='NoConsumer'>" +
             "      <generate name='c' count='2' consumer='ConsoleExporter,cons'>" +
@@ -449,7 +439,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testScopeWithVariables() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate name='a' count='2' consumer='NoConsumer'>" +
             "   <generate name='b' count='2' consumer='NoConsumer'>" +
             "      <generate name='c' count='2' consumer='ConsoleExporter,cons'>" +
@@ -485,7 +475,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testIdIgnored() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate name='a' count='3' consumer='cons'>" +
             "   <id name='id' mode='ignored' />" +
             "</generate>"
@@ -501,7 +491,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testAttributeIgnored() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate name='a' count='3' consumer='cons'>" +
             "   <attribute name='att' mode='ignored' />" +
             "</generate>"
@@ -517,7 +507,7 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testReferenceIgnored() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<generate type='a' count='3' consumer='cons'>" +
             "   <reference name='ref' targetType='b' mode='ignored' />" +
             "</generate>"

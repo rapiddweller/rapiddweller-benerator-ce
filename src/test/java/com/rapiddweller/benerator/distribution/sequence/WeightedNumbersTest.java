@@ -88,7 +88,7 @@ public class WeightedNumbersTest extends AbstractBeneratorIntegrationTest {
         + "    <attribute name='y' type='int' distribution=\"new WeightedNumbers('0^70,1^20,2^10')\"/>\n"
         + "  </generate>\n"
         + "</setup>";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     MemStore mem = (MemStore) context.get("mem");
     ObjectCounter<Integer> counter = new ObjectCounter<>(3);
     for (Entity entity : mem.getEntities("x")) {
@@ -110,7 +110,7 @@ public class WeightedNumbersTest extends AbstractBeneratorIntegrationTest {
         + "    </part>\n"
         + "  </generate>\n"
         + "</setup>";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     MemStore mem = (MemStore) context.get("mem");
     ObjectCounter<Integer> counter = new ObjectCounter<>(3);
     for (Entity entity : mem.getEntities("x")) {

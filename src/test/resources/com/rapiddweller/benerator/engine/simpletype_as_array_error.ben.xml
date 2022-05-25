@@ -1,0 +1,6 @@
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <generate count="10" consumer="ConsoleExporter">
+        <variable name="myvar" type="int" constant="5"/>
+        <attribute name="test" script="myvar[0]"/>
+    </generate>
+</setup>

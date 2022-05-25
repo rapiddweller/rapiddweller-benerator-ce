@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -27,40 +27,54 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.exception.ApplicationException;
+import com.rapiddweller.platform.memstore.MemStore;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 /**
  * Integration test for Benerator's Script functionality.<br/><br/>
- * <p>
  * Created at 30.12.2020
- *
  * @author Alexander Kell
+ * @author Volker Bergmann
  * @since 1.1.0
  */
 public class ScriptIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Script in file.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void scriptInFile() throws IOException {
     context.setContextUri("/com/rapiddweller/benerator/engine/script");
     parseAndExecuteFile("/com/rapiddweller/benerator/engine/script/scriptfile.ben.xml");
+    MemStore mem = (MemStore) context.get("mem");
+    assertEquals(2, mem.entityCount("person"));
+    assertEquals(5, mem.entityCount("script"));
   }
 
-  /**
-   * Script in code.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void scriptInCode() throws IOException {
     context.setContextUri("/com/rapiddweller/benerator/engine/script");
     parseAndExecuteFile("/com/rapiddweller/benerator/engine/script/scriptcode.ben.xml");
+    MemStore mem = (MemStore) context.get("mem");
+    assertEquals(2, mem.entityCount("person"));
+    assertEquals(5, mem.entityCount("script"));
+  }
+
+  @Test
+  public void testAccessSimpleTypeAsArray() {
+    String fileName = "simpletype_as_array_error.ben.xml";
+    try {
+      parseAndExecuteFile(getClass().getPackageName().replace('.', '/') + "/" + fileName);
+    } catch (ApplicationException e) {
+      assertEquals("Cannot do index-based access on Integer. Script text: 'myvar[0]'. File simpletype_as_array_error.ben.xml, line 4",
+          e.getMessage());
+      assertEquals("BEN-0120", e.getErrorId());
+      return;
+    }
+    fail("Expected exception is missing");
   }
 
 }

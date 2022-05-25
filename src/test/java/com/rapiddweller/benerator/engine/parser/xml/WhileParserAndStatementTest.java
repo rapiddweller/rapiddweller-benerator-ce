@@ -47,7 +47,7 @@ public class WhileParserAndStatementTest extends AbstractBeneratorIntegrationTes
   @Test
   public void testNoLoop() {
     context.setGlobal("count", 0);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<while test='2==3'>" +
             "	<evaluate id='count'>count + 1</evaluate>" +
             "</while>");
@@ -60,7 +60,7 @@ public class WhileParserAndStatementTest extends AbstractBeneratorIntegrationTes
   @Test
   public void testThreeLoops() {
     context.setGlobal("count", 0);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<while test='count &lt; 3'>" +
             "	<execute>count = count + 1</execute>" +
             "</while>");

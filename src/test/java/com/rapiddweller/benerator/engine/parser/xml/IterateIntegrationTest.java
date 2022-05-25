@@ -30,7 +30,7 @@ public class IterateIntegrationTest extends AbstractBeneratorIntegrationTest {
   /** Tests iterating an {@link EntitySource} */
   @Test
   public void testIterate() {
-    Statement statement = parse("<iterate type='Person' source='personSource' consumer='cons' />");
+    Statement statement = parseXmlString("<iterate type='Person' source='personSource' consumer='cons' />");
     PersonSource source = new PersonSource();
     source.setContext(context);
     context.setGlobal("personSource", source);
@@ -58,7 +58,7 @@ public class IterateIntegrationTest extends AbstractBeneratorIntegrationTest {
       db.execute("insert into GOIPAST (id, n) values (1, 3)");
       db.execute("insert into GOIPAST (id, n) values (2, 4)");
       // parse and run statement
-      Statement statement = parse(
+      Statement statement = parseXmlString(
           "<iterate type='GOIPAST' source='db' consumer='db.updater()'>" +
               "   <attribute name='n' constant='2' />" +
               "</iterate>"
@@ -88,7 +88,7 @@ public class IterateIntegrationTest extends AbstractBeneratorIntegrationTest {
         new Integer[] {4},
         new Integer[] {5});
     context.setGlobal("source", source);
-    Statement statement = parse("<iterate source='source' offset='2' type='array' count='3' consumer='cons' />");
+    Statement statement = parseXmlString("<iterate source='source' offset='2' type='array' count='3' consumer='cons' />");
     ConsumerMock consumer = new ConsumerMock(true, 1);
     context.setGlobal("cons", consumer);
     statement.execute(context);

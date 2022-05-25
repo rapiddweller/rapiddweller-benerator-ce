@@ -61,7 +61,7 @@ public class ArrayGenerationIntegrationTest extends AbstractBeneratorIntegration
   @SuppressWarnings("checkstyle:FileTabCharacter")
   @Test
   public void testSimpleCase() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate count='2' consumer='cons'>" +
             "	<value type='int' constant='3'/>" +
             "	<value type='string' constant='x'/>" +

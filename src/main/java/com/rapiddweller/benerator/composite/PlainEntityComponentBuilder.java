@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.common.Mutator;
+import com.rapiddweller.common.TextFileLocation;
 import com.rapiddweller.common.exception.MutationFailed;
 import com.rapiddweller.model.data.Entity;
 
@@ -39,8 +40,8 @@ import com.rapiddweller.model.data.Entity;
  */
 public class PlainEntityComponentBuilder extends AbstractComponentBuilder<Entity> {
 
-  public PlainEntityComponentBuilder(String name, Generator<?> source, String scope) {
-    super(source, new EntityPropertyMutator(name), scope);
+  public PlainEntityComponentBuilder(String name, Generator<?> source, String scope, TextFileLocation fileLocation) {
+    super(source, new EntityPropertyMutator(name), scope, fileLocation);
   }
 
   public String getName() {

@@ -66,19 +66,19 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
 
   @Test(expected = SyntaxError.class)
   public void testImport_without_attributes() {
-    parse("<import/>");
+    parseXmlString("<import/>");
   }
 
   @Test(expected = SyntaxError.class)
   public void testImport_platform_not_found() {
-    Statement statement = parse("<import package='not_a_platform'/>");
+    Statement statement = parseXmlString("<import package='not_a_platform'/>");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
   }
 
   @Test
   public void testDefaults() {
-    Statement statement = parse("<import defaults='true' />");
+    Statement statement = parseXmlString("<import defaults='true' />");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
     assertNotNull(context.forName("IncrementGenerator"));
@@ -87,7 +87,7 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
   @Test
   public void testImport_platform_without_descriptor() {
     try {
-      parse("<import platforms='test_no_desc'/>");
+      parseXmlString("<import platforms='test_no_desc'/>");
       fail("Exception expected");
     } catch (ApplicationException e) {
       assertEquals(BeneratorErrorIds.SYN_IMPORT_PLATFORMS, e.getErrorId());
@@ -116,7 +116,7 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
 
   @Test
   public void testMultiPlatforms() {
-    Statement statement = parse("<import platforms='db, xml'/>");
+    Statement statement = parseXmlString("<import platforms='db, xml'/>");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
     assertNotNull(context.forName("DefaultDBSystem"));
@@ -125,7 +125,7 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
 
   @Test
   public void testDomains() {
-    Statement statement = parse("<import domains='person, address' />");
+    Statement statement = parseXmlString("<import domains='person, address' />");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
     assertNotNull(context.forName("PersonGenerator"));
@@ -134,7 +134,7 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
 
   @Test(expected = SyntaxError.class)
   public void testImportAttributeTypo() {
-    parse("<import platmof='typo' />");
+    parseXmlString("<import platmof='typo' />");
   }
 
 }

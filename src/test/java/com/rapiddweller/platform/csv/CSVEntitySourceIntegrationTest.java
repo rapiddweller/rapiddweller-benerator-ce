@@ -82,7 +82,7 @@ public class CSVEntitySourceIntegrationTest extends AbstractBeneratorIntegration
   }
 
   private void check(String xml, String expectedAge) {
-    parseAndExecute(xml);
+    parseAndExecuteXmlString(xml);
     MemStore mem = (MemStore) context.get("mem");
     List<Entity> persons = mem.getEntities("person");
     assertEquals(2, persons.size());

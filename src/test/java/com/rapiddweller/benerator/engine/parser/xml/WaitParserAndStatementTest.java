@@ -68,27 +68,27 @@ public class WaitParserAndStatementTest extends AbstractBeneratorIntegrationTest
 
   @Test(expected = SyntaxError.class)
   public void testMutualExclusionFull() {
-    parse("<wait duration='1000' min='11' max='25' granularity='2' distribution='step'/>");
+    parseXmlString("<wait duration='1000' min='11' max='25' granularity='2' distribution='step'/>");
   }
 
   @Test(expected = SyntaxError.class)
   public void testMutualExclusionMin() {
-    parse("<wait duration='1000' min='11'/>");
+    parseXmlString("<wait duration='1000' min='11'/>");
   }
 
   @Test(expected = SyntaxError.class)
   public void testMutualExclusionMax() {
-    parse("<wait duration='1000' max='11'/>");
+    parseXmlString("<wait duration='1000' max='11'/>");
   }
 
   @Test(expected = SyntaxError.class)
   public void testMutualExclusionDistribution() {
-    parse("<wait duration='1000' distribution='random'/>");
+    parseXmlString("<wait duration='1000' distribution='random'/>");
   }
 
   @Test(expected = SyntaxError.class)
   public void testMutualExclusionGranularity() {
-    parse("<wait duration='1000' granularity='1000'/>");
+    parseXmlString("<wait duration='1000' granularity='1000'/>");
   }
 
 }

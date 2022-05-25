@@ -32,7 +32,7 @@ public class PartIntegrationTest extends AbstractBeneratorIntegrationTest {
             + "    </generate>\n"
             + "</setup>\n";
     // WHEN generating data
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     // THEN all counts (3, 4, 5) must have roughly the same frequency
     MemStore mem = (MemStore) context.get("mem");
     Collection<Entity> persons = mem.getEntities("person");
@@ -52,7 +52,7 @@ public class PartIntegrationTest extends AbstractBeneratorIntegrationTest {
             + "    </generate>\n"
             + "</setup>\n";
     // WHEN generating data
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     // THEN all counts (0, 1, 2) must have roughly the same frequency
     MemStore mem = (MemStore) context.get("mem");
     mem.printContent(new ConsolePrinter());

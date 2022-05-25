@@ -51,7 +51,7 @@ public class XLSIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testDefault() {
     ConsumerMock con = new ConsumerMock(true);
     context.setGlobal("con", con);
-    parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' consumer='con'/>");
+    parseAndExecuteXmlString("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' consumer='con'/>");
     List<Entity> products = (List<Entity>) con.getProducts();
     assertEquals(1, products.size());
     assertPersonValues("Alice", 123L, TimeUtil.date(2008, 11, 31), TimeUtil.date(2008, 11, 31, 13, 45, 0, 0), products.get(0));
@@ -63,7 +63,7 @@ public class XLSIntegrationTest extends AbstractBeneratorIntegrationTest {
     ConsumerMock con = new ConsumerMock(true);
     context.setGlobal("con", con);
     LocaleUtil.runInLocale(Locale.US,
-        () -> parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' format='formatted' consumer='con'/>"));
+        () -> parseAndExecuteXmlString("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' format='formatted' consumer='con'/>"));
     List<Entity> products = (List<Entity>) con.getProducts();
     assertEquals(1, products.size());
     assertPersonValues("Alice", "123", "2008-Dec-31", "13:45", products.get(0));
@@ -74,7 +74,7 @@ public class XLSIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testSheet() {
     ConsumerMock con = new ConsumerMock(true);
     context.setGlobal("con", con);
-    parseAndExecute("<iterate type='dummy' segment='address' source='com/rapiddweller/benerator/engine/xls/sheets.xls' consumer='con'/>");
+    parseAndExecuteXmlString("<iterate type='dummy' segment='address' source='com/rapiddweller/benerator/engine/xls/sheets.xls' consumer='con'/>");
     List<Entity> products = (List<Entity>) con.getProducts();
     assertEquals(1, products.size());
     Entity address = products.get(0);

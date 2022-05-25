@@ -45,7 +45,7 @@ public class IfParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testPlainTrue() {
-    parseAndExecute("<if test='1==1'><setting name='executed' value='OK'/></if>");
+    parseAndExecuteXmlString("<if test='1==1'><setting name='executed' value='OK'/></if>");
     assertEquals("OK", context.getGlobal("executed"));
   }
 
@@ -65,13 +65,13 @@ public class IfParserAndStatementTest extends AbstractBeneratorIntegrationTest {
   }
 
   private void executeAndCheckGlobal(String xml, String expectedGlobal) {
-    parseAndExecute(xml);
+    parseAndExecuteXmlString(xml);
     assertEquals(expectedGlobal, context.getGlobal("executed"));
   }
 
   @Test
   public void testThenElse() {
-    Statement statement = parse(
+    Statement statement = parseXmlString(
         "<if test='x==3'>" +
             "	<then>" +
             "		<setting name='executed' value='OK'/>" +
@@ -93,7 +93,7 @@ public class IfParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   @Test(expected = SyntaxError.class)
   public void testElseWithoutIf() {
-    parseAndExecute("<if test='2==3'><else/></if>");
+    parseAndExecuteXmlString("<if test='2==3'><else/></if>");
   }
 
   @Test(expected = SyntaxError.class)

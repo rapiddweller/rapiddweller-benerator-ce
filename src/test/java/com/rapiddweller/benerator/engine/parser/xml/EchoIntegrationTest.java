@@ -42,25 +42,25 @@ public class EchoIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testSimpleMessageAttribute() {
-    EchoStatement statement = (EchoStatement) parse("<echo message='Hello' />");
+    EchoStatement statement = (EchoStatement) parseXmlString("<echo message='Hello' />");
     assertEquals("Hello", statement.getExpression().evaluate(context));
   }
 
   @Test
   public void testSimpleElementText() {
-    EchoStatement statement = (EchoStatement) parse("<echo>Hello</echo>");
+    EchoStatement statement = (EchoStatement) parseXmlString("<echo>Hello</echo>");
     assertEquals("Hello", statement.getExpression().evaluate(context));
   }
 
   @Test
   public void testEscapedMessageAttribute() {
-    EchoStatement statement = (EchoStatement) parse("<echo message=\"\\'Test\\'\" />");
+    EchoStatement statement = (EchoStatement) parseXmlString("<echo message=\"\\'Test\\'\" />");
     assertEquals("'Test'", statement.getExpression().evaluate(context));
   }
 
   @Test
   public void testEscapedElementText() {
-    EchoStatement statement = (EchoStatement) parse("<echo>\\'Test\\'</echo>");
+    EchoStatement statement = (EchoStatement) parseXmlString("<echo>\\'Test\\'</echo>");
     assertEquals("'Test'", statement.getExpression().evaluate(context));
   }
 
@@ -91,18 +91,18 @@ public class EchoIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testLeafElement() {
-    EchoStatement statement = (EchoStatement) parse("<echo/>");
+    EchoStatement statement = (EchoStatement) parseXmlString("<echo/>");
     assertEquals("", statement.getExpression().evaluate(context));
   }
 
   @Test
   public void testEmptyElement() {
-    EchoStatement statement = (EchoStatement) parse("<echo></echo>");
+    EchoStatement statement = (EchoStatement) parseXmlString("<echo></echo>");
     assertEquals("", statement.getExpression().evaluate(context));
   }
 
   private void checkNameResolution(String xmlText) {
-    EchoStatement statement = (EchoStatement) parse(xmlText);
+    EchoStatement statement = (EchoStatement) parseXmlString(xmlText);
     context.set("name", "Volker");
     assertEquals("Hello Volker", statement.getExpression().evaluate(context));
   }

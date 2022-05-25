@@ -49,19 +49,19 @@ public class SettingIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testValue() {
-    parseAndExecute("<setting name='globalProp' value='XYZ' />");
+    parseAndExecuteXmlString("<setting name='globalProp' value='XYZ' />");
     assertEquals("XYZ", context.get("globalProp"));
   }
 
   @Test
   public void testEscapedValue() {
-    parseAndExecute("<setting name='globalProp' value=\"\\'\\t\\'\" />");
+    parseAndExecuteXmlString("<setting name='globalProp' value=\"\\'\\t\\'\" />");
     assertEquals("'\t'", context.get("globalProp"));
   }
 
   @Test
   public void testDateValue() {
-    parseAndExecute("<setting name='globalProp' value='{new java.util.Date()}' />");
+    parseAndExecuteXmlString("<setting name='globalProp' value='{new java.util.Date()}' />");
     Object prop = context.get("globalProp");
     assertTrue(prop instanceof Date);
     long expected = TimeUtil.millisSinceOwnEpoch((Date) prop);
@@ -71,13 +71,13 @@ public class SettingIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDefault_undefined() {
-    parseAndExecute("<setting name='globalProp' default='XYZ' />");
+    parseAndExecuteXmlString("<setting name='globalProp' default='XYZ' />");
     assertEquals("XYZ", context.get("globalProp"));
   }
 
   @Test
   public void testDefault_predefined() {
-    Statement statement = parse("<setting name='globalProp' default='XYZ' />");
+    Statement statement = parseXmlString("<setting name='globalProp' default='XYZ' />");
     context.setGlobal("globalProp", "ZZZ");
     statement.execute(context);
     assertEquals("ZZZ", context.get("globalProp"));
@@ -86,20 +86,20 @@ public class SettingIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testRef() {
     context.setGlobal("setting", "cfg");
-    parseAndExecute("<setting name='globalProp' ref='setting' />");
+    parseAndExecuteXmlString("<setting name='globalProp' ref='setting' />");
     assertEquals("cfg", context.get("globalProp"));
   }
 
   @Test
   public void testSource() {
     context.setGlobal("myGen", new ConstantGenerator<>("myProd"));
-    parseAndExecute("<setting name='globalProp' source='myGen' />");
+    parseAndExecuteXmlString("<setting name='globalProp' source='myGen' />");
     assertEquals("myProd", context.get("globalProp"));
   }
 
   @Test
   public void testNestedBean() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<setting name='globalProp'>" +
             "	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(123)'/>" +
             "</setting>");
@@ -108,7 +108,7 @@ public class SettingIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testNestedBeanArray() {
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<setting name='globalProp'>" +
             "	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(1)'/>" +
             "	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(2)'/>" +
@@ -121,13 +121,13 @@ public class SettingIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test(expected = SyntaxError.class)
   public void testInvalid() {
-    parseAndExecute("<setting name='globalProp' xyz='XYZ' />");
+    parseAndExecuteXmlString("<setting name='globalProp' xyz='XYZ' />");
   }
 
   @Test
   public void testBeneratorProperty() {
     assertNotEquals(123, context.getDefaultPageSize());
-    parseAndExecute("<setting name='context.defaultPageSize' value='123' />");
+    parseAndExecuteXmlString("<setting name='context.defaultPageSize' value='123' />");
     assertEquals(123, context.getDefaultPageSize());
   }
 

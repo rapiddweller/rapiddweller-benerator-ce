@@ -78,7 +78,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testStore() {
     MemStore.ignoreClose = true;
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='product' count='3' consumer='dst'>" +
             "	<id name='id' type='int' />" +
             "</generate>"
@@ -98,7 +98,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testIterate() {
     MemStore.ignoreClose = false;
-    parseAndExecute("<iterate source='src' type='product' consumer='cons'/>");
+    parseAndExecuteXmlString("<iterate source='src' type='product' consumer='cons'/>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(3, products.size());
     int index = 3;
@@ -114,7 +114,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testIterateWithSelector() {
     MemStore.ignoreClose = false;
-    parseAndExecute("<iterate source='src' type='product' selector='_candidate.id == 4' consumer='cons'/>");
+    parseAndExecuteXmlString("<iterate source='src' type='product' selector='_candidate.id == 4' consumer='cons'/>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(1, products.size());
     assertEquals(4, products.get(0).get("id"));
@@ -125,8 +125,8 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testIterateWithJsSelector() {
     MemStore.ignoreClose = false;
-    parseAndExecute("<execute type='js'>let test = 2 </execute>");
-    parseAndExecute("<iterate source='src' type='product' selector='{js: _candidate.id == test + 1 + 1}' consumer='cons'/>");
+    parseAndExecuteXmlString("<execute type='js'>let test = 2 </execute>");
+    parseAndExecuteXmlString("<iterate source='src' type='product' selector='{js: _candidate.id == test + 1 + 1}' consumer='cons'/>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(1, products.size());
     assertEquals(4, products.get(0).get("id"));
@@ -138,7 +138,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testVariable() {
     MemStore.ignoreClose = false;
     context.setDefaultOneToOne(true);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='order' count='unbounded' consumer='cons'>" +
             "	<variable name='p' source='src' type='product'/>" +
             "	<id name='id' type='int'/>" +
@@ -161,7 +161,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testPart() {
     MemStore.ignoreClose = false;
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='order' count='unbounded' consumer='cons'>" +
             "	<id name='id' type='int' />" +
             "	<part name='product' type='product' source='src' count='1'/>" +
@@ -184,7 +184,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testReference() {
     MemStore.ignoreClose = false;
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='order' count='unbounded' consumer='cons'>" +
             "	<id name='id' type='int' />" +
             "	<reference name='product_id' type='int' source='src' targetType='product' selector='_candidate!=5' unique='true'/>" +
@@ -206,7 +206,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testInserter_with_type() {
     MemStore mem = new MemStore("mem", dataModel);
     context.set("mem", mem);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='user' count='5' consumer=\"mem.inserter('customer')\">" +
             "	<id name='id' type='int'/>" +
             "</generate>"
@@ -225,7 +225,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testUpdater_with_type() {
     MemStore mem = new MemStore("mem", dataModel);
     context.set("mem", mem);
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<setup>" +
             "  <generate type='customer' count='5' consumer='mem'>" +
             "    <id name='id' type='int'/>" +
@@ -252,7 +252,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testIntegration() {
     MemStore.ignoreClose = true;
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<setup>" +
             "	<import platforms='memstore'/>" +
             "	<memstore id='store'/>" +

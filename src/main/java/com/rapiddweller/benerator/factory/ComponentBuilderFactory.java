@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -44,7 +44,6 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.distribution.sequence.ExpandSequence;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
-import com.rapiddweller.benerator.primitive.ScriptGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.wrapper.AsIntegerGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
@@ -54,8 +53,6 @@ import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.format.script.Script;
-import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.model.data.AlternativeGroupDescriptor;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -130,8 +127,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     if (scriptText == null) {
       return null;
     }
-    Script script = ScriptUtil.parseScriptText(scriptText);
-    Generator<?> generator = new ScriptGenerator(script);
+    Generator<?> generator = FactoryUtil.createScriptGenerator(scriptText);
     generator = DescriptorUtil.createConvertingGenerator(component.getTypeDescriptor(), generator, context);
     return builderFromGenerator(generator, component, context);
   }
@@ -368,9 +364,9 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     String scope = (typeDescriptor != null ? typeDescriptor.getScope() : null);
     if (descriptor instanceof ArrayElementDescriptor) {
       int index = ((ArrayElementDescriptor) descriptor).getIndex();
-      return new ArrayElementBuilder(index, source, scope);
+      return new ArrayElementBuilder(index, source, scope, descriptor.getFileLocation());
     } else {
-      return new PlainEntityComponentBuilder(descriptor.getName(), source, scope);
+      return new PlainEntityComponentBuilder(descriptor.getName(), source, scope, descriptor.getFileLocation());
     }
   }
 

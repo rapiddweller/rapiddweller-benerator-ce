@@ -75,7 +75,7 @@ public class DateTimeIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDateWithMinMaxAndGranularity() {
     // create DateTimeGenerator from XML descriptor
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='entity' count='500' consumer='cons'>" +
             "  <value type='date' min='2008-09-29' max='2008-10-02' granularity='0000-00-01'/>" +
             "</generate>");
@@ -97,7 +97,7 @@ public class DateTimeIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDateWithMinAndMax() {
     // create DateTimeGenerator from XML descriptor
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='entity' count='500' consumer='cons'>" +
             "  <value type='date' min='2008-09-29' max='2008-10-02' />" +
             "</generate>");
@@ -119,7 +119,7 @@ public class DateTimeIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDateWithMin() {
     // create DateTimeGenerator from XML descriptor
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='entity' count='500' consumer='cons'>" +
             "  <value type='date' min='2008-09-29' />" +
             "</generate>");
@@ -140,7 +140,7 @@ public class DateTimeIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testDateWithMax() {
     // create DateTimeGenerator from XML descriptor
-    parseAndExecute(
+    parseAndExecuteXmlString(
         "<generate type='entity' count='500' consumer='cons'>" +
             "  <value type='date' max='2008-10-02' />" +
             "</generate>");

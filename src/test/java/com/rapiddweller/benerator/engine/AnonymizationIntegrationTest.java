@@ -39,7 +39,7 @@ public class AnonymizationIntegrationTest extends AbstractBeneratorIntegrationTe
             "  <memstore id='out'/>" +
             "  <iterate source='mem' type='person' consumer='out'/>" +
             "</setup>";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     MemStore out = (MemStore) context.get("out");
     for (Entity person : out.getEntities("person")) {
       assertEquals("Alice", person.get("name"));
@@ -56,7 +56,7 @@ public class AnonymizationIntegrationTest extends AbstractBeneratorIntegrationTe
             "    <attribute name='name' converter='new MiddleMask(0,2)'/>" +
             "  </iterate>" +
             "</setup>";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     MemStore out = (MemStore) context.get("out");
     for (Entity person : out.getEntities("person")) {
       assertEquals("***ce", person.get("name"));
@@ -73,7 +73,7 @@ public class AnonymizationIntegrationTest extends AbstractBeneratorIntegrationTe
             "    <attribute name='name' constant='xxx'/>" +
             "  </iterate>" +
             "</setup>";
-    BeneratorContext context = parseAndExecute(xml);
+    BeneratorContext context = parseAndExecuteXmlString(xml);
     MemStore out = (MemStore) context.get("out");
     for (Entity person : out.getEntities("person")) {
       assertEquals("xxx", person.get("name"));
