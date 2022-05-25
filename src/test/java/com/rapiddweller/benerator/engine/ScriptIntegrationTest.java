@@ -69,7 +69,8 @@ public class ScriptIntegrationTest extends AbstractBeneratorIntegrationTest {
     try {
       parseAndExecuteFile(getClass().getPackageName().replace('.', '/') + "/" + fileName);
     } catch (ApplicationException e) {
-      assertEquals("Cannot do index-based access on Integer. Script text: 'myvar[0]' in  file file:///Users/volker/IdeaProjects/rapiddweller-benerator-ce/com/rapiddweller/benerator/engine/simpletype_as_array_error.ben.xml line 4 column 51", e.getMessage());
+      assertEquals("Cannot do index-based access on Integer. Script text: 'myvar[0]'. File simpletype_as_array_error.ben.xml, line 4",
+          e.getMessage());
       assertEquals("BEN-0120", e.getErrorId());
       return;
     }
