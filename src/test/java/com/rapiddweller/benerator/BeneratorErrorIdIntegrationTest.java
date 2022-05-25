@@ -685,7 +685,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0469_syn_iter_ill_selector() {
     BeneratorResult result = runFile("test_0469_syn_iter_ill_selector.ben.xml");
     assertResult(BeneratorErrorIds.SCRIPT_FAILED, // TODO should be SYN_ITERATE_SELECTOR
-        "Unable to resolve 'none'. Script text: 'none'",
+        "Unable to resolve 'none'. Script text: 'none'.",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -889,14 +889,14 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0558_syn_attr_ill_condition() {
     BeneratorResult result = runFile("test_0558_syn_attr_ill_condition.ben.xml");
     assertResult(BeneratorErrorIds.SCRIPT_FAILED, // TODO should be SYN_ATTR_CONDITION
-        "Unable to resolve 'none'. Script text: 'none'", ExitCodes.SYNTAX_ERROR, result);
+        "Unable to resolve 'none'. Script text: 'none'.", ExitCodes.SYNTAX_ERROR, result);
   }
 
   @Test
   public void test_0559_syn_attr_ill_filter() {
     BeneratorResult result = runFile("test_0559_syn_attr_ill_filter.ben.xml");
     assertResult(BeneratorErrorIds.SCRIPT_FAILED, // TODO should be SYN_ATTR_FILTER
-        "Unable to resolve 'none'. Script text: 'none'",
+        "Unable to resolve 'none'. Script text: 'none'.",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
