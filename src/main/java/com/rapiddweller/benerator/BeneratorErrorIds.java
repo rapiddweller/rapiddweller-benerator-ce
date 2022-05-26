@@ -267,6 +267,11 @@ public class BeneratorErrorIds {
   public static final String SYN_TEMPLATE_NAME = "BEN-0390";
   public static final String SYN_TEMPLATE_TYPE = "BEN-0391";
 
+  // Syntax Errors regarding <pre-parse-generate> ------------------------------------------------------------------------------
+
+  public static final String SYN_PRE_PARSE_GENERATE_ATTR = "BEN-0392";
+  public static final String SYN_PRE_PARSE_GENERATE_TARGET = "BEN-0393";
+
   // Syntax Errors regarding <generate> ------------------------------------------------------------------------------
 
   public static final String SYN_GENERATE_ILLEGAL_ATTR = "BEN-0400";
@@ -623,6 +628,16 @@ public class BeneratorErrorIds {
 
   public static final String SYN_XML_SIMPLE_NAME = "BEN-2300";
   public static final String SYN_XML_SIMPLE_TYPE = "BEN-2301";
+
+  // Syntax Errors regarding <mongodb> ------------------------------------------------------------------------------
+
+  public static final String SYN_SYSTEM_STORAGE_ATTR         = "BEN-2400";
+  public static final String SYN_SYSTEM_STORAGE_ID           = "BEN-2401";
+
+  // Syntax Errors regarding <meta-model> ------------------------------------------------------------------------------
+
+  public static final String SYN_META_MODEL_ATTR = "BEN-2500";
+  public static final String SYN_META_MODEL_ID = "BEN-2501";
 
 	// end of constants list -------------------------------------------------------------------------------------------
 

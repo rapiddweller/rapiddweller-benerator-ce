@@ -70,6 +70,7 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
   public static final String NESTING = "nesting";
 
   public static final String DISTRIBUTION = "distribution";
+  public static final String META_MODEL = "meta-model";
 
   // attributes ------------------------------------------------------------------------------------------------------
 
@@ -115,6 +116,7 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
     addConfig(ENCODING, String.class);
     addConfig(SCOPE, String.class);
     addConfig(CYCLIC, Boolean.class);
+    addConfig(META_MODEL, Boolean.class);
     // i18n config
     addConfig(LOCALE, Locale.class);
     addConfig(DATASET, String.class);

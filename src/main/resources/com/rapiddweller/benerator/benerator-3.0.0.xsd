@@ -54,10 +54,13 @@
             <xs:element ref="wait" minOccurs="0"/>
             <xs:element ref="domtree" minOccurs="0"/>
             <!--xs:element ref="template" minOccurs="0"/-->
+            <xs:element ref="meta-model" minOccurs="0"/>
+            <xs:element ref="pre-parse-generate" minOccurs="0"/>
             <xs:element ref="generate" minOccurs="0"/>
             <xs:element ref="iterate" minOccurs="0"/>
             <xs:element ref="anon-check" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="defaultComponents" minOccurs="0"/>
+            <xs:element ref="mongodb" minOccurs="0"/>
             <xs:element ref="database" minOccurs="0"/>
             <xs:element ref="transcodingTask" minOccurs="0"/>
             <xs:element ref="jms-destination" minOccurs="0"/>
@@ -338,6 +341,41 @@
         </xs:complexType>
     </xs:element-->
 
+    <xs:element name="meta-model">
+        <xs:annotation>
+            <xs:documentation>
+                Can be used to define meta model for entities. <!-- TODO complete doc -->
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="value" minOccurs="0"/>
+                <xs:element ref="id" minOccurs="0"/>
+                <xs:element ref="compositeId" minOccurs="0"/>
+                <xs:element ref="attribute" minOccurs="0"/>
+                <xs:element ref="reference" minOccurs="0"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="consumer" minOccurs="0"/>
+                <xs:element ref="meta-model" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="optional"/>
+            <xs:attributeGroup ref="generator-attrs"/>
+            <xs:attribute name="consumer" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="pre-parse-generate">
+        <xs:annotation>
+            <xs:documentation>
+                Marker for pre parsing generate tags to type descriptors and distribute them to custom storage systems.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="target" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
     <!-- start of elements related to <generate> and <iterate> - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <xs:element name="generate">
@@ -444,8 +482,10 @@
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:choice>
-                <xs:element ref="attribute"/>
-                <xs:element ref="part"/>
+                    <xs:element ref="id" minOccurs="0"/>
+                    <xs:element ref="attribute"/>
+                    <xs:element ref="part"/>
+                    <xs:element ref="reference"/>
                 </xs:choice>
             </xs:sequence>
             <xs:attribute name="name" type="xs:string" use="required"/>
@@ -780,6 +820,22 @@
         </xs:complexType>
     </xs:element>
 
+    <!-- NoSQL systems - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <!-- connects to a mongodb -->
+    <xs:element name="mongodb">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="id" use="required"/>
+            <xs:attribute type="xs:string" name="host"/>
+            <xs:attribute type="scriptable-positive-int" name="port"/>
+            <xs:attribute type="xs:string" name="database"/>
+            <xs:attribute type="xs:string" name="user"/>
+            <xs:attribute type="xs:string" name="password"/>
+            <xs:attribute type="scriptable-boolean" name="clean"/>
+            <xs:attribute name="environment" type="xs:string"/>
+            <xs:attribute name="system" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
 
     <!-- JMS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

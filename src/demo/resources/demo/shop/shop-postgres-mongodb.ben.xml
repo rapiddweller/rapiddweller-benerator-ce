@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 http://benerator.de/schema/rapiddweller-benerator-ce-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US">
+
+    <comment>
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ! Demonstration file for populating the shop database. !
+        ! !
+        ! You can choose a database and a stage like this: !
+        ! -Dstage=development -Ddatabase=oracle !
+        ! !
+        ! These database types are provided: !
+        ! sql: oracle, db2, sql_server, mysql, postgres, hsql, !
+        ! hsqlmem, firebird, derby, h2 !
+        ! no sql: mongodb !
+        ! !
+        ! ...and these stage configurations: !
+        ! development, perftest !
+        ! !
+        ! Set up your database connection in the file !
+        ! &lt;database&gt;/shop.&lt;database&gt;.properties !
+        ! !
+        ! You may want to try different generation quantities in !
+        ! shop.&lt;stage&gt;.properties !
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    </comment>
+
+    <import domains="person,net,product"/>
+    <import platforms="db"/>
+
+    <comment>setting default values</comment>
+    <setting name="stage" default="development"/>
+
+    <setting name="database_mongodb" default="mongodb"/>
+    <setting name="database_postgres" default="postgres"/>
+    <setting name="databases_mongodb_postgres" default="mongodb_postgres"/>
+
+    <comment>import stage and database specific properties</comment>
+    <include uri="{ftl:${database_mongodb}/shop.${database_mongodb}.properties}"/>
+    <include uri="{ftl:shop.${stage}.properties}"/>
+    <include uri="{ftl:${database_postgres}/shop.${database_postgres}.properties}"/>
+    <include uri="{ftl:shop.${stage}.properties}"/>
+
+    <comment>log the settings to the console</comment>
+    <echo>Starting generation for</echo>
+    <echo>{ftl: ${product_count + 6} products}</echo>
+    <echo>{ftl: ${customer_count + 1} customers}</echo>
+    <echo>{ftl: ${orders_per_customer} orders per customer}</echo>
+    <echo>{ftl: ${items_per_order} items per order}</echo>
+    <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
+    <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
+
+    <comment>define databases</comment>
+    <comment>define a mongodb database that will be referred by the id 'mongodb' subsequently</comment>
+    <mongodb id="mongodb" host="{ftl:${mongoHost}}" port="{ftl:${mongoPort}}" database="{ftl:${mongoDatabase}}"
+             user="{ftl:${mongoUser}}" password="{ftl:${mongoPassword}}" clean="{ftl:${mongoClean?c}}"/>
+
+    <comment>define a postgres database that will be referred by the id 'postgres' subsequently</comment>
+    <database id="postgres" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
+              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
+
+    <comment>drop the current tables/sequences if they exist and recreate them</comment>
+    <execute uri="{ftl:${databases_mongodb_postgres}/drop_tables.${database_postgres}.sql}" target="postgres"
+             onError="fatal"/>
+    <execute uri="{ftl:${databases_mongodb_postgres}/create_tables.${database_postgres}.sql}" target="postgres"/>
+
+    <pre-parse-generate target="mongodb"/>
+
+    <meta-model type="db_category" consumer="mongodb">
+        <id name="id" type="string" unique="true"/>
+        <attribute name="name" type="string"/>
+        <attribute name="parent_id" type="string"/>
+    </meta-model>
+
+    <comment>Creating a valid base data set for regression testing by importing a DbUnit file</comment>
+    <iterate source="{ftl:${databases_mongodb_postgres}/shop.dbunit_postgres.xml}" consumer="postgres"/>
+    <iterate source="{ftl:${databases_mongodb_postgres}/shop.dbunit_mongodb.xml}" consumer="mongodb"/>
+
+    <comment>Importing some more predefined products from a CSV file</comment>
+    <iterate source="products.import.csv" type="db_product" encoding="utf-8" consumer="mongodb"/>
+
+    <bean id="idGen" spec="new IncrementGenerator(1000)"/>
+
+    <generate type="db_product" count="{product_count}" consumer="mongodb">
+        <id name="ean_code" type="long" generator="new EANGenerator(true)"/>
+        <reference name="category_id" targetType="db_category" source="mongodb" distribution="random"/>
+        <attribute name="price" type="double" min="0.49" max="99.99" granularity="0.10" distribution="cumulated"/>
+        <!-- Export the generated products not only to the database, but also to a fixed column width file -->
+        <consumer class="FixedWidthEntityExporter">
+            <property name="uri" value="target/products.fcw"/>
+            <property name="columns" value="ean_code[13],name[30l],price[10.2r0]"/>
+        </consumer>
+    </generate>
+
+    <comment>create customers</comment>
+    <generate type="db_user" count="{customer_count}" consumer="postgres">
+        <variable name="person" generator="PersonGenerator" dataset="{country}" locale="{locale}"/>
+        <id name="id" generator="idGen"/>
+        <attribute name="name" script="person.givenName + ' ' + person.familyName"/>
+        <attribute name="email" generator="EMailAddressGenerator"/>
+        <attribute name="password" pattern="[A-Za-z0-9]{8,12}"/>
+        <reference name="role_id" constant="customer"/>
+        <generate type="db_customer" count="1" consumer="postgres">
+            <id name="id" script="db_user.id"/>
+            <attribute name="category" values="'A','B','C'"/>
+            <attribute name="salutation" script="person.salutation"/>
+            <attribute name="first_name" script="person.givenName"/>
+            <attribute name="last_name" script="person.familyName"/>
+            <attribute name="birth_date" nullable="false"/>
+        </generate>
+    </generate>
+
+    <comment>create orders for random customers and random products</comment>
+    <generate type="db_order" count="{customer_count * orders_per_customer}" consumer="mongodb">
+        <id name="id" generator="idGen" type="int"/>
+        <reference name="customer_id" type="int" source="postgres" targetType="db_customer" cyclic="true"/>
+        <attribute name="total_price" type="double" constant="0"/>
+    </generate>
+
+    <comment>create order items</comment>
+    <generate type="db_order_item" count="{customer_count * orders_per_customer * items_per_order}" consumer="mongodb">
+        <variable name="product"
+                  source="mongodb"
+                  selector="find: 'db_product', filter: {}, projection: {_id: 0, ean_code: 1, price: 1}"
+                  distribution="cumulated"/>
+        <id name="id" generator="idGen" type="int"/>
+        <attribute name="number_of_items"
+                   min="1" max="27"
+                   distribution="cumulated"
+                   type="int"/>
+        <reference name="order_id"
+                   type="int"
+                   targetType="db_order"
+                   source="mongodb"
+                   selector="find: 'db_order', filter: {id: { $gte: 1 }}, projection: {id: 1}"
+                   cyclic="true"/>
+        <reference name="product_ean_code" script="product[0]"/>
+        <attribute name="total_price" type="double" script="product[1] * db_order_item.number_of_items"/>
+    </generate>
+
+    <comment>Update order data, calculating the total sum of each order</comment>
+    <iterate source="mongodb" type="db_order" consumer="mongodb.updater()">
+        <attribute name="total_price" type="double" source="mongodb" cyclic="true"
+                   selector="{{ftl:'aggregate': 'db_order_item',
+                                    pipeline: [
+                                        {'$match': { 'order_id': { '$eq': ${db_order.id}}}},
+                                        {'$group': { '_id': ${db_order.id}, 'sum': { '$sum': '$total_price'}}},
+                                        {$project: { _id: 0, sum: 1}}],
+                                    cursor: {}
+                                    }}"/>
+    </iterate>
+
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="db_order" source="mongodb" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_order.counter != 301">
+        <error>{ftl: ${db_order.counter} items}</error>
+    </if>
+    <iterate type="db_order_item" source="mongodb" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_order_item.counter != 1501">
+        <error>{ftl: ${db_order_item.counter} items}</error>
+    </if>
+    <iterate type="db_user" source="postgres" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_user.counter != 104">
+        <error>{ftl: ${db_user.counter} items}</error>
+    </if>
+    <iterate type="db_product" source="mongodb" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_product.counter != 57">
+        <error>{ftl: ${db_product.counter} items}</error>
+    </if>
+
+</setup>
