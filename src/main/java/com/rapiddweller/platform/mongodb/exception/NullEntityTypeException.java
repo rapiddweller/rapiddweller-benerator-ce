@@ -1,4 +1,4 @@
-package com.rapiddweller.platform.nosql.exception;
+package com.rapiddweller.platform.mongodb.exception;
 
 import com.rapiddweller.model.data.Entity;
 

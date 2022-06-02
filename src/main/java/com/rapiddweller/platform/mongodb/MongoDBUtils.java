@@ -1,10 +1,10 @@
-package com.rapiddweller.platform.nosql.mongo;
+package com.rapiddweller.platform.mongodb;
 
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.IdDescriptor;
-import com.rapiddweller.platform.nosql.exception.TypeNotFoundException;
-import com.rapiddweller.platform.nosql.mongo.converter.EntityToDocumentConverter;
+import com.rapiddweller.platform.mongodb.exception.TypeNotFoundException;
+import com.rapiddweller.platform.mongodb.converter.EntityToDocumentConverter;
 import org.bson.Document;
 
 public class MongoDBUtils {

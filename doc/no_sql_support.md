@@ -9,7 +9,7 @@ You can implement your own custom implementation for NoSQL databases by
 
 The tag element for your own custom storage system will be parsed in the `AbstractBeneratorDescriptorParser`. It also will create a `Statement`, where the parsed tag elements will be handled and finally handed over to the `CustomStorageSystem`.
 
-> ⚠ **Information**: For a custom storage system reference implementation see ``com.rapiddweller.platform.nosql.mongo.MongoDBSystem``
+> ⚠ **Information**: For a custom storage system reference implementation see ``com.rapiddweller.platform.mongodb.MongoDBSystem``
 
 ## How to handle schema free storage systems
 

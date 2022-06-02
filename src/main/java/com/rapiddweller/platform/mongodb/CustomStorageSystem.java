@@ -1,4 +1,4 @@
-package com.rapiddweller.platform.nosql;
+package com.rapiddweller.platform.mongodb;
 
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.model.data.DataModel;
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract Implementation of a custom storage system. Extend this class for custom storage systems.
  * These custom storage systems can be used with <storage-system>.
- * See {@link com.rapiddweller.platform.nosql.mongo.MongoDBSystem} for reference implementation.
+ * See {@link MongoDBSystem} for reference implementation.
  */
 public abstract class CustomStorageSystem extends AbstractStorageSystem {
 

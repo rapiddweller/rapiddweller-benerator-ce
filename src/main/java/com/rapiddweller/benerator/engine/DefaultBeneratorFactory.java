@@ -260,7 +260,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
 
   private String[] defaultCEPlatformNames() {
     return new String[] { "csv", "db", "dbunit", "fixedwidth",
-        "memstore", "result", "template", "xls", "xml" };
+        "memstore", "result", "template", "xls", "xml", "mongodb" };
   }
 
   @Override

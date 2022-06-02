@@ -1,4 +1,4 @@
-package com.rapiddweller.platform.nosql.mongo.datasource;
+package com.rapiddweller.platform.mongodb.datasource;
 
 import org.bson.Document;
 

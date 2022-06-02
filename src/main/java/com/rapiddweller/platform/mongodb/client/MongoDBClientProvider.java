@@ -1,4 +1,4 @@
-package com.rapiddweller.platform.nosql.mongo.client;
+package com.rapiddweller.platform.mongodb.client;
 
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;

@@ -269,8 +269,8 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <pre-parse-generate> ------------------------------------------------------------------------------
 
-  public static final String SYN_PRE_PARSE_GENERATE_ATTR = "BEN-0392";
-  public static final String SYN_PRE_PARSE_GENERATE_TARGET = "BEN-0393";
+  public static final String SYN_PRE_PARSE_GENERATE_ATTR = "BEN-0392"; // TODO remove?
+  public static final String SYN_PRE_PARSE_GENERATE_TARGET = "BEN-0393"; // TODO remove?
 
   // Syntax Errors regarding <generate> ------------------------------------------------------------------------------
 
@@ -631,8 +631,16 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <mongodb> ------------------------------------------------------------------------------
 
-  public static final String SYN_SYSTEM_STORAGE_ATTR         = "BEN-2400";
-  public static final String SYN_SYSTEM_STORAGE_ID           = "BEN-2401";
+  public static final String SYN_MONGO_ILL_ATTR = "BEN-2400";
+  public static final String SYN_MONGO_ID = "BEN-2401";
+  public static final String SYN_MONGO_HOST = "BEN-2402";
+  public static final String SYN_MONGO_PORT = "BEN-2403";
+  public static final String SYN_MONGO_DATABASE = "BEN-2404";
+  public static final String SYN_MONGO_USER = "BEN-2405";
+  public static final String SYN_MONGO_PASSWORD = "BEN-2406";
+  public static final String SYN_MONGO_CLEAN = "BEN-2407";
+  public static final String SYN_MONGO_ENV = "BEN-2408";
+  public static final String SYN_MONGO_SYS = "BEN-2409";
 
   // Syntax Errors regarding <meta-model> ------------------------------------------------------------------------------
 

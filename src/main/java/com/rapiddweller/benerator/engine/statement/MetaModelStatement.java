@@ -4,7 +4,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.parser.xml.ElementToInstanceDesciptorParser;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.platform.nosql.CustomStorageSystem;
+import com.rapiddweller.platform.mongodb.CustomStorageSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;

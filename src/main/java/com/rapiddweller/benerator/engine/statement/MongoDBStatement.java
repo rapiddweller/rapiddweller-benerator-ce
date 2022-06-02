@@ -4,7 +4,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.Expression;
-import com.rapiddweller.platform.nosql.mongo.MongoDBSystem;
+import com.rapiddweller.platform.mongodb.MongoDBSystem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

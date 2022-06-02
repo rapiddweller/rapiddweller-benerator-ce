@@ -1,4 +1,4 @@
-package com.rapiddweller.platform.nosql.mongo.converter;
+package com.rapiddweller.platform.mongodb.converter;
 
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
