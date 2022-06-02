@@ -17,8 +17,10 @@ package com.rapiddweller.benerator.sensor;
 import com.rapiddweller.stat.LatencyCounter;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -33,8 +35,8 @@ public class Profile {
 	private final Profile parent;
 	private final Map<String, Profile> subProfiles;
 	private final LatencyCounter counter;
-	private final DecimalFormat nf = new DecimalFormat("0");
-	private final DecimalFormat df = new DecimalFormat("0.0");
+	private final DecimalFormat nf = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.US));
+	private final DecimalFormat df = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US));
 
 	public Profile(String name, Profile parent) {
 		this.parent = parent;

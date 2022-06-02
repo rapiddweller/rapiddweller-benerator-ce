@@ -5,7 +5,6 @@ package com.rapiddweller.benerator.sensor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -29,7 +28,7 @@ public class ProfileTest {
 		assertEquals(2, profile.getInvocationCount());
 		assertEquals(30, profile.getTotalLatency());
 		assertEquals(15, profile.getAverageLatency(), 0.001);
-		assertEquals("profile[2 inv., avg lat: 15,0, total lat: 30]", profile.toString());
+		assertEquals("profile[2 inv., avg lat: 15.0, total lat: 30]", profile.toString());
 		assertEquals(-309425751, profile.hashCode());
 		assertNotEquals(null, profile);
 		assertNotEquals(profile, new Object());
