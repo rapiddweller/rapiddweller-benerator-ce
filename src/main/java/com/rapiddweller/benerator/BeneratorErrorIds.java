@@ -454,7 +454,7 @@ public class BeneratorErrorIds {
   public static final String SYN_DB_URL                  = "BEN-1005";
   public static final String SYN_DB_DRIVER               = "BEN-1006";
   public static final String SYN_DB_USER                 = "BEN-1007";
-  public static final String SYN_DB_PASSWORD             = "BEN-1008";
+  public static final String SYN_DB_PWD                  = "BEN-1008";
   public static final String SYN_DB_CATALOG              = "BEN-1009";
   public static final String SYN_DB_SCHEMA               = "BEN-1010";
   public static final String SYN_DB_TABLE_FILTER         = "BEN-1011";
