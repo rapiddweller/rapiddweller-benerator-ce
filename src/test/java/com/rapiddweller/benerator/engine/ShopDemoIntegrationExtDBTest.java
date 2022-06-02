@@ -113,9 +113,9 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   /**
    * Demo mongodb shop.
    */
-  @Test @Ignore // TODO make this work
+  @Test
   public void DemoMongoDBShop() {
-    assumeTestActive("postgres");
+    assumeTestActive("mongodb", false);
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mongodb.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
   }
@@ -123,9 +123,10 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   /**
    * Demo postgres and mongodb shop.
    */
-  @Test @Ignore // TODO make this work
+  @Test
   public void DemoPostgresMongoDBShop() {
     assumeTestActive("postgres");
+    assumeTestActive("mongodb", false);
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-postgres-mongodb.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
   }
@@ -144,6 +145,11 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   }
 
   private void assumeTestActive(String code) {
-    assumeTrue(ConfigUtil.isTestActive(code));
+    assumeTrue(ConfigUtil.isTestActive(code, true));
   }
+
+  private void assumeTestActive(String code, boolean defaultActive) {
+    assumeTrue(ConfigUtil.isTestActive(code, defaultActive));
+  }
+
 }

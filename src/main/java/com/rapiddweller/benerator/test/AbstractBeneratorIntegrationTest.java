@@ -65,7 +65,7 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
 
   @After
   public void tearDown() {
-    this.resourceManager.close();
+    IOUtil.close(this.resourceManager);
     System.setProperty(GeneratorContext.CELL_SEPARATOR_SYSPROP, "" + GeneratorContext.DEFAULT_CELL_SEPARATOR);
   }
 
