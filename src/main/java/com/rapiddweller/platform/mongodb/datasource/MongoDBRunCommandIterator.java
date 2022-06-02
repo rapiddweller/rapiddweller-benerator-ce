@@ -1,9 +1,9 @@
-package com.rapiddweller.platform.nosql.mongo.datasource;
+package com.rapiddweller.platform.mongodb.datasource;
 
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
-import com.rapiddweller.platform.nosql.mongo.client.MongoDBClient;
+import com.rapiddweller.platform.mongodb.client.MongoDBClient;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

@@ -1,8 +1,8 @@
-package com.rapiddweller.platform.nosql.mongo.client;
+package com.rapiddweller.platform.mongodb.client;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
-import com.rapiddweller.platform.nosql.mongo.datasource.MongoDBRunCommandResult;
+import com.rapiddweller.platform.mongodb.datasource.MongoDBRunCommandResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

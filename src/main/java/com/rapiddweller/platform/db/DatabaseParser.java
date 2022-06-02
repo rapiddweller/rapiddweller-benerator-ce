@@ -104,7 +104,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     ATT_USER, false, BeneratorErrorIds.SYN_DB_USER, new ScriptableParser<>(new IdParser()));
 
   public static final AttrInfo<Expression<String>> PASSWORD = new AttrInfo<>(
-    ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PASSWORD, new ScriptableParser<>(new StringParser("db password")));
+    ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PWD, new ScriptableParser<>(new StringParser("db password")));
 
   public static final AttrInfo<Expression<String>> CATALOG = new AttrInfo<>(
     ATT_CATALOG, false, BeneratorErrorIds.SYN_DB_CATALOG, new ScriptableParser<>(new IdParser()));

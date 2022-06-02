@@ -1,12 +1,12 @@
-package com.rapiddweller.platform.nosql.mongo.datasource;
+package com.rapiddweller.platform.mongodb.datasource;
 
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.format.util.AbstractDataSource;
-import com.rapiddweller.platform.nosql.mongo.MongoDBUtils;
-import com.rapiddweller.platform.nosql.mongo.client.MongoDBClientProvider;
+import com.rapiddweller.platform.mongodb.MongoDBUtils;
+import com.rapiddweller.platform.mongodb.client.MongoDBClientProvider;
 import org.bson.Document;
 
 import java.util.Arrays;

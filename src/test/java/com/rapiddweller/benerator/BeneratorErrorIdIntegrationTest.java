@@ -1583,6 +1583,62 @@ public class BeneratorErrorIdIntegrationTest {
             "File test_1024_syn_db_system_wo_env.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
   }
 
+  @Test
+  public void test_2400_syn_mongo_ill_attr() {
+    BeneratorResult result = runFile("test_2400_syn_mongo_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_MONGO_ILL_ATTR,
+        "Illegal XML attribute: mongodb.url. File test_2400_syn_mongo_ill_attr.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_2401_syn_mongo_missing_id() {
+    BeneratorResult result = runFile("test_2401_syn_mongo_missing_id.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_MONGO_ID,
+        "Attribute 'id' is missing in <mongodb>. File test_2401_syn_mongo_missing_id.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_2401_syn_mongo_ill_id() {
+    BeneratorResult result = runFile("test_2401_syn_mongo_ill_id.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_MONGO_ID,
+        "Illegal attribute value for mongodb.id: '23'. File test_2401_syn_mongo_ill_id.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_2402_syn_mongo_ill_port() {
+    BeneratorResult result = runFile("test_2402_syn_mongo_ill_port.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_MONGO_PORT,
+        "Illegal attribute value for mongodb.port: 'none'. File test_2402_syn_mongo_ill_port.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_2407_syn_mongo_ill_clean() {
+    BeneratorResult result = runFile("test_2407_syn_mongo_ill_clean.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_MONGO_CLEAN,
+        "Illegal attribute value for mongodb.clean: '42'. Use 'true' or 'false. File test_2407_syn_mongo_ill_clean.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_2408_syn_mongo_missing_env() {
+    BeneratorResult result = runFile("test_2408_syn_mongo_missing_env.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_MONGO_ENV,
+        "system specified but no environment. File test_2408_syn_mongo_missing_env.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_2409_syn_mongo_missing_sys() {
+    BeneratorResult result = runFile("test_2409_syn_mongo_missing_sys.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_MONGO_SYS,
+        "environment specified but no system. File test_2409_syn_mongo_missing_sys.ben.xml, line 3",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   // helper methods --------------------------------------------------------------------------------------------------
 
   private BeneratorResult runFile(String name) {

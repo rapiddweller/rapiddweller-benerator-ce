@@ -26,37 +26,97 @@
 
 package com.rapiddweller.benerator.composite;
 
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DefaultDescriptorProvider;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.PartDescriptor;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link ComponentTypeConverter}.<br/><br/>
  * Created: 28.08.2013 17:19:08
- *
  * @author Volker Bergmann
  * @since 0.8.3
  */
 public class ComponentTypeConverterTest {
 
-  /**
-   * Test recursively.
-   */
+  DescriptorProvider provider;
+  private ComplexTypeDescriptor parentType;
+  private ComplexTypeDescriptor childType;
+  private ComponentTypeConverter converter;
+
+  @Before
+  public void setUp() {
+    provider = new DefaultDescriptorProvider("p", new DataModel());
+    childType = new ComplexTypeDescriptor("childType", provider);
+    childType.setComponent(new PartDescriptor("child", provider, "string"));
+    parentType = new ComplexTypeDescriptor("parentType", provider);
+    parentType.setComponent(new PartDescriptor("child", provider, childType));
+    parentType.setComponent(new PartDescriptor("list", provider, new ComplexTypeDescriptor("childType", provider)));
+    parentType.setComponent(new PartDescriptor("array", provider, new ComplexTypeDescriptor("childType", provider)));
+    converter = new ComponentTypeConverter(parentType);
+  }
+
   @Test
   public void testRecursively() {
-    DescriptorProvider provider = new DefaultDescriptorProvider("p", new DataModel());
-    ComplexTypeDescriptor childType = new ComplexTypeDescriptor("childType", provider);
-    childType.setComponent(new PartDescriptor("child", provider, "string"));
-    ComplexTypeDescriptor parentType = new ComplexTypeDescriptor("parentType", provider);
-    parentType.setComponent(new PartDescriptor("child", provider, childType));
-    ComponentTypeConverter converter = new ComponentTypeConverter(parentType);
     Entity child = new Entity(childType, "child", "childChildValue");
     Entity parent = new Entity(parentType, "child", child);
-    converter.convert(parent);
+    Entity result = converter.convert(parent);
+    assertNotNull(result);
+    Entity childEntity = (Entity) result.get("child");
+    assertNotNull(childEntity);
+    assertEquals("childType", childEntity.type());
+  }
+
+  @Test
+  public void testComponentTypes() {
+    List<Entity> list = CollectionUtil.toList(new Entity("childType", provider));
+    Entity[] array = new Entity[] { new Entity("childType", provider) };
+    Entity parent = new Entity(parentType, "list", list, "array", array);
+    Entity result = converter.convert(parent);
+    assertNotNull(result);
+    // check list conversion
+    Entity[] convertedList = (Entity[]) result.get("list");
+    Entity[] expectedList = ArrayUtil.toArray(new Entity("childType", provider));
+    assertArrayEquals(expectedList, convertedList);
+    // check array conversion
+    Entity[] convertedArray = (Entity[]) result.get("list");
+    Entity[] expectedArray = new Entity[] { new Entity("childType", provider) };
+    assertArrayEquals(expectedArray, convertedArray);
+  }
+
+  @Test
+  public void testConvertNull() {
+    assertNull(converter.convert(null));
+  }
+
+  @Test
+  public void testMTSettings() {
+    assertFalse(converter.isParallelizable());
+    assertTrue(converter.isThreadSafe());
+  }
+
+  @Test
+  public void testToString() {
+    assertEquals("ComponentTypeConverter[parentType[child[details=[], type=childType[" +
+        "child[details=[type=string], type=string[]]]], list[details=[], type=childType[]], " +
+        "array[details=[], type=childType[]]]]", converter.toString());
   }
 
 }

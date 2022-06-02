@@ -109,7 +109,7 @@ public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
 
   @Override
   public boolean isThreadSafe() {
-    return false;
+    return true;
   }
 
   @Override

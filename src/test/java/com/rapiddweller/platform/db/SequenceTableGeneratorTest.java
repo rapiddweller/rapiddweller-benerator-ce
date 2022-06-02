@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.GeneratorTest;
@@ -41,6 +42,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link SequenceTableGenerator}.<br/><br/>
@@ -74,18 +76,46 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
   }
 
   @Test
-  public void testStatic() {
-    SequenceTableGenerator<Integer> generator = null;
-    try {
-      generator = new SequenceTableGenerator<>("TT", "value", db);
+  public void testStatic_with_constructor() {
+    try (SequenceTableGenerator<Integer> generator = new SequenceTableGenerator<>("TT", "value", db)) {
       generator.setSelector("id1 = 1 and id2 = 2");
       generator.init(context);
       for (int i = 0; i < 100; i++) {
         assertEquals(1000 + i, generator.generate().intValue());
       }
       assertAvailable(generator);
-    } finally {
-      IOUtil.close(generator);
+    }
+  }
+
+  @Test
+  public void testStatic_with_bean_setup() {
+    try (SequenceTableGenerator<Integer> generator = new SequenceTableGenerator<>()) {
+      generator.setTable("TT");
+      generator.setColumn("value");
+      generator.setDatabase(db);
+      generator.setIncrement(1);
+      generator.setSelector("id1 = 1 and id2 = 2");
+      generator.init(context);
+      assertEquals(Number.class, generator.getGeneratedType());
+      for (int i = 0; i < 100; i++) {
+        assertEquals(1000 + i, generator.generate().intValue());
+      }
+      assertAvailable(generator);
+      generator.close();
+      assertNull(generator.generate());
+      assertNull(generator.generateWithParams());
+    }
+  }
+
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void test_db_null() {
+    try (SequenceTableGenerator<Integer> generator = new SequenceTableGenerator<>()) {
+      generator.setTable("TT");
+      generator.setColumn("value");
+      generator.setDatabase(null);
+      generator.setIncrement(1);
+      generator.setSelector("id1 = 1 and id2 = 2");
+      generator.init(context);
     }
   }
 

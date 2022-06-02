@@ -27,19 +27,15 @@
 package com.rapiddweller.domain.person;
 
 /**
- * Represents a person's gender.<br/>
- * <br/>
+ * Represents a person's gender.<br/><br/>
  * Created: 09.06.2006 21:44:06
- *
  * @author Volker Bergmann
  */
 public enum Gender {
-  /**
-   * Female gender.
-   */
+  /** Female gender. */
   FEMALE,
-  /**
-   * Male gender.
-   */
-  MALE
+  /** Male gender. */
+  MALE,
+  /** Any gender not male or female. */
+  DIVERSE
 }

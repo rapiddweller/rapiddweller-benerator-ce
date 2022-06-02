@@ -28,6 +28,9 @@ package com.rapiddweller.platform.java;
 
 import com.rapiddweller.platform.PersonBean;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Helper class for testing.<br/><br/>
  * Created: 13.05.2014 11:52:54
@@ -36,6 +39,8 @@ import com.rapiddweller.platform.PersonBean;
 public class ChildBean extends PersonBean {
 
   public int childNo;
+  private List<String> list;
+  private int[] array;
 
   public ChildBean() {
     this(null, 0, 0);
@@ -44,6 +49,22 @@ public class ChildBean extends PersonBean {
   public ChildBean(String name, int age, int childNo) {
     super(name, age);
     this.childNo = childNo;
+  }
+
+  public List<String> getList() {
+    return list;
+  }
+
+  public void setList(List<String> list) {
+    this.list = list;
+  }
+
+  public int[] getArray() {
+    return array;
+  }
+
+  public void setArray(int[] array) {
+    this.array = array;
   }
 
   @Override

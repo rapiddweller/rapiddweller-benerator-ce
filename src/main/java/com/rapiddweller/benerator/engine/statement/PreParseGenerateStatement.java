@@ -6,7 +6,7 @@ import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.FeatureDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.platform.nosql.CustomStorageSystem;
+import com.rapiddweller.platform.mongodb.CustomStorageSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;

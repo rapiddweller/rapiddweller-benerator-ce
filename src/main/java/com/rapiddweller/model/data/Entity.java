@@ -60,19 +60,15 @@ public class Entity implements Composite {
     this(new ComplexTypeDescriptor(name, descriptorProvider));
   }
 
-  public Entity(String name, DescriptorProvider descriptorProvider,
-                Object... componentKeyValuePairs) {
-    this(new ComplexTypeDescriptor(name, descriptorProvider),
-        componentKeyValuePairs);
+  public Entity(String name, DescriptorProvider descriptorProvider, Object... componentKeyValuePairs) {
+    this(new ComplexTypeDescriptor(name, descriptorProvider), componentKeyValuePairs);
   }
 
-  public Entity(ComplexTypeDescriptor descriptor,
-                Object... componentKeyValuePairs) {
+  public Entity(ComplexTypeDescriptor descriptor, Object... componentKeyValuePairs) {
     this.descriptor = descriptor;
     this.components = BeneratorFactory.getInstance().createComponentMap();
     for (int i = 0; i < componentKeyValuePairs.length; i += 2) {
-      setComponent((String) componentKeyValuePairs[i],
-          componentKeyValuePairs[i + 1]);
+      setComponent((String) componentKeyValuePairs[i], componentKeyValuePairs[i + 1]);
     }
   }
 

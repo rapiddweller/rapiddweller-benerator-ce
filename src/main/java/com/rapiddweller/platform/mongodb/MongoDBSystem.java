@@ -1,4 +1,4 @@
-package com.rapiddweller.platform.nosql.mongo;
+package com.rapiddweller.platform.mongodb;
 
 import com.mongodb.client.model.Filters;
 import com.rapiddweller.benerator.engine.BeneratorContext;
@@ -11,19 +11,18 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.util.ConvertingDataSource;
 import com.rapiddweller.model.data.*;
-import com.rapiddweller.platform.nosql.CustomStorageSystem;
-import com.rapiddweller.platform.nosql.exception.NullEntityTypeException;
-import com.rapiddweller.platform.nosql.mongo.converter.DocumentToObjectConverter;
-import com.rapiddweller.platform.nosql.mongo.converter.DocumentIdToEntityConverter;
-import com.rapiddweller.platform.nosql.mongo.converter.DocumentToEntityConverter;
-import com.rapiddweller.platform.nosql.mongo.client.MongoDBClient;
-import com.rapiddweller.platform.nosql.mongo.client.MongoDBClientProvider;
-import com.rapiddweller.platform.nosql.mongo.datasource.MongoDBDataSource;
+import com.rapiddweller.platform.mongodb.exception.NullEntityTypeException;
+import com.rapiddweller.platform.mongodb.converter.DocumentToObjectConverter;
+import com.rapiddweller.platform.mongodb.converter.DocumentIdToEntityConverter;
+import com.rapiddweller.platform.mongodb.converter.DocumentToEntityConverter;
+import com.rapiddweller.platform.mongodb.client.MongoDBClient;
+import com.rapiddweller.platform.mongodb.client.MongoDBClientProvider;
+import com.rapiddweller.platform.mongodb.datasource.MongoDBDataSource;
 import org.apache.logging.log4j.util.Strings;
 
 import java.util.*;
 
-import static com.rapiddweller.platform.nosql.mongo.MongoDBUtils.convertEntityToDocument;
+import static com.rapiddweller.platform.mongodb.MongoDBUtils.convertEntityToDocument;
 import static java.lang.Boolean.*;
 import static java.lang.String.format;
 
