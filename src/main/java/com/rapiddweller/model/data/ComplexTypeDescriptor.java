@@ -179,10 +179,6 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
     this.parts = new NamedValueList<>(NamedValueList.INSENSITIVE);
   }
 
-  public void clear() { // TODO remove
-    parts.clear();
-  }
-
   // java.lang.Object overrides --------------------------------------------------------------------------------------
 
   @Override

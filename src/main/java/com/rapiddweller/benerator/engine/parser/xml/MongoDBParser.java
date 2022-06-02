@@ -12,7 +12,6 @@ import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.common.Validator;
-import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.parser.StringParser;
 import com.rapiddweller.format.xml.AttrInfo;
@@ -22,7 +21,6 @@ import org.w3c.dom.Element;
 import static com.rapiddweller.benerator.BeneratorErrorIds.*;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-import static java.lang.String.format;
 
 public class MongoDBParser extends AbstractBeneratorDescriptorParser {
 

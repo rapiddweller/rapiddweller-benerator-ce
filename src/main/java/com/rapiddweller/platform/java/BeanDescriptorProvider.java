@@ -71,7 +71,7 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
   @Override
   public TypeDescriptor getTypeDescriptor(String abstractTypeName) {
     if (mapper.concreteType(abstractTypeName) != null) {
-      return null;
+      return null; // ignore simple types, since they are provided by the PrimitiveDescriptorProvider
     }
     TypeDescriptor result = super.getTypeDescriptor(abstractTypeName);
     if (result == null && BeanUtil.existsClass(abstractTypeName)) {
@@ -108,11 +108,6 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
     } catch (ClassNotFoundException e) {
       throw BeneratorExceptionFactory.getInstance().configurationError("No class mapping found for '" + primitiveType + "'", e);
     }
-  }
-
-  public void clear() {
-    typeMap.clear();
-    initMapper();
   }
 
   // private helpers -------------------------------------------------------------------------------------------------

@@ -57,8 +57,9 @@ public class Profile {
 
 	public Profile getOrCreateSubProfile(String name) {
 		Profile result = subProfiles.get(name);
-		if (result == null)
+		if (result == null) {
 			result = createSubProfile(name);
+		}
 		return result;
 	}
 
@@ -86,10 +87,9 @@ public class Profile {
 
 	@Override
 	public String toString() {
-		return "[" + nf.format(getInvocationCount()) + " inv., " +
-				"avg: " + df.format(getAverageLatency()) + ", " +
-				"total: " + nf.format(getTotalLatency()) + "]: " + 
-				name;
+		return name + "[" + nf.format(getInvocationCount()) + " inv., " +
+				"avg lat: " + df.format(getAverageLatency()) + ", " +
+				"total lat: " + nf.format(getTotalLatency()) + "]";
 	}
 
 	@Override
@@ -99,10 +99,12 @@ public class Profile {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null || getClass() != obj.getClass())
+		}
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
+		}
 		Profile that = (Profile) obj;
 		return this.name.equals(that.name);
 	}

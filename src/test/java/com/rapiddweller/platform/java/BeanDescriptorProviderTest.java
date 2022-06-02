@@ -26,38 +26,89 @@
 
 package com.rapiddweller.platform.java;
 
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.exception.IllegalArgumentError;
+import com.rapiddweller.domain.person.Gender;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.SimpleTypeDescriptor;
+import com.rapiddweller.model.data.TypeDescriptor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link BeanDescriptorProvider}.<br/><br/>
  * Created: 19.04.2010 10:38:21
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
 public class BeanDescriptorProviderTest {
 
-  /**
-   * The Provider.
-   */
   final BeanDescriptorProvider provider = new BeanDescriptorProvider();
 
-  /**
-   * Test abstract type.
-   */
+  @Test(expected = IllegalArgumentError.class)
+  public void testConstructorWithNull() {
+    new BeanDescriptorProvider(null);
+  }
+
   @Test
-  public void testAbstractType() {
+  public void testAbstractType_primitive() {
     assertEquals("string", provider.abstractType(String.class));
   }
 
-  /**
-   * Test concrete type.
-   */
   @Test
-  public void testConcreteType() {
+  public void testAbstractType_bean() {
+    assertEquals(ChildBean.class.getName(), provider.abstractType(ChildBean.class));
+  }
+
+  @Test
+  public void testAbstractType_enum() {
+    assertEquals("com.rapiddweller.domain.person.Gender", provider.abstractType(Gender.class));
+  }
+
+  @Test
+  public void testConcreteType_primitive() {
     assertEquals(String.class, provider.concreteType("string"));
+  }
+
+  @Test
+  public void testConcreteType_bean() {
+    assertEquals(ChildBean.class, provider.concreteType(ChildBean.class.getName()));
+  }
+
+  @Test
+  public void testConcreteType_enum() {
+    assertEquals(Gender.class, provider.concreteType("com.rapiddweller.domain.person.Gender"));
+  }
+
+  @Test(expected = ConfigurationError.class)
+  public void testConcreteType_illegal() {
+    provider.concreteType("my.non.existing.Class");
+  }
+
+  @Test
+  public void testGetTypeDescriptor_primitive() {
+    TypeDescriptor type = provider.getTypeDescriptor("int");
+    assertNull(type);
+  }
+
+  @Test
+  public void testGetTypeDescriptor_bean() {
+    ComplexTypeDescriptor type = (ComplexTypeDescriptor) provider.getTypeDescriptor(ChildBean.class.getName());
+    assertNotNull(type);
+    assertEquals(ChildBean.class.getName(), type.getName());
+    assertNotNull(type.getComponent("name"));
+    assertNotNull(type.getComponent("age"));
+  }
+
+  @Test
+  public void testGetTypeDescriptor_enum() {
+    SimpleTypeDescriptor type = (SimpleTypeDescriptor) provider.getTypeDescriptor(Gender.class.getName());
+    assertNotNull(type);
+    assertEquals(Gender.class.getName(), type.getName());
+    assertEquals("string", type.getParentName());
   }
 
 }

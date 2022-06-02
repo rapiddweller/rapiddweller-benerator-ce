@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -31,7 +31,6 @@ import java.util.Map;
 
 /**
  * Maps abstract types to concrete types and vice versa.
- *
  * @author Volker Bergmann
  * @since 0.3.04
  */
@@ -40,11 +39,6 @@ public class TypeMapper {
   private final Map<String, Class<?>> abstractToConcrete;
   private final Map<Class<?>, String> concreteToAbstract;
 
-  /**
-   * Instantiates a new Type mapper.
-   *
-   * @param typeMappings name-class pairs that list the mappings to be defined
-   */
   public TypeMapper(Object... typeMappings) {
     this.abstractToConcrete = new HashMap<>();
     this.concreteToAbstract = new HashMap<>();
@@ -55,34 +49,17 @@ public class TypeMapper {
     }
   }
 
-  /**
-   * Map.
-   *
-   * @param abstractType the abstract type
-   * @param concreteType the concrete type
-   */
   public void map(String abstractType, Class<?> concreteType) {
     abstractToConcrete.put(abstractType, concreteType);
     concreteToAbstract.put(concreteType, abstractType);
   }
 
-  /**
-   * Concrete type class.
-   *
-   * @param abstractType the abstract type
-   * @return the class
-   */
   public Class<?> concreteType(String abstractType) {
     return abstractToConcrete.get(abstractType);
   }
 
-  /**
-   * Abstract type string.
-   *
-   * @param concreteType the concrete type
-   * @return the string
-   */
   public String abstractType(Class<?> concreteType) {
     return concreteToAbstract.get(concreteType);
   }
+
 }
