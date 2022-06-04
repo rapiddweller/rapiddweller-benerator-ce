@@ -29,10 +29,17 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.common.Expression;
+import com.rapiddweller.platform.PersonBean;
+import com.rapiddweller.script.expression.ExpressionUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link DescriptorParserUtil}.<br/><br/>
@@ -61,4 +68,91 @@ public class DescriptorParserUtilTest {
     System.out.println(unescapingExpression);
     assertEquals("''Test''", unescapingExpression.evaluate(new DefaultContext()));
   }
+
+  @Test
+  public void testCheckGeneratorVsOuterAttrs_no_generator() {
+    Element outer = XMLUtil.parseStringAsElement("<outer><part></part></outer>");
+    Element part = XMLUtil.getChildElement(outer, false, true, "part");
+    assertNotNull(part);
+    DescriptorParserUtil.checkGeneratorVsOuterAttrs(part, "xyz", "err");
+  }
+
+  @Test
+  public void testMapXmlAttrsToBeanProperties() {
+    Element element = XMLUtil.parseStringAsElement("<person name='Alice' age='23'/>");
+    PersonBean bean = new PersonBean();
+    DescriptorParserUtil.mapXmlAttrsToBeanProperties(element, bean);
+    assertEquals("Alice", bean.getName());
+    assertEquals(23, bean.getAge());
+  }
+
+  @Test
+  public void testParseIntAttribute() {
+    Element element = XMLUtil.parseStringAsElement("<person age='23'/>");
+    assertEquals(23, (DescriptorParserUtil.parseIntAttribute("age", element).evaluate(null)).intValue());
+  }
+
+  @Test
+  public void testParseIntAttribute_fallback() {
+    Element element = XMLUtil.parseStringAsElement("<person/>");
+    assertEquals(18, (DescriptorParserUtil.parseIntAttribute("age", element, 18).evaluate(null)).intValue());
+  }
+
+  @Test
+  public void testParseScriptableStringArrayAttribute_defined() {
+    Element element = XMLUtil.parseStringAsElement("<x array='Alice,Bob,Charly'/>");
+    Expression<String[]> actualEx = DescriptorParserUtil.parseScriptableStringArrayAttribute("array", element);
+    String[] actual = ExpressionUtil.evaluate(actualEx, null);
+    String[] expected = new String[] { "Alice", "Bob", "Charly" };
+    assertArrayEquals(expected, actual);
+  }
+
+  @Test
+  public void testParseScriptableStringArrayAttribute_undefined() {
+    Element element = XMLUtil.parseStringAsElement("<x/>");
+    assertNull(DescriptorParserUtil.parseScriptableStringArrayAttribute("array", element));
+  }
+
+  @Test
+  public void testParseLongAttribute_defined() {
+    Element element = XMLUtil.parseStringAsElement("<person age='23'/>");
+    assertEquals(23L, (DescriptorParserUtil.parseLongAttribute("age", element, 18).evaluate(null)).longValue());
+  }
+
+  @Test
+  public void testParseLongAttribute_undefined() {
+    Element element = XMLUtil.parseStringAsElement("<person/>");
+    assertEquals(18L, (DescriptorParserUtil.parseIntAttribute("age", element, 18).evaluate(null)).longValue());
+  }
+
+  @Test
+  public void testParseBooleanExpressionAttribute_defined() {
+    Element element = XMLUtil.parseStringAsElement("<person member='true'/>");
+    assertTrue((DescriptorParserUtil.parseBooleanExpressionAttribute("member", element, false).evaluate(null)));
+  }
+
+  @Test
+  public void testParseBooleanExpressionAttribute_undefined() {
+    Element element = XMLUtil.parseStringAsElement("<person />");
+    assertFalse((DescriptorParserUtil.parseBooleanExpressionAttribute("age", element, false).evaluate(null)));
+  }
+
+  @Test
+  public void testParseScriptableString() {
+    Element element = XMLUtil.parseStringAsElement("<person name='Otto'/>");
+    assertEquals("Otto", DescriptorParserUtil.parseScriptableString(element, "name", "err").evaluate(null));
+  }
+
+  @Test
+  public void testParseScriptableStringAttribute_unescape() {
+    Element element = XMLUtil.parseStringAsElement("<person name='Otto'/>");
+    assertEquals("Otto", DescriptorParserUtil.parseScriptableStringAttribute("name", element, true).evaluate(null));
+  }
+
+  @Test
+  public void testGetAttributeAsString() {
+    Element element = XMLUtil.parseStringAsElement("<person name='Otto'/>");
+    assertEquals("Otto", DescriptorParserUtil.getAttributeAsString("name", element));
+  }
+
 }
