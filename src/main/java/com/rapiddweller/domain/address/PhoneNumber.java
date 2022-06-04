@@ -29,6 +29,8 @@ package com.rapiddweller.domain.address;
 import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.StringUtil;
 
+import java.util.Objects;
+
 /**
  * Represents a phone number.<br/><br/>
  * Created: 13.06.2006 07:19:26
@@ -129,15 +131,7 @@ public class PhoneNumber {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result
-        + ((areaCode == null) ? 0 : areaCode.hashCode());
-    result = prime * result
-        + ((countryCode == null) ? 0 : countryCode.hashCode());
-    result = prime * result
-        + ((localNumber == null) ? 0 : localNumber.hashCode());
-    return result;
+    return Objects.hash(countryCode, areaCode, localNumber);
   }
 
   @Override

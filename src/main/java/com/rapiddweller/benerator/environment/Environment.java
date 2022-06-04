@@ -9,6 +9,7 @@ import com.rapiddweller.common.Named;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Specifies one or more systems and optional plain settings.<br/><br/>
@@ -76,6 +77,23 @@ public class Environment implements Named {
 
   public void addSystem(String name, String type, Map<String, String> properties) {
     this.systems.put(name, new SystemRef(this, name, type, properties));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Environment that = (Environment) o;
+    return name.equals(that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
   }
 
   @Override

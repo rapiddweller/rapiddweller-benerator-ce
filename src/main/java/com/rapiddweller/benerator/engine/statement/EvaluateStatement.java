@@ -79,6 +79,7 @@ public class EvaluateStatement extends AbstractStatement {
   public static final String EXECUTE_SQL = "execute_sql";
 
   private static final Map<String, String> extensionMap;
+  public static final char DEFAULT_SQL_SEPARATOR = ';';
 
   static {
     try {
@@ -148,7 +149,7 @@ public class EvaluateStatement extends AbstractStatement {
         result = evaluateAsScript(context, onErrorValue, uriValue, typeValue, text);
       }
       context.setGlobal("result", result);
-      evaluateAssertion(result, onErrorValue, context);
+      evaluateAssertion(assertionEx, result, onErrorValue, context);
       exportResultWithId(result, context);
       return true;
     } catch (ConversionException e) {
@@ -164,7 +165,8 @@ public class EvaluateStatement extends AbstractStatement {
     }
   }
 
-  private void evaluateAssertion(Object result, String onErrorValue, BeneratorContext context) {
+  static boolean evaluateAssertion(Expression<?> assertionEx, Object result, String onErrorValue,
+                                BeneratorContext context) {
     Object assertionValue = ExpressionUtil.evaluate(assertionEx, context);
     if (assertionValue instanceof String) {
       assertionValue = LiteralParserConverter.parse((String) assertionValue);
@@ -173,27 +175,28 @@ public class EvaluateStatement extends AbstractStatement {
       if (assertionValue instanceof Boolean) {
         if (!(boolean) assertionValue) {
           getErrorHandler(onErrorValue).handleError("Assertion failed: '" + assertionEx + "'");
+          return false;
         }
       } else {
         if (!BeanUtil.equalsIgnoreType(assertionValue, result)) {
           getErrorHandler(onErrorValue).handleError("Assertion failed. Expected: '" + assertionValue + "', found: '" + result + "'");
+          return false;
         }
       }
     }
+    return true;
   }
 
-  private Object evaluateAsSql(BeneratorContext context, String onErrorValue, String uriValue, Object targetObject, String encoding, String text) {
-    Object result;
+  Object evaluateAsSql(BeneratorContext context, String onErrorValue, String uriValue, Object targetObject, String encoding, String text) {
     Character separator = ExpressionUtil.evaluate(separatorEx, context);
     if (separator == null) {
-      separator = ';';
+      separator = DEFAULT_SQL_SEPARATOR;
     }
     boolean optimize = ExpressionUtil.evaluateWithDefault(optimizeEx, false, context);
     Boolean invalidate = ExpressionUtil.evaluate(invalidateEx, context);
-    DBExecutionResult executionResult = runSql(uriValue, targetObject, onErrorValue, encoding,
+    DBExecutionResult executionResult = runSql(uriValue, targetObject, evaluate, onErrorValue, encoding,
         text, separator, optimize, invalidate);
-    result = (executionResult != null ? executionResult.result : null);
-    return result;
+    return (executionResult != null ? executionResult.result : null);
   }
 
   private Object evaluateAsScript(
@@ -205,7 +208,7 @@ public class EvaluateStatement extends AbstractStatement {
     if (!StringUtil.isEmpty(uriValue)) {
       text = IOUtil.getContentOfURI(uriValue);
     }
-    result = runScript(text, typeValue, onErrorValue, context);
+    result = runScript(text, typeValue, onErrorValue, context, location);
     return result;
   }
 
@@ -233,7 +236,7 @@ public class EvaluateStatement extends AbstractStatement {
     return typeValue;
   }
 
-  private String checkOs(String uriValue, String typeValue) {
+  private static String checkOs(String uriValue, String typeValue) {
     if ("winshell".equals(typeValue)) {
       if (!SystemInfo.isWindows()) {
         throw ExceptionFactory.getInstance().configurationError("Need Windows to run file: " + uriValue);
@@ -250,7 +253,7 @@ public class EvaluateStatement extends AbstractStatement {
     return typeValue;
   }
 
-  private static String mapExtensionOf(String uri) {
+  static String mapExtensionOf(String uri) {
     String lcUri = uri.toLowerCase();
     for (Entry<String, String> entry : extensionMap.entrySet()) {
       if (lcUri.endsWith(entry.getKey())) {
@@ -260,29 +263,29 @@ public class EvaluateStatement extends AbstractStatement {
     return null;
   }
 
-  private ErrorHandler getErrorHandler(String level) {
-    return new ErrorHandler(getClass().getName(), Level.valueOf(level));
+  private static ErrorHandler getErrorHandler(String level) {
+    return new ErrorHandler(EvaluateStatement.class.getName(), Level.valueOf(level));
   }
 
-  private Object runScript(String text, String type, String onError, Context context) {
-    ErrorHandler errorHandler = new ErrorHandler(getClass().getName(), Level.valueOf(onError));
+  static Object runScript(
+      String text, String type, String onError, Context context, TextFileLocation location) {
+    ErrorHandler errorHandler = new ErrorHandler(EvaluateStatement.class.getName(), Level.valueOf(onError));
     boolean evaluating = false;
     try {
       Script script = ScriptUtil.parseScriptText(text, type);
       evaluating = true;
       return script.evaluate(context);
     } catch (Exception e) {
+      RuntimeException e2;
       if (evaluating) {
-        RuntimeException e2 = BeneratorExceptionFactory.getInstance().scriptEvaluationFailed(
-                "Error evaluating script", e, text, location);
-        errorHandler.handleError(e2.getMessage(), e2);
-        return null;
+        e2 = BeneratorExceptionFactory.getInstance().scriptEvaluationFailed(
+            "Error evaluating script", e, text, location);
       } else {
-        RuntimeException e2 = BeneratorExceptionFactory.getInstance().syntaxErrorForText(
-                "Error parsing script", e, BeneratorErrorIds.SYN_EVALUATE_TEXT, location);
-        errorHandler.handleError(e2.getMessage(), e2);
-        return null;
+        e2 = BeneratorExceptionFactory.getInstance().syntaxErrorForText(
+            "Error parsing script", e, BeneratorErrorIds.SYN_EVALUATE_TEXT, location);
       }
+      errorHandler.handleError(e2.getMessage(), e2);
+      return null;
     }
   }
 
@@ -301,8 +304,8 @@ public class EvaluateStatement extends AbstractStatement {
     return LiteralParserConverter.parse(output);
   }
 
-  private DBExecutionResult runSql(String uri, Object targetObject, String onError, String encoding, String text,
-      char separator, boolean optimize, Boolean invalidate) {
+  static DBExecutionResult runSql(String uri, Object targetObject, boolean evaluate, String onError, String encoding,
+                                  String text, char separator, boolean optimize, Boolean invalidate) {
     if (targetObject == null) {
       throw ExceptionFactory.getInstance().configurationError("Please specify the 'target' database to execute the SQL script");
     }

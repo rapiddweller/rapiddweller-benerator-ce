@@ -3,16 +3,24 @@ package com.rapiddweller.domain.address;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * The type Phone number test.
+ * Tests the {@link PhoneNumber} class.
+ * @author Volker Bergmann
  */
 public class PhoneNumberTest {
-  /**
-   * Test set country code.
-   */
+
+  @Test
+  public void testStringConstructor() {
+    PhoneNumber n = new PhoneNumber("49 89 1234 567");
+    assertEquals("49", n.getCountryCode());
+    assertEquals("89", n.getAreaCode());
+    assertEquals("1234 567", n.getLocalNumber());
+  }
+
   @Test
   public void testSetCountryCode() {
     PhoneNumber phoneNumber = new PhoneNumber();
@@ -20,9 +28,6 @@ public class PhoneNumberTest {
     assertEquals("Country Code", phoneNumber.getCountryCode());
   }
 
-  /**
-   * Test set area code.
-   */
   @Test
   public void testSetAreaCode() {
     PhoneNumber phoneNumber = new PhoneNumber();
@@ -30,9 +35,6 @@ public class PhoneNumberTest {
     assertEquals("Oxford", phoneNumber.getAreaCode());
   }
 
-  /**
-   * Test set local number.
-   */
   @Test
   public void testSetLocalNumber() {
     PhoneNumber phoneNumber = new PhoneNumber();
@@ -40,9 +42,6 @@ public class PhoneNumberTest {
     assertEquals("Local Number", phoneNumber.getLocalNumber());
   }
 
-  /**
-   * Test set mobile.
-   */
   @Test
   public void testSetMobile() {
     PhoneNumber phoneNumber = new PhoneNumber();
@@ -50,49 +49,28 @@ public class PhoneNumberTest {
     assertTrue(phoneNumber.isMobile());
   }
 
-  /**
-   * Test to string.
-   */
   @Test
   public void testToString() {
     assertEquals("+--", (new PhoneNumber()).toString());
   }
 
-  /**
-   * Test hash code.
-   */
-  @Test
-  public void testHashCode() {
-    assertEquals(29791, (new PhoneNumber()).hashCode());
-  }
-
-  /**
-   * Test hash code 2.
-   */
-  @Test
-  public void testHashCode2() {
-    PhoneNumber phoneNumber = new PhoneNumber();
-    phoneNumber.setLocalNumber(null);
-    assertEquals(29791, phoneNumber.hashCode());
-  }
-
-  /**
-   * Test hash code 3.
-   */
-  @Test
-  public void testHashCode3() {
-    PhoneNumber phoneNumber = new PhoneNumber();
-    phoneNumber.setCountryCode(null);
-    assertEquals(29791, phoneNumber.hashCode());
-  }
-
-  /**
-   * Test equals.
-   */
   @Test
   public void testEquals() {
-    assertNotEquals("obj", (new PhoneNumber()));
-    assertNotEquals(null, (new PhoneNumber()));
+    assertNotEquals(null, new PhoneNumber("1 2 3"));
+    assertEquals(new PhoneNumber("1 2 3"), new PhoneNumber("1 2 3"));
+    assertNotEquals(new PhoneNumber("1 2 4"), new PhoneNumber("1 2 3"));
+    assertNotEquals(new PhoneNumber("1 3 3"), new PhoneNumber("1 2 3"));
+    assertNotEquals(new PhoneNumber("2 2 3"), new PhoneNumber("1 2 3"));
+    assertFalse(new PhoneNumber("1 2 3").equals("nada"));
+    PhoneNumber n = new PhoneNumber("1 2 4");
+    assertEquals(n, n);
   }
+
+  @Test
+  public void testHashCode() {
+    assertEquals(29791, new PhoneNumber().hashCode());
+    assertEquals(78481, new PhoneNumber("1 2 3").hashCode());
+  }
+
 }
 
