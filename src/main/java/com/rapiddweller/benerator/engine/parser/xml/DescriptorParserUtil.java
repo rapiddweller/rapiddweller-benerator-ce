@@ -38,6 +38,7 @@ import com.rapiddweller.format.text.SplitStringConverter;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.ConvertingExpression;
+import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.expression.StringExpression;
 import com.rapiddweller.script.expression.TypeConvertingExpression;
 import com.rapiddweller.script.expression.UnescapeExpression;
@@ -98,7 +99,7 @@ public class DescriptorParserUtil {
     for (String attrName : XMLUtil.getAttributes(element).keySet()) {
       Expression<String> expression = parseScriptableStringAttribute(attrName, element);
       String propertyName = normalizeAttributeName(attrName);
-      BeanUtil.setPropertyValue(bean, propertyName, expression.evaluate(null), false);
+      BeanUtil.setPropertyValue(bean, propertyName, ExpressionUtil.evaluate(expression,null), false);
     }
     return bean;
   }
