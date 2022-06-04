@@ -80,6 +80,18 @@ public class DefaultDBSystemTest extends ABCTest {
   }
 
   @Test
+  public void testGettersAndSetters() {
+    assertEquals("sa", db.getEnvironment());
+    assertNull(db.getSystem());
+    assertEquals("org.hsqldb.jdbcDriver", db.getDriver());
+    assertEquals("jdbc:hsqldb:mem:benerator", db.getUrl());
+    assertEquals("sa", db.getUser());
+    assertNull(db.getCatalog());
+    db.setCatalog("theCat");
+    assertEquals("theCat", db.getCatalog());
+  }
+
+  @Test
   public void testReadWrite() {
     db.setReadOnly(false);
 
