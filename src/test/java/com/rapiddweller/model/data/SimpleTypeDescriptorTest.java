@@ -2,11 +2,17 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.common.Encodings;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Locale;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SimpleTypeDescriptor}.<br/><br/>
@@ -92,6 +98,94 @@ public class SimpleTypeDescriptorTest {
     SimpleTypeDescriptor d = new SimpleTypeDescriptor("number", p);
     d.setConstant("C");
     assertEquals("C", d.getConstant());
+  }
+
+  @Test
+  public void testRowBased() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.isRowBased());
+    d.setRowBased(false);
+    assertFalse(d.isRowBased());
+  }
+
+  @Test
+  public void testFilter() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getFilter());
+    d.setFilter("true");
+    assertEquals("true", d.getFilter());
+  }
+
+  @Test
+  public void testCondition() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getCondition());
+    d.setCondition("true");
+    assertEquals("true", d.getCondition());
+  }
+
+  @Test
+  public void testFormat() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getFormat());
+    d.setFormat(Format.formatted);
+    assertEquals(Format.formatted, d.getFormat());
+  }
+
+  @Test
+  public void testSegment() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getSegment());
+    d.setSegment("main");
+    assertEquals("main", d.getSegment());
+  }
+
+  @Test
+  public void testSubSelector() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getSubSelector());
+    d.setSubSelector("subs");
+    assertEquals("subs", d.getSubSelector());
+  }
+
+  @Test
+  public void testEmptyMarker() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getEmptyMarker());
+    d.setEmptyMarker("<x>");
+    assertEquals("<x>", d.getEmptyMarker());
+  }
+
+  @Test
+  public void testNullMarker() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getNullMarker());
+    d.setNullMarker("-");
+    assertEquals("-", d.getNullMarker());
+  }
+
+  @Test
+  public void testEncoding() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getEncoding());
+    d.setEncoding(Encodings.ASCII);
+    assertEquals(Encodings.ASCII, d.getEncoding());
+  }
+
+  @Test
+  public void testScope() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getScope());
+    d.setScope("supi");
+    assertEquals("supi", d.getScope());
+  }
+
+  @Test
+  public void testLocale() {
+    SimpleTypeDescriptor d = new SimpleTypeDescriptor("x", p);
+    assertNull(d.getLocale());
+    d.setLocaleId("de_DE");
+    assertEquals(Locale.GERMANY, d.getLocale());
   }
 
 }
