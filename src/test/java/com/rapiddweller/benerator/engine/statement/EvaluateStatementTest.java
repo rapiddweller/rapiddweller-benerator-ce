@@ -29,13 +29,20 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.OperationFailed;
+import com.rapiddweller.common.TextFileLocation;
+import com.rapiddweller.common.exception.ScriptException;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.DataSource;
+import com.rapiddweller.jdbacl.DBExecutionResult;
+import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.common.Expression;
+import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.junit.Assume;
@@ -47,7 +54,10 @@ import static com.rapiddweller.common.SystemInfo.isSolaris;
 import static com.rapiddweller.common.SystemInfo.isWindows;
 import static com.rapiddweller.script.expression.ExpressionUtil.constant;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link EvaluateStatement}.<br/><br/>
@@ -58,6 +68,36 @@ import static org.junit.Assert.assertNotNull;
 public class EvaluateStatementTest extends AbstractStatementTest {
 
   @Test
+  public void testEvaluateAssertion_true() {
+    assertTrue(EvaluateStatement.evaluateAssertion(expression("true"), null, "fatal", context));
+  }
+
+  @Test(expected = OperationFailed.class)
+  public void testEvaluateAssertion_false_fatal() {
+    EvaluateStatement.evaluateAssertion(expression("false"), null, "fatal", context);
+  }
+
+  @Test
+  public void testEvaluateAssertion_false_warn() {
+    assertFalse(EvaluateStatement.evaluateAssertion(expression("false"), null, "warn", context));
+  }
+
+  @Test
+  public void testEvaluateAssertion_ex_true() {
+    assertTrue(EvaluateStatement.evaluateAssertion(expression("42"), 42, "fatal", context));
+  }
+
+  @Test(expected = OperationFailed.class)
+  public void testEvaluateAssertion_ex_false_fatal() {
+    EvaluateStatement.evaluateAssertion(expression("42"), 4711, "fatal", context);
+  }
+
+  @Test
+  public void testEvaluateAssertion_ex_false_warn() {
+    assertFalse(EvaluateStatement.evaluateAssertion(expression("42"), 4711, "warn", context));
+  }
+
+  @Test
   public void testInlineJavaScript() {
     EvaluateStatement stmt = new EvaluateStatement(
         true, "message", constant("'Hello World'"), null, null,
@@ -65,6 +105,26 @@ public class EvaluateStatementTest extends AbstractStatementTest {
         constant(false), null, null, null);
     stmt.execute(context);
     assertEquals("Hello World", context.get("message"));
+  }
+
+  @Test
+  public void testRunScript() {
+    context.set("name", "Volker");
+    Object result = EvaluateStatement.runScript("Hello ${name}", "ftl", "fatal", context, null);
+    assertEquals("Hello Volker", result);
+  }
+
+  @Test(expected = ScriptException.class)
+  public void testRunScript_error_fatal() {
+    TextFileLocation location = new TextFileLocation("file.js", 5, 7, 6, 8);
+    EvaluateStatement.runScript("Hello ${name}", "ftl", "fatal", context, location);
+  }
+
+  @Test
+  public void testRunScript_error_warn() {
+    TextFileLocation location = new TextFileLocation("file.js", 5, 7, 6, 8);
+    Object result = EvaluateStatement.runScript("Hello ${name}", "ftl", "warn", context, location);
+    assertNull(result);
   }
 
   @Test
@@ -128,11 +188,110 @@ public class EvaluateStatementTest extends AbstractStatementTest {
   @Test(expected = OperationFailed.class)
   public void testAssertFailed() {
     DefaultBeneratorContext context = new DefaultBeneratorContext();
-    EvaluateStatement s = new EvaluateStatement(true, null, new ConstantExpression<>("1"),
+    EvaluateStatement s = new EvaluateStatement(true, null, expression("1"),
         null, null, null, null,
-        null, new ConstantExpression<>("fatal"),
+        null, expression("fatal"),
         null, null, null, new ScriptExpression<>("result == 2"), null);
     s.execute(context);
+  }
+
+  @Test(expected = ConfigurationError.class)
+  public void testRunSql_db_null() {
+    EvaluateStatement.runSql(null, null, false, "fatal", Encodings.UTF_8,
+        "select count(*) from eval_stmt_test", ';', false, false);
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testRunSql_no_text_or_uri() {
+    DefaultDBSystem db = null;
+    try {
+      db = prepareInMemoryDb();
+      EvaluateStatement.runSql(null, db, false, "fatal", Encodings.UTF_8,
+          null, ';', false, false);
+    } finally {
+      db.execute("shutdown");
+      db.close();
+    }
+  }
+
+  @Test
+  public void testEvaluateAsSql() {
+    DefaultDBSystem db = null;
+    try {
+      db = prepareInMemoryDb();
+      String text = "select count(*) from eval_stmt_test";
+      EvaluateStatement stmt = new EvaluateStatement(true, "id", expression(text),
+          null, "sql", constant(db), null, null, constant("fatal"), null, constant(Boolean.FALSE),
+          constant(Boolean.FALSE), null, null);
+      Object result = stmt.evaluateAsSql(context, "fatal", null, db, Encodings.UTF_8, text);
+      assertEquals(2, result);
+    } finally {
+      db.execute("shutdown");
+      db.close();
+    }
+  }
+
+  @Test
+  public void testRunSql_text() {
+    DefaultDBSystem db = null;
+    try {
+      db = prepareInMemoryDb();
+      DBExecutionResult result = EvaluateStatement.runSql(null, db, false, "fatal", Encodings.UTF_8,
+          "select count(*) from eval_stmt_test", ';', false, false);
+      assertEquals(2, result.result);
+      assertFalse(result.changedStructure);
+    } finally {
+      db.execute("shutdown");
+      db.close();
+    }
+  }
+
+  @Test
+  public void testRunSql_text_invalidate() {
+    DefaultDBSystem db = null;
+    try {
+      db = prepareInMemoryDb();
+      DBExecutionResult result = EvaluateStatement.runSql(null, db, false, "fatal", Encodings.UTF_8,
+          "select count(*) from eval_stmt_test", ';', false, true);
+      assertEquals(2, result.result);
+      assertFalse(result.changedStructure);
+    } finally {
+      db.execute("shutdown");
+      db.close();
+    }
+  }
+
+  @Test
+  public void testRunSql_uri() {
+    DefaultDBSystem db = null;
+    try {
+      db = prepareInMemoryDb();
+      String uri = getClass().getName().replace('.', '/') + ".sql";
+      DBExecutionResult result = EvaluateStatement.runSql(uri, db, false, "fatal",
+          Encodings.UTF_8, null, ';', false, false);
+      assertEquals(2, result.result);
+    } finally {
+      db.execute("shutdown");
+      db.close();
+    }
+  }
+
+  @Test(expected = OperationFailed.class)
+  public void testRunSql_exception() {
+    DefaultDBSystem db = null;
+    try {
+      db = prepareInMemoryDb();
+      EvaluateStatement.runSql(null, db, false, "fatal", Encodings.UTF_8,
+          "select count(*) from not_a_table", ';', false, true);
+    } finally {
+      db.execute("shutdown");
+      db.close();
+    }
+  }
+
+  @Test
+  public void testMapExtensionOf_unknown() {
+    assertNull(EvaluateStatement.mapExtensionOf("file.unknown"));
   }
 
   // private helpers ---------------------------------------------------------------------------------------------------
@@ -158,6 +317,22 @@ public class EvaluateStatementTest extends AbstractStatementTest {
         constant(Encodings.UTF_8), constant(false), null, null, null);
     stmt.execute(context);
     assertEquals(expectedResult, context.get("result"));
+  }
+
+  private ConstantExpression<String> expression(String s) {
+    return new ConstantExpression<>(s);
+  }
+
+  private DefaultDBSystem prepareInMemoryDb() {
+    String dbUrl = HSQLUtil.getInMemoryURL(getClass().getSimpleName());
+    DefaultDBSystem db = new DefaultDBSystem("db", dbUrl, HSQLUtil.DRIVER,
+        HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
+    db.execute("create table eval_stmt_test ( id int )");
+    db.commit();
+    db.execute("insert into eval_stmt_test ( id ) values ( 1 )");
+    db.execute("insert into eval_stmt_test ( id ) values ( 2 )");
+    db.commit();
+    return db;
   }
 
 

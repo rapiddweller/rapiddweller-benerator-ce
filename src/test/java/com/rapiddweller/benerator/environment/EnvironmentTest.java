@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -26,6 +27,7 @@ public class EnvironmentTest {
   @Test
   public void testSetting() {
     Environment e = Environment.parse("test", CollectionUtil.buildMap("id_strategy", "hilo"));
+    assertEquals("test", e.getName());
     assertEquals(1, e.getSettings().size());
     assertEquals("hilo", e.getSetting("id_strategy"));
   }
@@ -42,6 +44,29 @@ public class EnvironmentTest {
     assertTrue(system.isDb());
     assertEquals("jdbc:url", system.getProperty("url"));
     assertEquals("com.the.Driver", system.getProperty("driver"));
+  }
+
+  @Test
+  public void testEquals() {
+    Environment env1 = new Environment("env1");
+    Environment env2 = new Environment("env2");
+    assertEquals(env1, env1);
+    assertNotEquals(env1, null);
+    assertNotEquals(env1, "string");
+    assertNotEquals(env1, env2);
+    assertEquals(3118339, env1.hashCode());
+  }
+
+  @Test
+  public void testHashCode() {
+    Environment env = new Environment("env1");
+    assertEquals(3118339, env.hashCode());
+  }
+
+  @Test
+  public void testToString() {
+    Environment env = new Environment("env1");
+    assertEquals("env1", env.toString());
   }
 
 }

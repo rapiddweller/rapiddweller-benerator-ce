@@ -45,7 +45,7 @@ public class EnvironmentUtil {
     for (String location : ConfigUtil.defaultConfigLocations(projectFolder)) {
       File folder = new File(location);
       if (folder.exists()) {
-        File[] envFiles = folder.listFiles((dir, name) -> name.endsWith(ENV_FILE_SUFFIX));
+        File[] envFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(ENV_FILE_SUFFIX));
         if (envFiles != null) {
           for (File envFile : envFiles) {
             String envFileName = envFile.getName();
@@ -58,9 +58,9 @@ public class EnvironmentUtil {
     return result;
   }
 
-  public static SystemRef[] findSystems(String type) {
+  public static SystemRef[] findSystems(String type, String projectFolder) {
     ArrayBuilder<SystemRef> result = new ArrayBuilder<>(SystemRef.class);
-    Collection<Environment> environments = EnvironmentUtil.findEnvironments().values();
+    Collection<Environment> environments = EnvironmentUtil.findEnvironments(projectFolder).values();
     for (Environment environment : environments) {
       for (SystemRef system : environment.getSystems()) {
         if (type.equals(system.getType())) {

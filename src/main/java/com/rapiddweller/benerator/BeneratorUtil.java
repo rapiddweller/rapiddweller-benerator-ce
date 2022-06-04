@@ -246,7 +246,7 @@ public class BeneratorUtil {
   // private helpers -------------------------------------------------------------------------------------------------
 
   private static void printEnvSystems(String label, String type, TextPrinter printer) {
-    SystemRef[] systems = EnvironmentUtil.findSystems(type);
+    SystemRef[] systems = EnvironmentUtil.findSystems(type, ".");
     printer.printStd(label + ":");
     for (SystemRef system : systems) {
       printer.printStd("- " + system.getEnvironment().getName() + "#" + system.getName() + " - " + describe(system));
