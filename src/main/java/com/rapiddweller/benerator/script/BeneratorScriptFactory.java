@@ -43,6 +43,11 @@ import java.io.IOException;
 public class BeneratorScriptFactory implements ScriptFactory {
 
   @Override
+  public boolean isTemplateEngine() {
+    return false;
+  }
+
+  @Override
   public Script parseText(String text) throws ParseException {
     return new BeneratorScript(DatabeneScriptParser.parseExpression(text), text);
   }

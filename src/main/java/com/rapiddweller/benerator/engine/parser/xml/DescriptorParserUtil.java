@@ -38,6 +38,7 @@ import com.rapiddweller.format.text.SplitStringConverter;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.ConvertingExpression;
+import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.expression.StringExpression;
 import com.rapiddweller.script.expression.TypeConvertingExpression;
 import com.rapiddweller.script.expression.UnescapeExpression;
@@ -64,7 +65,7 @@ public class DescriptorParserUtil {
     checkGeneratorVsOuterAttrs(part, "name", errorId);
   }
 
-  private static void checkGeneratorVsOuterAttrs(Element part, String parentAttr, String errorId) {
+  static void checkGeneratorVsOuterAttrs(Element part, String parentAttr, String errorId) {
     Attr generatorAttr = part.getAttributeNode("generator");
     if (generatorAttr != null) {
       Element outer = part;
@@ -98,7 +99,7 @@ public class DescriptorParserUtil {
     for (String attrName : XMLUtil.getAttributes(element).keySet()) {
       Expression<String> expression = parseScriptableStringAttribute(attrName, element);
       String propertyName = normalizeAttributeName(attrName);
-      BeanUtil.setPropertyValue(bean, propertyName, expression, true);
+      BeanUtil.setPropertyValue(bean, propertyName, ExpressionUtil.evaluate(expression,null), false);
     }
     return bean;
   }
@@ -185,12 +186,12 @@ public class DescriptorParserUtil {
 
   // scriptable strings ----------------------------------------------------------------------------------------------
 
-  public static Expression<String> parseScriptableString(Element element, String attrName, String synJmsDestinationFormat) {
+  public static Expression<String> parseScriptableString(Element element, String attrName, String errorId) {
     try {
       return parseScriptableStringAttribute(attrName, element);
     } catch (ConversionException e) {
       throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, null,
-          synJmsDestinationFormat, element.getAttributeNode(attrName));
+          errorId, element.getAttributeNode(attrName));
     }
   }
 

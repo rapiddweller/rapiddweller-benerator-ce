@@ -27,23 +27,22 @@ import java.io.IOException;
 /**
  * Creates {@link GraalScript}s.
  * Created at 30.12.2020
- *
  * @author Alexander Kell
  * @since 1.1.0
  */
 public class GraalJsScriptFactory implements ScriptFactory {
 
-
   private static final String LANGUAGE = "js";
   private final Engine jsEngine;
 
-  /**
-   * Instantiates a new Graal js script factory.
-   */
   public GraalJsScriptFactory() {
     this.jsEngine = Engine.newBuilder().build();
   }
 
+  @Override
+  public boolean isTemplateEngine() {
+    return false;
+  }
 
   @Override
   public Script parseText(String text) {

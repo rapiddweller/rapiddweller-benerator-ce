@@ -337,18 +337,8 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
 
   // literal construction helpers ------------------------------------------------------------------------------------
 
-  public TypeDescriptor withSource(String source) {
-    setSource(source);
-    return this;
-  }
-
   public TypeDescriptor withSeparator(String separator) {
     setSeparator(separator);
-    return this;
-  }
-
-  public TypeDescriptor withGenerator(String generator) {
-    setGenerator(generator);
     return this;
   }
 

@@ -26,7 +26,6 @@ import java.io.IOException;
 
 /**
  * Created at 30.12.2020
- *
  * @author Alexander Kell
  * @since 1.1.0
  */
@@ -35,13 +34,14 @@ public class GraalPyScriptFactory implements ScriptFactory {
   private static final String LANGUAGE = "python";
   private final Engine pythonEngine;
 
-  /**
-   * Instantiates a new Graal py script factory.
-   */
   public GraalPyScriptFactory() {
     this.pythonEngine = Engine.newBuilder().build();
   }
 
+  @Override
+  public boolean isTemplateEngine() {
+    return false;
+  }
 
   @Override
   public Script parseText(String text) {

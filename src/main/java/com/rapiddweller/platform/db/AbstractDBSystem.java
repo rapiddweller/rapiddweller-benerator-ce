@@ -33,6 +33,7 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
 import com.rapiddweller.benerator.util.DeprecationLogger;
+import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.exception.ConnectFailedException;
@@ -45,6 +46,8 @@ import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.script.ScriptSpec;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.ConvertingDataSource;
 import com.rapiddweller.jdbacl.ColumnInfo;
 import com.rapiddweller.jdbacl.DBUtil;
@@ -100,7 +103,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.rapiddweller.jdbacl.SQLUtil.createCatSchTabString;
-import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
 
 /**
  * Abstract class that serves as parent for classes which connect to databases using JDBC.<br/><br/>
@@ -168,7 +170,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
             "The old format is supported for backwards compatibility, but will be dropped in a future release");
       }
       SystemRef def = context.getEnvironmentSystem(environment, systemName);
-      if (!"db".equals(def.getType())) {
+      if (def == null || !"db".equals(def.getType())) {
         throw BeneratorExceptionFactory.getInstance().configurationError(
             "Not a database definition: '" + systemName + "' in environment '" + environmentName + "'");
       }
@@ -197,7 +199,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   }
 
 
-  private static String decimalGranularity(int scale) {
+  static String decimalGranularity(int scale) {
     if (scale == 0) {
       return "1";
     }
@@ -431,35 +433,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
     }
   }
 
-  @Override
-  @SuppressWarnings({"null", "checkstyle:VariableDeclarationUsageDistance"})
-  public DataSource<Entity> queryEntities(String type, String selector, Context context) {
-    logger.debug("queryEntities({})", type);
-    boolean script = false;
-    if (selector != null && selector.startsWith("{") && selector.endsWith("}")) {
-      selector = selector.substring(1, selector.length() - 1);
-      script = true;
-    }
-    String sql;
-    if (StringUtil.isEmpty(selector)) {
-      sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect());
-    } else if (StringUtil.startsWithIgnoreCase(selector, "select") ||
-        StringUtil.startsWithIgnoreCase(selector, "'select")) {
-      sql = selector;
-    } else if (selector.startsWith("ftl:")) { // TODO support script languages generically
-      sql = "ftl:select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE " + selector.substring(4);
-    } else if (!script) {
-      sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE " + selector;
-    } else {
-      sql = "'select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE ' + " + selector;
-    }
-    if (script) {
-      sql = '{' + sql + '}';
-    }
-    DataSource<ResultSet> source = createQuery(sql, context);
-    return new EntityResultSetDataSource(source, (ComplexTypeDescriptor) getTypeDescriptor(type));
-  }
-
   public long countEntities(String tableName) {
     logger.debug("countEntities({})", tableName);
     String query = "select count(*) from " +
@@ -469,16 +442,19 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   }
 
   @Override
+  @SuppressWarnings({"null", "checkstyle:VariableDeclarationUsageDistance"})
+  public DataSource<Entity> queryEntities(String type, String selector, Context context) {
+    logger.debug("queryEntities({})", type);
+    String tableSpec = createCatSchTabString(catalogName, schemaName, type, getDialect());
+    String sql = renderSelectorQuery(tableSpec, "*", selector);
+    DataSource<ResultSet> source = createQuery(sql, context);
+    return new EntityResultSetDataSource(source, (ComplexTypeDescriptor) getTypeDescriptor(type));
+  }
+
+  @Override
   public DataSource<?> queryEntityIds(String tableName, String selector, Context context) {
     logger.debug("queryEntityIds({}, {})", tableName, selector);
-
-    // check for script
-    boolean script = false;
-    if (selector != null && selector.startsWith("{") && selector.endsWith("}")) {
-      selector = selector.substring(1, selector.length() - 1);
-      script = true;
-    }
-
+    String tableSpec = createCatSchTabString(catalogName, schemaName, tableName, getDialect());
     // find out pk columns
     DBTable table = getTable(tableName);
     String[] pkColumnNames = table.getPKColumnNames();
@@ -486,16 +462,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       throw BeneratorExceptionFactory.getInstance().configurationError(
           "Cannot create reference to table " + tableName + " since it does not define a primary key");
     }
-
-    // construct selector
-    String query = renderQuery(catalogName, schemaName, tableName, pkColumnNames, dialect);
-    if (selector != null) {
-      if (script) {
-        query = "{'" + query + " where ' + " + selector + "}";
-      } else {
-        query += " where " + selector;
-      }
-    }
+    String colsSpec = ArrayFormat.format(pkColumnNames);
+    String query = renderSelectorQuery(tableSpec, colsSpec, selector);
     return query(query, true, context);
   }
 
@@ -607,6 +575,68 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   }
 
   // private helpers ------------------------------------------------------------------------------
+
+  static String renderSelectorQuery(String tableSpec, String colsSpec, String selector) {
+    // check for script
+    ScriptSpec spec = ScriptUtil.parseSpec(selector);
+    // construct SQL query
+    String sql;
+    String specText = spec.getText();
+    if (!spec.isScript()) {
+      sql = renderStaticSelectorQuery(tableSpec, colsSpec, specText);
+    } else if (spec.isTemplateScript()) {
+      sql = renderTemplateSelectorQuery(tableSpec, colsSpec, spec, specText);
+    } else if (specText.startsWith("'")) {
+      sql = renderSingleQuotedSelectorQuery(tableSpec, colsSpec, spec, specText, "'select", "'select ", " where ' + ");
+    } else {
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
+          "Script engine not supported in <database> select or subSelect attributes: " + spec.getEngineId());
+    }
+    return sql;
+  }
+
+  private static String renderSingleQuotedSelectorQuery(String tableSpec, String colsSpec, ScriptSpec spec, String specText, String s, String s2,
+                                                        String s3) {
+    String sql;
+    if (specText.toLowerCase().startsWith(s)) {
+      // SELECTOR is expected to be a complete and valid SQL query
+      sql = specText;
+    } else {
+      // SELECTOR is expected to be the argument of a WHERE clause
+      sql = s2 + colsSpec + " from " + tableSpec + s3 + specText;
+    }
+    sql = "{" + spec.getEngineId() + ":" + sql + "}";
+    return sql;
+  }
+
+  private static String renderTemplateSelectorQuery(String tableSpec, String colsSpec, ScriptSpec spec, String specText) {
+    String sql;// SELECTOR is a template expression
+    if (StringUtil.startsWithIgnoreCase(specText, "select ")) {
+      // SELECTOR is expected to be a complete and valid SQL query
+      sql = specText;
+    } else {
+      // SELECTOR is expected to be the argument of a WHERE clause
+      sql = "select " + colsSpec + " from " + tableSpec + " where " + specText;
+    }
+    sql = "{" + spec.getEngineId() + ":" + sql + "}";
+    return sql;
+  }
+
+  private static String renderStaticSelectorQuery(String tableSpec, String colsSpec, String specText) {
+    String sql;
+    // SELECTOR is static text
+    if (StringUtil.startsWithIgnoreCase(specText, "select ")) {
+      // SELECTOR is expected to be a complete and valid SQL query
+      sql = specText;
+    } else {
+      // SELECTOR is expected to be the static argument of a WHERE clause
+      sql = "select " + colsSpec + " from " + tableSpec;
+      if (!StringUtil.isEmpty(specText)) {
+        sql += " WHERE " + specText;
+      }
+    }
+    return sql;
+  }
 
   @Override
   public String toString() {

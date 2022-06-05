@@ -106,7 +106,7 @@ public class DefaultBeneratorSubContextTest {
 
   @Test
   public void testGlobal() {
-    assertEquals("globalValue", child.get("globalVar"));
+    assertEquals("globalValue", child.getGlobal("globalVar"));
     assertTrue(child.contains("globalVar"));
   }
 
