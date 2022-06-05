@@ -29,6 +29,8 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
@@ -74,9 +76,20 @@ public class DefaultDBSystemTest extends ABCTest {
               + ");",
           connection);
       db.invalidate();
+      context.setContextUri("target/test-classes/" + BeanUtil.packageFolder(getClass()));
     } finally {
       DBUtil.close(connection);
     }
+  }
+
+  @Test(expected = ConfigurationError.class)
+  public void test_env_without_system() {
+    new DefaultDBSystem("id", "local", null, context);
+  }
+
+  @Test(expected = ConfigurationError.class)
+  public void test_not_a_database() {
+    new DefaultDBSystem("id", "local", "kafka1", context);
   }
 
   @Test
@@ -89,6 +102,14 @@ public class DefaultDBSystemTest extends ABCTest {
     assertNull(db.getCatalog());
     db.setCatalog("theCat");
     assertEquals("theCat", db.getCatalog());
+  }
+
+  @Test
+  public void testDecimalFGranularity() {
+    assertEquals("1", DefaultDBSystem.decimalGranularity(0));
+    assertEquals("0.1", DefaultDBSystem.decimalGranularity(1));
+    assertEquals("0.01", DefaultDBSystem.decimalGranularity(2));
+    assertEquals("0.001", DefaultDBSystem.decimalGranularity(3));
   }
 
   @Test
@@ -173,22 +194,104 @@ public class DefaultDBSystemTest extends ABCTest {
   }
 
   @Test
-  public void testQueryEntities() {
+  public void testQueryEntities_no_selector() {
     db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
     db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
     DefaultBeneratorContext context = new DefaultBeneratorContext();
     DataContainer<Entity> container = new DataContainer<>();
 
-    // test without selector
+    // test with plain selector
+    DataIterator<Entity> iterator = db.queryEntities("TEST", null, context).iterator();
+    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator.next(container).getData());
+    assertEquals(new Entity("TEST", db, "ID", 2, "NAME", "Bob"), iterator.next(container).getData());
+    assertNull(iterator.next(container));
+    iterator.close();
+  }
+
+  @Test
+  public void testQueryEntities_static_selector() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer<Entity> container = new DataContainer<>();
+
+    // test with plain selector
     DataIterator<Entity> iterator = db.queryEntities("TEST", "ID = 1", context).iterator();
     assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator.next(container).getData());
     assertNull(iterator.next(container));
     iterator.close();
+  }
 
-    // test with selector
-    DataIterator<Entity> iterator2 = db.queryEntities("TEST", null, context).iterator();
-    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator2.next(container).getData());
-    assertEquals(new Entity("TEST", db, "ID", 2, "NAME", "Bob"), iterator2.next(container).getData());
+  @Test
+  public void testQueryEntities_ftl_selector() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer<Entity> container = new DataContainer<>();
+    // test with script selector
+    DataIterator<Entity> iterator = db.queryEntities("TEST", "{ftl:ID = ${23/23}}", context).iterator();
+    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator.next(container).getData());
+    assertNull(iterator.next(container));
+    iterator.close();
+  }
+
+  @Test
+  public void testQueryEntities_ben_selector() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer<Entity> container = new DataContainer<>();
+    DataIterator<Entity> iterator = db.queryEntities("TEST", "{ben:'ID = ' + 1}", context).iterator();
+    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator.next(container).getData());
+    assertNull(iterator.next(container));
+    iterator.close();
+  }
+
+  @Test
+  public void testQueryEntityIds_no_selector() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer container = new DataContainer<>();
+    DataIterator<?> iterator3 = db.queryEntityIds("TEST", null, context).iterator();
+    assertEquals(1, iterator3.next(container).getData());
+    assertEquals(2, iterator3.next(container).getData());
+    assertNull(iterator3.next(container));
+    iterator3.close();
+  }
+
+  @Test
+  public void testQueryEntityIds_static_selector() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer container = new DataContainer<>();
+    DataIterator<?> iterator = db.queryEntityIds("TEST", "ID = 1", context).iterator();
+    assertEquals(1, iterator.next(container).getData());
+    assertNull(iterator.next(container));
+    iterator.close();
+  }
+
+  @Test
+  public void testQueryEntityIds_ftl_selector() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer container = new DataContainer<>();
+    DataIterator<?> iterator = db.queryEntityIds("TEST", "{ftl:ID = 2}", context).iterator();
+    assertEquals(2, iterator.next(container).getData());
+    assertNull(iterator.next(container));
+    iterator.close();
+  }
+
+  @Test
+  public void testQueryEntityIds_ben_selector() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer container = new DataContainer<>();
+    DataIterator<?> iterator2 = db.queryEntityIds("TEST", "{ben:'ID = ' + 2}", context).iterator();
+    assertEquals(2, iterator2.next(container).getData());
     assertNull(iterator2.next(container));
     iterator2.close();
   }
@@ -227,7 +330,7 @@ public class DefaultDBSystemTest extends ABCTest {
     assertEquals("DefaultDBSystem[sa@jdbc:hsqldb:mem:benerator]", db.toString());
     assertEquals("hsql", db.getDbType());
     assertEquals(1, db.invalidationCount());
-    assertEquals("ConvertingDataSource[QueryDataSource[SELECT \"ID\" FROM \"PUBLIC\".\"TEST\" where SELECT * FROM TEST] -> ResultSetConverter]", db.queryEntityIds("TEST", "SELECT * FROM TEST", null).toString());
+    assertEquals("ConvertingDataSource[QueryDataSource[SELECT * FROM TEST] -> ResultSetConverter]", db.queryEntityIds("TEST", "SELECT * FROM TEST", null).toString());
     assertEquals(2, db.countEntities("TEST"));
     assertEquals("TEST[ID=1, NAME=Alice]", db.queryEntityById("TEST", 1).toString());
     assertNull(db.getCatalog());
