@@ -205,11 +205,6 @@ jobs:
           idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false
-      - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco-merged-test-coverage-report/jacoco.csv
-      - run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report
-        shell: bash
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
     ###################### Sonar ######################
 
