@@ -127,7 +127,7 @@
         <_rd_format_version>1.1.5-jdk-11-SNAPSHOT</_rd_format_version>
         <_rd_jdbacl_version>1.1.12-jdk-11-SNAPSHOT</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11-SNAPSHOT</_rd_script_version>
-        <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
+        <database_derbyclient.version>10.16.1.1</database_derbyclient.version>
         <database_h2.version>2.1.210</database_h2.version>
         <database_hsqldb.version>1.8.0.10</database_hsqldb.version>
         <database_icu4j.version>71.1</database_icu4j.version>
@@ -628,7 +628,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M6</version>
+                <version>3.0.0-M7</version>
                 <reportSets>
                     <reportSet>
                         <!-- defines aggregate unit test report -->
