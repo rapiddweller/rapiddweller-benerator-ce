@@ -21,7 +21,7 @@ public class DocumentToObjectConverter extends ThreadSafeConverter<Document, Obj
     @Override
     public Object convert(Document document) throws ConversionException {
         Object[] converted = convertToArray(document);
-        if (this.simplifying && converted.length <= 1) {
+        if (this.simplifying && converted.length == 1) {
             return converted[0];
         }
         return converted;
@@ -40,7 +40,7 @@ public class DocumentToObjectConverter extends ThreadSafeConverter<Document, Obj
             else if (value instanceof Collection) {
                 results.add(convertCollection((Collection<?>) value));
             }
-            else if (value.getClass().isArray()) {
+            else if (value != null && value.getClass().isArray()) {
                 results.add(convertCollection(List.of(value)));
             }
             else {
