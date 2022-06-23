@@ -59,6 +59,21 @@ jobs:
         shell: bash
     container: maven:3.6-adoptopenjdk-11
     services:
+      mongodb:
+        # Docker Hub image
+        image: aashreys/mongo-auth:latest
+        # Provide the password for postgres
+        env:
+          DB_HOST: mongodb
+          DB_PORT: "27017"
+          DB_CONNECTION: "benerator"
+          # mongodb
+          AUTH: "yes"
+          MONGODB_ADMIN_USER: "admin"
+          MONGODB_ADMIN_PASS: "root"
+          MONGODB_APPLICATION_DATABASE: "benerator"
+          MONGODB_APPLICATION_USER: "benerator"
+          MONGODB_APPLICATION_PASS: "benerator"
       # Label used to access the service container
       postgres:
         # Docker Hub image
@@ -119,7 +134,16 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: set db properties for postgres connetion
+      - name: set db properties for mongodb connection
+        run: |
+          echo "
+          mongoHost=mongodb
+          mongoPort=27017
+          mongoDatabase=benerator
+          mongoUser=benerator
+          mongoPassword=benerator
+          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+      - name: set db properties for postgres connection
         run: |
           echo "
           dbUrl=jdbc:postgresql://postgres:5432/benerator
