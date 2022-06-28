@@ -1,5 +1,26 @@
 <setup xmlns="https://www.benerator.de/schema/2.1.0">
-    <generate type="test" count="50" consumer="Result">
+    <generate type="test" count="100000" consumer="Result">
         <attribute name="name" pattern="[A-Z]{3,15}"/>
+        <attribute name="number" min="1" max="10000"/>
+        <attribute name="name_long" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long2" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long3" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long4" pattern="[A-Z]{30,150}"/>
+    </generate>
+    <generate type="test2" count="100000" consumer="Result">
+        <attribute name="name" pattern="[A-Z]{3,15}"/>
+        <attribute name="number" min="1" max="10000"/>
+        <attribute name="name_long" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long2" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long3" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long4" pattern="[A-Z]{30,150}"/>
+    </generate>
+    <generate type="test3" count="100000" consumer="Result">
+        <attribute name="name" pattern="[A-Z]{3,15}"/>
+        <attribute name="number" min="1" max="10000"/>
+        <attribute name="name_long" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long2" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long3" pattern="[A-Z]{30,150}"/>
+        <attribute name="name_long4" pattern="[A-Z]{30,150}"/>
     </generate>
 </setup>

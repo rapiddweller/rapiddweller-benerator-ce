@@ -13,29 +13,34 @@ import java.util.Set;
 
 /**
  * ResultExporter for rapiddweller-benerator-pro ui result functionality.<br/><br/>
+ * Limited to write Max of 1000 Entities per Entity name, configureable via property "result.max" like -Dresult.max=10
  * Created: 1/15/21
  *
  * @author akell
  * @since 1.1.0
  */
-
 public class Result extends TextFileExporter {
   private static final Logger logger = LoggerFactory.getLogger(Result.class);
 
   // constant
-  private String encoding = "UTF-8"; //Charset.defaultCharset().displayName();
+  private String encoding = "UTF-8";
+
 
   // attributes ------------------------------------------------------------------------------------------------------
   private PrintWriter csvWriter = null;
   private String[] columns;
 
+
   // configuration attributes ----------------------------------------------------------------------------------------
   private final Boolean endWithNewLine = false;
   private char separator = '|';
   private final String csvLineSeparator = System.lineSeparator();
+  private final int max = Integer.parseInt(System.getProperty("result.max", "1000"));
 
   // state attributes ------------------------------------------------------------------------------------------------
   private Boolean lfRequired = false;
+
+  private int generatedLines = 0;
 
   // Callback methods for parent class functionality -----------------------------------------------------------------
   public Result() {
@@ -55,11 +60,17 @@ public class Result extends TextFileExporter {
 
   @Override
   public void startConsumingImpl(Object data) {
-    Entity entity = (Entity) data;
-    if ((csvWriter == null)) {
-      initPrinter(data);
+    generatedLines++;
+    if (generatedLines <= max) {
+      Entity entity = (Entity) data;
+      if ((csvWriter == null)) {
+        initPrinter(data);
+      }
+      startCSVFile(entity);
+    } else if (generatedLines == max + 1) {
+      preClosePrinter(csvWriter);
+      close();
     }
-    startCSVFile(entity);
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
