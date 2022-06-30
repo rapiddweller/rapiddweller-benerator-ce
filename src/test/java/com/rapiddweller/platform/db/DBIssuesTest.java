@@ -15,17 +15,18 @@ import org.junit.Test;
 public class DBIssuesTest extends AbstractBeneratorIntegrationTest {
 
 	//TODO Discuss about hard limit for column size, break because H2 increased max chars to 1.000.000.000 / column
-	@Test@Ignore
+	@Test
+	@Ignore("Discuss about hard limit for column size, break because H2 increased max chars to 1.000.000.000 / column")
 	public void test_issue_heap_overflow_on_unlimited_varchar() {
 		// the heap overflow is caused by the edition's VarLengthStringGenerator, so this test needs to be performed on each edition
 		String xml = "<setup>\n" +
-			"    <database id='db' url='jdbc:h2:mem:target' driver='org.h2.Driver' user='sa' schema='public'/>\n" +
-			"    <execute target='db'>\n" +
-			"        drop table customer if exists;\n" +
-			"        create table customer ( name VARCHAR not null );\n" +
-			"    </execute>\n" +
-			"    <generate type='customer' count='10' consumer='db'/>\n" +
-			"    <execute target='db'>drop table customer if exists;</execute>\n" +
+				"    <database id='db' url='jdbc:h2:mem:target' driver='org.h2.Driver' user='sa' schema='public'/>\n" +
+				"    <execute target='db'>\n" +
+				"        drop table customer if exists;\n" +
+				"        create table customer ( name VARCHAR not null );\n" +
+				"    </execute>\n" +
+				"    <generate type='customer' count='10' consumer='db'/>\n" +
+				"    <execute target='db'>drop table customer if exists;</execute>\n" +
 			"</setup>";
 		parseAndExecuteXmlString(xml);
 	}
