@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
+import org.apache.commons.math3.util.Precision;
 
 /**
  * Double Generator that implements a 'random' Double Sequence.<br/><br/>
@@ -38,6 +39,7 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  */
 public class RandomDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
+  private final int decimalPlaces;
   private RandomProvider random;
 
   public RandomDoubleGenerator() {
@@ -50,6 +52,9 @@ public class RandomDoubleGenerator extends AbstractNonNullNumberGenerator<Double
 
   public RandomDoubleGenerator(double min, double max, double granularity) {
     super(Double.class, min, max, granularity);
+    String granularityText = Double.toString(Math.abs(granularity));
+    int integerPlaces = granularityText.indexOf('.');
+    decimalPlaces = granularityText.length() - integerPlaces - 1;
     this.random = BeneratorFactory.getInstance().getRandomProvider();
   }
 
@@ -64,7 +69,7 @@ public class RandomDoubleGenerator extends AbstractNonNullNumberGenerator<Double
       // if generation is granular, then apply it to the offset (not the base!)
       offset = Math.floor(offset / granularity) * granularity;
     }
-    return min + offset;
+    return Precision.round(min + offset, decimalPlaces);
   }
 
 }

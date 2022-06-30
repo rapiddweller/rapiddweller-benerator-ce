@@ -31,7 +31,11 @@ import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.converter.ConverterManager;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.IOException;
 
@@ -150,6 +154,17 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/xls-demo.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
+  }
+
+  /**
+   * Demo files demoSimpleNumbers demo.
+   */
+  // TODO add check eval methods to script
+  @Test
+  public void demoSimpleNumbers() {
+    context.setContextUri("/demo/simple");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/simple/numbers.ben.xml");
+    Assert.assertEquals("/demo/simple", benCtx.getContextUri());
   }
 
   /**
