@@ -4,7 +4,9 @@ package com.rapiddweller.platform.result;
 
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -25,6 +27,9 @@ public class ResultIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void test() {
     parseAndExecuteFile(getClass().getPackageName().replace('.', '/') + "/result.ben.xml");
+    Assert.assertEquals(IOUtil.readTextLines("results/test.csv", false).length, 1001);
+    Assert.assertEquals(IOUtil.readTextLines("results/test2.csv", false).length, 1001);
+    Assert.assertEquals(IOUtil.readTextLines("results/test3.csv", false).length, 1001);
   }
 
 }

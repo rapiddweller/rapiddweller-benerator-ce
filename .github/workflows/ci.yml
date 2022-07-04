@@ -95,6 +95,21 @@ jobs:
         shell: bash
     container: maven:3.6-adoptopenjdk-11
     services:
+      mongodb:
+        # Docker Hub image
+        image: aashreys/mongo-auth:latest
+        # Provide the password for postgres
+        env:
+          DB_HOST: mongodb
+          DB_PORT: "27017"
+          DB_CONNECTION: "benerator"
+          # mongodb
+          AUTH: "yes"
+          MONGODB_ADMIN_USER: "admin"
+          MONGODB_ADMIN_PASS: "root"
+          MONGODB_APPLICATION_DATABASE: "benerator"
+          MONGODB_APPLICATION_USER: "benerator"
+          MONGODB_APPLICATION_PASS: "benerator"
       # Label used to access the service container
       postgres:
         # Docker Hub image
@@ -160,6 +175,15 @@ jobs:
         with:
           name: setup
       - run: bash dot.env
+      - name: set db properties for mongodb connection
+        run: |
+          echo "
+          mongoHost=mongodb
+          mongoPort=27017
+          mongoDatabase=benerator
+          mongoUser=benerator
+          mongoPassword=benerator
+          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
       - name: set db properties for postgres connetion
         run: |
           echo "
@@ -205,11 +229,6 @@ jobs:
           idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false
-      - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco-merged-test-coverage-report/jacoco.csv
-      - run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report
-        shell: bash
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
     ###################### Sonar ######################
 
