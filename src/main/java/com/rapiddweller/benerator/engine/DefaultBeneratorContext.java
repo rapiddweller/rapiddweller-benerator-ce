@@ -291,10 +291,15 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
   }
 
   @Override
-  public SystemRef getEnvironmentSystem(String envName, String system) {
+  public SystemRef getEnvironmentSystem(String envName, String sysName) {
     synchronized (environments) {
       Environment env = environments.computeIfAbsent(envName, k -> EnvironmentUtil.parse(envName, contextUri));
-      return env.getSystem(system);
+      SystemRef result = env.getSystem(sysName);
+      if (result == null) {
+        throw BeneratorExceptionFactory.getInstance().configurationError(
+            "System '" + sysName + "' is not configured in environment '" + envName + "'");
+      }
+      return result;
     }
   }
 
