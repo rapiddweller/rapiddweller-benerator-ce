@@ -217,7 +217,7 @@ jobs:
       - name: set db properties for mssql connetion
         run: |
           echo "
-          dbUrl=jdbc:sqlserver://mssql:1433
+          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
           dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
           dbCatalog=master
           dbSchema=dbo
@@ -640,7 +640,7 @@ jobs:
         run: benerator --version
       - run: |
           echo "
-          dbUrl=jdbc:sqlserver://mssql:1433
+          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
           dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
           dbCatalog=master
           dbSchema=dbo
