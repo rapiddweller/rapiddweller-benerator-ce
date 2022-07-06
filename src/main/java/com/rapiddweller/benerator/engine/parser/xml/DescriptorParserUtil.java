@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.expression.TypedScriptExpression;
@@ -44,6 +45,8 @@ import com.rapiddweller.script.expression.TypeConvertingExpression;
 import com.rapiddweller.script.expression.UnescapeExpression;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+
+import java.beans.PropertyDescriptor;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_GENERATE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ITERATE;
@@ -97,9 +100,20 @@ public class DescriptorParserUtil {
 
   public static <T> T mapXmlAttrsToBeanProperties(Element element, T bean) {
     for (String attrName : XMLUtil.getAttributes(element).keySet()) {
-      Expression<String> expression = parseScriptableStringAttribute(attrName, element);
-      String propertyName = normalizeAttributeName(attrName);
-      BeanUtil.setPropertyValue(bean, propertyName, ExpressionUtil.evaluate(expression,null), false);
+      try {
+        Expression<String> expression = parseScriptableStringAttribute(attrName, element);
+        String propertyName = normalizeAttributeName(attrName);
+        PropertyDescriptor descriptor = BeanUtil.getPropertyDescriptor(bean.getClass(), propertyName);
+        Object value = expression;
+        if (!Expression.class.equals(descriptor.getPropertyType())) {
+          value = ExpressionUtil.evaluate(expression, null);
+        }
+        BeanUtil.setPropertyValue(bean, propertyName, value, false);
+      } catch (Exception e) {
+        throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(
+            "Error processing '" + attrName + "' attribute of " + XMLUtil.format(element),
+            e, BeneratorErrorIds.UNSPECIFIC, element.getAttributeNode(attrName));
+      }
     }
     return bean;
   }
