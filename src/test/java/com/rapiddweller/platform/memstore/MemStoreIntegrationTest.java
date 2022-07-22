@@ -28,6 +28,7 @@ package com.rapiddweller.platform.memstore;
 
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
@@ -43,6 +44,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration test for the {@link MemStore} class.<br/><br/>
  * Created: 08.03.2011 16:06:12
+ *
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -51,7 +53,9 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   private MemStore dst;
   private ConsumerMock consumer;
 
-  /** Sets up source, consumer and descriptor. */
+  /**
+   * Sets up source, consumer and descriptor.
+   */
   @Before
   public void setUpConsumerAndDescriptor() {
     consumer = new ConsumerMock(true);
@@ -93,7 +97,9 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /** Test iteration. */
+  /**
+   * Test iteration.
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void testIterate() {
@@ -109,7 +115,9 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /** Test iteration with rapiddweller script selector. */
+  /**
+   * Test iteration with rapiddweller script selector.
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void testIterateWithSelector() {
@@ -120,7 +128,9 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertEquals(4, products.get(0).get("id"));
   }
 
-  /** Test iterate with JavaScript selector. */
+  /**
+   * Test iterate with JavaScript selector.
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void testIterateWithJsSelector() {
@@ -132,7 +142,9 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertEquals(4, products.get(0).get("id"));
   }
 
-  /** Test variable evaluation. */
+  /**
+   * Test variable evaluation.
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void testVariable() {
@@ -156,7 +168,46 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /** Test sub part generation. */
+  @Test
+  public void testsumEntityColumnPositive() {
+    MemStore mem = new MemStore("mem", dataModel);
+    context.set("mem", mem);
+    parseAndExecuteXmlString(
+        "<generate type='user' count='5' consumer=\"mem\">" +
+            "	<id name='id' type='int' generator='IncrementGenerator'/>" +
+            "</generate>"
+    );
+    int totalCount = mem.sumEntityColumn("user", "id");
+    assertEquals(15, totalCount);
+  }
+
+  @Test(expected = IllegalArgumentError.class)
+  public void testsumEntityColumnNegative() {
+    MemStore mem = new MemStore("mem", dataModel);
+    context.set("mem", mem);
+    parseAndExecuteXmlString(
+        "<generate type='user' count='5' consumer=\"mem\">" +
+            "	<id name='id' type='int' generator='IncrementGenerator'/>" +
+            "</generate>"
+    );
+    int totalCount = mem.sumEntityColumn("xxx", "id");
+  }
+
+  @Test(expected = IllegalArgumentError.class)
+  public void testsumEntityColumnNegative2() {
+    MemStore mem = new MemStore("mem", dataModel);
+    context.set("mem", mem);
+    parseAndExecuteXmlString(
+        "<generate type='user' count='5' consumer=\"mem\">" +
+            "	<id name='id' type='int' generator='IncrementGenerator'/>" +
+            "</generate>"
+    );
+    int totalCount = mem.sumEntityColumn("user", "xxx");
+  }
+
+  /**
+   * Test sub part generation.
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void testPart() {
@@ -179,7 +230,9 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /** Test reference generation. */
+  /**
+   * Test reference generation.
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void testReference() {
@@ -248,7 +301,9 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /** Test integration with XML-based setup. */
+  /**
+   * Test integration with XML-based setup.
+   */
   @Test
   public void testIntegration() {
     MemStore.ignoreClose = true;

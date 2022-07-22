@@ -78,6 +78,16 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
   }
 
   /**
+   * Demo memstore.
+   */
+  @Test
+  public void demoMemstore() {
+    context.setContextUri("/demo/memstore");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/memstore/memstore.ben.xml");
+    Assert.assertEquals("/demo/memstore", benCtx.getContextUri());
+  }
+
+  /**
    * Demo files greeting csv.
    */
   @Test
