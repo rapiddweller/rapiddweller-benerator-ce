@@ -102,6 +102,32 @@ public class WedgeSequenceTest extends GeneratorTest {
     expectGeneratedSequence(doubleGenerator(-1.0, 0.5, 0.5), -1.0, 0.5, -0.5, 0.0).withCeasedAvailability();
   }
 
+  /**
+   * Test double granularity 0 1.
+   */
+  @Test
+  public void testDoubleGranularity0_1() {
+    expectGeneratedSequence(doubleGenerator(0.0, 0.5, 0.1), 0.0, 0.5, 0.1, 0.4, 0.2, 0.3).withCeasedAvailability();
+    expectGeneratedSequence(doubleGenerator(-0.5, 0.0, 0.1), -0.5, 0.0, -0.4, -0.1, -0.3, -0.2).withCeasedAvailability();
+  }
+
+  /**
+   * Test double granularity 0 0 1.
+   */
+  @Test
+  public void testDoubleGranularity0_0_1() {
+    expectGeneratedSequence(doubleGenerator(-0.5, -0.48, 0.01), -0.5, -0.48, -0.49).withCeasedAvailability();
+    expectGeneratedSequence(doubleGenerator(0.5, 0.52, 0.01), 0.5, 0.52, 0.51).withCeasedAvailability();
+  }
+
+  /**
+   * Test double granularity 0 0 2.
+   */
+  @Test
+  public void testDoubleGranularity0_0_2() {
+    expectGeneratedSequence(doubleGenerator(-0.5, -0.44, 0.02), -0.5, -0.44, -0.48, -0.46).withCeasedAvailability();
+  }
+
   private Generator<Long> longGenerator(long min, long max, long granularity) {
     return initialize(new WedgeLongGenerator(min, max, granularity));
   }

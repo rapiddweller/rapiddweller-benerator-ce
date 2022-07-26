@@ -33,6 +33,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static com.rapiddweller.common.SystemInfo.isLinux;
+import static com.rapiddweller.common.SystemInfo.isMacOsx;
 
 /**
  * Integration test for Benerator's Script functionality.<br/><br/><p>
@@ -44,7 +45,7 @@ public class ManualExampleTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void example1() throws IOException {
-    Assume.assumeTrue(isLinux());
+    Assume.assumeTrue(isLinux() || isMacOsx());
     context.setContextUri("/com/rapiddweller/benerator/engine/manual");
     parseAndExecuteFile("/com/rapiddweller/benerator/engine/manual/example.ben.xml");
   }
