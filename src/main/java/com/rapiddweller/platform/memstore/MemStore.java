@@ -34,9 +34,13 @@ import com.rapiddweller.benerator.util.FilterExDataSource;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.common.ui.TextPrinter;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.DataSourceFromIterable;
@@ -45,7 +49,7 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.common.Expression;
+import com.rapiddweller.platform.db.DefaultDBSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +60,7 @@ import java.util.Map;
 /**
  * Simple heap-based implementation of the AbstractStorageSystem interface.<br/><br/>
  * Created: 07.03.2011 14:41:40
+ *
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -102,13 +107,76 @@ public class MemStore extends AbstractStorageSystem {
 
   public int totalEntityCount() {
     int result = 0;
-    for (EntityStore entityStore : entitiesByType.values())
+    for (EntityStore entityStore : entitiesByType.values()) {
       result += entityStore.size();
+    }
     return result;
   }
 
   public int entityCount(String type) {
     return entitiesByType.get(type).size();
+  }
+
+  public void filter(String entityName, String filterColumn, DataSource<Entity> list) {
+    ArrayList<Object> filterList = new ArrayList<>();
+    DataIterator<Entity> iterator = list.iterator();
+    DataContainer<Entity> container = new DataContainer<>();
+    while ((container = iterator.next(container)) != null) {
+      Entity entity = container.getData();
+      filterList.add(entity.get(filterColumn));
+    }
+    this.getEntities(entityName).removeIf(entity -> !filterList.contains(entity.get(filterColumn)));
+  }
+
+  public void removeNotExistingIds(String entityName, String filterColumn, String filterTable, Object db) {
+    ArrayList<Object> filterList = new ArrayList<>();
+    DataIterator<Entity> iterator = null;
+    if (db.getClass() == DefaultDBSystem.class) {
+      iterator = ((AbstractStorageSystem) db).queryEntities("1", String.format("SELECT DISTINCT \"%s\" FROM \"%s\"", filterColumn, filterTable), null)
+          .iterator();
+    } else if (db.getClass() == MemStore.class) {
+      iterator = ((MemStore) db).queryEntities(filterTable, "", null).iterator();
+    }
+    if (iterator != null) {
+      DataContainer<Entity> container = new DataContainer<>();
+      while ((container = iterator.next(container)) != null) {
+        Entity entity = container.getData();
+        filterList.add(entity.get(filterColumn));
+      }
+      this.getEntities(entityName).removeIf(entity -> !filterList.contains(entity.get(filterColumn)));
+    }
+  }
+
+  public int sumEntityColumn(String type, String column) {
+    int result = 0;
+    EntityStore e = entitiesByType.get(type);
+    if (e != null) {
+      for (Entity entity : e.entities()) {
+        Object value = entity.get(column);
+        if (value != null && value.getClass() == Integer.class) {
+          result += (Integer) value;
+        } else if (value != null && value.getClass() == Double.class) {
+          result += (Double) value;
+        }  else if (value != null && value.getClass() == String.class) {
+          try {
+            result += Integer.parseInt((String) value);
+          } catch (NumberFormatException e1) {
+            logger.warn("Could not parse {} as integer try to parse as double", value);
+            try {
+              result += Double.parseDouble((String) value);
+            } catch (NumberFormatException e2) {
+              logger.warn("Could not parse value {}, not a numeric value", value);
+            }
+          }
+        } else {
+          throw new IllegalArgumentError(
+              String.format("Entity %s does not have a column with name %s or given column is not a numeric value", type, column));
+        }
+      }
+    } else {
+      throw new IllegalArgumentError(String.format("Entity %s does not exist in Memstore", type));
+    }
+    return result;
   }
 
   @Override

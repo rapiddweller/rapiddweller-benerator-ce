@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
+import org.apache.commons.math3.util.Precision;
 
 /**
  * Generates 'Double' values for the 'wedge' sequence.<br/><br/>
@@ -39,6 +40,7 @@ public class WedgeDoubleGenerator extends AbstractNonNullNumberGenerator<Double>
 
   private Double cursor;
   private double end;
+  private int decimalPlaces;
 
   public WedgeDoubleGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
@@ -58,6 +60,9 @@ public class WedgeDoubleGenerator extends AbstractNonNullNumberGenerator<Double>
   @Override
   public void init(GeneratorContext context) {
     assertNotInitialized();
+    String granularityText = Double.toString(Math.abs(granularity));
+    int integerPlaces = granularityText.indexOf('.');
+    decimalPlaces = granularityText.length() - integerPlaces - 1;
     cursor = min;
     max = min + (max - min) / granularity * granularity;
     double steps = (max - min) / granularity + 1;
@@ -80,7 +85,7 @@ public class WedgeDoubleGenerator extends AbstractNonNullNumberGenerator<Double>
         cursor += granularity;
       }
     }
-    return result;
+    return Precision.round(result, decimalPlaces);
   }
 
   @Override

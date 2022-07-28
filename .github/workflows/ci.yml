@@ -178,6 +178,15 @@ jobs:
       - name: set db properties for mongodb connection
         run: |
           echo "
+          target.db.host=mongodb
+          target.db.port=27017
+          target.db.database=benerator
+          target.db.user=benerator
+          target.db.password=benerator
+          target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+      - name: set db properties for mongodb connection2
+        run: |
+          echo "
           mongoHost=mongodb
           mongoPort=27017
           mongoDatabase=benerator
@@ -208,7 +217,7 @@ jobs:
       - name: set db properties for mssql connetion
         run: |
           echo "
-          dbUrl=jdbc:sqlserver://mssql:1433
+          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
           dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
           dbCatalog=master
           dbSchema=dbo
@@ -631,7 +640,7 @@ jobs:
         run: benerator --version
       - run: |
           echo "
-          dbUrl=jdbc:sqlserver://mssql:1433
+          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
           dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
           dbCatalog=master
           dbSchema=dbo

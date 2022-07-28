@@ -72,7 +72,7 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   /**
    * Demo Mssql Shop
    */
-  @Test @Ignore // TODO connect fails
+  @Test
   public void DemoMssqlShop() {
     assumeTestActive("mssql");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mssql.ben.xml");
@@ -115,7 +115,7 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
    */
   @Test
   public void DemoMongoDBShop() {
-    assumeTestActive("mongodb", false);
+    assumeTestActive("mongodb");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mongodb.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
   }
@@ -126,7 +126,7 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   @Test
   public void DemoPostgresMongoDBShop() {
     assumeTestActive("postgres");
-    assumeTestActive("mongodb", false);
+    assumeTestActive("mongodb");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-postgres-mongodb.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
   }

@@ -1,0 +1,16 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/2.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/2.0.0 http://benerator.de/schema/rapiddweller-benerator-ce-2.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US">
+    <generate type="numbers" count="100" consumer="LoggingConsumer">
+        <attribute name="int_max_10" type="int" maxLength="10"/>
+        <attribute name="double_001" type="double" min="0.0" max="10.0" granularity="0.01"/>
+        <attribute name="double_01" type="double" min="0.0" max="10.0" granularity="0.1"/>
+        <attribute name="double_025" type="double" min="0.0" max="10.0" granularity="0.25"/>
+        <attribute name="double_033" type="double" min="0.0" max="10.0" granularity="0.33"/>
+        <attribute name="double_05" type="double" min="0.0" max="10.0" granularity="0.5"/>
+        <attribute name="double_only_max" type="double" max="10.0" granularity="0.5"/>
+        <attribute name="double_only_min" type="double" min="10.0" granularity="0.5"/>
+    </generate>
+</setup>

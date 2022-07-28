@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/2.1.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/2.1.0 https://www.benerator.de/schema/benerator-2.1.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <memstore id="mem"/>
+    <import domains="person"/>
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC"
+              tableFilter="db_.*"/>
+
+    <execute target="db">
+        CREATE TABLE "test" (
+        "id" int,
+        "number" int,
+        "name" varchar,
+        "age" int,
+        PRIMARY KEY ("id")
+        );
+    </execute>
+
+    <generate type="test" count="100" threads="1" consumer="db">
+        <variable name="person" generator="PersonGenerator"/>
+
+        <attribute name="id" generator="IncrementGenerator"/>
+        <attribute name="number" type="double" min="1" max="100"/>
+        <attribute name="name" script="person"/>
+        <attribute name="age" script="person.age"/>
+    </generate>
+
+    <generate type="test2" count="1000" threads="1" consumer="mem">
+        <variable name="person" generator="PersonGenerator"/>
+
+        <attribute name="id" generator="IncrementGenerator"/>
+        <attribute name="number" type="double" min="1" max="100"/>
+        <attribute name="name" script="person"/>
+        <attribute name="age" script="person.age"/>
+    </generate>
+
+    <echo>Original List before filtering</echo>
+    <iterate type="test_file" source="test_file.wgt.ent.csv" separator="|" consumer="mem,ConsoleExporter"/>
+    <comment>Sum up total count of count column</comment>
+    <execute>
+        totalCount = mem.sumEntityColumn('test_file','count')
+    </execute>
+    <echo>{ftl:totalcount ${totalCount}}</echo>
+
+    <comment>Remove not existing entries in Memstore</comment>
+    <execute>
+        mem.removeNotExistingIds('test2','id','test',db)
+    </execute>
+
+    <comment>Sum up total count of count column</comment>
+    <execute>
+        totalCount = mem.sumEntityColumn('test2','number')
+    </execute>
+    <echo>{ftl:totalcount ${totalCount}}</echo>
+
+    <echo>Original List after filtering</echo>
+    <iterate type="test2" source="mem" consumer="ConsoleExporter"/>
+
+    <generate type="te" count="{totalCount}" consumer="mem">
+        <attribute name="counter" generator="IncrementGenerator"/>
+    </generate>
+
+    <comment>Check if results are correct</comment>
+    <evaluate assert="result == totalCount">mem.entityCount('te')</evaluate>
+
+</setup>
