@@ -39,6 +39,14 @@
         <attribute name="age" script="person.age"/>
     </generate>
 
+    <echo>Original List before filtering</echo>
+    <iterate type="test_file" source="test_file.wgt.ent.csv" separator="|" consumer="mem,ConsoleExporter"/>
+    <comment>Sum up total count of count column</comment>
+    <execute>
+        totalCount = mem.sumEntityColumn('test_file','count')
+    </execute>
+    <echo>{ftl:totalcount ${totalCount}}</echo>
+
     <comment>Remove not existing entries in Memstore</comment>
     <execute>
         mem.removeNotExistingIds('test2','id','test',db)
