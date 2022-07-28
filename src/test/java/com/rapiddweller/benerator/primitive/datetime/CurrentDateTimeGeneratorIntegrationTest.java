@@ -34,7 +34,7 @@ public class CurrentDateTimeGeneratorIntegrationTest extends AbstractBeneratorIn
 		String xml = "<setup xmlns='https://www.benerator.de/schema/3.0.0'>\n" +
 				"    <memstore id='mem'/>" +
 				"    <generate type='event' count='3' consumer='mem'>\n" +
-				"        <attribute name='dateTime' generator=\"new CurrentZonedDateTimeGenerator('America/Chicago')\"/>\n" +
+				"        <attribute name='dateTime' type='zoneddatetime' generator=\"new CurrentZonedDateTimeGenerator('America/Chicago')\"/>\n" +
 				"    </generate>\n" +
 				"</setup>";
 		parseXmlString(xml).execute(context);
@@ -43,7 +43,7 @@ public class CurrentDateTimeGeneratorIntegrationTest extends AbstractBeneratorIn
 		List<Entity> events = mem.getEntities("event");
 		assertEquals(3, events.size());
 		for (int i = 0; i < 3; i++) {
-			assertEquals(ZoneId.systemDefault(), ((ZonedDateTime) events.get(i).getComponent("dateTime")).getZone());
+			assertEquals(ZoneId.of("America/Chicago"), ((ZonedDateTime) events.get(i).getComponent("dateTime")).getZone());
 		}
 	}
 
