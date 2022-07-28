@@ -110,6 +110,7 @@ public class BeneratorErrorIds {
   public static final String SYN_SETUP_DEF_SOURCE_SCRIPTED     = "BEN-0213";
   public static final String SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES = "BEN-0214";
   public static final String SYN_SETUP_GENERATOR_FACTORY       = "BEN-0215";
+  public static final String SYN_SETUP_DEF_TIMEZONE            = "BEN-0216";
 
   // Syntax Errors regarding <comment> -------------------------------------------------------------------------------
 

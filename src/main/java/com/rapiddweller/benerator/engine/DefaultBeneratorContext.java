@@ -61,6 +61,7 @@ import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
 
 import java.io.File;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -92,6 +93,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   protected boolean defaultSourceScripted;
   protected String defaultEncoding;
+  protected String defaultTimeZone;
   protected String defaultDataset;
   protected long defaultPageSize;
   protected boolean defaultNull;
@@ -132,6 +134,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
     this.contextUri = contextUri;
     this.defaultSourceScripted = false;
     this.defaultEncoding = SystemInfo.getFileEncoding();
+    this.defaultTimeZone = ZoneId.systemDefault().getId();
     this.defaultDataset = Country.getDefault().getIsoCode();
     this.defaultPageSize = 1;
     this.defaultNull = true;
@@ -219,6 +222,20 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
   @Override
   public Locale getDefaultLocale() {
     return Locale.getDefault();
+  }
+
+  @Override
+  public String getDefaultTimeZone() {
+    return defaultTimeZone;
+  }
+
+  public void setDefaultTimeZone(String defaultTimeZone) {
+    try {
+      ZoneId zoneId = ZoneId.of(defaultTimeZone);// check if it is a legal time zone spec
+      this.defaultTimeZone = zoneId.getId();
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().configurationError("Not a valid time zone id", e);
+    }
   }
 
   @Override

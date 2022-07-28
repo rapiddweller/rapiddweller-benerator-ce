@@ -354,11 +354,19 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
-  public void test_0213_syn_setup_defaultGenFact() {
+  public void test_0215_syn_setup_defaultGenFact() {
     BeneratorResult result = runFile("test_0215_syn_setup_genFact.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_GENERATOR_FACTORY,
         "Illegal attribute value for setup.generatorFactory: 'none'. " +
             "File test_0215_syn_setup_genFact.ben.xml, line 1", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0216_syn_setup_defaultTimeZone() {
+    BeneratorResult result = runFile("test_0216_syn_setup_defTimeZone.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_TIMEZONE,
+        "Illegal attribute value for setup.defaultTimeZone: 'nowhere'. " +
+            "File test_0216_syn_setup_defTimeZone.ben.xml, line 1", ExitCodes.SYNTAX_ERROR, result);
   }
 
   // <echo> tests ----------------------------------------------------------------------------------------------------

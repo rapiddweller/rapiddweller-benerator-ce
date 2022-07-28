@@ -56,6 +56,8 @@ public interface GeneratorContext extends Context, ClassProvider {
 
   Locale getDefaultLocale();
 
+  String getDefaultTimeZone();
+
   String getDefaultDataset();
 
   long getDefaultPageSize();

@@ -94,6 +94,11 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
+  public String getDefaultTimeZone() {
+    return parent.getDefaultTimeZone();
+  }
+
+  @Override
   public void remove(String key) {
     parent.remove(key);
   }
