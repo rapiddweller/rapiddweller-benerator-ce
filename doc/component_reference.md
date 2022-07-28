@@ -50,6 +50,8 @@ See **[Using Relational Databases](using_relational_databases.md)**.
 
 * **CurrentDateTimeGenerator**: Generates java.util.Date objects that represent the current date and time
 
+* **CurrentZonedDateTimeGenerator**: Generates java.util.ZonedDateTime objects that represent the current date and time 
+
 * **CurrentMilliTimeGenerator**: Generates long values that denote the number of milliseconds since 1970-01-01 00:00:00
 
 * **CurrentNanoTimeGenerator**: Generates long values that denote a number of milliseconds since an arbitrary point in
@@ -66,6 +68,9 @@ See **[Using Relational Databases](using_relational_databases.md)**.
 * **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate,
   maxDate, dateGranularity, dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime
   on odd days in August 2010, configure
+
+* **ZonedDateTimeGenerator**: TODO
+
 
 ```xml
 
