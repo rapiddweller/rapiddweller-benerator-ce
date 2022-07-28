@@ -30,6 +30,7 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 
 /**
  * Implements the {@link IndividualWeight} function in a manner that an arbitrary object feature value
@@ -71,7 +72,11 @@ public class FeatureWeight extends IndividualWeight<Object> {
 
   @Override
   public double weight(Object object) {
-    return converter.convert(accessor.getValue(object));
+    try {
+      return converter.convert(accessor.getValue(object));
+    } catch (NullPointerException e) {
+      throw new IllegalArgumentError(String.format("Entity does not have a column %s or given column is not a numeric value", feature));
+    }
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
