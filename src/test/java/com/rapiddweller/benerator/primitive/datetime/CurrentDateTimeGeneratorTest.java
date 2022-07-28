@@ -39,15 +39,11 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link CurrentDateGenerator}.<br/><br/>
  * Created: 15.04.2011 08:52:43
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
 public class CurrentDateTimeGeneratorTest extends GeneratorTest {
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     Date startDate = new Date();

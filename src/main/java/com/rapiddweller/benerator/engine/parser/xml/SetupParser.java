@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.string.GlobalErrorHandlerParser;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.parser.string.PlainEncodingParser;
+import com.rapiddweller.benerator.engine.parser.string.ZoneIdParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
@@ -55,6 +56,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -90,7 +92,10 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
       new RegexBasedStringParser("line separator", "(\\r)?\\n"), SystemInfo.LF);
 
   protected static final AttrInfo<String> DEFAULT_LOCALE = new AttrInfo<>(
-    ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), Locale.getDefault().toString());
+      ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), Locale.getDefault().toString());
+
+  protected static final AttrInfo<ZoneId> DEFAULT_TIME_ZONE = new AttrInfo<>(
+      ATT_DEFAULT_TIME_ZONE, false, SYN_SETUP_DEF_TIMEZONE, new ZoneIdParser(), ZoneId.systemDefault().getId());
 
   protected static final AttrInfo<String> DEFAULT_DATASET = new AttrInfo<>(
     ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(), Country.getDefault().getIsoCode());
@@ -124,9 +129,9 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
   static {
     ATTR_SUPPORT = new AttrInfoSupport(SYN_SETUP_ILLEGAL_ATTRIBUTE,
         COUNT, DEFAULT_SCRIPT, DEFAULT_NULL, DEFAULT_ENCODING, DEFAULT_LINE_SEPARATOR,
-        DEFAULT_LOCALE, DEFAULT_DATASET, DEFAULT_PAGE_SIZE, DEFAULT_SEPARATOR, DEFAULT_ONE_TO_ONE,
-        DEFAULT_ERR_HANDLER, DEFAULT_IMPORTS, DEFAULT_SOURCE_SCRIPTED, ACCEPT_UNKNOWN_SIMPLE_TYPES,
-        GENERATOR_FACTORY);
+        DEFAULT_LOCALE, DEFAULT_TIME_ZONE, DEFAULT_DATASET, DEFAULT_PAGE_SIZE, DEFAULT_SEPARATOR,
+        DEFAULT_ONE_TO_ONE, DEFAULT_ERR_HANDLER, DEFAULT_IMPORTS, DEFAULT_SOURCE_SCRIPTED,
+        ACCEPT_UNKNOWN_SIMPLE_TYPES, GENERATOR_FACTORY);
   }
 
   public SetupParser() {

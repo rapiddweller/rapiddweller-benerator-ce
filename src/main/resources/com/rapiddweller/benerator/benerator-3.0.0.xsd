@@ -22,6 +22,7 @@
                     <xs:attribute name="defaultLineSeparator" type="xs:string"/>
                     <xs:attribute name="defaultSourceScripted" type="xs:boolean" default="false"/>
                     <xs:attribute name="defaultLocale" type="xs:string"/>
+                    <xs:attribute name="defaultTimeZone" type="xs:string"/>
                     <xs:attribute name="defaultDataset" type="xs:string"/>
                     <xs:attribute name="defaultPageSize" type="xs:long" default="1"/>
                     <xs:attribute name="defaultSeparator" type="xs:string" default=","/>
