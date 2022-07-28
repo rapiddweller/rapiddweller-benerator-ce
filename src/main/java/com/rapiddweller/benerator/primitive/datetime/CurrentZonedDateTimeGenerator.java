@@ -21,7 +21,7 @@ public class CurrentZonedDateTimeGenerator extends ThreadSafeNonNullGenerator<Zo
 	// constructors --------------------------------------------------------------------------------------------------
 
 	public CurrentZonedDateTimeGenerator() {
-		this(null);
+		this(ZoneId.systemDefault().getId());
 	}
 
 	public CurrentZonedDateTimeGenerator(String zoneId) {
