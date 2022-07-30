@@ -42,19 +42,19 @@ set PATH=$BENERATOR_HOME\bin:$PATH
 5. create your first benerator script for example myscript.xml with following content
 ```xml
 <setup>
-  <import domains="person"/>
-  <generate type="customer" count="1000" threads="1" consumer="LoggingConsumer,CSVEntityExporter">
-    <variable name="person" generator="new PersonGenerator{minAgeYears='21', maxAgeYears='67',femaleQuota='0.5'}" />
-    <variable name="company" generator="CompanyNameGenerator" />
-    <attribute name="first_name" script="person.familyName" />
-    <attribute name="last_name" script="person.givenName" />
-    <attribute name="birthDate" script="person.birthDate" converter="new java.text.SimpleDateFormat('dd.MM.YYYY')" />
-    <attribute name="superuser" values="true, false" />
-    <attribute name="salutation" script="person.salutation " />
-    <attribute name="academicTitle" script="person.academicTitle" />
-    <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + '.de'" />
-  </generate>
-</setup>
+    <import domains="person,organization"/>
+    <generate type="customer" count="1000" threads="1" consumer="LoggingConsumer,CSVEntityExporter">
+      <variable name="person" generator="new PersonGenerator{minAgeYears='21', maxAgeYears='67',femaleQuota='0.5'}" />
+      <variable name="company" generator="CompanyNameGenerator" />
+      <attribute name="first_name" script="person.familyName" />
+      <attribute name="last_name" script="person.givenName" />
+      <attribute name="birthDate" script="person.birthDate" converter="new java.text.SimpleDateFormat('dd.MM.YYYY')" />
+      <attribute name="superuser" values="true, false" />
+      <attribute name="salutation" script="person.salutation " />
+      <attribute name="academicTitle" script="person.academicTitle" />
+      <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + this.tc_creation + '.de'" />
+    </generate>
+  </setup>
 ```
 
 6. run your first benerator script 
