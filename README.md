@@ -19,6 +19,71 @@
 generate, obfuscate (anonymize / pseudonymize) and migrate data for development,
 testing and training purposes.
 
+## Quickstart
+
+1. make sure you have install **Java 11 JDK** or higher and **JAVA_HOME** Environment variable is set correctly 
+2. download latest benerator version from [Releases](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases)
+3. unzip .tar.gz to *choose/your/path*
+4. open a terminal (bash / powershell) and add Environment variable BENERATOR_HOME=*choose/your/path* and add *choose/your/path*/bin to your PATH variable
+For example **(these environment variables are only set in your terminal session, read more about environment variables [here](https://en.wikipedia.org/wiki/Environment_variable))**
+
+#### Linux bash  
+```shell
+export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-2.0.0-jdk-11-dist  
+export PATH=$BENERATOR_HOME/bin:$PATH  
+```
+
+#### Windows 10 Powershell  
+```shell
+set BENERATOR_HOME=C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist  
+set PATH=$BENERATOR_HOME\bin:$PATH 
+```
+
+5. create your first benerator script for example myscript.xml with following content
+```xml
+<setup>
+  <import domains="person"/>
+  <generate type="customer" count="1000" threads="1" consumer="LoggingConsumer,CSVEntityExporter">
+    <variable name="person" generator="new PersonGenerator{minAgeYears='21', maxAgeYears='67',femaleQuota='0.5'}" />
+    <variable name="address" generator="AddressGenerator" />
+    <variable name="company" generator="CompanyNameGenerator" />
+    <attribute name="first_name" script="person.familyName" />
+    <attribute name="last_name" script="person.givenName" />
+    <attribute name="birthDate" script="person.birthDate" converter="new java.text.SimpleDateFormat('dd.MM.YYYY')" />
+    <attribute name="superuser" values="true, false" />
+    <attribute name="salutation" script="person.salutation " />
+    <attribute name="academicTitle" script="person.academicTitle" />
+    <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + this.tc_creation + '.de'" />
+  </generate>
+</setup>
+```
+
+6. run your first benerator script 
+```shell
+benerator myscript.xml
+``` 
+
+Console Output should show something like this
+```log
+[INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - finishConsuming(customer[first_name=Roberts, last_name=Marie, birthDate=13.03.1995, superuser=true, salutation=Mrs., academicTitle=[null], email=info@Joshua-Baker.de])
+[INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - startConsuming(customer[first_name=Nicholson, last_name=James, birthDate=18.11.1955, superuser=true, salutation=Mr., academicTitle=[null], email=info@William-Elliott.de])
+[INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - finishConsuming(customer[first_name=Nicholson, last_name=James, birthDate=18.11.1955, superuser=true, salutation=Mr., academicTitle=[null], email=info@William-Elliott.de])
+```
+
+Additional you should have a export.csv file in the same directory with content like this
+```cs
+Lewis,Samuel,01.11.1987,false,Mr.,,info@Aurium.de
+Robinson,Oliver,20.09.1978,true,Mr.,,info@SmartForge.de
+White,Samuel,01.01.1959,true,Mr.,,info@GPH.de
+Clarke,James,01.01.1968,true,Mr.,,info@EJZ.de
+Green,Oliver,13.11.1986,false,Mr.,,info@MKK.de
+Thompson,Daniel,27.01.1979,true,Mr.,,info@OPF.de
+Green,Sophie,09.09.1981,true,Mrs.,,info@MySet.de
+Williams,Lily,15.02.1957,false,Mrs.,,info@Daniel-Taylor.de
+Wilson,Chloe,07.10.1987,true,Mrs.,,info@Deltar.de
+Thompson,Jack,06.09.1984,true,Mr.,,info@TechNet.de
+```
+
 ## Introduction
 
 [rapiddweller Benerator](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (unit/integration/load) and showcase setup.
