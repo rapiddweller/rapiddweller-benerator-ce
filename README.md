@@ -34,8 +34,8 @@ export PATH=$BENERATOR_HOME/bin:$PATH
 ```
 
 #### Windows 10 Powershell  
-```shell
-$Env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist'  
+```powershell
+$env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist'  
 $env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist\bin'
 ```
 
@@ -58,7 +58,7 @@ $env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist\bin'
 ```
 
 6. run your first benerator script 
-```shell
+```powershell
 benerator myscript.xml
 ``` 
 
