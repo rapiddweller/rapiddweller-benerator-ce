@@ -45,7 +45,6 @@ set PATH=$BENERATOR_HOME\bin:$PATH
   <import domains="person"/>
   <generate type="customer" count="1000" threads="1" consumer="LoggingConsumer,CSVEntityExporter">
     <variable name="person" generator="new PersonGenerator{minAgeYears='21', maxAgeYears='67',femaleQuota='0.5'}" />
-    <variable name="address" generator="AddressGenerator" />
     <variable name="company" generator="CompanyNameGenerator" />
     <attribute name="first_name" script="person.familyName" />
     <attribute name="last_name" script="person.givenName" />
@@ -53,7 +52,7 @@ set PATH=$BENERATOR_HOME\bin:$PATH
     <attribute name="superuser" values="true, false" />
     <attribute name="salutation" script="person.salutation " />
     <attribute name="academicTitle" script="person.academicTitle" />
-    <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + this.tc_creation + '.de'" />
+    <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + '.de'" />
   </generate>
 </setup>
 ```
