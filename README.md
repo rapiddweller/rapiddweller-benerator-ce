@@ -21,10 +21,10 @@ testing and training purposes.
 
 ## Quickstart
 
-1. make sure you have install **Java 11 JDK** or higher and **JAVA_HOME** Environment variable is set correctly 
-2. download latest benerator version from [Releases](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases)
+1. make sure you have installed **Java 11 JDK** or higher and **JAVA_HOME** environment variable is set correctly 
+2. download the latest benerator version from [Releases](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases)
 3. unzip .tar.gz to *choose/your/path*
-4. open a terminal (bash / powershell) and add Environment variable BENERATOR_HOME=*choose/your/path* and add *choose/your/path*/bin to your PATH variable
+4. open a terminal (bash / PowerShell) and add environment variable BENERATOR_HOME=*choose/your/path* and add *choose/your/path*/bin to your PATH variable
 For example **(these environment variables are only set in your terminal session, read more about environment variables [here](https://en.wikipedia.org/wiki/Environment_variable))**
 
 #### Linux bash  
@@ -33,13 +33,13 @@ export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-2.0.0-jdk-11-dist
 export PATH=$BENERATOR_HOME/bin:$PATH  
 ```
 
-#### Windows 10 Powershell  
+#### Windows 10 PowerShell  
 ```powershell
 $env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist'  
 $env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist\bin'
 ```
 
-5. create your first benerator script for example myscript.xml with following content
+5. create your own benerator script myscript.xml with the following content
 ```xml
 <setup>
     <import domains="person,organization"/>
@@ -62,14 +62,14 @@ $env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist\bin'
 benerator myscript.xml
 ``` 
 
-Console Output should show something like this
+Console output should show something like this
 ```log
 [INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - finishConsuming(customer[first_name=Roberts, last_name=Marie, birthDate=13.03.1995, superuser=true, salutation=Mrs., academicTitle=[null], email=info@Joshua-Baker.de])
 [INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - startConsuming(customer[first_name=Nicholson, last_name=James, birthDate=18.11.1955, superuser=true, salutation=Mr., academicTitle=[null], email=info@William-Elliott.de])
 [INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - finishConsuming(customer[first_name=Nicholson, last_name=James, birthDate=18.11.1955, superuser=true, salutation=Mr., academicTitle=[null], email=info@William-Elliott.de])
 ```
 
-Additional you should have a export.csv file in the same directory with content like this
+Additional you should have an export.csv file in the same directory with content like this
 ```cs
 Lewis,Samuel,01.11.1987,false,Mr.,,info@Aurium.de
 Robinson,Oliver,20.09.1978,true,Mr.,,info@SmartForge.de
