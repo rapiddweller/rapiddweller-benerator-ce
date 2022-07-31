@@ -2,101 +2,22 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.common.RegexUtil;
 import org.junit.Test;
-
-import java.util.Locale;
 
 import static org.junit.Assert.*;
 
+/** Tests the {@link RegexStringGenerator}.
+ *  @author Volker Bergmann
+ */
 public class RegexStringGeneratorTest extends GeneratorTest {
     @Test
-    public void testConstructor() {
-        RegexStringGenerator actualRegexStringGenerator = new RegexStringGenerator();
-        Locale locale = new Locale("en");
-        actualRegexStringGenerator.setLocale(locale);
-        actualRegexStringGenerator.setMinLength(3);
-        actualRegexStringGenerator.setOrdered(true);
-        actualRegexStringGenerator.setPattern("Pattern");
-        actualRegexStringGenerator.setUnique(true);
-        Locale locale1 = actualRegexStringGenerator.getLocale();
-        assertSame(locale, locale1);
-        assertEquals(30, actualRegexStringGenerator.getMaxLength());
-        assertEquals(3, actualRegexStringGenerator.getMinLength());
-        assertEquals("Pattern", actualRegexStringGenerator.getPattern());
-        assertTrue(actualRegexStringGenerator.isOrdered());
-        assertTrue(actualRegexStringGenerator.isThreadSafe());
-        assertTrue(actualRegexStringGenerator.isUnique());
-    }
-
-    @Test
-    public void testConstructor2() {
-        RegexStringGenerator actualRegexStringGenerator = new RegexStringGenerator();
-        Class<?> expectedGeneratedType = String.class;
-        assertSame(expectedGeneratedType, actualRegexStringGenerator.getGeneratedType());
-        assertFalse(actualRegexStringGenerator.isUnique());
-        assertFalse(actualRegexStringGenerator.isOrdered());
-        assertNull(actualRegexStringGenerator.getSource());
-        assertNull(actualRegexStringGenerator.getPattern());
-        assertEquals(30, actualRegexStringGenerator.getMaxLength());
-    }
-
-    @Test
-    public void testConstructor3() {
-        RegexStringGenerator actualRegexStringGenerator = new RegexStringGenerator(3);
-        Class<?> expectedGeneratedType = String.class;
-        assertSame(expectedGeneratedType, actualRegexStringGenerator.getGeneratedType());
-        assertFalse(actualRegexStringGenerator.isUnique());
-        assertFalse(actualRegexStringGenerator.isOrdered());
-        assertNull(actualRegexStringGenerator.getSource());
-        assertNull(actualRegexStringGenerator.getPattern());
-        assertEquals(3, actualRegexStringGenerator.getMaxLength());
-    }
-
-    @Test
-    public void testConstructor4() {
-        RegexStringGenerator actualRegexStringGenerator = new RegexStringGenerator("Pattern");
-        Class<?> expectedGeneratedType = String.class;
-        assertSame(expectedGeneratedType, actualRegexStringGenerator.getGeneratedType());
-        assertFalse(actualRegexStringGenerator.isUnique());
-        assertFalse(actualRegexStringGenerator.isOrdered());
-        assertNull(actualRegexStringGenerator.getSource());
-        assertEquals("Pattern", actualRegexStringGenerator.getPattern());
-        assertEquals(30, actualRegexStringGenerator.getMaxLength());
-    }
-
-    @Test
-    public void testConstructor5() {
-        RegexStringGenerator actualRegexStringGenerator = new RegexStringGenerator("Pattern", 3);
-
-        Class<?> expectedGeneratedType = String.class;
-        assertSame(expectedGeneratedType, actualRegexStringGenerator.getGeneratedType());
-        assertFalse(actualRegexStringGenerator.isUnique());
-        assertFalse(actualRegexStringGenerator.isOrdered());
-        assertNull(actualRegexStringGenerator.getSource());
-        assertEquals("Pattern", actualRegexStringGenerator.getPattern());
-        assertEquals(3, actualRegexStringGenerator.getMaxLength());
-    }
-
-    @Test
-    public void testConstructor6() {
-        RegexStringGenerator actualRegexStringGenerator = new RegexStringGenerator("Pattern", 3, true);
-
-        Class<?> expectedGeneratedType = String.class;
-        assertSame(expectedGeneratedType, actualRegexStringGenerator.getGeneratedType());
-        assertTrue(actualRegexStringGenerator.isUnique());
-        assertFalse(actualRegexStringGenerator.isOrdered());
-        assertNull(actualRegexStringGenerator.getSource());
-        assertEquals("Pattern", actualRegexStringGenerator.getPattern());
-        assertEquals(3, actualRegexStringGenerator.getMaxLength());
-    }
-
-    @Test
-    public void testIsParallelizable() {
+    public void testIsParallelizable_non_unique() {
         assertTrue((new RegexStringGenerator()).isParallelizable());
     }
 
     @Test
-    public void testIsParallelizable2() {
+    public void testIsParallelizable_unique() {
         RegexStringGenerator regexStringGenerator = new RegexStringGenerator();
         regexStringGenerator.setUnique(true);
         assertFalse(regexStringGenerator.isParallelizable());
@@ -108,7 +29,7 @@ public class RegexStringGeneratorTest extends GeneratorTest {
     }
 
     @Test
-    public void testToString2() {
+    public void testToString_unique() {
         RegexStringGenerator regexStringGenerator = new RegexStringGenerator();
         regexStringGenerator.setUnique(true);
         assertEquals("RegexStringGenerator[unique 'null']", regexStringGenerator.toString());
@@ -135,7 +56,46 @@ public class RegexStringGeneratorTest extends GeneratorTest {
         checkProducts(gen, 100, "AB", "ABB", "ABBB");
     }
 
-    // TODO add further tests
+    @Test
+    public void testFix() {
+        expectProducts("ABC", "ABC");
+    }
+
+    @Test
+    public void testCharset() {
+        expectProducts("[A-D]", "A", "B", "C", "D");
+    }
+
+    @Test
+    public void testNotCharset() {
+        assertProductsMatch("[^ABC]");
+    }
+
+    @Test
+    public void testAlternative() {
+        expectProducts("ABC|DEF", "ABC", "DEF");
+    }
+
+    @Test
+    public void testQuadruplet() {
+        assertProductsMatch("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}");
+    }
+
+    // private helper ------------------------------------------------------------------------------------------------
+
+    private static void expectProducts(String regex, String... expectedProducts) {
+        RegexStringGenerator gen = new RegexStringGenerator(regex);
+        gen.init(new DefaultBeneratorContext());
+        checkProducts(gen, 100, expectedProducts);
+    }
+
+    private static void assertProductsMatch(String regex) {
+        RegexStringGenerator gen = new RegexStringGenerator(regex);
+        gen.init(new DefaultBeneratorContext());
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(RegexUtil.matches(regex, gen.generate()));
+        }
+    }
 
 }
 

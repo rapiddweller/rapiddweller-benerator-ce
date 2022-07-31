@@ -64,8 +64,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class SettingParser extends AbstractBeneratorDescriptorParser {
 
-  // TODO merge this with Bean property parsing
-
   public static final NameAttribute NAME = new NameAttribute(BeneratorErrorIds.SYN_SETTING_NAME, true, true);
 
   public static final AttrInfo<Expression<String>> DEFAULT = new AttrInfo<>(
@@ -101,7 +99,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
-  public static Expression<?> parseValueRefSourceOrChildren(Element element) {
+  public static Expression<Object> parseValueRefSourceOrChildren(Element element) {
     if (element.hasAttribute(ATT_VALUE)) {
       return VALUE.parse(element);
     } else if (element.hasAttribute(ATT_REF)) {
@@ -156,6 +154,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
     }
 
     @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected Expression<Object> parseImpl(String spec) {
       return new SourceExpression(DatabeneScriptParser.parseBeanSpec(spec));
     }

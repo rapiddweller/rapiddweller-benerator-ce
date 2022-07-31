@@ -5,21 +5,15 @@ package com.rapiddweller.benerator.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
-import com.rapiddweller.model.data.InstanceDescriptor;
-import com.rapiddweller.model.data.VariableDescriptor;
-import com.rapiddweller.model.data.VariableHolder;
 import org.w3c.dom.Element;
 
 /**
- * TODO JavaDoc.<br/><br/>
+ * Parses an array element of simple type.<br/><br/>
  * Created: 14.12.2021 06:31:36
- *
  * @author Volker Bergmann
- * @since TODO
+ * @since 3.0.0
  */
 public class SimpleTypeArrayElementParser extends AbstractComponentParser {
 

@@ -121,7 +121,7 @@
     </xs:element>
 
 
-    <xs:element name="setting"> <!-- TODO unify with property -->
+    <xs:element name="setting">
         <xs:annotation><xs:documentation>Global property value</xs:documentation></xs:annotation>
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">

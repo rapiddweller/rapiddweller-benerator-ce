@@ -25,12 +25,12 @@ public class UriParserTest {
     assertEquals("http://xyz.com/index.html", p.parse("http://xyz.com/index.html"));
   }
 
-  /* TODO test for illegal values
   @Test
   public void testIllegal() {
+    assertThrows(SyntaxError.class, () -> p.parse(null));
     assertThrows(SyntaxError.class, () -> p.parse(""));
+    assertThrows(SyntaxError.class, () -> p.parse("illegal://uri"));
   }
-  */
 
   @Test
   public void testEmpty() {
