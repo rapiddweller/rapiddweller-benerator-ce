@@ -46,34 +46,54 @@ See **[Using Relational Databases](using_relational_databases.md)**.
 
 ### current date / time generators
 
-* **CurrentDateGenerator**: Generates java.util.Date objects that represent the current date
+#### CurrentDateGenerator
+Generates **date** values that represent the current date
 
-* **CurrentDateTimeGenerator**: Generates java.util.Date objects that represent the current date and time
+#### CurrentDateTimeGenerator
+Generates **date** values that represent the current date and time
 
-* **CurrentZonedDateTimeGenerator**: Generates java.util.ZonedDateTime objects that represent the current date and time 
+#### CurrentZonedDateTimeGenerator
+Generates **zoneddatetime** values that represent the current date and time. 
+By default, it uses the system's default time zone. 
+In order to specify a different time zone set the generator's property 
+**timeZone** as described below in the **[ZonedDateTimeGenerator](component_reference.md)**.
 
-* **CurrentMilliTimeGenerator**: Generates long values that denote the number of milliseconds since 1970-01-01 00:00:00
+#### CurrentMilliTimeGenerator
+Generates ***long*** values that denote the number of milliseconds since 1970-01-01 00:00:00
 
-* **CurrentNanoTimeGenerator**: Generates long values that denote a number of milliseconds since an arbitrary point in
-  time (possible even in the future, so values may be negative)
+#### CurrentNanoTimeGenerator
+Generates **long** values that denote a number of milliseconds since an arbitrary point in
+time (possible even in the future, so values may be negative)
 
-* **CurrentTimeGenerator**: Generates java.util.Date objects that represent the current time of the day
+#### CurrentTimeGenerator
+Generates **date** values that represent the current time of the day
+
 
 ### arbitrary date / time generators
 
-* **DateGenerator**: Generates date values that represent a certain time at a certain day based on a common Distribution
+#### DateGenerator
+Generates **date** values that represent a certain time at a certain day based on a common Distribution
 
-* **DayGenerator**: Generates date values that represent „day“ dates – dates at midnight
+#### DayGenerator
+Generates **date** values that represent „day“ dates – dates at midnight
 
-* **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate,
-  maxDate, dateGranularity, dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime
-  on odd days in August 2010, configure
+#### DateTimeGenerator
+Generates **date** values with date and time configurable independentlyIts properties are: minDate,
+maxDate, dateGranularity, dateDistribution, minTime, maxTime, timeGranularity, timeDistribution.
 
-* **ZonedDateTimeGenerator**: TODO
+**minDate** and **maxDate** are configured in the form yyyy-MM-dd (year-month-day).
 
+**dateGranularity** is **specified** in the form y-M-d (years-months-days), eg. 0-0-7 for weekly events, 
+or 0-1-0 for monthly ones.  
 
+**minTime** and **maxTime** need to be specified as HH:mm:ss (hours:minutes:seconds) with the hours in 24-hour-format. 
+
+**timeGranularity** is specified in the form H:m:s (hours:minutes:seconds), eg. 0-1-0 or 0-0-60 for hourly events.
+
+The generator is configured most easily as a JavaBean, eg. by ```<bean id="dtGen">``` and used eg. in attribute generation with ```generator="idGen""```.
+
+As an example, for a 9-to-5 datetime on odd days of August 2010, use
 ```xml
-
 <bean id="dtGen" class="DateTimeGenerator">
     <property name='minDate' value='2010-08-01'/>
     <property name='maxDate' value='2010-08-31'/>
@@ -85,6 +105,50 @@ See **[Using Relational Databases](using_relational_databases.md)**.
     <property name='timeDistribution' value='random'/>
 </bean>
 ```
+
+
+#### ZonedDateTimeGenerator
+
+Generates **zoneddatetime** values with a fixed timezone and 
+variable date and time configurable independently. 
+
+For the following properties, please see the description of the 
+**[DateTimeGenerator](component_reference.md)** above: minDate,
+maxDate, dateGranularity, dateDistribution, minTime, maxTime, 
+timeGranularity, timeDistribution
+
+By default, the generator uses the system's default time zone. 
+In order to specify a different time zone set the generator's
+property **timeZone** to a zone id that is supported in Java,
+for example one of these:
+
+Name                 | Zone offset
+---------------------| -----------
+America/Vancouver    | GMT-8
+America/Chicago      | GMT-6
+America/New_York     | GMT-5
+America/Santiago     | GMT-4
+America/Buenos_Aires | GMT-3
+America/Sao_Paulo    | GMT-3
+Europe/Lisbon        | GMT
+Europe/London        | GMT
+Europe/Berlin        | GMT+1
+Europe/Athens        | GMT+2
+Asia/Tel_Aviv        | GMT+2
+Africa/Johannesburg  | GMT+2
+Asia/Istanbul        | GMT+3
+Europe/Moscow        | GMT+3
+Asia/Calcutta        | GMT+5:30 
+Asia/Jakarta         | GMT+7
+Asia/Bangkok         | GMT+7
+Asia/Hong_Kong       | GMT+8
+Asia/Shanghai        | GMT+8
+Asia/Taipei	         | GMT+8
+Asia/Singapore       | GMT+8
+Asia/Tokyo           | GMT+9
+Asia/Seoul           | GMT+9
+Australia/Sydney     | GMT+10
+
 
 ### file related generators
 
