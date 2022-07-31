@@ -62,7 +62,7 @@ Applying the Benerator setup
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<setup xmlns="https://www.benerator.de/schema/2.1.0" defaultDataset="US">
+<setup xmlns="https://www.benerator.de/schema/3.0.0" defaultDataset="US">
     
     <import domains="address"/>
 

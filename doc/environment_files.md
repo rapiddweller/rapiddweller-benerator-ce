@@ -118,5 +118,5 @@ Now switching the stage means just switching the `stage` flag:
 ```
 
 ## Backwards Compatibility
-The previous database-only environment format (before Benerator 2.1.0) is still supported, 
+The previous database-only environment format (before Benerator 3.0.0) is still supported, 
 but will be abandoned in a future release. 
