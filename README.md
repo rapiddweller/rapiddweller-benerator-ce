@@ -19,7 +19,7 @@
 generate, obfuscate (anonymize / pseudonymize) and migrate data for development,
 testing and training purposes.
 
-## Quickstart
+## Quickstart ( use benerator version from releases )
 
 1. make sure you have installed **Java 11 JDK** or higher and **JAVA_HOME** environment variable is set correctly 
 2. download the latest benerator version from [Releases](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases)
@@ -30,7 +30,8 @@ For example **(these environment variables are only set in your terminal session
 #### Linux bash  
 ```shell
 export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-2.0.0-jdk-11-dist  
-export PATH=$BENERATOR_HOME/bin:$PATH  
+export PATH=$BENERATOR_HOME/bin:$PATH 
+chmod a+x $BENERATOR_HOME/bin/*.sh
 ```
 
 #### Windows 10 PowerShell  
@@ -91,13 +92,13 @@ Metadata constraints are imported from systems and/or configuration files. Data 
 generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
 language and region. It is strongly customizable with plugins and configuration options.
 
-rapiddweller Benerator is built for Java 11.
+rapiddweller Benerator is built for Java 11
 
-If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
+*If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.*
 
 ## Prerequisites
 
-- Java 11 JDK (we recommend [adoptopenjdk](https://adoptopenjdk.net/))
+- Java 11 JDK **(we recommend [graalvm](https://www.graalvm.org/) or [azul](https://www.azul.com/))**
 - [Maven](https://maven.apache.org/)
 
 Check your local setup
