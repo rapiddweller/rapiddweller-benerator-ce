@@ -195,7 +195,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>hsqldb</groupId>
+            <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>${database_hsqldb.version}</version>
             <scope>provided</scope>
