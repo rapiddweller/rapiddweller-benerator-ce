@@ -52,7 +52,40 @@ jobs:
   ###################### Test / Build ######################
 
 
-  test_jdk11:
+  test_UT_multiplatform:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        java: [ 11, graalvm ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up cache for ~./m2/repository
+        uses: actions/cache@v2.1.1
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ matrix.os }}-java${{ matrix.java }}-
+            maven-${{ matrix.os }}-
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        if: ${{ matrix.java }} != 'graalvm'
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Set up GraalVM
+        uses: ayltai/setup-graalvm@v1
+        if: ${{ matrix.java }} == 'graalvm'
+        with:
+          java-version: 11
+          graalvm-version: 21.1.0
+          native-image: true
+      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+
+  test_IT_jdk11:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -195,4 +228,4 @@ jobs:
           dbSchema=XDB
           idStrategy=seqhilo
           idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false
+      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false

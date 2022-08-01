@@ -86,10 +86,33 @@ jobs:
           if-no-files-found: error
           retention-days: 5
 
-  test_jdk11:
+  test_UT_multiplatform:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        java: [ 11 ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up cache for ~./m2/repository
+        uses: actions/cache@v2.1.1
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ matrix.os }}-java${{ matrix.java }}-
+            maven-${{ matrix.os }}-
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+
+  test_IT_jdk11:
     runs-on: ubuntu-latest
-    needs:
-      - setup
     defaults:
       run:
         shell: bash
@@ -170,11 +193,6 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Download dot.env
-        uses: actions/download-artifact@v2
-        with:
-          name: setup
-      - run: bash dot.env
       - name: set db properties for mongodb connection
         run: |
           echo "
@@ -193,7 +211,7 @@ jobs:
           mongoUser=benerator
           mongoPassword=benerator
           mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
-      - name: set db properties for postgres connetion
+      - name: set db properties for postgres connection
         run: |
           echo "
           dbUrl=jdbc:postgresql://postgres:5432/benerator
@@ -236,10 +254,7 @@ jobs:
           dbSchema=XDB
           idStrategy=seqhilo
           idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false
-
-    ###################### Sonar ######################
+      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false
 
   sonar:
     if: ${{ (!contains(github.event.head_commit.message, 'dependabot'))  && (!contains(github.event.head_commit.message, 'Bump')) }}
@@ -282,7 +297,7 @@ jobs:
 
   assembly_jdk11:
     runs-on: ubuntu-latest
-    needs: [ test_jdk11,build_jdk11 ]
+    needs: [ test_UT_multiplatform, test_IT_jdk11, build_jdk11 ]
     container: maven:3.6-adoptopenjdk-11
     steps:
       - uses: actions/checkout@v2
@@ -319,7 +334,6 @@ jobs:
 
   E2ET_helper-scripts_jdk11:
     runs-on: ubuntu-latest
-    needs: [ test_jdk11 ]
     steps:
       - uses: actions/checkout@v2
       - name: Cache Maven packages

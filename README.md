@@ -19,6 +19,71 @@
 generate, obfuscate (anonymize / pseudonymize) and migrate data for development,
 testing and training purposes.
 
+## Quickstart ( use benerator version from releases )
+
+1. make sure you have installed **Java 11 JDK** or higher and **JAVA_HOME** environment variable is set correctly 
+2. download the latest benerator version from [Releases](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases)
+3. unzip .tar.gz to *choose/your/path*
+4. open a terminal (bash / PowerShell) and add environment variable BENERATOR_HOME=*choose/your/path* and add *choose/your/path*/bin to your PATH variable
+For example **(these environment variables are only set in your terminal session, read more about environment variables [here](https://en.wikipedia.org/wiki/Environment_variable))**
+
+#### Linux bash  
+```shell
+export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-2.0.0-jdk-11-dist  
+export PATH=$BENERATOR_HOME/bin:$PATH 
+chmod a+x $BENERATOR_HOME/bin/*.sh
+```
+
+#### Windows 10 PowerShell  
+```powershell
+$env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist'  
+$env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist\bin'
+```
+
+5. create your own benerator script myscript.xml with the following content
+```xml
+<setup>
+    <import domains="person,organization"/>
+    <generate type="customer" count="1000" threads="1" consumer="LoggingConsumer,CSVEntityExporter">
+      <variable name="person" generator="new PersonGenerator{minAgeYears='21', maxAgeYears='67',femaleQuota='0.5'}" />
+      <variable name="company" generator="CompanyNameGenerator" />
+      <attribute name="first_name" script="person.familyName" />
+      <attribute name="last_name" script="person.givenName" />
+      <attribute name="birthDate" script="person.birthDate" converter="new java.text.SimpleDateFormat('dd.MM.YYYY')" />
+      <attribute name="superuser" values="true, false" />
+      <attribute name="salutation" script="person.salutation " />
+      <attribute name="academicTitle" script="person.academicTitle" />
+      <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + this.tc_creation + '.de'" />
+    </generate>
+  </setup>
+```
+
+6. run your first benerator script 
+```powershell
+benerator myscript.xml
+``` 
+
+Console output should show something like this
+```log
+[INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - finishConsuming(customer[first_name=Roberts, last_name=Marie, birthDate=13.03.1995, superuser=true, salutation=Mrs., academicTitle=[null], email=info@Joshua-Baker.de])
+[INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - startConsuming(customer[first_name=Nicholson, last_name=James, birthDate=18.11.1955, superuser=true, salutation=Mr., academicTitle=[null], email=info@William-Elliott.de])
+[INFO ] 2022-07-30 09:36:02.902 [main] LoggingConsumer - finishConsuming(customer[first_name=Nicholson, last_name=James, birthDate=18.11.1955, superuser=true, salutation=Mr., academicTitle=[null], email=info@William-Elliott.de])
+```
+
+Additional you should have an export.csv file in the same directory with content like this
+```cs
+Lewis,Samuel,01.11.1987,false,Mr.,,info@Aurium.de
+Robinson,Oliver,20.09.1978,true,Mr.,,info@SmartForge.de
+White,Samuel,01.01.1959,true,Mr.,,info@GPH.de
+Clarke,James,01.01.1968,true,Mr.,,info@EJZ.de
+Green,Oliver,13.11.1986,false,Mr.,,info@MKK.de
+Thompson,Daniel,27.01.1979,true,Mr.,,info@OPF.de
+Green,Sophie,09.09.1981,true,Mrs.,,info@MySet.de
+Williams,Lily,15.02.1957,false,Mrs.,,info@Daniel-Taylor.de
+Wilson,Chloe,07.10.1987,true,Mrs.,,info@Deltar.de
+Thompson,Jack,06.09.1984,true,Mr.,,info@TechNet.de
+```
+
 ## Introduction
 
 [rapiddweller Benerator](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (unit/integration/load) and showcase setup.
@@ -27,13 +92,13 @@ Metadata constraints are imported from systems and/or configuration files. Data 
 generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
 language and region. It is strongly customizable with plugins and configuration options.
 
-rapiddweller Benerator is built for Java 11.
+rapiddweller Benerator is built for Java 11
 
-If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
+*If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.*
 
 ## Prerequisites
 
-- Java 11 JDK (we recommend [adoptopenjdk](https://adoptopenjdk.net/))
+- Java 11 JDK **(we recommend [graalvm](https://www.graalvm.org/) or [azul](https://www.azul.com/))**
 - [Maven](https://maven.apache.org/)
 
 Check your local setup
