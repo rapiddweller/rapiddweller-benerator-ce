@@ -52,10 +52,35 @@ jobs:
   ###################### Test / Build ######################
 
 
-  test_jdk11:
+  test_UT_multiplatform:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
+        java: [ 11, 15 ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up cache for ~./m2/repository
+        uses: actions/cache@v2.1.1
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ matrix.os }}-java${{ matrix.java }}-
+            maven-${{ matrix.os }}-
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+
+  test_IT_jdk11:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
         java: [ 11, 15 ]
       fail-fast: false
 
@@ -206,4 +231,4 @@ jobs:
           dbSchema=XDB
           idStrategy=seqhilo
           idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false
+      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false
