@@ -39,7 +39,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link PerfTrackingConsumer}.<br/><br/>
  * Created: 14.03.2010 11:53:48
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -48,9 +47,6 @@ public class PerfTrackingConsumerTest {
   private static final int MAX_LATENCY = 80;
   private static final int MIN_LATENCY = 40;
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     ConsumerMock mock = new ConsumerMock(false, 1, MIN_LATENCY, MAX_LATENCY);
@@ -65,7 +61,7 @@ public class PerfTrackingConsumerTest {
       counter.printSummary(new PrintWriter(System.out), 90, 95);
       assertTrue(counter.minLatency() >= MIN_LATENCY - 10);
       assertTrue(counter.averageLatency() > MIN_LATENCY - 10);
-      assertTrue(counter.averageLatency() < MAX_LATENCY + 10);
+      assertTrue(counter.averageLatency() < MAX_LATENCY + 20);
     } finally {
       IOUtil.close(tracker);
     }
