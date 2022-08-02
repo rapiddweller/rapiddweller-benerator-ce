@@ -44,8 +44,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class PerfTrackingConsumerTest {
 
-  private static final int MAX_LATENCY = 80;
   private static final int MIN_LATENCY = 40;
+  private static final int MAX_LATENCY = 80;
+  private static final int MAX_AVG_LATENCY = MAX_LATENCY;
 
   @Test
   public void test() {
@@ -61,7 +62,8 @@ public class PerfTrackingConsumerTest {
       counter.printSummary(new PrintWriter(System.out), 90, 95);
       assertTrue(counter.minLatency() >= MIN_LATENCY - 10);
       assertTrue(counter.averageLatency() > MIN_LATENCY - 10);
-      assertTrue(counter.averageLatency() < MAX_LATENCY + 20);
+      assertTrue("Average latency was " + counter.averageLatency() + ". Tolerated maximum is " + MAX_AVG_LATENCY,
+          counter.averageLatency() < MAX_AVG_LATENCY);
     } finally {
       IOUtil.close(tracker);
     }
