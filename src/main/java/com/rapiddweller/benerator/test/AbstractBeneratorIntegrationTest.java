@@ -46,6 +46,7 @@ import org.w3c.dom.Element;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * Parent class for Benerator integration tests.<br/><br/>
@@ -123,5 +124,14 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
     assertEquals(expMessage, s.getMessage());
     assertEquals(ExitCodes.SYNTAX_ERROR, s.getExitCode());
   }
+
+  protected void assumeTestActive(String code) {
+    assumeTrue(ConfigUtil.isTestActive(code, true));
+  }
+
+  protected void assumeTestActive(String code, boolean defaultActive) {
+    assumeTrue(ConfigUtil.isTestActive(code, defaultActive));
+  }
+
 
 }

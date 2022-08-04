@@ -144,12 +144,4 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
     Assert.assertEquals("/demo/WIP", benCtx.getContextUri());
   }
 
-  private void assumeTestActive(String code) {
-    assumeTrue(ConfigUtil.isTestActive(code, true));
-  }
-
-  private void assumeTestActive(String code, boolean defaultActive) {
-    assumeTrue(ConfigUtil.isTestActive(code, defaultActive));
-  }
-
 }
