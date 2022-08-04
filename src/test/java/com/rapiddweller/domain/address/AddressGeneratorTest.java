@@ -154,6 +154,8 @@ public class AddressGeneratorTest extends GeneratorClassTest {
       assertEquals(cityAreaCode, address.getFax().getAreaCode());
       assertNotNull(address.getState());
       assertNotNull(address.getCountry());
+      assertNotNull("No organization specified", address.getOrganization());
+      assertNotNull("No department specified", address.getDepartment());
       // check country
       if (supported) {
         assertEquals(country, address.getCountry());
