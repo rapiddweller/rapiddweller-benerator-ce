@@ -74,6 +74,7 @@ public class JdbcMetaTypeMapper {
         // Types.STRUCT is not supported
         Types.TIME, PrimitiveType.DATE,
         Types.TIMESTAMP, PrimitiveType.TIMESTAMP,
+        Types.TIMESTAMP_WITH_TIMEZONE, PrimitiveType.ZONED_DATE_TIME, // TODO test
         Types.TINYINT, PrimitiveType.BYTE,
         Types.VARBINARY, PrimitiveType.BINARY,
         Types.VARCHAR, PrimitiveType.STRING,

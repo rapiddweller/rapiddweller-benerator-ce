@@ -54,12 +54,8 @@ public class Address {
   private PhoneNumber mobilePhone;
   private PhoneNumber fax;
 
-  // TODO generate the following attributes
   private String organization;
   private String department;
-  private String building;
-  private String co;
-  private String poBox;
 
   public Address() {
     this(null, null, null, null, null, null, null, null, null, null);
@@ -80,14 +76,6 @@ public class Address {
     this.officePhone = officePhone;
     this.mobilePhone = mobilePhone;
     this.fax = fax;
-  }
-
-  public String getOrganization() {
-    return organization;
-  }
-
-  public void setOrganization(String organization) {
-    this.organization = organization;
   }
 
   public String getStreet() {
@@ -196,6 +184,21 @@ public class Address {
     this.fax = fax;
   }
 
+  public String getOrganization() {
+    return organization;
+  }
+
+  public void setOrganization(String organization) {
+    this.organization = organization;
+  }
+
+  public String getDepartment() {
+    return department;
+  }
+
+  public void setDepartment(String department) {
+    this.department = department;
+  }
 
   // Override methods from java.lang.Object --------------------------------------------------------------------------
 
@@ -211,9 +214,7 @@ public class Address {
   @Override
   public int hashCode() {
     return HashCodeBuilder.hashCode(
-        postalCode, street, houseNumber, poBox, city,
-        organization, building, co, department,
-        mobilePhone, officePhone, privatePhone);
+        postalCode, street, houseNumber, city, organization, department, mobilePhone, officePhone, privatePhone);
   }
 
   @Override
@@ -234,19 +235,10 @@ public class Address {
     if (!NullSafeComparator.equals(this.houseNumber, that.houseNumber)) {
       return false;
     }
-    if (!NullSafeComparator.equals(this.poBox, that.poBox)) {
-      return false;
-    }
     if (!NullSafeComparator.equals(this.city, that.city)) {
       return false;
     }
     if (!NullSafeComparator.equals(this.organization, that.organization)) {
-      return false;
-    }
-    if (!NullSafeComparator.equals(this.building, that.building)) {
-      return false;
-    }
-    if (!NullSafeComparator.equals(this.co, that.co)) {
       return false;
     }
     if (!NullSafeComparator.equals(this.department, that.department)) {

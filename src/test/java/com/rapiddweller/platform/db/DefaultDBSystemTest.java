@@ -38,6 +38,7 @@ import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.ABCTest;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
 
-import static com.rapiddweller.jdbacl.dialect.HSQLUtil.*;
+import static com.rapiddweller.jdbacl.dialect.H2Util.*;
 import static org.junit.Assert.*;
 
 /**
@@ -82,6 +83,11 @@ public class DefaultDBSystemTest extends ABCTest {
     }
   }
 
+  @After
+  public void shutdown() {
+    db.close();
+  }
+
   @Test(expected = ConfigurationError.class)
   public void test_env_without_system() {
     new DefaultDBSystem("id", "local", null, context);
@@ -96,8 +102,8 @@ public class DefaultDBSystemTest extends ABCTest {
   public void testGettersAndSetters() {
     assertEquals("sa", db.getEnvironment());
     assertNull(db.getSystem());
-    assertEquals("org.hsqldb.jdbcDriver", db.getDriver());
-    assertEquals("jdbc:hsqldb:mem:benerator", db.getUrl());
+    assertEquals(DRIVER, db.getDriver());
+    assertEquals("jdbc:h2:mem:benerator", db.getUrl());
     assertEquals("sa", db.getUser());
     assertNull(db.getCatalog());
     db.setCatalog("theCat");
@@ -327,8 +333,8 @@ public class DefaultDBSystemTest extends ABCTest {
     db.execute("insert into TEST (ID, NAME) values (2, 'Bob')");
     Consumer updater = db.updater();
     // update (1, Alice) to (1, Charly)
-    assertEquals("DefaultDBSystem[sa@jdbc:hsqldb:mem:benerator]", db.toString());
-    assertEquals("hsql", db.getDbType());
+    assertEquals("DefaultDBSystem[sa@jdbc:h2:mem:benerator]", db.toString());
+    assertEquals("h2", db.getDbType());
     assertEquals(1, db.invalidationCount());
     assertEquals("ConvertingDataSource[QueryDataSource[SELECT * FROM TEST] -> ResultSetConverter]", db.queryEntityIds("TEST", "SELECT * FROM TEST", null).toString());
     assertEquals(2, db.countEntities("TEST"));
@@ -358,7 +364,6 @@ public class DefaultDBSystemTest extends ABCTest {
     assertEquals(2, storedData.size());
     assertArrayEquals(new Object[] {1, "Charly"}, storedData.get(0));
     assertArrayEquals(new Object[] {2, "Otto"}, storedData.get(1));
-    db.close();
   }
 
   @Test

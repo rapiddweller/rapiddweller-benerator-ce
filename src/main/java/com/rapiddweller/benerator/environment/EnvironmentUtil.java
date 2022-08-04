@@ -5,6 +5,7 @@ package com.rapiddweller.benerator.environment;
 import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConfigUtil;
+import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
@@ -123,7 +124,7 @@ public class EnvironmentUtil {
 
   public static Environment parseFile(String envName, String filePath) {
     try {
-      Map<String, String> properties = IOUtil.readProperties(filePath);
+      Map<String, String> properties = IOUtil.readProperties(filePath, Encodings.UTF_8);
       if (properties.containsKey("db_url") && properties.containsKey("db_driver")) {
         // old style db environment definition
         return parseOldStyleEnvironment(filePath, envName, properties);

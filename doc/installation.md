@@ -84,7 +84,7 @@ On any OS, open a console window (shell,cmd or powershell) and type ...
 ```shell
 $ benerator -–version
 
-Benerator Community Edition 2.1.0-jdk-11
+Benerator Community Edition 3.0.0-jdk-11
 Java version:  11.0.11
 JVM product:   OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)
 System:        Mac OS X 10.16 x86_64

@@ -12,11 +12,10 @@ import org.w3c.dom.NamedNodeMap;
 import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
 
 /**
- * TODO JavaDoc.<br/><br/>
+ * Parent class for XML comopnent parsers.<br/><br/>
  * Created: 14.12.2021 06:35:12
- *
  * @author Volker Bergmann
- * @since TODO
+ * @since 3.0.0
  */
 public class AbstractXMLComponentParser extends AbstractComponentParser {
 

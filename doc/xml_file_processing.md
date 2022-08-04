@@ -133,7 +133,7 @@ For the first trials, use a simple XML Schema file. We are beginning without ann
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           xmlns:ben="https://www.benerator.de/schema/benerator-2.1.0.xsd"
+           xmlns:ben="https://www.benerator.de/schema/benerator-3.0.0.xsd"
            xmlns="https://www.benerator.de/shop-0.8.1.xsd"
            targetNamespace="https://www.benerator.de/shop-0.8.1.xsd"
            elementFormDefault="qualified">`

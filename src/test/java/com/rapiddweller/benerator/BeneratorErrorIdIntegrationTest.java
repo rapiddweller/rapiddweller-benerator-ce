@@ -1470,7 +1470,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_1003_syn_db_ill_env() {
     BeneratorResult result = runFile("test_1003_syn_db_ill_env.ben.xml");
     assertResult(BeneratorErrorIds.SYN_DB_ENVIRONMENT,
-        "Illegal attribute value for database.environment: '!§$%/'. " +
+        "Illegal attribute value for database.environment: '!$%/'. " +
             "File test_1003_syn_db_ill_env.ben.xml, line 3",
         ExitCodes.SYNTAX_ERROR, result);
   }
@@ -1479,7 +1479,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_1004_syn_db_ill_system() {
     BeneratorResult result = runFile("test_1004_syn_db_ill_system.ben.xml");
     assertResult(BeneratorErrorIds.SYN_DB_SYSTEM,
-        "Illegal attribute value for database.system: '!§$%/'. " +
+        "Illegal attribute value for database.system: '!$%/'. " +
             "File test_1004_syn_db_ill_system.ben.xml, line 3",
         ExitCodes.SYNTAX_ERROR, result);
   }
