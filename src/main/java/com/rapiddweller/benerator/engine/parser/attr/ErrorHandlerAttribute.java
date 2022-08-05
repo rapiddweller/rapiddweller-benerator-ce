@@ -16,7 +16,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR
  * {@link AttrInfo} for the error handler.<br/><br/>
  * Created: 10.12.2021 19:54:07
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ErrorHandlerAttribute extends AttrInfo<Expression<ErrorHandler>> {
 

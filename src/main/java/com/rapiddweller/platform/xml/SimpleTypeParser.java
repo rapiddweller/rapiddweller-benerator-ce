@@ -22,7 +22,7 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  * Parses &lt;type&gt; elements.<br/><br/>
  * Created: 14.12.2021 06:21:24
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SimpleTypeParser extends AbstractXMLComponentParser {
 

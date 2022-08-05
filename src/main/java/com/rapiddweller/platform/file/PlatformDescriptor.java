@@ -8,7 +8,7 @@ import com.rapiddweller.benerator.DefaultPlatformDescriptor;
  * Platform descriptor for the 'file' platform.<br/><br/>
  * Created: 06.12.2021 23:37:23
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PlatformDescriptor extends DefaultPlatformDescriptor {
 

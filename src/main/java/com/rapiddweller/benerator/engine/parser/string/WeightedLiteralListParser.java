@@ -10,7 +10,7 @@ import com.rapiddweller.script.WeightedSample;
  * Parses weighted literal lists.<br/><br/>
  * Created: 19.12.2021 19:23:53
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class WeightedLiteralListParser extends AbstractParser<WeightedSample<?>[]> {
 

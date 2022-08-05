@@ -13,7 +13,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_COUNT_GR
  * {@link AttrInfo} for count granularities.<br/><br/>
  * Created: 20.12.2021 00:07:31
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class CountGranularityAttribute extends AttrInfo<Expression<Long>> {
   public CountGranularityAttribute(String errorId) {

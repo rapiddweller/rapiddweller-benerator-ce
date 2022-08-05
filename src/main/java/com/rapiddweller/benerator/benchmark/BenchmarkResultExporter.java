@@ -8,7 +8,7 @@ import java.io.IOException;
  * Common interface for Benchmark result exporters.<br/><br/>
  * Created: 16.11.2021 10:19:31
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public interface BenchmarkResultExporter {
   void export(BenchmarkToolReport result) throws IOException;

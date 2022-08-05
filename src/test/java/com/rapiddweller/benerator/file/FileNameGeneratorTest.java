@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  * Tests the {@link FileNameGenerator}.<br/><br/>
  * Created: 29.09.2021 09:09:54
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class FileNameGeneratorTest extends GeneratorTest {
 

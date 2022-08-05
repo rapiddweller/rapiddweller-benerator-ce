@@ -13,7 +13,7 @@ import java.util.Map;
  * Parses an {@link ErrorHandler} sspec.<br/><br/>
  * Created: 08.12.2021 16:38:14
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class GlobalErrorHandlerParser extends AbstractTypedParser<ErrorHandler> {
 

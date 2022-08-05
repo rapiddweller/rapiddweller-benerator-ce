@@ -27,7 +27,7 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.resolveS
  * Parent class for component parsers.<br/><br/>
  * Created: 14.12.2021 05:13:36
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public abstract class AbstractComponentParser {
 

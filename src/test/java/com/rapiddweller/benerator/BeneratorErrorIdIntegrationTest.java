@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link BeneratorErrorIds} returned from Benerator runs in different scenarios.<br/><br/>
  * Created: 18.11.2021 17:25:52
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BeneratorErrorIdIntegrationTest {
 

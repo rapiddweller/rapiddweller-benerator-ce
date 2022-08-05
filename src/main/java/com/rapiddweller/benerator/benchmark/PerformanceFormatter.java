@@ -11,7 +11,7 @@ import java.util.Locale;
  * numbers greater or equal to 10 without fraction digits.<br/><br/>
  * Created: 04.11.2021 06:29:18
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PerformanceFormatter {
 

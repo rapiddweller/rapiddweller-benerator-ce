@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link LoggingConsumer}.<br/><br/>
  * Created: 09.11.2021 12:38:56
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class LoggingConsumerTest {
 

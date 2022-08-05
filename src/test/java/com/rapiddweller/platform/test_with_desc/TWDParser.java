@@ -12,7 +12,7 @@ import org.w3c.dom.Element;
  * Simple parser for testing.<br/><br/>
  * Created: 01.12.2021 16:59:12
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class TWDParser extends XMLStatementParser {
 

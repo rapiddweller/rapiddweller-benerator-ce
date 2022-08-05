@@ -11,7 +11,7 @@ import com.rapiddweller.format.xml.AttrInfo;
  * {@link AttrInfo} for the upper or lower bound of a count value range.<br/><br/>
  * Created: 19.12.2021 21:22:20
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class MinMaxCountAttribute extends AttrInfo<Expression<Long>> {
   public MinMaxCountAttribute(String name, String errorId) {

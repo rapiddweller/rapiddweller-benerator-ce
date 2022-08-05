@@ -16,7 +16,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ENCODING
  * {@link AttrInfo} for an encoding.<br/><br/>
  * Created: 19.12.2021 22:17:07
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class EncodingAttribute extends AttrInfo<Expression<String>> {
 

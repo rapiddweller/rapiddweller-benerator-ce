@@ -35,7 +35,7 @@ class PolyglotContext {
                     logger.debug("Entity found : {}", valueKey);
                     Map<String, Object> map = new Entity2MapConverter().convert((Entity) obj);
                     // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
-                    // TODO: might should create an Entity2ProxyObjectConverter in 2.1.0
+                    // TODO: might should create an Entity2ProxyObjectConverter in 3.0.0
                     ProxyObject proxy = ProxyObject.fromMap(map);
                     polyglotCtx.getBindings(language).putMember(valueKey, proxy);
                 } else {

@@ -13,7 +13,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
  * {@link AttrInfo} for a 'name' attribute.<br/><br/>
  * Created: 11.12.2021 07:02:57
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class NameAttribute extends AttrInfo<String> {
 

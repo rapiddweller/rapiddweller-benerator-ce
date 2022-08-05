@@ -11,7 +11,7 @@ import com.rapiddweller.common.Expression;
  * Parses scripts.<br/><br/>
  * Created: 09.12.2021 17:20:00
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ScriptParser<E> extends AbstractParser<Expression<E>> {
 

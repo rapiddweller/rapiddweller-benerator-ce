@@ -10,7 +10,7 @@ import com.rapiddweller.common.cli.CommandLineConfig;
  * Holds the configuration for a Benerator run.<br/><br/>
  * Created: 21.10.2021 14:38:58
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BeneratorConfig extends CommandLineConfig {
 

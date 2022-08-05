@@ -6,7 +6,7 @@ package com.rapiddweller.benerator.engine;
  * Assembles the information returned after a Benerator run.<br/><br/>
  * Created: 18.11.2021 16:41:46
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BeneratorResult {
 

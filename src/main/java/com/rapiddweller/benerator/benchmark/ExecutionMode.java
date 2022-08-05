@@ -11,7 +11,7 @@ import java.util.Objects;
  * Specifies a Benerator edition and execution thread count.<br/><br/>
  * Created: 02.11.2021 07:33:09
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ExecutionMode implements Comparable<ExecutionMode> {
 

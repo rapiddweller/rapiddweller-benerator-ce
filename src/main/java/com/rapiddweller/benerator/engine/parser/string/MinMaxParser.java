@@ -10,7 +10,7 @@ import com.rapiddweller.common.parser.AbstractParser;
  * Parses strings that represent the minimum or maximum of a value range.<br/><br/>
  * Created: 15.12.2021 15:07:27
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class MinMaxParser<T> extends AbstractParser<Comparable<T>> {
 

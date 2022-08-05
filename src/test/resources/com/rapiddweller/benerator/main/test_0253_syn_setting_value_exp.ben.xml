@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<setup xmlns="https://www.benerator.de/schema/2.1.0">
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
     <bean id="test" class="com.rapiddweller.benerator.test.Person">
         <property name="name" value="{not_existent}"/>
     </bean>

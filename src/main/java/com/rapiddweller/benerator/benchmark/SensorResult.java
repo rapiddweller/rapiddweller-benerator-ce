@@ -6,7 +6,7 @@ package com.rapiddweller.benerator.benchmark;
  * Holds the result of one sensor in one benchmark run.<br/><br/>
  * Created: 02.11.2021 07:30:29
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SensorResult {
 

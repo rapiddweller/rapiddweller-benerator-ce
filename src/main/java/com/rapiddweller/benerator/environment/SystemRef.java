@@ -11,7 +11,7 @@ import java.util.Objects;
  * Environment entry for a system.<br/><br/>
  * Created: 03.11.2021 17:58:34
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SystemRef implements Named {
 

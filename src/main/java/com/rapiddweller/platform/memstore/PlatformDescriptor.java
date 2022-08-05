@@ -9,7 +9,7 @@ import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
  * Platform descriptor for the 'memstore' platform.<br/><br/>
  * Created: 01.12.2021 17:59:37
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PlatformDescriptor extends DefaultPlatformDescriptor {
 

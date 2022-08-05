@@ -6,7 +6,7 @@ package com.rapiddweller.benerator;
  * Describes a domain.<br/><br/>
  * Created: 04.12.2021 12:13:00
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class DomainDescriptor {
 

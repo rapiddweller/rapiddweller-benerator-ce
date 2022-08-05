@@ -139,7 +139,7 @@ public class EnvironmentUtil {
 
   private static Environment parseOldStyleEnvironment(String filePath, String envName, Map<String, String> srcProps) {
     DeprecationLogger.warn("Environment file " + filePath + " is using a deprecated environment file format. " +
-        "Please update this to the new environment definition file format introduced in Benerator 2.1.0. " +
+        "Please update this to the new environment definition file format introduced in Benerator 3.0.0. " +
         "The old format is supported for backwards compatibility but will dropped in a future release");
     Map<String, String> resultProps = new HashMap<>();
     for (Map.Entry<String, String> entry : srcProps.entrySet()) {

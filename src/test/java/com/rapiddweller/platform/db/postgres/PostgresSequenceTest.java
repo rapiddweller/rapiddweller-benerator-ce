@@ -9,7 +9,7 @@ import org.junit.Test;
  * Tests sequence support for Postgres.<br/><br/>
  * Created: 09.11.2021 10:15:05
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PostgresSequenceTest extends AbstractProstgresIntegrationTest {
 

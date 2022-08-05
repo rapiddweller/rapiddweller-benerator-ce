@@ -10,7 +10,7 @@ import com.rapiddweller.format.xml.AttrInfoSupport;
  * Parent class for all XML statement parsers of Benerator.<br/><br/>
  * Created: 01.12.2021 16:39:28
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public abstract class XMLStatementParser extends AbstractXMLElementParser<Statement> {
   protected XMLStatementParser(

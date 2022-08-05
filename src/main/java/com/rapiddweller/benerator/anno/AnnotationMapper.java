@@ -206,7 +206,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
         system = "db";
         DeprecationLogger.warn("Observed a @Database annotation with 'environment' but without 'system' setting. " +
             "If you are using the old definition file format, please upgrade to " +
-            "the new environment definition file format introduced in Benerator 2.1.0 and specify a 'system' name. " +
+            "the new environment definition file format introduced in Benerator 3.0.0 and specify a 'system' name. " +
             "The old format is supported for backwards compatibility, but will be dropped in a future release");
       }
       db = new DefaultDBSystem(annotation.id(), annotation.environment(), system, context);

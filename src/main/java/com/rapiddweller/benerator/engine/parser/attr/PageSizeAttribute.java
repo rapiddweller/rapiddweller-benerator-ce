@@ -14,7 +14,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE
  * of the {@link com.rapiddweller.benerator.engine.BeneratorRootContext}.<br/><br/>
  * Created: 10.12.2021 19:33:54
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PageSizeAttribute extends AttrInfo<Expression<Long>> {
   public PageSizeAttribute(String errorId) {
