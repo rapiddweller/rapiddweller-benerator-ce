@@ -15,7 +15,7 @@
         CREATE TABLE "test" (
         "id" int,
         "number" int,
-        "name" varchar,
+        "name" varchar(100),
         "age" int,
         PRIMARY KEY ("id")
         );
