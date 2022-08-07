@@ -86,8 +86,7 @@
   <execute target="config" type="sql">{ftl: UPDATE "config"."process"
     SET "value" = PARSEDATETIME('${until}','yyyy-MM-dd HH:mm:ss.SSSSSS')
     WHERE "key" = 'last_processed_datetime';
-    }
-  </execute>
+    }</execute>
 
   <iterate type="process" source="config" consumer="ConsoleExporter"/>
 
