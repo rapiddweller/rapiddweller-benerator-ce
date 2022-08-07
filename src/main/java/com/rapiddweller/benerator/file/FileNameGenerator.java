@@ -136,7 +136,7 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
     }
   }
 
-  public enum PathType { // TODO v3.0.0 integration test for FileNameType support
+  public enum PathType {
     /** Represents the absolute file name, @see {@link File#getAbsolutePath()}. */
     absolute,
     /** Represents the canonical file name, @see {{@link File#getCanonicalPath()}}. */
