@@ -5,20 +5,121 @@
 ## 3.0.0
 
 ### Release Highlights
+- MongoDB support
+- Greatly improved syntax checking, error handling and error reporting. Syntax errors are reported with line number and file name, get assigned a unique error id and the beneration process returns a related process return code and 
+- AVRO support in Kafka (Enterprise Edition)
+- New domains 'logistic', 'shipping' and 'container' (Enterprise Edition)
+- Postgres: UUID and JSON data type support
+- Improved and extended the configuration mechanism for environment definitions
+- Improved multithreading support, code quality, testing procedures, test coverage and documentation with unique error ids and process return codes
+- Introduced execution modes: strict, lenient, turbo
+- Completed support of the ```<part>``` element for hierarchical data generation and manipulationwith minCount, MaxCount, countGranularity and countDistribution
+- New 'zoneddatetime' data type with generators CurrentZonedDateTimeGenerator and ZonedDateTimeGenerator. They can be configured with an individual 'zone' in the generator or a global 'defaultTimeZone) in the ```<setup>``` element
+- Increased JavaScript execution performance by a factor of 10
+- Improved Benerator and Benchmark log output for core information, brevity and readability 
+- New beneration performance sensor mechanism
+- New 'condition' attribute in ```<variable>```
+- New command line options for Benerator and Benchmark Tool:
+  - **--list env** to list all environment definitions available in the current project  
+  - ***--list db** to list all database definitions available in the current project
+  - **--list kafka** to list all kafka definitions available in the current project
+- New command line option for cache invalidation: --clearCaches
+- Addressed log4j-caused security issues
+- New watermark demo
 
-- Fixed support for 'time' data type
-- Fixed regex based string generation for optional groups
-- Added missing fields to benerator.xsd
-- Fixed bug: <memstore> ignores entity identity
+#### Domains
+- General: Allowing to load all domain generators by their simple name (calling the default constructor)
+- Address:
+  - Added properties to address generation: 'street2', 'companyName' and 'department'
+  - Added population to US states
+- Person: New DIVERSE Gender
 
-### Important Notes
+#### Platforms:
+- mongodb platform: Alpha-stage contribution of Daniel Figia
+- kafka (Enterprise Edition):
+  - New AVRO support
+  - Added schema.url for AVRO schema lookup 
+  - Added idle.timeout.seconds to make a KafkaImporter stop automatically after a certain number
+  - Improved Kafka benchmark
+- db (Database)
+  - Supporting UUID and JSON types of Postgres
+  - Improved support of dynamic ```<database>``` selectors
+  - Default transaction isolation level is set to 'read committed'
+- csv, fixedwidth, xml, dbunit: Evaluate contained scripts if cofigured by 'sourceScripted' or 'defaultSourceScripted' settings
+- fixedwidth: Allowing for row format configuration of fixed with file in Benerator setup
 
-- 
+#### Redesigned
+- Parsing, error checking, exception handling and syntax error reporting
+- Requiring max or maxCount in ```<generate>```, supporting count="unbounded"
+- Removed dependency of Benerator from ContiPerf
 
+### Components
+- Added 'lang' attribute to ```<echo>``` element for specifying the script language used for the message text
+- Using relative URLs in TemplateFileEntityExporter
+  - ```<execute>``` and ```<evaluate>```: Assuming type="shell" if a 'shell' attribute is set
+- Added 'offset' and 'maxLogs' feature to LoggingConsumer
+- Improved JavaHash to always crate a hex string of 8 characters
+- Created 'Append' converter which appends a string to its input texts
+- New Converters 'Mask', 'MiddleMask' and 'CutLength'
+- 'FileNameGenerator' got a 'pathType' which can be configured to generate 'absolute', 'canonical' or 'local' file names
+
+#### Benchmark Tool
+- Improved benchmark definition for shorter execution times
+- Allowing to use both --ce and --ee at the same time
+- Execution of a single benchmark by command line
+- Restricting file generation to 1GB
+- --list prints out a list of all available benchmarks
+- New benchmark 'gen-big-entity.ben.xml'
+- Rebalanced database benchmarks for more reads than writes
+- Exporting benchmark results in file formats CSV, XLS and TXT
+
+#### Bug Fixes
+- 'time' data type support
+- Regex based string generation for optional groups
+- Missing fields in benerator.xsd
+- 'memstore' ignores entity identity
+- Granularity in number generators
+- Expression evaluation issue in mapping of XML attributes to bean properties
+- Syntax error for onError='ignore'
+- Heap overflow on H2 varchar with unspecified length
+- Postgres blocking table after query
+- Entity comparison fails
+- PartModifier: Nested Entities are ignored
+- Exception on missing houseNumber
+- Bug fix for granularity >= 1
+- handling of default country/dataset
+- thread capability checking
+- Handling of empty ```<echo/>``` elements
+- Errors in parsing stages are not logged
+- MemStore.update()
+- Shell invocation dos not resolve environment variables
+- Quote escaping in CSVEntityExporter fails
+- MemStore.queryEntities() returns all duplicates as only one Entity
+- Mask fails for binary database columns
+- Undefined component types
+- NPE in multithreaded execution
+- environment properties file not found
+- For multiple database setups, meta data cache always writes to the same file
+- If data is iterated and a converter is applied, then the input data is first overwritten then converted
+- Parent type fields are not generated
+- Regex based string generation for optional groups
+- NPE when querying last element in GeneratorIterator
+- 'minExclusive' and 'maxEclusive' settings are ignored
+- Default constructor of RandomBigDecimalGenerator creates an illegal setup
+- RandomBigDecimalGenerator refuses granularity of 1
 
 ### Breaking Changes
+- Requiring max or maxCount in ```<generate>```, supporting count="unbounded"
+- Redesigned platform and domain definition
+- All built-in platforms are imported by default
+- Renamed class DBSystem to AbstractDBSystem
+- Custom generators that inherit from GeneratorWrapper must explicitly overwrite the methods isThreadSafe() and isParallelizable()
+- Console output format changed
+- Redesigned XML parsing to exactly match the XML schema definition
 
-- 
+### Important Notes
+- The environment definition file format used in earlier versions is still supported but its support will be dropped in a future release.
+-
 
 ---
 
