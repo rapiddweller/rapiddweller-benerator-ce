@@ -45,7 +45,7 @@ import java.io.IOException;
  */
 public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
 
-  private FileNameType fileNameType;
+  private PathType pathType;
 
   /** Default constructor initializing the generator to scan all file types recursively
    *  starting at the working directory without filtering and provide their absolute paths. */
@@ -53,19 +53,19 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
     this(".", null, false, true, false);
   }
 
-  /** Constructor for backwards compatibility which uses {@link FileNameType#ABSOLUTE}. */
+  /** Constructor for backwards compatibility which uses {@link PathType#absolute}. */
   public FileNameGenerator(
       String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
-    this(rootUri, filter, FileNameType.ABSOLUTE, recursive, files, folders);
+    this(rootUri, filter, PathType.absolute, recursive, files, folders);
   }
 
   /** Full constructor */
-  public FileNameGenerator(String rootUri, String filter, FileNameType fileNameType,
+  public FileNameGenerator(String rootUri, String filter, PathType pathType,
                            boolean recursive, boolean files, boolean folders) {
     super(new FileGenerator(rootUri, filter, recursive, folders, files));
     setRootUri(rootUri);
     setFilter(filter);
-    setFileNameType(fileNameType);
+    setFileNameType(pathType);
     setRecursive(recursive);
     setFolders(folders);
     setFiles(files);
@@ -84,9 +84,9 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
     ((FileGenerator) getSource()).setFilter(filter);
   }
 
-  /** Sets the type of file name to generate. @see {@link FileNameType} */
-  public void setFileNameType(FileNameType fileNameType) {
-    this.fileNameType = fileNameType;
+  /** Sets the type of file name to generate. @see {@link PathType} */
+  public void setFileNameType(PathType pathType) {
+    this.pathType = pathType;
   }
 
   /** If set to true, files are included, otherwise not */
@@ -120,9 +120,9 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
   @Override
   public String generate() {
     File file = generateFromSource().unwrap();
-    switch (fileNameType) {
-      case CANONICAL: return canonicalPath(file);
-      case LOCAL: return file.getName();
+    switch (pathType) {
+      case canonical: return canonicalPath(file);
+      case local: return file.getName();
       default: return file.getAbsolutePath();
     }
   }
@@ -136,13 +136,13 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
     }
   }
 
-  public enum FileNameType {
+  public enum PathType { // TODO v3.0.0 integration test for FileNameType support
     /** Represents the absolute file name, @see {@link File#getAbsolutePath()}. */
-    ABSOLUTE,
+    absolute,
     /** Represents the canonical file name, @see {{@link File#getCanonicalPath()}}. */
-    CANONICAL,
+    canonical,
     /** Represents the local file name, @see {@link File#getName()}. */
-    LOCAL
+    local
   }
 
 }

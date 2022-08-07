@@ -19,7 +19,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
 
   @Test
   public void testFilesAndFolders() {
-    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.FileNameType.LOCAL, true, true, true);
+    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.PathType.local, true, true, true);
     initialize(g);
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 10000);
@@ -30,7 +30,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
 
   @Test
   public void testFoldersOnly() {
-    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.FileNameType.LOCAL, true, false, true);
+    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.PathType.local, true, false, true);
     initialize(g);
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 10000);
@@ -44,7 +44,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
 
   @Test
   public void testFilesOnly() {
-    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.FileNameType.LOCAL, true, true, false);
+    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.PathType.local, true, true, false);
     initialize(g);
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 10000);
@@ -54,7 +54,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
 
   @Test
   public void testFilenameFilter() {
-    FileNameGenerator g = new FileNameGenerator("src/main/java", ".*Generator.java", FileNameGenerator.FileNameType.LOCAL, true, true, false);
+    FileNameGenerator g = new FileNameGenerator("src/main/java", ".*Generator.java", FileNameGenerator.PathType.local, true, true, false);
     initialize(g);
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 10000);
@@ -68,7 +68,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
 
   @Test
   public void testFlat() {
-    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.FileNameType.LOCAL, false, false, true);
+    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.PathType.local, false, false, true);
     initialize(g);
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 100);
@@ -79,7 +79,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
 
   @Test
   public void testAbsolute() {
-    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.FileNameType.ABSOLUTE, false, false, true);
+    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.PathType.absolute, false, false, true);
     initialize(g);
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 100);
@@ -91,7 +91,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
 
   @Test
   public void testCanonical() {
-    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.FileNameType.CANONICAL, false, false, true);
+    FileNameGenerator g = new FileNameGenerator("src/main/java", null, FileNameGenerator.PathType.canonical, false, false, true);
     initialize(g);
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 100);
