@@ -61,10 +61,10 @@
   <!-- Read watermark - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <echo>Reading watermark</echo>
-  <evaluate id="from_ts" target="config">select "value" from "config"."process" where "key" =
-    'last_processed_datetime'
+  <evaluate id="from_ts" target="config">
+    SELECT "value" from "config"."process" WHERE "key" = 'last_processed_datetime'
   </evaluate>
-  <setting name="from"  value="{TimeUtil.formatTimestamp(from_ts, 'yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
+  <setting name="from" value="{TimeUtil.formatTimestamp(from_ts, 'yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
   <setting name="until" value="{TimeUtil.formatCurrentTimestamp('yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
   <echo/>
 
@@ -83,9 +83,9 @@
   <!-- Update watermark - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <echo>{ftl:Updating watermark to ${until}}</echo>
-  <execute target="config" type="sql">{ftl:
-    UPDATE "config"."process" SET "value" = PARSEDATETIME('${until}','yyyy-MM-dd HH:mm:ss.SSSSSS') where "key" =
-    'last_processed_datetime'
+  <execute target="config" type="sql">{ftl: UPDATE "config"."process"
+    SET "value" = PARSEDATETIME('${until}','yyyy-MM-dd HH:mm:ss.SSSSSS')
+    WHERE "key" = 'last_processed_datetime';
     }
   </execute>
 
