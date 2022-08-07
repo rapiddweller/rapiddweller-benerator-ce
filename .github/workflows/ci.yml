@@ -6,6 +6,7 @@ on:
       - 3.*
     branches:
       - development
+      - release-prep
     paths-ignore:
       - '**.md'
 
