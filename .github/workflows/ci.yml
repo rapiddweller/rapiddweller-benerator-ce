@@ -13,7 +13,7 @@ on:
 env:
   MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
   JAVA_JDKVERSION_TAG: "jdk-11"
-  BUILD_IMAGE: "$BUILD_IMAGE"
+  BUILD_IMAGE: "maven:3.8.6-jdk-11"
   SET_VERSION: |
     ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
     echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
@@ -869,6 +869,8 @@ jobs:
       - E2ET_script-jdk11
       - E2ET_anon-jdk11
       - E2ET_files-jdk11
+      - E2ET_watermark-jdk11
+      - E2ET_memstore-jdk11
     container: $BUILD_IMAGE
     defaults:
       run:
@@ -912,6 +914,8 @@ jobs:
       - E2ET_script-jdk11
       - E2ET_anon-jdk11
       - E2ET_files-jdk11
+      - E2ET_watermark-jdk11
+      - E2ET_memstore-jdk11
     if: startsWith(github.ref, 'refs/tags/')
     container: $BUILD_IMAGE
     steps:
