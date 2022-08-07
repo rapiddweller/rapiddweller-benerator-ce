@@ -39,7 +39,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.rapiddweller.benerator.main.Benerator.main;
 import static com.rapiddweller.common.SystemInfo.isLinux;
 
 /**
@@ -201,39 +200,29 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
   /**
    * Demo env db
    */
-  @Test @Ignore("This crashes") // TODO
+  @Test
   public void demoDbEnvOld() throws IOException {
-    String[] args = new String[1];
-    args[0] = "src/demo/resources/demo/db/dbenv-old.ben.xml";
-    main(args);
+    context.setContextUri("/demo/db");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/db/dbenv-old.ben.xml");
+    Assert.assertEquals("/demo/db", benCtx.getContextUri());
   }
 
   /** Tests the new environment file format introduced in Benerator 2.1 */
-  @Test @Ignore("This crashes") // TODO
+  @Test
   public void demoDbEnvNew() {
-    String[] args = new String[1];
-    args[0] = "src/demo/resources/demo/db/dbenv-new.ben.xml";
-    main(args);
+    context.setContextUri("/demo/db");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/db/dbenv-new.ben.xml");
+    Assert.assertEquals("/demo/db", benCtx.getContextUri());
   }
 
   /**
    * Demo env db conf
    */
-  @Test @Ignore("This crashes") // TODO
+  @Test
   public void demoDbEnvConf() {
-    String[] args = new String[1];
-    args[0] = "src/demo/resources/demo/db/dbenvconf.ben.xml";
-    main(args);
-  }
-
-  /**
-   * Demo env db conf
-   */
-  @Test @Ignore("This crashes") // TODO
-  public void prioDbEnvConf() {
-    String[] args = new String[1];
-    args[0] = "src/demo/resources/demo/db/priodbenvconf.ben.xml";
-    main(args);
+    context.setContextUri("/demo/db");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/db/dbenvconf.ben.xml");
+    Assert.assertEquals("/demo/db", benCtx.getContextUri());
   }
 
   /**

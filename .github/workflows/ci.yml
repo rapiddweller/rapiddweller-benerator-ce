@@ -6,6 +6,7 @@ on:
       - 3.*
     branches:
       - development
+      - release-prep
     paths-ignore:
       - '**.md'
 
@@ -378,6 +379,13 @@ jobs:
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/script/scriptcode.ben.xml
       - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_script-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_anon-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -406,6 +414,13 @@ jobs:
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/anon/anon.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_anon-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_db-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -436,6 +451,13 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/db/hsqlmem.masstest.ben.xml
       - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
       - run: benerator $BENERATOR_HOME/demo/db/h2.multischema.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_db-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_files-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -473,6 +495,13 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/file/greetings_csv.ben.xml
       - run: benerator $BENERATOR_HOME/demo/file/import_fixed_width.ben.xml
       - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_files-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_hsqlmem-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -501,6 +530,13 @@ jobs:
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_hsqlmem-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_postgresql-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -563,6 +599,13 @@ jobs:
       - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
       - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_postgresql-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_mysql-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -616,6 +659,13 @@ jobs:
       - run: cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mysql.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_mysql-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_mssql-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -665,6 +715,13 @@ jobs:
       - run: cat $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mssql.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_mssql-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   E2ET_oracle-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -714,6 +771,13 @@ jobs:
       - run: cat $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-oracle.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_oracle-adoptopenjdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
 
   ###################### Release & Publish ######################
 
