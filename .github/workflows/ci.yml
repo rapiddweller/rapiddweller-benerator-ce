@@ -13,7 +13,6 @@ on:
 env:
   MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
   JAVA_JDKVERSION_TAG: "jdk-11"
-  BUILD_IMAGE: "maven:3.8.6-jdk-11"
   SET_VERSION: |
     ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
     echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
@@ -21,7 +20,7 @@ jobs:
   ###################### Setup ######################
   setup:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     defaults:
       run:
         shell: bash
@@ -64,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - setup
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     steps:
       - uses: actions/checkout@v2
       - name: Cache Maven packages
@@ -118,7 +117,7 @@ jobs:
     defaults:
       run:
         shell: bash
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     services:
       mongodb:
         # Docker Hub image
@@ -264,7 +263,7 @@ jobs:
     defaults:
       run:
         shell: bash
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     steps:
       - uses: actions/checkout@v2
         with:
@@ -300,7 +299,7 @@ jobs:
   assembly_jdk11:
     runs-on: ubuntu-latest
     needs: [ test_UT_multiplatform, test_IT_jdk11, build_jdk11 ]
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     steps:
       - uses: actions/checkout@v2
       - name: Download dot.env
@@ -354,7 +353,7 @@ jobs:
 
   E2ET_script-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
@@ -391,7 +390,7 @@ jobs:
 
   E2ET_memstore-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
@@ -426,7 +425,7 @@ jobs:
 
   E2ET_watermark-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
@@ -461,7 +460,7 @@ jobs:
 
   E2ET_anon-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
@@ -496,7 +495,7 @@ jobs:
 
   E2ET_db-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
@@ -536,7 +535,7 @@ jobs:
 
   E2ET_files-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
@@ -580,7 +579,7 @@ jobs:
 
   E2ET_hsqlmem-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
@@ -615,7 +614,7 @@ jobs:
 
   E2ET_postgresql-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     services:
       # Label used to access the service container
@@ -684,7 +683,7 @@ jobs:
 
   E2ET_mysql-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     services:
       # Label used to access the service container
@@ -744,7 +743,7 @@ jobs:
 
   E2ET_mssql-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     services:
       # Label used to access the service container
@@ -800,7 +799,7 @@ jobs:
 
   E2ET_oracle-jdk11:
     runs-on: ubuntu-latest
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     needs: [ assembly_jdk11 ]
     services:
       # Label used to access the service container
@@ -871,7 +870,7 @@ jobs:
       - E2ET_files-jdk11
       - E2ET_watermark-jdk11
       - E2ET_memstore-jdk11
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     defaults:
       run:
         shell: bash
@@ -917,7 +916,7 @@ jobs:
       - E2ET_watermark-jdk11
       - E2ET_memstore-jdk11
     if: startsWith(github.ref, 'refs/tags/')
-    container: $BUILD_IMAGE
+    container: maven:3.8.6-jdk-11
     steps:
       - uses: actions/checkout@v2
       - name: Download dot.env
