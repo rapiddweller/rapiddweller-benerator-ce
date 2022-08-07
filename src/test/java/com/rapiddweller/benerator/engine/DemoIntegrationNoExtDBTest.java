@@ -236,6 +236,17 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
   }
 
   /**
+   * Demo script db.
+   */
+  @Test
+  public void demoScriptDb() {
+    context.setContextUri("/demo/script");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/script/scriptdb.ben.xml");
+    Assert.assertEquals("/demo/script", benCtx.getContextUri());
+
+  }
+
+  /**
    * Demo script code.
    */
   @Test
@@ -288,6 +299,16 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
     context.setContextUri("/demo/shop");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-h2.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
+  }
+
+  /**
+   * wartermark
+   */
+  @Test
+  public void watermark() {
+    context.setContextUri("/demo/watermark");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/watermark/watermark.ben.xml");
+    Assert.assertEquals("/demo/watermark", benCtx.getContextUri());
   }
 
 }

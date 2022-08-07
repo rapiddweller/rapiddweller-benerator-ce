@@ -136,4 +136,25 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     }
   }
 
+  @Test //TODO execute with ftl curly bracket fix faulty parsing behavior
+  public void testDbwithFTLandNewLine() {
+    String url = HSQLUtil.getInMemoryURL("benerator");
+    AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
+    BeneratorContext context = new DefaultBeneratorContext();
+    context.setGlobal("db", db);
+    assertEquals(0, db.invalidationCount());
+    try {
+      db.execute("create table epast_test (id int)");
+      Statement statement = parseXmlString("<execute target='db' invalidate='true'>{ftl: select * from epast_test where 1 = 0}\n</execute>");
+      statement.execute(context);
+      assertEquals(2, db.invalidationCount());
+      Statement statement2 = parseXmlString("<execute target='db' invalidate='false'>create table AAA (id int)</execute>");
+      statement2.execute(context);
+      assertEquals(2, db.invalidationCount());
+    } finally {
+      db.execute("drop table epast_test");
+      db.close();
+    }
+  }
+
 }

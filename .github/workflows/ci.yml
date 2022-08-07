@@ -351,7 +351,7 @@ jobs:
       - run: bash script/2_setup_benerator.sh
       - run: bash script/3_execute_demos.sh
 
-  E2ET_script-adoptopenjdk11:
+  E2ET_script-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -379,15 +379,86 @@ jobs:
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/script/scriptcode.ben.xml
       - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/script/scriptdb.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_script-adoptopenjdk11-log
+          name: E2ET_script-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_anon-adoptopenjdk11:
+  E2ET_memstore-jdk11:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+    needs: [ assembly_jdk11 ]
+    steps:
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11_test
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - name: setup benerator env
+        run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
+      - run: benerator $BENERATOR_HOME/demo/memstore/memstore.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_memstore-jdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
+
+  E2ET_watermark-jdk11:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+    needs: [ assembly_jdk11 ]
+    steps:
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11_test
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - name: setup benerator env
+        run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
+      - run: benerator $BENERATOR_HOME/demo/watermark/watermark.ben.xml
+      - name: Upload logfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: E2ET_watermark-jdk11-log
+          path: benerator.log
+          if-no-files-found: error
+          retention-days: 10
+
+  E2ET_anon-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -417,12 +488,12 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_anon-adoptopenjdk11-log
+          name: E2ET_anon-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_db-adoptopenjdk11:
+  E2ET_db-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -451,15 +522,18 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/db/hsqlmem.masstest.ben.xml
       - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
       - run: benerator $BENERATOR_HOME/demo/db/h2.multischema.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/dbenv-new.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/dbenv-old.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/dbenvconf.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_db-adoptopenjdk11-log
+          name: E2ET_db-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_files-adoptopenjdk11:
+  E2ET_files-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -498,12 +572,12 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_files-adoptopenjdk11-log
+          name: E2ET_files-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_hsqlmem-adoptopenjdk11:
+  E2ET_hsqlmem-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -533,12 +607,12 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_hsqlmem-adoptopenjdk11-log
+          name: E2ET_hsqlmem-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_postgresql-adoptopenjdk11:
+  E2ET_postgresql-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -602,12 +676,12 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_postgresql-adoptopenjdk11-log
+          name: E2ET_postgresql-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_mysql-adoptopenjdk11:
+  E2ET_mysql-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -662,12 +736,12 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_mysql-adoptopenjdk11-log
+          name: E2ET_mysql-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_mssql-adoptopenjdk11:
+  E2ET_mssql-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -718,12 +792,12 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_mssql-adoptopenjdk11-log
+          name: E2ET_mssql-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
 
-  E2ET_oracle-adoptopenjdk11:
+  E2ET_oracle-jdk11:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
@@ -774,7 +848,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: E2ET_oracle-adoptopenjdk11-log
+          name: E2ET_oracle-jdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -784,16 +858,18 @@ jobs:
   publish_jdk11:
     runs-on: ubuntu-latest
     needs:
-      - E2ET_oracle-adoptopenjdk11
-      - E2ET_mssql-adoptopenjdk11
-      - E2ET_mysql-adoptopenjdk11
-      - E2ET_postgresql-adoptopenjdk11
+      - E2ET_oracle-jdk11
+      - E2ET_mssql-jdk11
+      - E2ET_mysql-jdk11
+      - E2ET_postgresql-jdk11
       - E2ET_helper-scripts_jdk11
-      - E2ET_hsqlmem-adoptopenjdk11
-      - E2ET_db-adoptopenjdk11
-      - E2ET_script-adoptopenjdk11
-      - E2ET_anon-adoptopenjdk11
-      - E2ET_files-adoptopenjdk11
+      - E2ET_hsqlmem-jdk11
+      - E2ET_db-jdk11
+      - E2ET_script-jdk11
+      - E2ET_anon-jdk11
+      - E2ET_files-jdk11
+      - E2ET_watermark-jdk11
+      - E2ET_memstore-jdk11
     container: maven:3.6-adoptopenjdk-11
     defaults:
       run:
@@ -827,16 +903,18 @@ jobs:
   release_jdk11:
     runs-on: ubuntu-latest
     needs:
-      - E2ET_oracle-adoptopenjdk11
-      - E2ET_mssql-adoptopenjdk11
-      - E2ET_mysql-adoptopenjdk11
-      - E2ET_postgresql-adoptopenjdk11
+      - E2ET_oracle-jdk11
+      - E2ET_mssql-jdk11
+      - E2ET_mysql-jdk11
+      - E2ET_postgresql-jdk11
       - E2ET_helper-scripts_jdk11
-      - E2ET_hsqlmem-adoptopenjdk11
-      - E2ET_db-adoptopenjdk11
-      - E2ET_script-adoptopenjdk11
-      - E2ET_anon-adoptopenjdk11
-      - E2ET_files-adoptopenjdk11
+      - E2ET_hsqlmem-jdk11
+      - E2ET_db-jdk11
+      - E2ET_script-jdk11
+      - E2ET_anon-jdk11
+      - E2ET_files-jdk11
+      - E2ET_watermark-jdk11
+      - E2ET_memstore-jdk11
     if: startsWith(github.ref, 'refs/tags/')
     container: maven:3.6-adoptopenjdk-11
     steps:
