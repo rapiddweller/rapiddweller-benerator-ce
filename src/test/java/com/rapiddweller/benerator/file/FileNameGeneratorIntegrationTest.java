@@ -56,7 +56,7 @@ public class FileNameGeneratorIntegrationTest extends AbstractBeneratorIntegrati
 			System.out.println(file);
 			String path = (String) file.get("path");
 			assertNotNull(path);
-			assertTrue(path.contains("src/main/java"));
+			assertTrue(path.contains("src/main/java") || path.contains("src\\main\\java"));
 			assertTrue(path.contains("/") || path.contains("\\"));
 			assertTrue(path.endsWith(".java") || path.endsWith(".html"));
 		}
@@ -72,7 +72,7 @@ public class FileNameGeneratorIntegrationTest extends AbstractBeneratorIntegrati
 			System.out.println(file);
 			String path = (String) file.get("path");
 			assertNotNull(path);
-			assertTrue(path.contains("src/main/java"));
+			assertTrue(path.contains("src/main/java") || path.contains("src\\main\\java"));
 			assertTrue(path.contains("/") || path.contains("\\"));
 			assertTrue(path.endsWith(".java") || path.endsWith(".html"));
 		}
