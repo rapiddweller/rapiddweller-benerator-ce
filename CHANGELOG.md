@@ -5,17 +5,17 @@
 ## 3.0.0
 
 ### Release Highlights
-- MongoDB support
 - Greatly improved syntax checking, error handling and error reporting. Syntax errors are reported with line number and file name, get assigned a unique error id and the beneration process returns a related process return code and 
 - AVRO support in Kafka (Enterprise Edition)
 - New domains 'logistic', 'shipping' and 'container' (Enterprise Edition)
 - Postgres: UUID and JSON data type support
+- Completed support of the ```<part>``` element for hierarchical data generation and manipulationwith minCount, MaxCount, countGranularity and countDistribution
+- Increased JavaScript GraalVM execution performance by a factor of 10+
+- MongoDB support
+- Introduced execution modes: strict, lenient, turbo
+- New 'zoneddatetime' data type with generators CurrentZonedDateTimeGenerator and ZonedDateTimeGenerator. They can be configured with an individual 'zone' in the generator or a global 'defaultTimeZone) in the ```<setup>``` element
 - Improved and extended the configuration mechanism for environment definitions
 - Improved multithreading support, code quality, testing procedures, test coverage and documentation with unique error ids and process return codes
-- Introduced execution modes: strict, lenient, turbo
-- Completed support of the ```<part>``` element for hierarchical data generation and manipulationwith minCount, MaxCount, countGranularity and countDistribution
-- New 'zoneddatetime' data type with generators CurrentZonedDateTimeGenerator and ZonedDateTimeGenerator. They can be configured with an individual 'zone' in the generator or a global 'defaultTimeZone) in the ```<setup>``` element
-- Increased JavaScript execution performance by a factor of 10
 - Improved Benerator and Benchmark log output for core information, brevity and readability 
 - New beneration performance sensor mechanism
 - New 'condition' attribute in ```<variable>```
@@ -26,6 +26,18 @@
 - New command line option for cache invalidation: --clearCaches
 - Addressed log4j-caused security issues
 - New watermark demo
+
+### Breaking Changes
+- Requiring max or maxCount in ```<generate>```, supporting count="unbounded"
+- Redesigned platform and domain definition
+- All built-in platforms are imported by default
+- Renamed class DBSystem to AbstractDBSystem
+- Custom generators that inherit from GeneratorWrapper must explicitly overwrite the methods isThreadSafe() and isParallelizable()
+- Console output format changed
+- Redesigned XML parsing to exactly match the XML schema definition
+
+### Important Notes
+- The environment definition file format used in earlier versions is still supported but its support will be dropped in a future release.
 
 #### Domains
 - General: Allowing to load all domain generators by their simple name (calling the default constructor)
@@ -108,18 +120,23 @@
 - Default constructor of RandomBigDecimalGenerator creates an illegal setup
 - RandomBigDecimalGenerator refuses granularity of 1
 
-### Breaking Changes
-- Requiring max or maxCount in ```<generate>```, supporting count="unbounded"
-- Redesigned platform and domain definition
-- All built-in platforms are imported by default
-- Renamed class DBSystem to AbstractDBSystem
-- Custom generators that inherit from GeneratorWrapper must explicitly overwrite the methods isThreadSafe() and isParallelizable()
-- Console output format changed
-- Redesigned XML parsing to exactly match the XML schema definition
+#### Depenency Updated
+- database_derbyclient from 10.15.2.0 to 10.7.1.1
+- database_h2 from 1.4.200 to 2.1.210
+- database_icu4j from 67.1 to 71.1
+- database_jaybird from 4.0.1.java11 to 4.0.6.java11
+- database_mssqldb from 9.2.1.jre11 to 11.1.2.jre11-preview
+- database_mysql from 8.0.20 to 8.0.29
+- database_oracle from >21.1.0.0 to 21.6.0.0.1
+- database_postgresql from 42.2.23 to 42.4.1
+- database_mongodb (new) 3.12.11
+- antlr-runtime from 3.3 to 3.5.3
+- xml-apis from 1.4.01 to 1.0.b2 (1.0.b2 is newest version)
+- slf4j from 1.7.32 to 1.7.36
+- log4j from 2.14.1 to 2.18.0
+- scriptengine_freemarker from 2.3.20 to 2.3.31
+- scriptengine_graalvm from 21.1.0 to 22.2.0
 
-### Important Notes
-- The environment definition file format used in earlier versions is still supported but its support will be dropped in a future release.
--
 
 ---
 
