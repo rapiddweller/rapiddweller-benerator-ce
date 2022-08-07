@@ -382,7 +382,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_script-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -417,7 +417,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_anon-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -454,7 +454,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_db-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -498,7 +498,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_files-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -533,7 +533,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_hsqlmem-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -602,7 +602,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_postgresql-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -662,7 +662,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_mysql-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -718,7 +718,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_mssql-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
@@ -774,7 +774,7 @@ jobs:
       - name: Upload logfile
         uses: actions/upload-artifact@v2
         with:
-          name: log
+          name: E2ET_oracle-adoptopenjdk11-log
           path: benerator.log
           if-no-files-found: error
           retention-days: 10
