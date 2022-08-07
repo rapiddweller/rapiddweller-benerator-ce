@@ -301,4 +301,14 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
   }
 
+  /**
+   * wartermark
+   */
+  @Test
+  public void watermark() {
+    context.setContextUri("/demo/watermark");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/watermark/watermark.ben.xml");
+    Assert.assertEquals("/demo/watermark", benCtx.getContextUri());
+  }
+
 }
