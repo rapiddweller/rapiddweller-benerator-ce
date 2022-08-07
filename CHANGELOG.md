@@ -50,7 +50,7 @@
 
 #### Redesigned
 - Parsing, error checking, exception handling and syntax error reporting
-- Requiring max or maxCount in ```<generate>```, supporting count="unbounded"
+- Requiring count or maxCount in ```<generate>```, supporting count="unbounded"
 - Removed dependency of Benerator from ContiPerf
 
 ### Components
