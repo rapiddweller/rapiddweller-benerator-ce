@@ -13,7 +13,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_THREADS;
  * {@link AttrInfo} for the number of threads to execute a task.<br/><br/>
  * Created: 19.12.2021 21:17:18
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ThreadsAttribute extends AttrInfo<Expression<Integer>> {
   public ThreadsAttribute(String errorId) {

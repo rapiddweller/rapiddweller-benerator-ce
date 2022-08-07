@@ -8,7 +8,7 @@ import java.util.Locale;
  * Root context for a Benerator run.<br/><br/>
  * Created: 28.09.2021 10:01:34
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public interface BeneratorRootContext extends BeneratorContext {
   void setDefaultEncoding(String defaultEncoding);

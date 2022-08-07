@@ -38,7 +38,7 @@ import java.util.Set;
  * Tests the {@link RandomBigDecimalGenerator}.<br/><br/>
  * Created: 29.09.2021 08:41:21
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class RandomBigDecimalGeneratorTest extends GeneratorClassTest {
 

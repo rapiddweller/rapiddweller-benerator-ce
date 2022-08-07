@@ -26,7 +26,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE
  * Parses &lt;part&gt; elements.<br/><br/>
  * Created: 14.12.2021 05:36:16
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PartParser extends AbstractComponentParser {
 

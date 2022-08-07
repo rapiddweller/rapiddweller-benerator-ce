@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * Logs deprecation messages.<br/><br/>
  * Created: 03.11.2021 18:59:48
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class DeprecationLogger {
 

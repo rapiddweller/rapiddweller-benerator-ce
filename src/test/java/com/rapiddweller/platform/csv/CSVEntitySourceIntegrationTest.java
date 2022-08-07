@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  * Integration Test for the {@link CSVEntitySource}.<br/><br/>
  * Created: 17.12.2021 12:27:29
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class CSVEntitySourceIntegrationTest extends AbstractBeneratorIntegrationTest {
 

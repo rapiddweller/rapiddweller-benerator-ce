@@ -21,7 +21,7 @@ import java.util.List;
  * Helper class for importing Benerator components.<br/><br/>
  * Created: 06.12.2021 19:50:06
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class Importer {
 

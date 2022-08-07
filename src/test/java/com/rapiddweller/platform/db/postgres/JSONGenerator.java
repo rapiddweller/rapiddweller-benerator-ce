@@ -9,7 +9,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * Helper class for test.<br/><br/>
  * Created: 09.11.2021 20:15:26
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class JSONGenerator extends ThreadSafeGenerator<String> {
 

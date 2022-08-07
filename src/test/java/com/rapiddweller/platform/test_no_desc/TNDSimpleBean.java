@@ -6,7 +6,7 @@ package com.rapiddweller.platform.test_no_desc;
  * Simple bean class for testing.<br/><br/>
  * Created: 01.12.2021 16:00:41
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class TNDSimpleBean {
 

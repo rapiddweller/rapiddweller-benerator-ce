@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the {@link JavaHash} class.<br/><br/>
  * Created: 04.11.2021 20:16:41
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class JavaHashTest {
 

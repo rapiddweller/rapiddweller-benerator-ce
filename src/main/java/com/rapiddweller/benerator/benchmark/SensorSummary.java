@@ -8,7 +8,7 @@ import java.util.TreeMap;
  * Holds the measurements of a sensor over tests with different ExecutionModes.<br/><br/>
  * Created: 02.11.2021 16:07:34
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SensorSummary {
 

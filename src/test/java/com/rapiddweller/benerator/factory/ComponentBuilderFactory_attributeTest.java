@@ -932,8 +932,11 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     }
     // create descriptors
     PrimitiveDescriptorProvider pdp = new PrimitiveDescriptorProvider(dataModel);
-    TypeDescriptor type = pdp.getTypeDescriptor(typeName);
-    if (type == null) {
+    SimpleTypeDescriptor parentType = (SimpleTypeDescriptor) pdp.getTypeDescriptor(typeName);
+    TypeDescriptor type;
+    if (parentType != null) {
+      type = new SimpleTypeDescriptor(name + "_type", testDescriptorProvider, parentType);
+    } else {
       assertNull("Not a primitive type: " + typeName, typeName);
       type = new SimpleTypeDescriptor(name + "_type", testDescriptorProvider);
     }
@@ -955,7 +958,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     return builder;
   }
 
-    public Entity createEntity() {
+  public Entity createEntity() {
     return new Entity("Entity", testDescriptorProvider);
   }
 

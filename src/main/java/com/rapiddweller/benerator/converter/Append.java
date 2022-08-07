@@ -11,7 +11,7 @@ import com.rapiddweller.common.converter.ToStringConverter;
  * of the object and appends a suffix.<br/><br/>
  * Created: 27.10.2021 11:42:49
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class Append extends AbstractConverter<Object, String> {
 

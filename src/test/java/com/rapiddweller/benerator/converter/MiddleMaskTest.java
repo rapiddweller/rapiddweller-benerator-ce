@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNull;
  * Tests the {@link MiddleMask} converter.<br/><br/>
  * Created: 12.10.2021 12:24:27
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class MiddleMaskTest {
 

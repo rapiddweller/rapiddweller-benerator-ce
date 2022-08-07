@@ -11,7 +11,7 @@ import com.rapiddweller.platform.test_with_desc.sub2.ImpClassSimpleBean;
  * {@link com.rapiddweller.benerator.PlatformDescriptor} for testing.<br/><br/>
  * Created: 01.12.2021 16:29:51
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PlatformDescriptor extends DefaultPlatformDescriptor {
 

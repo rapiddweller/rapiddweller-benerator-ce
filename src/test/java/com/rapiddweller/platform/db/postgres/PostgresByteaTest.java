@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNull;
  * Tests support for the BYTEA type of Postgres.<br/><br/>
  * Created: 09.11.2021 10:09:49
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PostgresByteaTest extends AbstractProstgresIntegrationTest {
 

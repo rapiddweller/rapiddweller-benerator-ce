@@ -17,7 +17,7 @@ import org.w3c.dom.Element;
  * Parses &lt;id&gt; elements.<br/><br/>
  * Created: 14.12.2021 05:47:38
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class IdParser extends AbstractComponentParser {
 

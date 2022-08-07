@@ -18,7 +18,7 @@ import java.util.List;
  * Applies a {@link Converter} to an attribute.<br/><br/>
  * Created: 12.10.2021 17:22:38
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class AttributeProcessor extends AbstractGenerationStep<Entity> implements ComponentBuilder<Entity> {
 

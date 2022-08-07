@@ -42,7 +42,7 @@ import static org.junit.Assert.fail;
  * Tests the {@link GeneratorIterator}.<br/><br/>
  * Created: 01.10.2021 22:50:39
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class GeneratorIteratorTest {
 

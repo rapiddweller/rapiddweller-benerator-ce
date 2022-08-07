@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThrows;
  * Tests the {@link UriParser}.<br/><br/>
  * Created: 10.12.2021 13:20:25
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class UriParserTest {
 

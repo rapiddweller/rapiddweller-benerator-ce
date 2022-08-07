@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link BeneratorUtil}.<br/><br/>
  * Created: 28.09.2021 12:59:23
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BeneratorUtilTest {
 
