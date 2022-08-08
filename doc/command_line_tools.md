@@ -91,7 +91,7 @@ so the report will look something like this:
 
 ```text
 +---------------------------------------------------------------------------+
-| Benchmark throughput of Benerator Community Edition 2.0.0-jdk-11-SNAPSHOT |
+| Benchmark throughput of Benerator Community Edition 3.0.0-jdk-11          |
 | on a Mac OS X 11.4 x86_64 with 8 cores                                    |
 | Java version 11.0.11                                                      |
 | OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)                         |
@@ -134,7 +134,7 @@ the following result:
 
 ```text
 +-----------------------------------------------------------------------------+
-| Benchmark throughput of Benerator Enterprise Edition 2.0.0-jdk-11-SNAPSHOT  |
+| Benchmark throughput of Benerator Enterprise Edition 3.0.0-jdk-11           |
 | on a Mac OS X 11.4 x86_64 with 8 cores                                      |
 | Java version 11.0.11                                                        |
 | OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)                           |

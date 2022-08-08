@@ -6,9 +6,9 @@ The benerator configuration file is XML based. An XML schema is provided. The do
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<setup xmlns="https://www.benerator.de/schema/2.0.0"
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://www.benerator.de/schema/2.0.0 https://www.benerator.de/schema/rapiddweller-benerator-ce-2.0.0.xsd">
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/rapiddweller-benerator-ce-3.0.0.xsd">
     <!-- content here -->
 </setup>
 ```

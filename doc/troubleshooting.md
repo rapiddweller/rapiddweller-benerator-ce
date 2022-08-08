@@ -220,5 +220,5 @@ db_schema=Z
 
 ## Method isApplicationDetached() not found in class Xyz
 
-See **'[Migration from 1.1.x to 2.0.0](migrating_benerator_projects.md#migration-from-11x-to-200)'**.
+See **'[Migration from 1.1.x to 3.0.0](migrating_benerator_projects.md#migration-from-11x-to-200)'**.
 

@@ -29,15 +29,15 @@ For example **(these environment variables are only set in your terminal session
 
 #### Linux bash  
 ```shell
-export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-2.0.0-jdk-11-dist  
+export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-3.0.0-jdk-11-dist  
 export PATH=$BENERATOR_HOME/bin:$PATH 
 chmod a+x $BENERATOR_HOME/bin/*.sh
 ```
 
 #### Windows 10 PowerShell  
 ```powershell
-$env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist'  
-$env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-2.0.0-jdk-11-dist\bin'
+$env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-3.0.0-jdk-11-dist'  
+$env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-3.0.0-jdk-11-dist\bin'
 ```
 
 5. create your own benerator script myscript.xml with the following content
@@ -113,7 +113,7 @@ mvn -version
 1. Choose how to install:
 
    a) Download a Prebuilt Distribution from **Project Overview > Releases**
-   (current release is `2.0.0`, cp. rapiddweller-benerator-ce-2.0.0-jdk-11-dist.zip)
+   (current release is `3.0.0`, cp. rapiddweller-benerator-ce-3.0.0-jdk-11-dist.zip)
    and unzip the downloaded file in an appropriate directory, e.g.
    `/Developer/Applications` or `C:\Program Files\Development`.
 
@@ -129,10 +129,10 @@ mvn -version
 
    - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the
      User Variables section. Enter BENERATOR_HOME as name and the path as value
-     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-2.0.0-jdk-11`). Click OK several times.
+     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-3.0.0-jdk-11`). Click OK several times.
 
    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
-     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-2.0.0-jdk-11`
+     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-3.0.0-jdk-11`
 
 4. On Unix/Linux/Mac systems: **Set permissions**  
    Open a shell on the installation's root directory and execute
