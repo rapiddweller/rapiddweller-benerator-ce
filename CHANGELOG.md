@@ -6,12 +6,14 @@
 
 ### Release Highlights
 - Greatly improved syntax checking, error handling and error reporting. Syntax errors are reported with line number and file name, get assigned a unique error id and the beneration process returns a related process return code and 
-- AVRO support in Kafka (Enterprise Edition)
+- New demos (watermark,dbenv-old, dbenvconf, memstore, scriptdb, shop-hsqlmem-adv-sql-exporter, shop-mongodb, shop-postgres-mongodb)
 - New domains 'logistic', 'shipping' and 'container' (Enterprise Edition)
 - Postgres: UUID and JSON data type support
 - Completed support of the ```<part>``` element for hierarchical data generation and manipulationwith minCount, MaxCount, countGranularity and countDistribution
 - Increased JavaScript GraalVM execution performance by a factor of 10+
+- AVRO support in Kafka (Enterprise Edition)
 - MongoDB support
+- new memstore functionality (removeNotExistingIds, sumEntityColumn, totalEntityCount)
 - Introduced execution modes: strict, lenient, turbo
 - New 'zoneddatetime' data type with generators CurrentZonedDateTimeGenerator and ZonedDateTimeGenerator. They can be configured with an individual 'zone' in the generator or a global 'defaultTimeZone) in the ```<setup>``` element
 - Improved and extended the configuration mechanism for environment definitions
@@ -25,10 +27,9 @@
   - **--list kafka** to list all kafka definitions available in the current project
 - New command line option for cache invalidation: --clearCaches
 - Addressed log4j-caused security issues
-- New watermark demo
 
 ### Breaking Changes
-- Requiring max or maxCount in ```<generate>```, supporting count="unbounded"
+- Requiring count or maxCount in ```<generate>```, supporting count="unbounded" means unlimited count
 - Redesigned platform and domain definition
 - All built-in platforms are imported by default
 - Renamed class DBSystem to AbstractDBSystem
@@ -47,8 +48,8 @@
 - Person: New DIVERSE Gender
 
 #### Platforms:
-- mongodb platform: Alpha-stage contribution of Daniel Figia
-- kafka (Enterprise Edition):
+- mongodb platform: Alpha-stage contribution of [Daniel Figia](https://github.com/DanielFGA)
+- kafka **([Enterprise Edition](https://www.benerator.de))**:
   - New AVRO support
   - Added schema.url for AVRO schema lookup 
   - Added idle.timeout.seconds to make a KafkaImporter stop automatically after a certain number
@@ -152,7 +153,7 @@
 - Improved/reworked Benerator Project Wizard
 - Improved/reworked Benerator Maven Plugin
 - Add custom separator support for Benerator weighting files
-- Add new [Hash Converters](/doc/component_reference.md#rapiddweller-converters)
+- Add new [Hash Converters](/doc/component_reference.md#Default Converters)
 - Add Benchmark Tool and [Performance Tuning](/doc/performance_tuning.md) section in Manual
 - Extend PersonGenerator with attribute age
 - Update Graalvm to 21.1.0
@@ -167,7 +168,7 @@
 ### Breaking Changes
 
 - See the manual's
-  [Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-200)
+  [Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-300)
   what to do if you programmed custom Distributions.
 
 ---
@@ -296,4 +297,4 @@ N/A
 
 ### Changes before v0.9.8
 
-- Please see previous [releasenotes](/releasenotes) in the releasenotes project folder.
+- Please see previous releasenotes for details on sourceforge net repository
