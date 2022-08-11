@@ -89,7 +89,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -99,8 +98,6 @@ import java.util.Set;
  * @since 0.6.1
  */
 public class AnnotationMapper extends DefaultDescriptorProvider {
-
-  private static final Set<String> STANDARD_METHODS;
 
   private static final Package BENERATOR_ANNO_PACKAGE = Unique.class.getPackage();
   private static final Package BEANVAL_ANNO_PACKAGE = Max.class.getPackage();
@@ -113,13 +110,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
       Factory.class, Equivalence.class, Coverage.class, Serial.class,
       Defaults.class, Gentle.class, Mean.class,
       ThreadPoolSize.class);
-
-  static {
-    STANDARD_METHODS = new HashSet<>();
-    for (Method method : Annotation.class.getMethods()) {
-      STANDARD_METHODS.add(method.getName());
-    }
-  }
 
   private final PathResolver pathResolver;
 
@@ -183,7 +173,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   private static Generator<Object[]> createDescriptorBasedGenerator(Descriptor annotation, MethodDescriptor testMethod, BeneratorContext context) {
-    String filename = null;
+    String filename;
     if (annotation.file().length() > 0) {
       filename = annotation.file();
     } else {
@@ -479,11 +469,8 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
         if (BeanUtil.isPrimitiveType(paramTypes[i].getName())) {
           elementDescriptor.setNullable(false); // primitives can never be null
         } else {
-          elementDescriptor.setNullable(
-              elementDescriptor.getNullQuota() == null ||
-                  ((Double) elementDescriptor
-                      .getDeclaredDetailValue("nullQuota")) !=
-                      0.); // if nullQuota == 0, then set nullable to false
+          elementDescriptor.setNullable(elementDescriptor.getNullQuota() == null ||
+                  ((Double) elementDescriptor.getDetailValue("nullQuota")) != 0.); // if nullQuota == 0, then set nullable to false
         }
       }
       nativeDescriptor.addElement(elementDescriptor);
@@ -501,8 +488,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
       ArrayElementDescriptor parentElement = nativeDescriptor.getElement(i);
       if (containsConfig(paramAnnos[i])) {
         TypeDescriptor parentElementType = parentElement.getTypeDescriptor();
-        TypeDescriptor elementType = DescriptorUtil.deriveType(
-            parentElementType.getName(), parentElementType);
+        TypeDescriptor elementType = DescriptorUtil.deriveType(parentElementType.getName(), parentElementType);
         ArrayElementDescriptor element = new ArrayElementDescriptor(i, this, elementType);
         element.setParent(parentElement);
         for (Annotation annotation : paramAnnos[i]) {
