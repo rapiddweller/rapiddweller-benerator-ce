@@ -325,7 +325,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 
   private static Generator<?> createSimpleTypeXLSSourceGenerator(
       SimpleTypeDescriptor descriptor, String sourceName, Uniqueness uniqueness, BeneratorContext context) {
-    // TODO define common mechanism for file sources CSV, XLS, ... and entity, array, simple type
     Generator<?> generator;
     Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
     String sourceUri = context.resolveRelativeUri(sourceName);
@@ -451,7 +450,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private Time parseTime(SimpleTypeDescriptor descriptor, String detailName, Time defaultTime) {
-    String detail = (String) descriptor.getDeclaredDetailValue(detailName);
+    String detail = (String) descriptor.getDetailValue(detailName);
     try {
       if (detail != null) {
         DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
@@ -477,7 +476,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private Date parseDate(SimpleTypeDescriptor descriptor, String detailName, Date defaultDate) {
-    String detail = (String) descriptor.getDeclaredDetailValue(detailName);
+    String detail = (String) descriptor.getDetailValue(detailName);
     try {
       if (detail != null) {
         DateFormat dateFormat = DescriptorUtil.getPatternAsDateFormat(descriptor);
@@ -492,7 +491,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private static long parseDateGranularity(SimpleTypeDescriptor descriptor) {
-    String detail = (String) descriptor.getDeclaredDetailValue(DescriptorConstants.ATT_GRANULARITY);
+    String detail = (String) descriptor.getDetailValue(DescriptorConstants.ATT_GRANULARITY);
     if (detail != null) {
       return DateString2DurationConverter.defaultInstance().convert(detail);
     } else {

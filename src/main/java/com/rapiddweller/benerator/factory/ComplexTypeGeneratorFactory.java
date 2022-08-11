@@ -122,7 +122,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
     } else {
       String segment = descriptor.getSegment();
-      for (FileFormat format : FileFormats.all()) { // TODO support CSV, FCW, DbUnit and XLS with this mechanism
+      for (FileFormat format : FileFormats.all()) { // TODO support DbUnit, XLS and XML with this mechanism
         if (format.matchesUri(sourceSpec)) {
           generator = createProtocolSourceGenerator(sourceSpec, format, descriptor, context);
           break;
