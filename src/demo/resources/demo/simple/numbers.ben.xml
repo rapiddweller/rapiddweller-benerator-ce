@@ -1,7 +1,7 @@
 <setup
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="https://www.benerator.de/schema/2.0.0"
-        xsi:schemaLocation="https://www.benerator.de/schema/2.0.0 http://benerator.de/schema/rapiddweller-benerator-ce-2.0.0.xsd"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 http://benerator.de/schema/benerator-3.0.0.xsd"
         defaultDataset="US" defaultLocale="en_US">
     <generate type="numbers" count="100" consumer="LoggingConsumer">
         <attribute name="int_max_10" type="int" maxLength="10"/>

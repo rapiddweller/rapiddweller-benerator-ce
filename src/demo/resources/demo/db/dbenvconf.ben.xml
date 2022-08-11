@@ -2,7 +2,7 @@
 <setup>
 
     <import platforms="db"/>
-    <database id="database" environment="conf.db"/>
+    <database id="database" environment="conf"/>
     <execute type="sql" target="database">
         create table sample (
         id int primary key
