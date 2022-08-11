@@ -34,7 +34,6 @@ import com.rapiddweller.script.PrimitiveType;
 import java.sql.Types;
 import java.util.Map;
 
-
 /**
  * Maps JDBC types to benerator types.
  * @author Volker Bergmann
@@ -74,7 +73,7 @@ public class JdbcMetaTypeMapper {
         // Types.STRUCT is not supported
         Types.TIME, PrimitiveType.DATE,
         Types.TIMESTAMP, PrimitiveType.TIMESTAMP,
-        Types.TIMESTAMP_WITH_TIMEZONE, PrimitiveType.ZONED_DATE_TIME, // TODO test
+        Types.TIMESTAMP_WITH_TIMEZONE, PrimitiveType.ZONED_DATE_TIME,
         Types.TINYINT, PrimitiveType.BYTE,
         Types.VARBINARY, PrimitiveType.BINARY,
         Types.VARCHAR, PrimitiveType.STRING,
