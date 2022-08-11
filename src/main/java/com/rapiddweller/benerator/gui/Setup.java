@@ -94,8 +94,6 @@ public class Setup implements ObservableBean, Serializable {
   private File createScriptFile;
   private String dbSnapshot;
 
-  private MavenDependency[] dbDependencies;
-
   public Setup() {
     this.changeSupport = new PropertyChangeSupport(this);
 
@@ -119,7 +117,6 @@ public class Setup implements ObservableBean, Serializable {
     setDbUrl(DEFAULT_DB_URL);
     setDbSchema(DEFAULT_DB_SCHEMA);
     setDbSnapshot("dbunit");
-    this.dbDependencies = new MavenDependency[0]; // TODO handle maven dependencies
     if (archetype == null) {
       setArchetype(ArchetypeManager.getInstance().getDefaultArchetype());
     }
@@ -355,14 +352,6 @@ public class Setup implements ObservableBean, Serializable {
 
   public void setCreateScriptFile(File createScriptFile) {
     this.createScriptFile = createScriptFile;
-  }
-
-  public MavenDependency[] getDbDependencies() {
-    return dbDependencies;
-  }
-
-  public void setDbDependencies(MavenDependency[] dbDependencies) {
-    this.dbDependencies = dbDependencies;
   }
 
   public String getDbSnapshot() {
