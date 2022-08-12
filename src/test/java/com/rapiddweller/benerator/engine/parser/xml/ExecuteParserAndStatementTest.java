@@ -111,6 +111,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       assertEquals(2, db.invalidationCount());
     } finally {
       db.execute("drop table epast_test");
+      db.execute("drop table BBB");
       db.close();
     }
   }
@@ -131,6 +132,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       statement2.execute(context);
       assertEquals(2, db.invalidationCount());
     } finally {
+      db.execute("drop table AAA");
       db.execute("drop table epast_test");
       db.close();
     }
@@ -152,6 +154,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       statement2.execute(context);
       assertEquals(2, db.invalidationCount());
     } finally {
+      db.execute("drop table AAA");
       db.execute("drop table epast_test");
       db.close();
     }
