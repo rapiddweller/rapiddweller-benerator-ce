@@ -393,6 +393,11 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectGenerations(helper, 100, validator);
   }
 
+  @Test
+  public void testZonedDateTime() {
+    // TODO vbergmann implement
+  }
+
     @Test
     public void test_BooleanGenerator() {
         checkBuilder(
