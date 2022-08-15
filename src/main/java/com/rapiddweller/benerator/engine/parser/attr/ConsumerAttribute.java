@@ -12,7 +12,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER
  * @author Volker Bergmann
  * @since 3.0.0
  */
-public class ConsumerAttribute extends AttrInfo<String> { // TODO improve
+public class ConsumerAttribute extends AttrInfo<String> { // TODO vbergmann improve parsing and validation
   public ConsumerAttribute(String errorId) {
     super(ATT_CONSUMER, false, errorId, null);
   }

@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -74,8 +75,7 @@ public class DescriptorRunnerTest extends ModelTest {
     }
   }
 
-  /* TODO fix or remove generatedFiles()
-  @Test
+  @Test @Ignore // TODO vbergmann fix or remove generatedFiles()
   public void testGetGeneratedFiles_csv() throws IOException {
     DescriptorRunner runner = new DescriptorRunner("string://<setup>" +
         "  <import platforms='csv'/>" +
@@ -93,7 +93,6 @@ public class DescriptorRunnerTest extends ModelTest {
       FileUtil.deleteIfExists(new File(EXPORT_FILE_URI));
     }
   }
-  */
 
   static class TestExporter implements FileExporter {
 
