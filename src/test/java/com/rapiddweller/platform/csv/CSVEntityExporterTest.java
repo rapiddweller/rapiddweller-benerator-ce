@@ -130,7 +130,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 
   @Test
   public void testAppend() throws Exception {
-    Assume.assumeFalse(SystemInfo.isWindows()); // TODO make this test work on Windows
+    Assume.assumeFalse(SystemInfo.isWindows()); // TODO akell make this test work on Windows
     CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
     exporter.setAppend(true);
     consumeAliceBobCharlyAndClose(exporter);

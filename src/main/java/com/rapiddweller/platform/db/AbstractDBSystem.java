@@ -945,7 +945,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       String primitiveTypeName = primitiveType.getName();
       typeToWrite = driverTypeMapper.concreteType(primitiveTypeName);
     }
-    // TODO Version 3.0.0 wrong entity information when table with same name exists in different schema and is part of context.
+    // TODO akell v3.0.0 wrong entity information when table with same name exists in different schema and is part of context.
+    // should work like this: <database id="db" .../>
+    // => <generate type="db:tablename" />
     return new ColumnInfo(name, sqlType, typeToWrite);
   }
 
