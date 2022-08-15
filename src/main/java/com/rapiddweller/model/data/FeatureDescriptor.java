@@ -99,7 +99,7 @@ public class FeatureDescriptor implements Named {
     return details.containsKey(name);
   }
 
-  public Object getDetailValue(String name) { // TODO remove generic feature access?
+  public Object getDetailValue(String name) {
     return this.getConfiguredDetail(name).getValue();
   }
 

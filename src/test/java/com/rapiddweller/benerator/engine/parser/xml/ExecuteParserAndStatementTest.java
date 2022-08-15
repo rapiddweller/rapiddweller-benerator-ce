@@ -138,7 +138,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     }
   }
 
-  @Test //TODO execute with ftl curly bracket fix faulty parsing behavior
+  @Test
   public void testDbwithFTLandNewLine() {
     String url = HSQLUtil.getInMemoryURL("benerator");
     AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
