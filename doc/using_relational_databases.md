@@ -924,33 +924,34 @@ When you have a PostgreSQL database for example with the following data model:
 CREATE SCHEMA schema1;
 CREATE SCHEMA schema2;
 CREATE SCHEMA schema3;
+
 CREATE SEQUENCE schema1.seq_id_gen START WITH 10;
 CREATE SEQUENCE schema2.seq_id_gen START WITH 10;
 CREATE SEQUENCE schema3.seq_id_gen START WITH 20;
 
 CREATE TABLE schema3.db_manufacturer (
-id SERIAL PRIMARY KEY,
-name varchar(30) NOT NULL,
-description text NULL
+  id SERIAL PRIMARY KEY,
+  name varchar(30) NOT NULL,
+  description text NULL
 );
 CREATE TABLE IF NOT EXISTS schema1.db_category (
-id SERIAL PRIMARY KEY,
-name varchar(30) NOT NULL
+  id SERIAL PRIMARY KEY,
+  name varchar(30) NOT NULL
 );
 CREATE TABLE schema2.db_category (
-id SERIAL PRIMARY KEY,
-name varchar(30) NOT NULL
+  id SERIAL PRIMARY KEY,
+  name varchar(30) NOT NULL
 );
 CREATE TABLE schema1.db_product (
-ean_code varchar(13) NOT NULL,
-name varchar(30) NOT NULL,
-category_id int NOT NULL,
-manufacturer_id int NOT NULL,
-price decimal(8,2) NOT NULL,
-notes varchar(256) NULL,
-description text NULL,
-CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES schema1.db_category (id),
-CONSTRAINT db_manufacturer_fk FOREIGN KEY (manufacturer_id) REFERENCES schema3.db_manufacturer (id)
+  ean_code varchar(13) NOT NULL,
+  name varchar(30) NOT NULL,
+  category_id int NOT NULL,
+  manufacturer_id int NOT NULL,
+  price decimal(8,2) NOT NULL,
+  notes varchar(256) NULL,
+  description text NULL,
+  CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES schema1.db_category (id),
+  CONSTRAINT db_manufacturer_fk FOREIGN KEY (manufacturer_id) REFERENCES schema3.db_manufacturer (id)
 );
 COMMIT;
 ```

@@ -5,7 +5,7 @@
 ## 3.0.0
 
 ### Release Highlights
-- Greatly improved syntax checking, error handling and error reporting. Syntax errors are reported with line number and file name, get assigned a unique error id and the beneration process returns a related process return code and 
+- Greatly improved syntax checking, error handling and error reporting. Syntax errors are reported with line number and file name, get assigned a unique error id and the beneration process returns a related process return code 
 - New demos (watermark,dbenv-old, dbenvconf, memstore, scriptdb, shop-hsqlmem-adv-sql-exporter, shop-mongodb, shop-postgres-mongodb)
 - New domains 'logistic', 'shipping' and 'container' (Enterprise Edition)
 - Postgres: UUID and JSON data type support
@@ -52,13 +52,13 @@
 - kafka **([Enterprise Edition](https://www.benerator.de))**:
   - New AVRO support
   - Added schema.url for AVRO schema lookup 
-  - Added idle.timeout.seconds to make a KafkaImporter stop automatically after a certain number
+  - Added idle.timeout.seconds to make a kafka-importer stop automatically after a certain number of seconds without message reception.
   - Improved Kafka benchmark
 - db (Database)
   - Supporting UUID and JSON types of Postgres
   - Improved support of dynamic ```<database>``` selectors
   - Default transaction isolation level is set to 'read committed'
-- csv, fixedwidth, xml, dbunit: Evaluate contained scripts if cofigured by 'sourceScripted' or 'defaultSourceScripted' settings
+- csv, fixedwidth, xml, dbunit: Evaluate contained scripts if configured by 'sourceScripted' or 'defaultSourceScripted' settings
 - fixedwidth: Allowing for row format configuration of fixed with file in Benerator setup
 
 #### Redesigned

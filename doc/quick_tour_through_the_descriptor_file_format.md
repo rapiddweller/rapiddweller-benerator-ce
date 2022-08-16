@@ -35,6 +35,7 @@ Several global benerator properties allow for customization of its behavior:
 | maxCount | limits the maximum cardinality of all entity and association generations. If set to 0, cardinalities will not be limited. | -1 |
 | defaultOneToOne | When set to to Benerator assumes each relation is one-to-one. | false |
 | acceptUnknownSimpleTypes | When set to true, Benerator accepts unknown simple data types from its DescriptorProviders, relying on the user to choose the correct data type when generating. | false |
+| defaultSourceScripted | When set to true, Benerator resolves script expressions that are contained in imported data files. When set to false, all data is imported 'as is' | false |
 
 You can configure them in the `<setup>` element, e.g.
 
@@ -161,6 +162,9 @@ the console. But what is a Person? Benerator will figure it out by itself if it 
 table, an XML schema with a 'Person' element, or any other 'DescriptorProvider'. Benerator will generate database-valid
 or XML-Schema-valid data automatically. More about this later.
 
+If you want to generate unlimited amounts of data or let the called components decide how much data to generate, 
+use `count="unbounded"`
+
 Let us start without DescriptorProviders, manually putting together what we need.
 
 Entities consist of members, e.g. `<attribute>`s, `<id>`s or `<reference>`s. I will concentrate on attributes in the
@@ -233,7 +237,6 @@ In whatever type of data generation or iteration, an **offset** can be applied t
 source, e.g.
 
 ```xml
-
 <iterate type="Person" source="persons.csv" offset="10"/>
 ```
 
@@ -245,7 +248,6 @@ The meaning of the `<echo>` element is similar to the echo command in batch file
 console to inform the user what is happening, e.g.
 
 ```xml
-
 <echo>Running...</echo>
 ```
 
@@ -253,9 +255,16 @@ For Mac OS X users there is a nice extra feature: When using **`type='speech'`**
 facility to speak the text. When executed on other operating systems, the text is only printed to the console:
 
 ```xml
-
 <echo type="speech">Generation Finished</echo>
 ```
+
+Echo statements may contain a script expression to be evaluated. 
+The usual markup like `{ftl:` can be omitted when the `lang` attribute is used: 
+
+```xml
+<echo lang="ftl">Running on ${context.version}</echo>
+```
+
 
 ## `<beep/>`
 
