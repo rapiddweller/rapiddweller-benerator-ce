@@ -77,7 +77,7 @@ import java.util.concurrent.Executors;
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public class DefaultBeneratorContext implements BeneratorRootContext {
+public class DefaultBeneratorContext extends AbstractBeneratorContext implements BeneratorRootContext {
 
   // constants -------------------------------------------------------------------------------------------------------
 
