@@ -48,7 +48,7 @@ The person domain has three major components:
 
 * TINValidator: Validates European Tax Identification Numbers
 
-![](assets/grafik16.png)
+![](assets/domain_person.png)
 
 ### PersonGenerator
 
@@ -163,7 +163,7 @@ free to contact us for assistance: **[team@rapiddweller.com](mailto:team@rapiddw
 
 * **PostalCodeValidator**: Validates if a given postal code is valid in a given country
 
-![](assets/grafik17.png)
+![](assets/domain_address.png)
 
 The following countries are supported:
 
@@ -191,7 +191,7 @@ The generated Address objects have the following data fields:
 
 * **privatePhone**, **officePhone**, **mobilePhone** and **fax**: References to PhoneNumber objects, which can be navigated and queried by a script expression
 
-* **companyName** and **department**: Names of a company and a department.
+* **organization** and **department**: Names of an organization and a department.
 
 
 ## net domain
@@ -208,7 +208,7 @@ Provides the following generators:
 
 * **DepartmentNameGenerator**, a generator for department names
 
-![](assets/grafik18.png)
+![](assets/domain_organization.png)
 
 If you use the CompanyNameGenerator like this:
 
