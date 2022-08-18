@@ -12,7 +12,7 @@ import java.util.Map;
  * Abstract parent class for in-memory entity storage.<br/><br/>
  * Created: 22.11.2021 15:00:07
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public abstract class EntityStore implements Iterable<Entity> {
 

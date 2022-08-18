@@ -9,7 +9,7 @@ to be created explicitly when using the Benerator API programmatically.
 
 For domain-specific generators (e.g. person, address, finance), see **[Domains](domains.md)**.
 
-### Common Id Generators
+### Generators For Common Id Types
 
 Benerator contains the following common predefined and platform-independent generators:
 
@@ -22,11 +22,11 @@ Benerator contains the following common predefined and platform-independent gene
 * **LocalSequenceGenerator**: Mimics the behavior of a (named) database sequence on a single client VM. Its property '
   cached' (true by default) specifies if sequence value changes shall be persisted immediately or in the end.
 
-### Database-related Generators
+### Database-Related Generators
 
 See **[Using Relational Databases](using_relational_databases.md)**.
 
-### simple type generators
+### Generators For Data Of Simple Type
 
 * **CharacterGenerator**: Generates random characters.
 
@@ -44,7 +44,7 @@ See **[Using Relational Databases](using_relational_databases.md)**.
 
 * **LuhnGenerator**: Generates Luhn-valid strings like credit card numbers
 
-### current date / time generators
+### Generators For The Current Date And/Or Time
 
 #### CurrentDateGenerator
 Generates **date** values that represent the current date
@@ -69,7 +69,7 @@ time (possible even in the future, so values may be negative)
 Generates **date** values that represent the current time of the day
 
 
-### arbitrary date / time generators
+### Generators For Random Date And/Or Time Values
 
 #### DateGenerator
 Generates **date** values that represent a certain time at a certain day based on a common Distribution
@@ -150,11 +150,12 @@ Asia/Seoul           | GMT+9
 Australia/Sydney     | GMT+10
 
 
-### file related generators
+### File-Related Generators
 
 * **FileGenerator**: generates java.io.File objects representing files in a given directory structure
 
-* **FileNameGenerator**: generates file names representing files in a given directory structure
+* **FileNameGenerator**: generates file names representing files in a given directory structure.  
+  It has a 'pathType' property which can be configured to generate `absolute`, `canonical` or `local` file names.
 
 * **TextFileContentGenerator**: provides text file contents as String
 
@@ -730,7 +731,7 @@ Usage example:
 | timestampCapitalization | The capitalization to use when rendering a month name in a timestamp: 'upper', 'lower' or 'mixed' | mixed |
 | decimalPattern | The pattern to render decimal values | System default |
 | decimalSeparator | The decimal separator to use for decimal values | System default |
-| integralPattern | The pattern to integral number values | System default |
+| integralPattern | The pattern to format integral number values | System default |
 
 The line format is described as a comma-separated list of property names with format spec, e.g. name[20],age[3r]
 ,points[5.2r0]. The format spec consists of

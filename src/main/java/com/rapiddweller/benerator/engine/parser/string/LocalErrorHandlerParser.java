@@ -17,7 +17,7 @@ import java.util.Objects;
  * Parses a local error handler spec. If none is defined, it falls back to the global one.<br/><br/>
  * Created: 10.12.2021 18:27:59
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class LocalErrorHandlerParser extends AbstractParser<Expression<ErrorHandler>> {
 

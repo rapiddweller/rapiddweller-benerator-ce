@@ -27,12 +27,10 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sensor.Profiler;
 import com.rapiddweller.benerator.sensor.Profiling;
-import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.RoundedNumberFormat;
@@ -46,8 +44,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.Closeable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Parses and executes a benerator descriptor file.<br/><br/>
@@ -66,7 +62,6 @@ public class DescriptorRunner implements ResourceManager {
   private final BeneratorContext context;
 
   final BeneratorFactory factory;
-  private List<String> generatedFiles;
 
   private final ResourceManagerSupport resourceManager = new ResourceManagerSupport();
   long startTime = 0;
@@ -78,7 +73,6 @@ public class DescriptorRunner implements ResourceManager {
     this.uri = uri;
     this.context = context;
     this.factory = BeneratorFactory.getInstance();
-    this.generatedFiles = new ArrayList<>();
     ConverterManager.getInstance().setContext(context);
   }
 
@@ -122,7 +116,6 @@ public class DescriptorRunner implements ResourceManager {
     BeneratorParseContext parsingContext = this.factory.createParseContext(resourceManager);
     BeneratorRootStatement statement = (BeneratorRootStatement) parsingContext.parseElement(root, null,null);
     // prepare system
-    generatedFiles = new ArrayList<>();
     context.setContextUri(IOUtil.getParentUri(uri));
     return statement;
   }
@@ -139,17 +132,9 @@ public class DescriptorRunner implements ResourceManager {
       if (Profiling.isEnabled()) {
         Profiler.defaultInstance().printSummary();
       }
-      List<String> generations = getGeneratedFiles();
-      if (!generations.isEmpty()) {
-        logger.info("Generated file(s): {}", generations);
-      }
     } finally {
       context.close();
     }
-  }
-
-  public List<String> getGeneratedFiles() {
-    return generatedFiles;
   }
 
 
@@ -157,12 +142,7 @@ public class DescriptorRunner implements ResourceManager {
 
   @Override
   public boolean addResource(Closeable resource) {
-    if (!resourceManager.addResource(resource)) {
-      return false;
-    } else if (resource instanceof FileExporter) {
-      generatedFiles.add(((FileExporter) resource).getUri());
-    }
-    return true;
+    return resourceManager.addResource(resource);
   }
 
   @Override

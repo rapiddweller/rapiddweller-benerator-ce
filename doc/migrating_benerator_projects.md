@@ -24,14 +24,14 @@ against changes, if you inherit from a child class of this interface
 instead of implementing it directly.
 
 
-## Migration from 1.1.x to 2.0.0
+## Migration from 1.1.x to 3.0.0
 
 If you did not program custom implementations of Benerator's interfaces 
 or classes, existing projects are supposed to work like before (but faster).
 
 If you programmed a custom distribution by implementing the Distribution 
 **directly** (and did not inherit from a child class), the bad news is that 
-your code will not be compatible with Benerator 2.0.0.
+your code will not be compatible with Benerator 3.0.0.
 
 The good news is that this is easily fixed: Edit the Java code of your 
 custom distribution class and replace the ```ìmplements Distribution```

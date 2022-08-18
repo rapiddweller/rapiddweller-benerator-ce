@@ -13,7 +13,7 @@ import java.util.Set;
  * Parses URIs in Strings.<br/><br/>
  * Created: 10.12.2021 12:21:03
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class UriParser extends AbstractTypedParser<String> {
 

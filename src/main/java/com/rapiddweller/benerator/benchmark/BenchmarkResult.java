@@ -11,7 +11,7 @@ import java.util.Collection;
  * Holds the measurement of all sensors on all execution modes in one benchmark in one environment.<br/><br/>
  * Created: 02.11.2021 07:32:46
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BenchmarkResult {
 

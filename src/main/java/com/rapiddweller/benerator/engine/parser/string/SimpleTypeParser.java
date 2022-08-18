@@ -10,7 +10,7 @@ import com.rapiddweller.script.PrimitiveType;
  * Parses the names of simple types.<br/><br/>
  * Created: 14.12.2021 09:07:33
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SimpleTypeParser extends AbstractTypedParser<String> {
 

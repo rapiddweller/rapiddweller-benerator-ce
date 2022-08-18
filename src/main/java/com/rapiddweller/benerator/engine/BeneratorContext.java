@@ -44,6 +44,8 @@ import com.rapiddweller.script.ScriptContext;
  */
 public interface BeneratorContext extends GeneratorContext, ScriptContext {
 
+  String getVersion();
+
   void setContextUri(String contextUri);
 
   // simple configuration properties ---------------------------------------------------------------------------------

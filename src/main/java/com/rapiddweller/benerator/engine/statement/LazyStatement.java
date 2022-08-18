@@ -37,7 +37,7 @@ import com.rapiddweller.common.Expression;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class LazyStatement extends StatementProxy { // TODO can this be removed?
+public class LazyStatement extends StatementProxy {
 
   private final Expression<Statement> statementExpression;
 

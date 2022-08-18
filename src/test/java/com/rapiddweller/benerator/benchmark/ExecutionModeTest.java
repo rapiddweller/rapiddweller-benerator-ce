@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link ExecutionMode} class.<br/><br/>
  * Created: 02.11.2021 16:15:39
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ExecutionModeTest {
 

@@ -11,7 +11,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
  * {@link AttrInfo} for simple data types.<br/><br/>
  * Created: 14.12.2021 08:54:03
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SimpleTypeAttribute extends AttrInfo<String> {
   public SimpleTypeAttribute(String errorId) {

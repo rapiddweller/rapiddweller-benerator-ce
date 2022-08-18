@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
  * Parses &lt;entity&gt; and &lt;type&gt; elements.<br/><br/>
  * Created: 14.12.2021 06:17:44
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ComplexTypeParser extends AbstractXMLComponentParser {
 

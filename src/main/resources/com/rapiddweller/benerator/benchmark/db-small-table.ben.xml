@@ -1,4 +1,4 @@
-<setup xmlns="https://www.benerator.de/schema/2.1.0">
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
     <import platforms='db'/>
     <database id="db" environment="{environment}" system="{system}"/>
     <execute target="db" onError="ignore">

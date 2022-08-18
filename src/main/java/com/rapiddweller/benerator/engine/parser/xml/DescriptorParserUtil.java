@@ -35,6 +35,7 @@ import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.text.SplitStringConverter;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
@@ -129,7 +130,14 @@ public class DescriptorParserUtil {
   // creating expressions for data retrieval -------------------------------------------------------------------------
 
   public static Expression<String> parseScriptableElementText(Element element, boolean unescape) {
-    Expression<String> result = new StringExpression(new ScriptableExpression(XMLUtil.getText(element), null));
+    String text = XMLUtil.getText(element);
+    if (text != null) {
+      String trimmedText = text.trim();
+      if (ScriptUtil.isScript(trimmedText)) {
+        text = trimmedText;
+      }
+    }
+    Expression<String> result = new StringExpression(new ScriptableExpression(text, null));
     if (unescape) {
       result = new UnescapeExpression(result);
     }

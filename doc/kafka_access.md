@@ -61,6 +61,12 @@ If you need to use another encoding like UTF-16, specify it as `encoding` parame
     format='json' encoding='UTF-16'/>
 ```
 
+### idle.timeout.seconds
+
+By default, a kafka-importer runs forever.
+When using the `idle.timeout.seconds` property, it can be configured to stop 
+automatically after a certain number of seconds without message reception.
+
 ### auto.offset.reset
 
 When connecting to a topic, a client declares which group it belongs to
@@ -154,7 +160,7 @@ Example:
     enable.auto.commit='true' auto.commit.interval.ms='5000'/>
 ```
 
-For a better match with benerator's pageSize approach, you can use this in a Kafka-Importer too, 
+For a better match with Benerator's pageSize approach, you can use this in a Kafka-Importer too, 
 e.g. for committing messages in groups of 10,000:
 
 ```xml
@@ -205,3 +211,13 @@ Shared file benerator.xml:
         ssl.key.password='{ssl_password}'
 />
 ```
+
+## AVRO Support
+
+Since Release 3.0.0, Benerator supports AVRO.  
+In order to use it, set the following attributes of the ```<Kafka-exporter>``` or ```<Kafka-importer>``` element:
+
+* ```format```: Set this to ```AVRO```.
+
+* ```schema.url```: The URL of the AVRO schema file. Attention: The current implementation does not support https. This will be resolved in a future release. Until then, pleas download the schema file, save it in your project folder and make the ```schema.url``` point to the saved file.
+

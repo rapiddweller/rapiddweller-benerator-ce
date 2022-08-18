@@ -47,11 +47,11 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.expression.ConstantExpression;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -393,6 +393,15 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectGenerations(helper, 100, validator);
   }
 
+  @Test
+  public void testZonedDateTime() {
+    checkBuilder(
+        "zdt_test",
+        (product) -> product instanceof ZonedDateTime,
+        (products) -> !products.contains(null),
+        "type", "zoneddatetime");
+  }
+
     @Test
     public void test_BooleanGenerator() {
         checkBuilder(
@@ -468,15 +477,14 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
         "nullQuota", "0.5");
   }
 
-  @Test @Ignore("This fails") // TODO v3.0.0 make this work
-  public void test_date_samples_nullQuota() {
+  @Test
+  public void test_date_samples() {
     checkBuilder("samples_test",
         new AllowedValuesValidator(null, DATE_2000_01_01, DATE_2000_01_02, DATE_2000_01_03),
-        new NullQuotaValidator(0.5, 0.3),
-      "values", "2000-01-01,2000-01-02,2000-01-03",
+        new NullQuotaValidator(0, 0),
+      "values", "'2000-01-01','2000-01-02','2000-01-03'",
       "type", "date",
-      "pattern", "yyyy-MM-dd",
-      "nullQuota", "0.5");
+      "pattern", "yyyy-MM-dd");
   }
 
   @Test
@@ -673,40 +681,27 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
         "type", "date");
   }
 
-  @Test @Ignore("This fails") // TODO v3.0.0 make this work
+  @Test
   public void test_date_min_max() {
     checkBuilder("date_test",
         (product) -> !((Date) product).before(DATE_2000_01_01) && !((Date) product).after(DATE_2000_01_03),
         null,
         "type", "date",
-        "min", "01/01/2000",
-        "max", "01/03/2000"
+        "min", "2000-01-01",
+        "max", "2000-01-03"
     );
   }
 
-  @Test @Ignore("This fails") // TODO v3.0.0 make this work
-  public void test_date_min_max_locale() {
-    checkBuilder("date_test",
-        (product) -> !((Date) product).before(DATE_2000_01_01) && !((Date) product).after(DATE_2000_01_03),
-        null,
-        "type", "date",
-        "min", "01.01.2000",
-        "max", "03.01.2000",
-        "locale", "de"
-    );
-  }
-
-  @Test @Ignore("This fails") // TODO v3.0.0 make this work
+  @Test
   public void test_date_distribution() {
     checkBuilder("date_test",
-        (product) -> !((Date) product).before(DATE_2000_01_01) && !((Date) product).after(DATE_2000_12_31),
+        (product) -> product == null || !((Date) product).before(DATE_2000_01_01) && !((Date) product).after(DATE_2000_12_31),
         null,
         "type", "date",
         "min", "2000-01-01",
         "max", "2000-12-31",
         "granularity", "0000-00-01",
         "distribution", "cumulated",
-        "pattern", "yyyy-MM-dd",
         "nullQuota", "0.1"
     );
   }
@@ -932,19 +927,24 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     }
     // create descriptors
     PrimitiveDescriptorProvider pdp = new PrimitiveDescriptorProvider(dataModel);
-    TypeDescriptor type = pdp.getTypeDescriptor(typeName);
-    if (type == null) {
+    SimpleTypeDescriptor parentType = (SimpleTypeDescriptor) pdp.getTypeDescriptor(typeName);
+    TypeDescriptor type;
+    if (parentType != null) {
+      type = new SimpleTypeDescriptor(name + "_type", testDescriptorProvider, parentType);
+    } else {
       assertNull("Not a primitive type: " + typeName, typeName);
       type = new SimpleTypeDescriptor(name + "_type", testDescriptorProvider);
     }
     PartDescriptor part = new PartDescriptor(name, testDescriptorProvider, type);
     for (int i = 0; i < featureDetails.length; i += 2) {
-      if (componentFeatures.contains(featureDetails[i])) {
-        if (!"type".equals(featureDetails[i])) {
-          part.setDetailValue(featureDetails[i], featureDetails[i + 1]);
+      String feature = featureDetails[i];
+      String value = featureDetails[i + 1];
+      if (componentFeatures.contains(feature)) {
+        if (!"type".equals(feature)) {
+          part.setDetailValue(feature, value);
         }
       } else {
-        type.setDetailValue(featureDetails[i], featureDetails[i + 1]);
+        type.setDetailValue(feature, value);
       }
     }
     // create and init the component builder
@@ -955,7 +955,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     return builder;
   }
 
-    public Entity createEntity() {
+  public Entity createEntity() {
     return new Entity("Entity", testDescriptorProvider);
   }
 

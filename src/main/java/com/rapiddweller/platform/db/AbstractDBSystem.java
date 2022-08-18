@@ -166,7 +166,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
         systemName = "db";
         DeprecationLogger.warn("Observed a <Database> definition with an 'environment', but without 'system' setting. " +
             "If you are using the old definition file format, please upgrade to " +
-            "the new environment definition file format introduced in Benerator 2.1.0 and specify a 'system' name. " +
+            "the new environment definition file format introduced in Benerator 3.0.0 and specify a 'system' name. " +
             "The old format is supported for backwards compatibility, but will be dropped in a future release");
       }
       SystemRef def = context.getEnvironmentSystem(environment, systemName);
@@ -945,7 +945,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       String primitiveTypeName = primitiveType.getName();
       typeToWrite = driverTypeMapper.concreteType(primitiveTypeName);
     }
-    // TODO Version 2.1.0 wrong entity information when table with same name exists in different schema and is part of context.
+    // TODO akell v3.0.0 wrong entity information when table with same name exists in different schema and is part of context.
+    // should work like this: <database id="db" .../>
+    // => <generate type="db:tablename" />
     return new ColumnInfo(name, sqlType, typeToWrite);
   }
 

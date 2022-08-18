@@ -11,7 +11,7 @@ import com.rapiddweller.common.Expression;
  * Parses a bean specification.<br/><br/>
  * Created: 10.12.2021 17:58:57
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BeanSpecParser extends AbstractParser<Expression<?>> {
 

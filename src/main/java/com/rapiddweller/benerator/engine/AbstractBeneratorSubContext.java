@@ -48,7 +48,7 @@ import java.util.concurrent.ExecutorService;
  * @author Volker Bergmann
  * @since 0.8.0
  */
-public abstract class AbstractBeneratorSubContext implements BeneratorSubContext {
+public abstract class AbstractBeneratorSubContext extends AbstractBeneratorContext implements BeneratorSubContext {
 
   protected final BeneratorContext parent;
   protected final String currentProductName;

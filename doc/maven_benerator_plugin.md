@@ -30,7 +30,7 @@ manually. The minimal configuration in Maven's pom.xml would be:
     <plugin>
       <groupId>com.rapiddweller</groupId>
       <artifactId>benerator-maven-plugin</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0</version>
     </plugin>
   </plugins>
 
@@ -72,7 +72,7 @@ configuration, e.g.:
 <plugin>
   <groupId>com.rapiddweller</groupId>
   <artifactId>benerator-maven-plugin</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 
   <configuration>
     <encoding>utf-8</encoding>
@@ -150,7 +150,7 @@ configuration (this requires Maven 2.0.9 or newer):
 
   <groupId>com.rapiddweller</groupId>
   <artifactId>benerator-maven-plugin</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 
   <configuration>
     ...
@@ -204,7 +204,7 @@ configurations on your local development systems. You can then specify them as p
 <plugin>
   <groupId>com.rapiddweller</groupId>
   <artifactId>benerator-maven-plugin</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 
   <configuration>
     <descriptor>src/test/benerator/myproject.ben.xml</descriptor>
@@ -232,7 +232,7 @@ You can also configure the benerator plugin to attach specific goals to a partic
     <plugin>
       <groupId>com.rapiddweller</groupId>
       <artifactId>benerator-maven-plugin</artifactId>
-      <version>2.0.0</version>
+      <version>3.0.0</version>
 
       <executions>
 

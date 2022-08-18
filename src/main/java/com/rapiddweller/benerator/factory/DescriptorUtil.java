@@ -38,7 +38,6 @@ import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.NullSafeComparator;
@@ -64,7 +63,6 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.model.data.VariableHolder;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.common.Expression;
@@ -565,7 +563,7 @@ public class DescriptorUtil {
     Integer maxLength = null;
     SimpleTypeDescriptor tmp = descriptor;
     while (maxLength == null && tmp != null) {
-      maxLength = (Integer) tmp.getDeclaredDetailValue(MAX_LENGTH);
+      maxLength = (Integer) tmp.getDetailValue(MAX_LENGTH);
       tmp = tmp.getParent();
     }
     if (maxLength == null) {

@@ -58,7 +58,7 @@ public class ResultSet2EntityConverter {
     int columnCount = metaData.getColumnCount();
     for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
       String columnName = metaData.getColumnName(columnIndex);
-      String typeName = null;
+      String typeName;
       if (descriptor != null) {
         ComponentDescriptor component = descriptor.getComponent(columnName);
         if (component != null) {
@@ -78,7 +78,7 @@ public class ResultSet2EntityConverter {
     return entity;
   }
 
-  // TODO v1.0 perf: use a dedicated converter for each column
+  // TODO perf: use a dedicated converter for each column
   private static Object javaValue(ResultSet resultSet, int columnIndex,
                                   String primitiveType, DataModel dataModel)
       throws SQLException {

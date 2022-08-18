@@ -10,7 +10,7 @@ import com.rapiddweller.common.Expression;
  * {@link Expression} which resolves to the 'maxCount' value defined in the root &lt;setup&gt; element.<br/><br/>
  * Created: 20.12.2021 00:33:35
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class GlobalMaxCountExpression implements Expression<Long> {
 

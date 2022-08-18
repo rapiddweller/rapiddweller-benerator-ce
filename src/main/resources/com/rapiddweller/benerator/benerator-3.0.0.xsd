@@ -886,13 +886,6 @@
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="map"/>
                     <xs:enumeration value="json"/>
-                    <xs:enumeration value="avro">
-                        <xs:annotation>
-                            <xs:appinfo>
-                                <since>3.0.0</since>
-                            </xs:appinfo>
-                        </xs:annotation>
-                    </xs:enumeration>
                 </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>

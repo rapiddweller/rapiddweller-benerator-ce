@@ -69,8 +69,6 @@ public class ElementToInstanceDesciptorParser {
 
     private static boolean isMetaData(TypeDescriptor localType) {
         return localType.supportsDetail(META_MODEL) &&
-                Optional.ofNullable(localType.getDetailValue(META_MODEL))
-                        .map(e -> (Boolean) e)
-                        .orElse(false);
+                Optional.ofNullable(localType.getDetailValue(META_MODEL)).map(e -> (Boolean) e).orElse(false);
     }
 }

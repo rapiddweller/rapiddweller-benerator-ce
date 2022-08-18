@@ -35,6 +35,7 @@ import com.rapiddweller.benerator.distribution.IndividualWeight;
 import com.rapiddweller.benerator.distribution.sequence.RandomIntegerGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
+import com.rapiddweller.benerator.primitive.datetime.ZonedDateTimeGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
 import com.rapiddweller.benerator.wrapper.AccessingGenerator;
@@ -72,6 +73,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Locale;
 
@@ -325,7 +327,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 
   private static Generator<?> createSimpleTypeXLSSourceGenerator(
       SimpleTypeDescriptor descriptor, String sourceName, Uniqueness uniqueness, BeneratorContext context) {
-    // TODO define common mechanism for file sources CSV, XLS, ... and entity, array, simple type
     Generator<?> generator;
     Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
     String sourceUri = context.resolveRelativeUri(sourceName);
@@ -399,6 +400,8 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       return createTimeGenerator(descriptor, uniqueness, context);
     } else if (Timestamp.class == targetType) {
       return createTimestampGenerator(descriptor, uniqueness, context);
+    } else if (ZonedDateTime.class == targetType) {
+      return createZonedDateTimeGenerator(descriptor, uniqueness, context);
     } else if (byte[].class == targetType) {
       return createByteArrayGenerator(descriptor, context);
     } else {
@@ -451,7 +454,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private Time parseTime(SimpleTypeDescriptor descriptor, String detailName, Time defaultTime) {
-    String detail = (String) descriptor.getDeclaredDetailValue(detailName);
+    String detail = (String) descriptor.getDetailValue(detailName);
     try {
       if (detail != null) {
         DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
@@ -463,6 +466,10 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       logger.error("Error parsing date " + detail, e);
       return defaultTime;
     }
+  }
+
+  private Generator<ZonedDateTime> createZonedDateTimeGenerator(SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    return new ZonedDateTimeGenerator();
   }
 
   private static Generator<Character> createCharacterGenerator(
@@ -477,7 +484,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private Date parseDate(SimpleTypeDescriptor descriptor, String detailName, Date defaultDate) {
-    String detail = (String) descriptor.getDeclaredDetailValue(detailName);
+    String detail = (String) descriptor.getDetailValue(detailName);
     try {
       if (detail != null) {
         DateFormat dateFormat = DescriptorUtil.getPatternAsDateFormat(descriptor);
@@ -492,7 +499,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private static long parseDateGranularity(SimpleTypeDescriptor descriptor) {
-    String detail = (String) descriptor.getDeclaredDetailValue(DescriptorConstants.ATT_GRANULARITY);
+    String detail = (String) descriptor.getDetailValue(DescriptorConstants.ATT_GRANULARITY);
     if (detail != null) {
       return DateString2DurationConverter.defaultInstance().convert(detail);
     } else {

@@ -10,7 +10,7 @@ import java.text.ParseException;
  * Tests the &lt;defaultComopnents&gt; element.<br/><br/>
  * Created: 13.12.2021 10:55:31
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class StandardDefaultComponentIntegrationTest extends AbstractDefaultComponentIntegrationTest {
 

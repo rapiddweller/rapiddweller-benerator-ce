@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link Entity} class.<br/><br/>
  * Created: 28.09.2021 13:17:20
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class EntityTest {
 

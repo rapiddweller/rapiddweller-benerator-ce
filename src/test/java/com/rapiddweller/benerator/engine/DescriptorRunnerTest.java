@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class DescriptorRunnerTest extends ModelTest {
   private static final String EXPORT_FILE_URI = "test-uri.txt";
 
   @Test
-  public void testProgrammaticInvocation() throws IOException {
+  public void testProgrammaticInvocation() {
     DefaultBeneratorContext context = new DefaultBeneratorContext();
     DescriptorRunner runner = new DescriptorRunner(
         "string://<setup>" +
@@ -73,27 +74,6 @@ public class DescriptorRunnerTest extends ModelTest {
       IOUtil.close(runner);
     }
   }
-
-  /* TODO fix or remove generatedFiles()
-  @Test
-  public void testGetGeneratedFiles_csv() throws IOException {
-    DescriptorRunner runner = new DescriptorRunner("string://<setup>" +
-        "  <import platforms='csv'/>" +
-        "  <generate type='data' count='10' consumer='CSVEntityExporter'>" +
-        "    <attribute name='x' constant='123'/>" +
-        "  </generate>" +
-        "</setup>", new DefaultBeneratorContext());
-    try {
-      runner.run();
-      List<String> generatedFiles = runner.getGeneratedFiles();
-      assertEquals(1, generatedFiles.size());
-      assertEquals(EXPORT_FILE_URI, generatedFiles.get(0));
-    } finally {
-      IOUtil.close(runner);
-      FileUtil.deleteIfExists(new File(EXPORT_FILE_URI));
-    }
-  }
-  */
 
   static class TestExporter implements FileExporter {
 

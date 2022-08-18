@@ -17,7 +17,7 @@ import java.util.List;
  * Holds the results of a Benchmark set execution.<br/><br/>
  * Created: 02.11.2021 09:13:06
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BenchmarkToolReport {
 

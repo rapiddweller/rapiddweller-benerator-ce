@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  * and {@link BeneratorRootStatement}.<br/><br/>
  * Created: 17.12.2021 11:12:00
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SetupIntegrationTest extends AbstractBeneratorIntegrationTest {
 

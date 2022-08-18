@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
  * Parses the name of an encoding.<br/><br/>
  * Created: 19.12.2021 23:02:47
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PlainEncodingParser extends AbstractTypedParser<String> {
 

@@ -45,8 +45,8 @@ Entities can have
 
 Benerator abstracts simple types too. These are the predefined simple types:
 
-| Benerator type | JDBC type name | JDBC type code | Java type |
-| --- | --- | --- | --- |
+| Benerator type | JDBC type name | JDBC type code | Java type | Comment
+| --- | --- | --- | --- | --- |
 | byte | Types.BIT | -7 | java.lang.Byte |
 | byte | Types.TINYINT | -6 | java.lang.Byte |
 | short | Types.SMALLINT | 5 | java.lang.Short |
@@ -57,20 +57,21 @@ Benerator abstracts simple types too. These are the predefined simple types:
 | double | Types.NUMERIC | 2 | java.lang.Double |
 | double | Types.REAL | 7 | java.lang.Double |
 | big_decimal | Types.DECIMAL | 3 | java.math.BigDecimal |
-| boolean | Types.BOOLEAN | 16 | java.lang.Boolean |
+| boolean | Types.BOOLEAN | 16 | java.lang.Boolean | true or false |
 | char | Types.CHAR | 1 | java.lang.Character |
-| date | Types.DATE | 91 | java.lang.Date |
-| date | Types.TIME | 92 | java.lang.Date |
-| timestamp | Types.TIMESTAMP | 93 | java.lang.Timestamp |
+| date | Types.DATE | 91 | java.lang.Date | Date without time zone |
+| date | Types.TIME | 92 | java.lang.Date | Time without time zone |
+| timestamp | Types.TIMESTAMP | 93 | java.lang.Timestamp | Date and time without time zone |
+| zoneddatetime | Types.TIMESTAMP_WITH_TIMEZONE | 2013 | java.time.ZonedDateTime | Date and time with time zone |
 | string | Types.VARCHAR | 12 | java.lang.String |
 | string | Types.LONGVARCHAR | -1 | java.lang.String |
 | string | Types.CLOB | 2005 | java.lang.String |
 | object | Types.JAVA_OBJECT | 2000 | java.lang.Object |
 | binary | Types.BINARY | -2 | byte[] |
-| binary | Types.VARBINARY | -3 | byte[] |
-| binary | Types.VARBINARY | -4 | byte[] |
-| binary | Types.BLOB | 2004 | byte[] |
-| (heuristic) | Types.OTHER | 1111 | (heuristic) |
+| binary | Types.VARBINARY | -3 | byte[] | 
+| binary | Types.LONGVARBINARY | -4 | byte[] | 
+| binary | Types.BLOB | 2004 | byte[] | 
+| (heuristic) | Types.OTHER | 1111 | (heuristic) | 
 
 Oracle's `NCHAR`, `NVARCHAR2` and `NCLOB` types are treated as strings.
 

@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  * Integration test for &gt;iterate&gt;.<br/><br/>
  * Created: 09.12.2021 19:25:30
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class IterateIntegrationTest extends AbstractBeneratorIntegrationTest {
 

@@ -19,7 +19,7 @@ import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
  * Holds the configuration of a Benchmark run as specified via commend line arguments.<br/><br/>
  * Created: 21.10.2021 16:55:29
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BenchmarkToolConfig extends CommandLineConfig {
 

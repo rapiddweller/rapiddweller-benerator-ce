@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
  * Verifies that Slf4j is properly configured to call Log4j 2.<br/><br/>
  * Created: 07.10.2021 19:02:05
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class Slf4jLog4jIntegrationTest {
 

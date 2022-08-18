@@ -111,6 +111,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       assertEquals(2, db.invalidationCount());
     } finally {
       db.execute("drop table epast_test");
+      db.execute("drop table BBB");
       db.close();
     }
   }
@@ -131,12 +132,13 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       statement2.execute(context);
       assertEquals(2, db.invalidationCount());
     } finally {
+      db.execute("drop table AAA");
       db.execute("drop table epast_test");
       db.close();
     }
   }
 
-  @Test //TODO execute with ftl curly bracket fix faulty parsing behavior
+  @Test
   public void testDbwithFTLandNewLine() {
     String url = HSQLUtil.getInMemoryURL("benerator");
     AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
@@ -152,6 +154,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       statement2.execute(context);
       assertEquals(2, db.invalidationCount());
     } finally {
+      db.execute("drop table AAA");
       db.execute("drop table epast_test");
       db.close();
     }

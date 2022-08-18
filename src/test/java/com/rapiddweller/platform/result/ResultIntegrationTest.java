@@ -15,7 +15,7 @@ import java.io.File;
  * Tests the {@link Result} class.<br/><br/>
  * Created: 13.12.2021 16:20:18
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ResultIntegrationTest extends AbstractBeneratorIntegrationTest {
 

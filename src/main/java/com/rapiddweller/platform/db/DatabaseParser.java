@@ -223,7 +223,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
           new String[] { ATT_ENVIRONMENT, ATT_SYSTEM },
           new String[] { ATT_URL, ATT_DRIVER });
       assertGroupComplete(BeneratorErrorIds.SYN_DB_URL_GROUP_INCOMPLETE, element, ATT_URL, ATT_DRIVER);
-      // TODO For backwards compatibility, it is allowed to leave out ATT_SYSTEM.
+      // For backwards compatibility, it is allowed to leave out ATT_SYSTEM.
       // When dropping that, then enable the following check
       // assertGroupComplete(element, BeneratorErrorIds.SYN_DB_ENV_GROUP_INCOMPLETE, ATT_ENVIRONMENT, ATT_SYSTEM)
       if (SYSTEM.parse(element) != null && ENVIRONMENT.parse(element) == null) {

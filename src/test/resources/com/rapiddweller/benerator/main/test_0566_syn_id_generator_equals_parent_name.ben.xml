@@ -1,4 +1,4 @@
-<setup defaultDataset="US" defaultLocale="en" xmlns="https://www.benerator.de/schema/2.1.0">
+<setup defaultDataset="US" defaultLocale="en" xmlns="https://www.benerator.de/schema/3.0.0">
     <generate name="UUIDGenerator" type="data" count="1">
         <id name="x" generator="UUIDGenerator"/>
     </generate>

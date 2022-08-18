@@ -11,7 +11,7 @@ import com.rapiddweller.common.parser.TypedParser;
  * Parses a list of elements.<br/><br/>
  * Created: 10.12.2021 12:54:30
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ListParser<E> extends AbstractParser<E[]> {
 

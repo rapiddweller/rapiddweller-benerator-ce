@@ -34,7 +34,9 @@ The person domain has three major components:
 
 * BirthDateGenerator: Generates birth dates
 
-* GenderGenerator: Generates Gender values
+* GenderGenerator: Generates Gender values. 
+  The generated gender can be one of the values `MALE`, `FEMALE` and `DIVERSE`.
+  The generator is configured with the properties `femaleQuota`and `diverseQuota`.
 
 * EmailAddressGenerator: Generates Email addresses
 
@@ -141,7 +143,8 @@ free to contact us for assistance: **[team@rapiddweller.com](mailto:team@rapiddw
 
 ## Address domain
 
-* **AddressGenerator**: Generates addresses that match simple validity checks: The City exists, the ZIP code matches and the phone number area codes
+* **AddressGenerator**: Generates addresses that match simple validity checks: 
+  The City exists, the ZIP code matches and the phone number area codes
   are right. The street names are random, so most addresses will not stand validation of real existence.
 
 * **PhoneNumberGenerator**: Generates landline telephone numbers for a country
@@ -171,6 +174,25 @@ The following countries are supported:
 | Germany        |  DE  | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
 | Switzerland    |  CH  | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
 | Brazil         |  BR  | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
+
+The generated Address objects have the following data fields:
+
+* **street**: The regular street address
+
+* **street2**: Additions to the street address, like c/o or postbox
+
+* **postalCode**: the postal code
+
+* **city**: A reference to a City object, which can be navigated and queried by a script expression, for example `{address.city.name}`
+
+* **state**: A reference to a State object, which can be navigated and queried by a script expression, for example `{address.state.name}`
+
+* **country**: A reference to a Country object, which can be navigated and queried by a script expression, for example `{address.country.name}`
+
+* **privatePhone**, **officePhone**, **mobilePhone** and **fax**: References to PhoneNumber objects, which can be navigated and queried by a script expression
+
+* **companyName** and **department**: Names of a company and a department.
+
 
 ## net domain
 

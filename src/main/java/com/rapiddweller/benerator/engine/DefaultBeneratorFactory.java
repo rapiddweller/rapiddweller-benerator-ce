@@ -248,6 +248,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
     context.importPackage("com.rapiddweller.benerator.distribution.function");
     context.importPackage("com.rapiddweller.benerator.distribution.cumulative");
     context.importPackage("com.rapiddweller.benerator.sample");
+    context.importPackage("com.rapiddweller.benerator.file");
     // import ConsoleExporter and LoggingConsumer
     context.importPackage("com.rapiddweller.model.consumer");
     // import format, converters and validators from common

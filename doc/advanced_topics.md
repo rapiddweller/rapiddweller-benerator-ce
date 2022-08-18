@@ -280,6 +280,8 @@ As an example, here is a query which only returns products whose name starts wit
 <variable name="product" source="store" type="product" selector="_candidate.name.startsWith('A')"/>
 ```
 
+TODO akell: Explain new features
+
 ## Datasets
 
 You can define datasets and combine them with supersets. This mechanism lets you also define parallel and overlapping hierarchies of nested datasets.
@@ -516,36 +518,41 @@ the total number of execution over all threads is the page size. For this, The e
 ## Staging
 
 Combining scripting and property files, you get a staging mechanism. A typical example would be to use different setups for developing data generation
-on a local system and using it to produce mass data on a test environment. The basic approach is to extract variable properties to properties files,
-e.g. development.properties:
+on a local system and using it to produce mass data on a test environment. 
+For the definition of system access in different stages, Benerator provides the mechanism of environment files.
+For a detailed explanation about them, see the chapter '[Environment Files](environment_files.md)')
+
+For the definition of individual settings which shall depend on the environment, 
+you can set up a simple staging mechanism using properties files. 
+As an example, the setup of a development system may be defined in a file development.properties:
 
 ```properties
 user_count=100
-db_batch=false
-pageSize=1
-db_uri=jdbc:oracle:thin:@10.37.129.4:1521:XE
-db_driver=oracle.jdbc.driver.OracleDriver
-db_user={user.name}
-db_password={user.name}
-db_schema={user.name}
+encrypted=false
 ```
 
-and `perftest.properties`:
+and the settings for a performance test in a file  `perftest.properties`:
 
 ```properties
 user_count=1000000
-db_batch=true
-pageSize=1000
-db_uri=jdbc:oracle:thin:@134.53.26.183:1521:MYAPP
-db_driver=oracle.jdbc.driver.OracleDriver
-db_user=myapp
-db_password=myapp
-db_schema=myapp
+encrypted=true
 ```
 
-You can then decide which configuration to use by setting a stage setting as Java virtual machine parameter, e.g. write
+You can then decide which configuration to use by setting a stage setting 
+as Java virtual machine parameter, e.g. use the system shell and call
 
-`<mvn benerator:generate -Dstage=development/>`
+```mvn benerator:generate -Dstage=development```
+
+In your data generation setup, you can evaluate the 'stage' setting and import the related file using
+
+```<include uri="{ftl:${stage}.properties}"/>```
+
+as well as system access configurations defined in files `development.env.properties` 
+and `perftest.env.properties`, for example for a database, using  
+
+```xml
+<database id="db" environment="{stage}" system="crdb"/>
+```
 
 ## Template data structures
 

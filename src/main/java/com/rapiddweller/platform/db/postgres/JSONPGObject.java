@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * Helper class for writing JSON strings to Postgres.<br/><br/>
  * Created: 09.11.2021 19:33:42
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class JSONPGObject extends PGobject {
 

@@ -10,7 +10,7 @@ import org.w3c.dom.Element;
  * Asserts that an XML has no text content.<br/><br/>
  * Created: 13.12.2021 06:49:42
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class NoContentValidator implements Validator<Element> {
 

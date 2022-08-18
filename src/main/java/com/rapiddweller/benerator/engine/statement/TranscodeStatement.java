@@ -260,7 +260,6 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
   //            handleNonEquivalence(message, source.getId(), sourceEntity);
   //          }
   //        }
-  //        // TODO store in target if there is a rule one day
   //        mapper.store(source, this, nk, sourceId, targetId);
   //      }
   //    } finally {
