@@ -12,12 +12,48 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=security_rating)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://search.maven.org/artifact/com.rapiddweller/rapiddweller-benerator-ce)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=alert_status)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
+![GitHub stars](https://img.shields.io/github/stars/rapiddweller/rapiddweller-benerator-ce?style=social)
 
 # rapiddweller-benerator-ce
 
 [rapiddweller Benerator](https://www.benerator.de) is a software solution to
 generate, obfuscate (anonymize / pseudonymize) and migrate data for development,
 testing and training purposes.
+
+## Introduction
+
+[rapiddweller Benerator](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (unit/integration/load) and showcase setup.
+
+The core goals of Benerator are
+
+* Generation of data that satisfies complex data validity requirements  
+* Anonymization of production data for showcases and serious performance testing projects  
+* Efficient generation of large data volumes, scaling up to companies with billions of customers and Big Data projects  
+* Early applicability in projects  
+* Little maintenance effort with ongoing implementation through configuration by exception  
+* Wide and easy customizability  
+* Applicability by non-developers  
+* Intuitive data definition format  
+* Satisfying stochastic requirements on data  
+* Extraction and anonymization of production data  
+* Supporting distributed and heterogeneous applications  
+* Establishing a common data generation platform for different business domains and software systems  
+
+### Data Synthesization  
+Performance test data can be completely synthesized. A basic setup can be imported e.g. from DbUnit files, CSV files and fixed column width files. A descriptor file configures how imported data should be processed and adds completely synthesized data. The processed or generated data finally is stored in the system under test.
+![Data Synthesization](https://github.com/rapiddweller/rapiddweller-benerator-ce/blob/development/doc/assets/grafik1.png)
+
+### Production Data Anonymization  
+Production data can be easily extracted from production systems. Tables can be imported unmodified, filtered, anonymized and converted.
+![Production Data Anonymization](https://github.com/rapiddweller/rapiddweller-benerator-ce/blob/development/doc/assets/grafik2.png)
+
+### Building Blocks  
+Benerator is developed and continuously extended and improved since June 2006. Benerator is mainly used and tested best for the data file and database data generation, for these applications Benerator should help you with almost all your data generation needs out of the box - and extending Benerator for specific needs is easy.
+![Building Blocks](https://github.com/rapiddweller/rapiddweller-benerator-ce/blob/development/doc/assets/grafik3.png)
+
+rapiddweller Benerator is built for Java 11
+
+*If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.*
 
 ## Quickstart ( use benerator version from releases )
 
@@ -83,18 +119,6 @@ Williams,Lily,15.02.1957,false,Mrs.,,info@Daniel-Taylor.de
 Wilson,Chloe,07.10.1987,true,Mrs.,,info@Deltar.de
 Thompson,Jack,06.09.1984,true,Mr.,,info@TechNet.de
 ```
-
-## Introduction
-
-[rapiddweller Benerator](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (unit/integration/load) and showcase setup.
-
-Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, obfuscated, or
-generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
-language and region. It is strongly customizable with plugins and configuration options.
-
-rapiddweller Benerator is built for Java 11
-
-*If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.*
 
 ## Prerequisites
 
