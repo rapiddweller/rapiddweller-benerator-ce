@@ -6,6 +6,28 @@
     project_dir: "{{lookup('env','PWD')}}"
     network: rddnet
     supported_services:
+      minio:
+        name: minio_local
+        docker_image: "minio/minio"
+        network: "{{ network }}"
+        command: 'server --console-address ":9001" /data'
+        env: {
+          MINIO_ACCESS_KEY: "benadmin",
+          MINIO_SECRET_KEY: "rdadm123!",
+          MINIO_COMPRESS: "true",
+          MINIO_COMPRESS_EXTENSIONS: ".csv,.xml"
+        }
+        entrypoint: >
+          /bin/sh -c "
+          /usr/bin/mc config host add minio_local http://minio:9000 benadmin rdadm123!;
+          /usr/bin/mc mb minio_local/demo;
+          /usr/bin/mc mb minio_local/project;
+          /usr/bin/mc mb minio_local/snapshot;
+          exit 0;
+          "
+        published_ports:
+          - "39000:9000"
+          - "39001:9001"
       mongodb:
         name: mongodb_local
         docker_image: aashreys/mongo-auth:latest
@@ -66,14 +88,17 @@
         published_ports:
           - "31521:1521"
       db2:
+        # db: testdb, user db2inst1 pw: benerator
         name: db2_local
         docker_image: ibmcom/db2
         network: "{{ network }}"
+        privileged: true
+        volumes:
+          - /home/akell/Documents/docker/db2/database:/database
         env: {
           LICENSE: 'accept',
-          DB2INSTANCE: benerator,
           DB2INST1_PASSWORD: benerator,
-          DBNAME: benerator,
+          DBNAME: testdb,
           SAMPLEDB: 'true',
         }
         published_ports:
@@ -90,18 +115,6 @@
         }
         published_ports:
           - "33050:3050"
-      hsqldb:
-        name: hsqldb_local
-        docker_image: blacklabelops/hsqldb
-        network: "{{ network }}"
-        env: {
-          HSQLDB_USER: 'benerator',
-          HSQLDB_PASSWORD: 'benerator',
-          HSQLDB_DATABASE_NAME: 'benerator',
-          HSQLDB_DATABASE_ALIAS: 'benerator'
-        }
-        published_ports:
-          - "39001:9001"
 
 
   tasks:
@@ -140,6 +153,8 @@
     - name: Create default containers
       docker_container:
         name: "{{ item.value.name }}"
+        privileged: "{{ item.value.privileged | default(omit)}}"
+        command: "{{ item.value.command | default(omit)}}"
         image: "{{ item.value.docker_image }}"
         networks:
           - name: "{{ network }}"
