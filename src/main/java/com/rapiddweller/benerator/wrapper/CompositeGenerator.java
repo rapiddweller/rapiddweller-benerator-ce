@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.ThreadAware;
@@ -57,6 +58,12 @@ public abstract class CompositeGenerator<E> extends AbstractGenerator<E> {
 
 
   // component registration ------------------------------------------------------------------------------------------
+
+  protected <T extends Generator<U>, U> T registerAndInitComponent(T component, GeneratorContext context) {
+    registerComponent(component);
+    component.init(context);
+    return component;
+  }
 
   protected <T extends Generator<U>, U> T registerComponent(T component) {
     components.add(component);

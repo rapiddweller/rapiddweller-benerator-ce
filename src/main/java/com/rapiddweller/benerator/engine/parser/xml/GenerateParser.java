@@ -15,7 +15,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  * Parses a &lt;generate&gt; element in a Benerator XML file.<br/><br/>
  * Created: 29.11.2021 15:41:49
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class GenerateParser extends AbstractGenIterParser {
 

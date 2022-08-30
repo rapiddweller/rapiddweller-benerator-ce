@@ -12,12 +12,12 @@ import java.util.Objects;
  * Holds the core data of a benchmark definition.<br/><br/>
  * Created: 02.11.2021 07:32:01
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class Benchmark {
 
   private static final String V200 = "2.0.0";
-  private static final String V210 = "2.1.0";
+  private static final String V210 = "3.0.0";
 
   static final Benchmark[] INSTANCES = {
       new Benchmark("gen-string", false, V200, 10000, "Generation of big entities with random strings"),

@@ -14,7 +14,7 @@ import java.util.List;
  * Tests the {@link SimpleTypeDescriptor} with XML setup files.<br/><br/>
  * Created: 30.09.2021 20:55:04
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SimpleTypeDescriptorIntegrationTest extends AbstractBeneratorIntegrationTest {
 

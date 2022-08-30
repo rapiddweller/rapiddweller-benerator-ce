@@ -22,7 +22,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_EXECUTE;
  * Parses an &lt;execute&gt; directive.<br/><br/>
  * Created: 29.11.2021 13:59:43
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ExecuteParser extends AbstractEvaluateOrExecuteParser {
 

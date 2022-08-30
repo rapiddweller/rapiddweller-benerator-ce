@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link PartModifier}.<br/><br/>
  * Created: 29.09.2021 19:11:56
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PartModifierTest {
 

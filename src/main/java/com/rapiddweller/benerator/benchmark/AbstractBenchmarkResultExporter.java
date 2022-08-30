@@ -11,7 +11,7 @@ import com.rapiddweller.common.HF;
  * Abstract parent class to use for {@link BenchmarkResultExporter} implementations.<br/><br/>
  * Created: 16.11.2021 10:43:36
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public abstract class AbstractBenchmarkResultExporter implements BenchmarkResultExporter {
 

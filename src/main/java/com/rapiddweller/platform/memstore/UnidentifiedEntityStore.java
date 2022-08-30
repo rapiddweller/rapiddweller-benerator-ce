@@ -14,7 +14,7 @@ import java.util.Map;
  * {@link EntityStore} for entity types without id.<br/><br/>
  * Created: 22.11.2021 15:00:22
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class UnidentifiedEntityStore extends EntityStore {
 

@@ -59,7 +59,7 @@ import static com.rapiddweller.common.xml.XMLAssert.mutuallyExcludeAttributes;
  * Parses &lt;attribute&gt; elements.<br/><br/>
  * Created: 14.12.2021 05:07:20
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class AttributeParser extends AbstractComponentParser {
 

@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link BeneratorErrorIds} returned from Benerator runs in different scenarios.<br/><br/>
  * Created: 18.11.2021 17:25:52
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BeneratorErrorIdIntegrationTest {
 
@@ -99,33 +99,6 @@ public class BeneratorErrorIdIntegrationTest {
       ConverterManager.getInstance().reset();
     }
   }
-
-  /*
-  @Test
-  public void test_init_2_Delocalizing_failed() {
-    // TODO implement test
-  }
-
-  @Test
-  public void test_init_3_ScriptUtil_failed() {
-    // TODO implement test
-  }
-
-  @Test
-  public void test_init_4_DatabaseManager_failed() {
-    // TODO implement test
-  }
-
-  @Test
-  public void test_init_5_Country_failed() {
-    // TODO implement test
-  }
-
-  @Test
-  public void test_init_6_BeneratorMonitor_failed() {
-    // TODO implement test
-  }
-*/
 
   // Benerator file syntax errors ------------------------------------------------------------------------------------
 
@@ -881,11 +854,6 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
-  public void test_0556_syn_attr_ill_scope() {
-    // TODO implement
-  }
-
-  @Test
   public void test_0557_syn_attr_ill_offset() {
     BeneratorResult result = runFile("test_0557_syn_attr_ill_offset.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_OFFSET,
@@ -914,11 +882,6 @@ public class BeneratorErrorIdIntegrationTest {
     assertResult(BeneratorErrorIds.SYN_ATTR_UNIQUE,
         "Illegal attribute value for attribute.unique: 'none'. " +
             "Use 'true' or 'false. File test_0560_syn_attr_ill_unique.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
-  }
-
-  @Test
-  public void test_0561_syn_attr_ill_uniqueKey() {
-    // TODO implement
   }
 
   @Test
@@ -1470,7 +1433,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_1003_syn_db_ill_env() {
     BeneratorResult result = runFile("test_1003_syn_db_ill_env.ben.xml");
     assertResult(BeneratorErrorIds.SYN_DB_ENVIRONMENT,
-        "Illegal attribute value for database.environment: '!§$%/'. " +
+        "Illegal attribute value for database.environment: '!$%/'. " +
             "File test_1003_syn_db_ill_env.ben.xml, line 3",
         ExitCodes.SYNTAX_ERROR, result);
   }
@@ -1479,7 +1442,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_1004_syn_db_ill_system() {
     BeneratorResult result = runFile("test_1004_syn_db_ill_system.ben.xml");
     assertResult(BeneratorErrorIds.SYN_DB_SYSTEM,
-        "Illegal attribute value for database.system: '!§$%/'. " +
+        "Illegal attribute value for database.system: '!$%/'. " +
             "File test_1004_syn_db_ill_system.ben.xml, line 3",
         ExitCodes.SYNTAX_ERROR, result);
   }

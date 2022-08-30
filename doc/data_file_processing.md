@@ -36,6 +36,14 @@ need to configure the CSV import component (CSVEntitySource) explicitly with a `
 
 For CSV files without a header, you need to specify a comma-separated list of column names in the 'columns' property.
 
+If an XLS file contains script expressions, the default behavior is to provide them to Benerator 'as is',
+as a plain text. If script expressions shall be resolved, the `sourceScripted` attribute of the
+`<iterate>` element must be set to `true`:
+
+```xml
+<iterate type="product" source="in" sourceScripted="true" consumer="ConsoleExporter"/>
+```
+
 ### Creating CSV files
 
 For creating a CSV file you must always take the same approach as above: Defining a bean with its properties and
@@ -68,6 +76,15 @@ that its data capacity is limited to 65,535 rows.
 ```xml
 <iterate type="product" source="products.xls" consumer="ConsoleExporter"/>
 ```
+
+If an XLS file contains script expressions, the default behavior is to provide them to Benerator 'as is',
+as a plain text. If script expressions shall be resolved, the `sourceScripted` attribute of the 
+`<iterate>` element must be set to `true`:
+
+```xml
+<iterate type="product" source="products.xls" sourceScripted="true" consumer="ConsoleExporter"/>
+```
+
 
 
 ### Creating Excel&#8482; Files

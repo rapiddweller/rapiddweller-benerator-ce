@@ -2,8 +2,8 @@
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="https://www.benerator.de/schema/2.1.0"
-       xsi:schemaLocation="https://www.benerator.de/schema/2.1.0 https://www.benerator.de/schema/benerator-2.1.0.xsd">
+       xmlns="https://www.benerator.de/schema/3.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd">
 
     <!-- read comma-sparated csv and output to semicolon separated csv -->
     <iterate type="db_product" source="demo/file/products.import.csv" encoding="utf-8">

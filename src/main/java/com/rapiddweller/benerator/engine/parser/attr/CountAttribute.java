@@ -16,7 +16,7 @@ import static com.rapiddweller.common.StringUtil.isEmpty;
  * {@link AttrInfo} for 'count' attributes.<br/><br/>
  * Created: 19.12.2021 20:48:04
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class CountAttribute extends AttrInfo<Expression<Long>> {
 

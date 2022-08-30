@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<setup defaultDataset="US" defaultLocale="en" defaultPageSize="100" defaultSeparator="|">
+
+    <!-- define a database that will be referred by the id 'db' later -->
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC"
+              tableFilter="db_.*"/>
+
+    <memstore id="mem"/>
+    <execute type="js">
+        function getQuery1(id) {
+        const Entity2MapConverter = Java.type('com.rapiddweller.platform.map.Entity2MapConverter')
+
+        // mem = memstore id
+        const q = Entity2MapConverter.convertEntity(mem.getEntities("querylist")[1]).get("query")
+        const query = eval(q)
+        print('getQuery1 : ', query);
+        return query;
+        }
+
+        function getQuery2(index) {
+        const Entity2MapConverter = Java.type('com.rapiddweller.platform.map.Entity2MapConverter')
+
+        // mem = memstore id
+        const id = 1;
+        const q = Entity2MapConverter.convertEntity(mem.getEntities("querylist")[index]).get("query")
+        const query = eval(q)
+        print('getQuery2 : ', query);
+        return query;
+        }
+
+    </execute>
+
+    <execute target="db" onError="warn">
+        DROP TABLE IF EXISTS "playlist";
+        DROP TABLE IF EXISTS TRACK;
+        DROP TABLE IF EXISTS PLAYLIST_TRACK;
+    </execute>
+
+    <execute target="db">
+        CREATE TABLE "playlist" (
+        PLAYLIST_ID int NOT NULL,
+        name varchar(16) NOT NULL,
+        PRIMARY KEY (PLAYLIST_ID)
+        );
+
+        CREATE TABLE TRACK (
+        TRACK_ID int NOT NULL,
+        name varchar(16) NOT NULL,
+        PRIMARY KEY (TRACK_ID)
+        );
+
+        CREATE TABLE PLAYLIST_TRACK (
+        PLAYLIST_ID int NOT NULL,
+        TRACK_ID int NOT NULL,
+        name varchar(16) NOT NULL,
+        unique (PLAYLIST_ID, TRACK_ID)
+        );
+    </execute>
+
+    <generate type="playlist" threads="1" count="500" pageSize="20" consumer="db">
+        <id name="PLAYLIST_ID" type="int" generator="IncrementGenerator"/>
+    </generate>
+
+    <generate type="TRACK" threads="1" count="500" pageSize="20" consumer="db">
+        <id name="TRACK_ID" type="int" generator="IncrementGenerator"/>
+    </generate>
+
+    <generate type="PLAYLIST_TRACK" threads="1" count="500" pageSize="1" consumer="db">
+        <reference name="PLAYLIST_ID" type="int" source="db" targetType="playlist" unique="true"/>
+        <reference name="TRACK_ID" type="int" source="db" targetType="TRACK" unique="true"/>
+    </generate>
+
+    <echo>Printing generated data</echo>
+    <iterate type="querylist" source="sql.ent.csv" consumer="mem"/>
+    <iterate type="playlist" source="db" consumer="NoConsumer"/>
+    <iterate type="TRACK" source="db" consumer="NoConsumer"/>
+    <iterate type="PLAYLIST_TRACK" source="db" consumer="NoConsumer"/>
+
+    <generate type="query_TRACK_ID" count="20" threads="1" consumer="ConsoleExporter">
+        <variable name="count" generator="IncrementGenerator"/>
+        <attribute name="PLAYLIST_TRACK" source="db" subSelector="{{js:getQuery1(count)}}"/>
+    </generate>
+
+    <generate type="query_TRACK_ID" count="5" threads="1" consumer="ConsoleExporter">
+        <attribute name="PLAYLIST_TRACK" source="db" selector="{js:getQuery2(1)}" cyclic="true"/>
+    </generate>
+
+</setup>

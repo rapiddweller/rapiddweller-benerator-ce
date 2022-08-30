@@ -9,7 +9,7 @@ import com.rapiddweller.model.data.DescriptorProvider;
  * Benerator CE implementation of the XMLModuke interface.<br/><br/>
  * Created: 04.10.2021 07:58:52
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class DefaultXMLModule implements XMLModule {
 

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the {@link EncodingAttribute}.<br/><br/>
  * Created: 19.12.2021 23:00:24
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class EncodingAttributeTest {
 

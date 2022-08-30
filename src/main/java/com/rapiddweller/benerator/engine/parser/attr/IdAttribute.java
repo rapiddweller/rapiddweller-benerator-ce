@@ -11,7 +11,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
  * {@link AttrInfo} implementation for 'id' attributes.<br/><br/>
  * Created: 12.12.2021 07:16:57
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class IdAttribute extends AttrInfo<String> {
 

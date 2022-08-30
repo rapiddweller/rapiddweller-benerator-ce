@@ -69,7 +69,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALUES;
  * Parses &lt;reference&gt; elements.<br/><br/>
  * Created: 14.12.2021 05:50:43
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ReferenceParser extends AbstractComponentParser {
 

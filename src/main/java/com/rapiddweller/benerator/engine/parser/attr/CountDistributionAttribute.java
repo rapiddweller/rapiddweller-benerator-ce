@@ -13,7 +13,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_COUNT_DI
  * {@link AttrInfo} for a count distribution.<br/><br/>
  * Created: 19.12.2021 21:27:13
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class CountDistributionAttribute extends AttrInfo<Expression<String>> {
   public CountDistributionAttribute(String errorId) {

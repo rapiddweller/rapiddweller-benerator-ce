@@ -121,7 +121,7 @@
     </xs:element>
 
 
-    <xs:element name="setting"> <!-- TODO unify with property -->
+    <xs:element name="setting">
         <xs:annotation><xs:documentation>Global property value</xs:documentation></xs:annotation>
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -886,13 +886,6 @@
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="map"/>
                     <xs:enumeration value="json"/>
-                    <xs:enumeration value="avro">
-                        <xs:annotation>
-                            <xs:appinfo>
-                                <since>3.0.0</since>
-                            </xs:appinfo>
-                        </xs:annotation>
-                    </xs:enumeration>
                 </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>

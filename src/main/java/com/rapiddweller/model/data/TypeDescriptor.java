@@ -30,6 +30,7 @@ import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.operation.FirstNonNullSelector;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Describes a type.<br/><br/>
@@ -77,7 +78,7 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
   protected String parentName;
   protected TypeDescriptor parent;
 
-  // constructors ----------------------------------------------------------------------------------------------------
+  // constructors & life cycle operations ----------------------------------------------------------------------------
 
   protected TypeDescriptor(String name, DescriptorProvider provider, TypeDescriptor parent) {
     this(name, provider, (parent != null ? parent.getName() : null));
@@ -126,14 +127,6 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
   }
 
   // properties ------------------------------------------------------------------------------------------------------
-
-  public String getParentName() {
-    return parentName;
-  }
-
-  public void setParentName(String parentName) {
-    this.parentName = parentName;
-  }
 
   public Boolean isRowBased() {
     return (Boolean) getDetailValue(ROW_BASED);
@@ -335,32 +328,63 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
     setDetailValue(DISTRIBUTION, distribution);
   }
 
-  // literal construction helpers ------------------------------------------------------------------------------------
+  public String getParentName() {
+    return parentName;
+  }
+
+  public void setParentName(String parentName) {
+    this.parentName = parentName;
+  }
+
+  public TypeDescriptor getParent() {
+    if (this.parent != null) { // parent has already been resolved
+      return this.parent;
+    }
+    if (this.parentName == null) {
+      return null; // no parent reference defined
+    }
+    // Try to resolve parentNAme reference
+    TypeDescriptor candidate = getDataModel().getTypeDescriptor(this.parentName);
+    if (candidate != this) {
+      this.parent = candidate; // type derives from a known parent type
+    } else {
+      this.parent = null; // this is the definition of a new type
+    }
+    return this.parent;
+  }
+
+  public void setParent(TypeDescriptor parent) {
+    this.parent = parent;
+    this.parentName = (parent != null ? parent.getName() : null);
+  }
+
+  // construction helpers --------------------------------------------------------------------------------------------
 
   public TypeDescriptor withSeparator(String separator) {
     setSeparator(separator);
     return this;
   }
 
-  // generic functionality -------------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-  public TypeDescriptor getParent() {
-    if (parent != null) {
-      return parent;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-    if (parentName == null) {
-      return null;
+    if (!(o instanceof TypeDescriptor)) {
+      return false;
     }
-    // TODO the following is a workaround for name conflicts with types of same name in different name spaces, e.g. xs:string <-> ben.string
-    TypeDescriptor candidate = getDataModel().getTypeDescriptor(parentName);
-    if (candidate != this) {
-      parent = candidate;
+    if (!super.equals(o)) {
+      return false;
     }
-    return parent;
+    TypeDescriptor that = (TypeDescriptor) o;
+    return Objects.equals(parentName, that.parentName);
   }
 
-  public void setParent(TypeDescriptor parent) {
-    this.parent = parent;
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), parentName);
   }
 
 }

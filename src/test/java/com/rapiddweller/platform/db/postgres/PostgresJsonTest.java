@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  * Testing the JSON column type support of Postgres.<br/><br/>
  * Created: 09.11.2021 15:08:23
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PostgresJsonTest extends AbstractProstgresIntegrationTest {
 

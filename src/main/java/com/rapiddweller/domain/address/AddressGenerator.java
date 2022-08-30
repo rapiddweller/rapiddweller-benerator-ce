@@ -32,6 +32,8 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.domain.organization.CompanyNameGenerator;
+import com.rapiddweller.domain.organization.DepartmentNameGenerator;
 
 /**
  * Generates {@link Address} objects.<br/><br/>
@@ -39,13 +41,14 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * @author Volker Bergmann
  * @since 0.1
  */
-public class AddressGenerator extends CompositeGenerator<Address>
-    implements NonNullGenerator<Address> {
+public class AddressGenerator extends CompositeGenerator<Address> implements NonNullGenerator<Address> {
 
   private VarLengthStringGenerator localPhoneNumberGenerator;
   private String dataset;
   private CityGenerator cityGenerator;
   private StreetNameGenerator streetNameGenerator;
+  private CompanyNameGenerator companyNameGen;
+  private DepartmentNameGenerator depNameGen;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
@@ -100,8 +103,7 @@ public class AddressGenerator extends CompositeGenerator<Address>
     assertInitialized();
     City city = cityGenerator.generate();
     Country country = city.getCountry();
-    Street street = new Street(city,
-        streetNameGenerator.generateForCountryAndLocale(
+    Street street = new Street(city, streetNameGenerator.generateForCountryAndLocale(
             country.getIsoCode(), city.getLanguage()));
     String[] data = street.generateHouseNumberWithPostalCode();
     String houseNumber = data[0];
@@ -110,9 +112,11 @@ public class AddressGenerator extends CompositeGenerator<Address>
     PhoneNumber officePhone = generatePhoneNumber(city);
     PhoneNumber mobilePhone = country.generateMobileNumber(city);
     PhoneNumber fax = generatePhoneNumber(city);
-    return new Address(street.getName(), houseNumber, postalCode, city,
-        city.getState(), country,
+    Address address = new Address(street.getName(), houseNumber, postalCode, city, city.getState(), country,
         privatePhone, officePhone, mobilePhone, fax);
+    address.setOrganization(companyNameGen.generate().getFullName());
+    address.setDepartment(depNameGen.generate());
+    return address;
   }
 
   @Override
@@ -123,23 +127,17 @@ public class AddressGenerator extends CompositeGenerator<Address>
   // private helpers -------------------------------------------------------------------------------------------------
 
   private void initMembers(GeneratorContext context) {
-    CountryGenerator countryGenerator =
-        registerComponent(new CountryGenerator(dataset));
-    countryGenerator.init(context);
-    cityGenerator = registerComponent(new CityGenerator(dataset));
-    cityGenerator.init(context);
-    streetNameGenerator =
-        registerComponent(new StreetNameGenerator(dataset));
-    streetNameGenerator.init(context);
-    localPhoneNumberGenerator = BeneratorFactory.getInstance()
-        .createVarLengthStringGenerator("[0-9]", 10, 10, 1, null);
-    localPhoneNumberGenerator.init(context);
+    cityGenerator = registerAndInitComponent(new CityGenerator(dataset), context);
+    streetNameGenerator = registerAndInitComponent(new StreetNameGenerator(dataset), context);
+    localPhoneNumberGenerator = registerAndInitComponent(
+        BeneratorFactory.getInstance().createVarLengthStringGenerator("[0-9]", 10, 10, 1, null), context);
+    companyNameGen = registerAndInitComponent(new CompanyNameGenerator(), context);
+    depNameGen = registerAndInitComponent(new DepartmentNameGenerator(), context);
   }
 
   private PhoneNumber generatePhoneNumber(City city) {
     int localPhoneNumberLength = 10 - city.getAreaCode().length();
-    String localCode = localPhoneNumberGenerator
-        .generateWithLength(localPhoneNumberLength);
+    String localCode = localPhoneNumberGenerator.generateWithLength(localPhoneNumberLength);
     return new PhoneNumber(city.getCountry().getPhoneCode(),
         city.getAreaCode(), localCode);
   }

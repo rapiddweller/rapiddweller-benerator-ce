@@ -17,7 +17,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE_S
  * {@link AttrInfo} for a 'sourceScripted' attribute.<br/><br/>
  * Created: 19.12.2021 22:40:36
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class SourceScriptedAttribute extends AttrInfo<Expression<Boolean>> {
 

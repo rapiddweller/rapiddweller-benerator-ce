@@ -14,7 +14,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NULL_QUO
  * {@link AttrInfo} for the nullQuota attribute.<br/><br/>
  * Created: 19.12.2021 21:59:36
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class NullQuotaAttribute extends AttrInfo<Expression<Double>> {
   public NullQuotaAttribute(String errorId) {

@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link com.rapiddweller.stat.LatencyCounter}.<br/><br/>
  * Created: 26.02.2012 18:31:16
- * @since 2.1.0
+ * @since 3.0.0
  * @author Volker Bergmann
  */
 public class LatencyCounterTest {

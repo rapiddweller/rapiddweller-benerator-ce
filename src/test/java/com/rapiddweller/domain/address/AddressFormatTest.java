@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the {@link AddressFormat}.<br/><br/>
  * Created: 28.09.2021 20:43:13
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class AddressFormatTest {
 

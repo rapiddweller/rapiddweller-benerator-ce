@@ -37,6 +37,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -45,6 +46,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.sql.Connection;
 
+import static com.rapiddweller.common.SystemInfo.isLinux;
 import static org.junit.Assert.*;
 
 /**
@@ -106,7 +108,7 @@ public class DBSnaphotToolTest {
 
   @Test
   public void testHsqlDbUnitSnapshot() throws Exception {
-//    Assume.assumeTrue(isLinux());
+    Assume.assumeTrue(isLinux());
     // prepare DB
     Connection connection = HSQLUtil.connectInMemoryDB(dbName);
     DBUtil.executeScriptFile(CREATION_SCRIPT, ENCODING, connection, true, new ErrorHandler(getClass()));
@@ -128,7 +130,7 @@ public class DBSnaphotToolTest {
 
   @Test
   public void testHsqlXlsSnapshot() throws Exception {
-//    Assume.assumeTrue(isLinux());
+    Assume.assumeTrue(isLinux());
     // prepare DB
     Connection connection = HSQLUtil.connectInMemoryDB(dbName);
     DBUtil.executeScriptFile(CREATION_SCRIPT, ENCODING, connection, true, new ErrorHandler(getClass()));

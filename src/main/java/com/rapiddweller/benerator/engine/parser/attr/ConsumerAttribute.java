@@ -10,9 +10,9 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER
  * {@link AttrInfo} for a consumer attribute.<br/><br/>
  * Created: 19.12.2021 21:45:35
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
-public class ConsumerAttribute extends AttrInfo<String> { // TODO improve
+public class ConsumerAttribute extends AttrInfo<String> { // TODO vbergmann improve parsing and validation
   public ConsumerAttribute(String errorId) {
     super(ATT_CONSUMER, false, errorId, null);
   }

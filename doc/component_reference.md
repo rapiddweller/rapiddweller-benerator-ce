@@ -9,7 +9,7 @@ to be created explicitly when using the Benerator API programmatically.
 
 For domain-specific generators (e.g. person, address, finance), see **[Domains](domains.md)**.
 
-### Common Id Generators
+### Generators For Common Id Types
 
 Benerator contains the following common predefined and platform-independent generators:
 
@@ -22,11 +22,11 @@ Benerator contains the following common predefined and platform-independent gene
 * **LocalSequenceGenerator**: Mimics the behavior of a (named) database sequence on a single client VM. Its property '
   cached' (true by default) specifies if sequence value changes shall be persisted immediately or in the end.
 
-### Database-related Generators
+### Database-Related Generators
 
 See **[Using Relational Databases](using_relational_databases.md)**.
 
-### simple type generators
+### Generators For Data Of Simple Type
 
 * **CharacterGenerator**: Generates random characters.
 
@@ -44,36 +44,56 @@ See **[Using Relational Databases](using_relational_databases.md)**.
 
 * **LuhnGenerator**: Generates Luhn-valid strings like credit card numbers
 
-### current date / time generators
+### Generators For The Current Date And/Or Time
 
-* **CurrentDateGenerator**: Generates java.util.Date objects that represent the current date
+#### CurrentDateGenerator
+Generates **date** values that represent the current date
 
-* **CurrentDateTimeGenerator**: Generates java.util.Date objects that represent the current date and time
+#### CurrentDateTimeGenerator
+Generates **date** values that represent the current date and time
 
-* **CurrentZonedDateTimeGenerator**: Generates java.util.ZonedDateTime objects that represent the current date and time 
+#### CurrentZonedDateTimeGenerator
+Generates **zoneddatetime** values that represent the current date and time. 
+By default, it uses the system's default time zone. 
+In order to specify a different time zone set the generator's property 
+**timeZone** as described below in the **[ZonedDateTimeGenerator](component_reference.md)**.
 
-* **CurrentMilliTimeGenerator**: Generates long values that denote the number of milliseconds since 1970-01-01 00:00:00
+#### CurrentMilliTimeGenerator
+Generates ***long*** values that denote the number of milliseconds since 1970-01-01 00:00:00
 
-* **CurrentNanoTimeGenerator**: Generates long values that denote a number of milliseconds since an arbitrary point in
-  time (possible even in the future, so values may be negative)
+#### CurrentNanoTimeGenerator
+Generates **long** values that denote a number of milliseconds since an arbitrary point in
+time (possible even in the future, so values may be negative)
 
-* **CurrentTimeGenerator**: Generates java.util.Date objects that represent the current time of the day
-
-### arbitrary date / time generators
-
-* **DateGenerator**: Generates date values that represent a certain time at a certain day based on a common Distribution
-
-* **DayGenerator**: Generates date values that represent „day“ dates – dates at midnight
-
-* **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate,
-  maxDate, dateGranularity, dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime
-  on odd days in August 2010, configure
-
-* **ZonedDateTimeGenerator**: TODO
+#### CurrentTimeGenerator
+Generates **date** values that represent the current time of the day
 
 
+### Generators For Random Date And/Or Time Values
+
+#### DateGenerator
+Generates **date** values that represent a certain time at a certain day based on a common Distribution
+
+#### DayGenerator
+Generates **date** values that represent „day“ dates – dates at midnight
+
+#### DateTimeGenerator
+Generates **date** values with date and time configurable independentlyIts properties are: minDate,
+maxDate, dateGranularity, dateDistribution, minTime, maxTime, timeGranularity, timeDistribution.
+
+**minDate** and **maxDate** are configured in the form yyyy-MM-dd (year-month-day).
+
+**dateGranularity** is **specified** in the form y-M-d (years-months-days), eg. 0-0-7 for weekly events, 
+or 0-1-0 for monthly ones.  
+
+**minTime** and **maxTime** need to be specified as HH:mm:ss (hours:minutes:seconds) with the hours in 24-hour-format. 
+
+**timeGranularity** is specified in the form H:m:s (hours:minutes:seconds), eg. 0-1-0 or 0-0-60 for hourly events.
+
+The generator is configured most easily as a JavaBean, eg. by ```<bean id="dtGen">``` and used eg. in attribute generation with ```generator="idGen""```.
+
+As an example, for a 9-to-5 datetime on odd days of August 2010, use
 ```xml
-
 <bean id="dtGen" class="DateTimeGenerator">
     <property name='minDate' value='2010-08-01'/>
     <property name='maxDate' value='2010-08-31'/>
@@ -86,11 +106,56 @@ See **[Using Relational Databases](using_relational_databases.md)**.
 </bean>
 ```
 
-### file related generators
+
+#### ZonedDateTimeGenerator
+
+Generates **zoneddatetime** values with a fixed timezone and 
+variable date and time configurable independently. 
+
+For the following properties, please see the description of the 
+**[DateTimeGenerator](component_reference.md)** above: minDate,
+maxDate, dateGranularity, dateDistribution, minTime, maxTime, 
+timeGranularity, timeDistribution
+
+By default, the generator uses the system's default time zone. 
+In order to specify a different time zone set the generator's
+property **timeZone** to a zone id that is supported in Java,
+for example one of these:
+
+Name                 | Zone offset
+---------------------| -----------
+America/Vancouver    | GMT-8
+America/Chicago      | GMT-6
+America/New_York     | GMT-5
+America/Santiago     | GMT-4
+America/Buenos_Aires | GMT-3
+America/Sao_Paulo    | GMT-3
+Europe/Lisbon        | GMT
+Europe/London        | GMT
+Europe/Berlin        | GMT+1
+Europe/Athens        | GMT+2
+Asia/Tel_Aviv        | GMT+2
+Africa/Johannesburg  | GMT+2
+Asia/Istanbul        | GMT+3
+Europe/Moscow        | GMT+3
+Asia/Calcutta        | GMT+5:30 
+Asia/Jakarta         | GMT+7
+Asia/Bangkok         | GMT+7
+Asia/Hong_Kong       | GMT+8
+Asia/Shanghai        | GMT+8
+Asia/Taipei	         | GMT+8
+Asia/Singapore       | GMT+8
+Asia/Tokyo           | GMT+9
+Asia/Seoul           | GMT+9
+Australia/Sydney     | GMT+10
+
+
+### File-Related Generators
 
 * **FileGenerator**: generates java.io.File objects representing files in a given directory structure
 
-* **FileNameGenerator**: generates file names representing files in a given directory structure
+* **FileNameGenerator**: generates file names representing files in a given directory structure.  
+  It has a 'pathType' property which can be configured to generate `absolute`, `canonical` or `local` file names.
 
 * **TextFileContentGenerator**: provides text file contents as String
 
@@ -666,7 +731,7 @@ Usage example:
 | timestampCapitalization | The capitalization to use when rendering a month name in a timestamp: 'upper', 'lower' or 'mixed' | mixed |
 | decimalPattern | The pattern to render decimal values | System default |
 | decimalSeparator | The decimal separator to use for decimal values | System default |
-| integralPattern | The pattern to integral number values | System default |
+| integralPattern | The pattern to format integral number values | System default |
 
 The line format is described as a comma-separated list of property names with format spec, e.g. name[20],age[3r]
 ,points[5.2r0]. The format spec consists of

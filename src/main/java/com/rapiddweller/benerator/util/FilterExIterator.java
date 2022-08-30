@@ -53,7 +53,7 @@ public class FilterExIterator<E> extends DataIteratorProxy<E> {
     this.context = context;
   }
 
-  // TODO need to eval with project data
+  // TODO akell need to eval with project data
   @Override
   public DataContainer<E> next(DataContainer<E> wrapper) {
     DataContainer<E> tmp;

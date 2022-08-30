@@ -10,7 +10,7 @@ import com.rapiddweller.common.converter.AbstractConverter;
  * which cuts the length of a maximum.<br/><br/>
  * Created: 12.10.2021 11:46:31
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class CutLength extends AbstractConverter<String, String> {
 

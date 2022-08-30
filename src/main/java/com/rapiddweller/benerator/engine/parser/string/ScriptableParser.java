@@ -18,7 +18,7 @@ import com.rapiddweller.script.expression.ConstantExpression;
  * {@link ScriptableObjectParser}<br/><br/>
  * Created: 08.12.2021 18:34:07
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ScriptableParser<E> extends AbstractParser<Expression<E>> {
 

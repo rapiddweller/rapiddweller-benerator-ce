@@ -37,7 +37,7 @@ import static com.rapiddweller.benerator.BeneratorUtil.MT_BENERATOR_FACTORY;
  * Runs all test configurations as defined in a {@link BenchmarkToolConfig}.<br/><br/>
  * Created: 02.11.2021 09:38:50
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class BenchmarkRunner {
 

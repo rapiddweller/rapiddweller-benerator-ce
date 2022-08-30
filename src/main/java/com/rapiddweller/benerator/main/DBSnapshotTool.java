@@ -70,7 +70,6 @@ public class DBSnapshotTool {
   public static final String FORMAT = "format";
   public static final String DIALECT = "dialect";
 
-  // TODO test with each database
   private static final Logger logger = LoggerFactory.getLogger(DBSnapshotTool.class);
 
   public static String[] supportedFormats() {

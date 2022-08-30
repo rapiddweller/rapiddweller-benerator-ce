@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  * Tests anonymization features.<br/><br/>
  * Created: 12.10.2021 15:31:50
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class AnonymizationIntegrationTest extends AbstractBeneratorIntegrationTest {
 

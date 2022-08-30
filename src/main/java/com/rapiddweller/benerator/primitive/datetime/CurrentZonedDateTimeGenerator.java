@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
  */
 public class CurrentZonedDateTimeGenerator extends ThreadSafeNonNullGenerator<ZonedDateTime> {
 
-	private ZoneId zoneId;
+	private ZoneId zone;
 
 	// constructors --------------------------------------------------------------------------------------------------
 
@@ -24,18 +24,18 @@ public class CurrentZonedDateTimeGenerator extends ThreadSafeNonNullGenerator<Zo
 		this(ZoneId.systemDefault().getId());
 	}
 
-	public CurrentZonedDateTimeGenerator(String zoneId) {
-		setZoneId(zoneId);
+	public CurrentZonedDateTimeGenerator(String zone) {
+		setZone(zone);
 	}
 
 	// properties ----------------------------------------------------------------------------------------------------
 
 	public String getZoneId() {
-		return zoneId.getId();
+		return zone.getId();
 	}
 
-	public void setZoneId(String zoneId) {
-		this.zoneId = ZoneId.of(zoneId);
+	public void setZone(String zone) {
+		this.zone = ZoneId.of(zone);
 	}
 
 	@Override
@@ -48,14 +48,14 @@ public class CurrentZonedDateTimeGenerator extends ThreadSafeNonNullGenerator<Zo
 	@Override
 	public void init(GeneratorContext context) {
 		super.init(context);
-		if (zoneId == null) {
-			setZoneId(ZoneId.systemDefault().getId());
+		if (zone == null) {
+			setZone(ZoneId.systemDefault().getId());
 		}
 	}
 
 	@Override
 	public ZonedDateTime generate() {
-		return ZonedDateTime.now(zoneId);
+		return ZonedDateTime.now(zone);
 	}
 
 	// java.lang.Object overrides ------------------------------------------------------------------------------------

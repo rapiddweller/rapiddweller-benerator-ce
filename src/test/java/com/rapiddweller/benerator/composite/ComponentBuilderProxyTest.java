@@ -42,7 +42,7 @@ import static org.junit.Assert.assertNull;
  * Tests the {@link ComponentBuilderProxy}.<br/><br/>
  * Created: 01.10.2021 23:41:34
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ComponentBuilderProxyTest {
 

@@ -24,7 +24,7 @@ import java.util.Collection;
  * Writes benchmark results to an XLS file.<br/><br/>
  * Created: 16.11.2021 12:28:08
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class XLSBenchmarkExporter extends AbstractBenchmarkResultExporter {
 

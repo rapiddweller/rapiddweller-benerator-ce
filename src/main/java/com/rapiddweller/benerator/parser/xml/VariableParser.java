@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
  * Parses &lt;variable&gt; elements.<br/><br/>
  * Created: 14.12.2021 05:42:53
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class VariableParser extends AbstractComponentParser {
 

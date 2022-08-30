@@ -33,6 +33,8 @@ import com.rapiddweller.common.operation.MinNumberStringOperation;
 import com.rapiddweller.common.operation.MinOperation;
 import com.rapiddweller.script.PrimitiveType;
 
+import java.util.Objects;
+
 /**
  * Describes a simple type.<br/><br/>
  * Created: 03.03.2008 08:58:58
@@ -40,6 +42,8 @@ import com.rapiddweller.script.PrimitiveType;
  * @since 0.5.0
  */
 public class SimpleTypeDescriptor extends TypeDescriptor {
+
+  // constants -------------------------------------------------------------------------------------------------------
 
   public static final String MIN = "min";
   public static final String MAX = "max";
@@ -57,7 +61,13 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
   public static final String VALUES = "values";
   public static final String MAP = "map";
 
+
+  // attributes ------------------------------------------------------------------------------------------------------
+
   private PrimitiveType primitiveType = null;
+
+
+  // constructors ----------------------------------------------------------------------------------------------------
 
   public SimpleTypeDescriptor(String name, DescriptorProvider provider) {
     this(name, provider, (String) null);
@@ -87,6 +97,7 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
     addConfig(CONSTANT, String.class);
     addConfig(MAP, String.class);
   }
+
 
   // properties ------------------------------------------------------------------------------------------------------
 
@@ -214,7 +225,8 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
     setDetailValue(MAP, map);
   }
 
-  // literate build helpers ------------------------------------------------------------------------------------------
+
+  // construction helpers --------------------------------------------------------------------------------------------
 
   public SimpleTypeDescriptor withMin(String min) {
     setMin(min);
@@ -259,6 +271,29 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
   public SimpleTypeDescriptor withValues(String values) {
     this.setValues(values);
     return this;
+  }
+
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof SimpleTypeDescriptor)) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    SimpleTypeDescriptor that = (SimpleTypeDescriptor) o;
+    return Objects.equals(primitiveType, that.primitiveType);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), primitiveType);
   }
 
 }

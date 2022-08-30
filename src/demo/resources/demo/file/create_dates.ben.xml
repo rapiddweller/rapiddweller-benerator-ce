@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="https://www.benerator.de/schema/2.1.0"
-       xsi:schemaLocation="https://www.benerator.de/schema/2.1.0 https://www.benerator.de/schema/benerator-2.1.0.xsd">
+       xmlns="https://www.benerator.de/schema/3.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd">
 
     <bean id="datetime_gen" class="DateTimeGenerator">
         <property name="minDate" value="2007-06-21"/>

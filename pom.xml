@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rapiddweller</groupId>
     <artifactId>rapiddweller-benerator-ce</artifactId>
-    <version>3.0.0-jdk-11-SNAPSHOT</version>
+    <version>3.1.0-jdk-11-SNAPSHOT</version>
     <name>rapiddweller Benerator</name>
     <description>
         rapiddweller 'Benerator' is a software solution to
@@ -123,10 +123,10 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <build_number>${buildNumber}</build_number>
-        <_rd_common_version>2.0.0-jdk-11-SNAPSHOT</_rd_common_version>
-        <_rd_format_version>1.1.5-jdk-11-SNAPSHOT</_rd_format_version>
-        <_rd_jdbacl_version>1.1.12-jdk-11-SNAPSHOT</_rd_jdbacl_version>
-        <_rd_script_version>1.1.4-jdk-11-SNAPSHOT</_rd_script_version>
+        <_rd_common_version>2.0.0-jdk-11</_rd_common_version>
+        <_rd_format_version>1.1.5-jdk-11</_rd_format_version>
+        <_rd_jdbacl_version>1.1.12-jdk-11</_rd_jdbacl_version>
+        <_rd_script_version>1.1.4-jdk-11</_rd_script_version>
         <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
         <database_h2.version>2.1.210</database_h2.version>
         <database_hsqldb.version>1.8.0.10</database_hsqldb.version>
@@ -135,14 +135,14 @@
         <database_mssqldb.version>11.1.2.jre11-preview</database_mssqldb.version>
         <database_mysql-connector-java.version>8.0.29</database_mysql-connector-java.version>
         <database_oracle.version>21.6.0.0.1</database_oracle.version>
-        <database_postgresql.version>42.4.0</database_postgresql.version>
-        <database_mariadb-java-client.version>3.0.6</database_mariadb-java-client.version>
+        <database_postgresql.version>42.4.1</database_postgresql.version>
+        <database_mariadb-java-client.version>3.0.7</database_mariadb-java-client.version>
         <mongodb.version>3.12.11</mongodb.version>
         <dependency_antlr-runtime.version>3.5.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
         <dependency_xml-apis.version>1.0.b2</dependency_xml-apis.version>
-        <dependency_slf4j.version>1.7.36</dependency_slf4j.version>
+        <dependency_slf4j.version>2.0.0</dependency_slf4j.version>
         <dependency_log4j.version>2.18.0</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scriptengine_freemarker.version>2.3.31</scriptengine_freemarker.version>
@@ -195,7 +195,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>hsqldb</groupId>
+            <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>${database_hsqldb.version}</version>
             <scope>provided</scope>
@@ -571,7 +571,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.12.0</version>
+                <version>3.12.1</version>
                 <executions>
                     <execution>
                         <id>create-site</id>

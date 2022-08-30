@@ -5,6 +5,7 @@ package com.rapiddweller.benerator.environment;
 import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConfigUtil;
+import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
@@ -123,7 +124,7 @@ public class EnvironmentUtil {
 
   public static Environment parseFile(String envName, String filePath) {
     try {
-      Map<String, String> properties = IOUtil.readProperties(filePath);
+      Map<String, String> properties = IOUtil.readProperties(filePath, Encodings.UTF_8);
       if (properties.containsKey("db_url") && properties.containsKey("db_driver")) {
         // old style db environment definition
         return parseOldStyleEnvironment(filePath, envName, properties);
@@ -138,7 +139,7 @@ public class EnvironmentUtil {
 
   private static Environment parseOldStyleEnvironment(String filePath, String envName, Map<String, String> srcProps) {
     DeprecationLogger.warn("Environment file " + filePath + " is using a deprecated environment file format. " +
-        "Please update this to the new environment definition file format introduced in Benerator 2.1.0. " +
+        "Please update this to the new environment definition file format introduced in Benerator 3.0.0. " +
         "The old format is supported for backwards compatibility but will dropped in a future release");
     Map<String, String> resultProps = new HashMap<>();
     for (Map.Entry<String, String> entry : srcProps.entrySet()) {

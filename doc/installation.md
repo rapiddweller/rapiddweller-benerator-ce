@@ -7,7 +7,7 @@ Download Benerator from:
 [https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/)
 
 You should download the most recent version of the rapiddweller-benerator-dist archive from the download page, e.g.
-_rapiddweller-benerator-ce-2.0.0-jdk-11-dist.zip_ .
+_rapiddweller-benerator-ce-3.0.0-jdk-11-dist.zip_ .
 
 !!! warning
 
@@ -26,10 +26,10 @@ Create an environment variable BENERATOR_HOME that points to the path you extrac
 
 **Windows Details**: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the
 User Variables section. Enter BENERATOR_HOME as name and the path as value (
-e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-2.0.0`). Click OK several times.
+e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-3.0.0`). Click OK several times.
 
 **Mac/Unix/Linux Details**: Open the file .profile in your user directory. Add an entry that points to benerator, e.g.:
-`export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-2.0.0`
+`export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-3.0.0`
 
 ## Optional: Install JDBC drivers
 
@@ -84,7 +84,7 @@ On any OS, open a console window (shell,cmd or powershell) and type ...
 ```shell
 $ benerator -–version
 
-Benerator Community Edition 2.1.0-jdk-11
+Benerator Community Edition 3.0.0-jdk-11
 Java version:  11.0.11
 JVM product:   OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)
 System:        Mac OS X 10.16 x86_64

@@ -8,15 +8,15 @@
 
   <echo>Preparing source</echo>
   <database id="source" environment="environment" system="source"/>
-  <execute target="source">
+  <execute type="sql" target="source">
     CREATE SCHEMA "source";
     CREATE TABLE "source"."data"
     (
-    id              SERIAL  NOT NULL,
-    no              VARCHAR NOT NULL,
-    name            VARCHAR,
-    company         VARCHAR,
-    date            DATETIME NOT NULL,
+    id SERIAL NOT NULL,
+    no VARCHAR NOT NULL,
+    name VARCHAR,
+    company VARCHAR,
+    date DATETIME NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (id)
     );
@@ -37,17 +37,11 @@
 
   <echo>Preparing config</echo>
   <database id="config" environment="environment" system="config"/>
-  <execute target="config">
+  <execute type="sql" target="config">
     CREATE SCHEMA "config";
-    CREATE TABLE "config"."watermark"
-    (
-    id              SERIAL  NOT NULL,
-    key             VARCHAR NOT NULL,
-    value           DATETIME,
-    PRIMARY KEY (id),
-    UNIQUE (id)
-    );
-    insert into "config"."watermark" (key, value) values ('last_processed_datetime', timestamp'2020-01-01 00:00:00');
+    CREATE TABLE "config"."process"(id SERIAL NOT NULL, "key" VARCHAR NOT NULL, "value" DATETIME, PRIMARY KEY (id),
+    UNIQUE (id));
+    insert into "config"."process" ("key", "value") values ('last_processed_datetime', timestamp'2020-01-01 00:00:00');
   </execute>
   <echo/>
 
@@ -56,18 +50,10 @@
 
   <echo>Creating target</echo>
   <database id="target" environment="environment" system="target"/>
-  <execute target="target">
+  <execute type="sql" target="target">
     CREATE SCHEMA "target";
-    CREATE TABLE "target"."data"
-    (
-    id              SERIAL  NOT NULL,
-    no              VARCHAR NOT NULL,
-    name            VARCHAR,
-    company         VARCHAR,
-    date            DATETIME NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE (id)
-    );
+    CREATE TABLE "target"."data"(id SERIAL NOT NULL,no VARCHAR NOT NULL, name VARCHAR, company VARCHAR, date DATETIME
+    NOT NULL, PRIMARY KEY (id), UNIQUE (id));
   </execute>
   <echo/>
 
@@ -75,8 +61,10 @@
   <!-- Read watermark - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <echo>Reading watermark</echo>
-  <evaluate id="from_ts" target="config">select value from "config"."watermark" where key = 'last_processed_datetime'</evaluate>
-  <setting name="from"  value="{TimeUtil.formatTimestamp(from_ts, 'yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
+  <evaluate id="from_ts" target="config">
+    SELECT "value" from "config"."process" WHERE "key" = 'last_processed_datetime'
+  </evaluate>
+  <setting name="from" value="{TimeUtil.formatTimestamp(from_ts, 'yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
   <setting name="until" value="{TimeUtil.formatCurrentTimestamp('yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
   <echo/>
 
@@ -95,8 +83,11 @@
   <!-- Update watermark - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <echo>{ftl:Updating watermark to ${until}}</echo>
-  <execute target="config" type="SQL">{ftl:
-    UPDATE config.process SET value = ${until} where key = 'last_processed_datetime'
-  }</execute>
+  <execute target="config" type="sql">{ftl: UPDATE "config"."process"
+    SET "value" = PARSEDATETIME('${until}','yyyy-MM-dd HH:mm:ss.SSSSSS')
+    WHERE "key" = 'last_processed_datetime';
+    }</execute>
+
+  <iterate type="process" source="config" consumer="ConsoleExporter"/>
 
 </setup>

@@ -12,7 +12,7 @@ import com.rapiddweller.format.xml.AttrInfo;
  * {@link AttrInfo} for a scriptable boolean attribute.<br/><br/>
  * Created: 19.12.2021 21:38:03
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ScriptableBooleanAttribute extends AttrInfo<Expression<Boolean>>{
 

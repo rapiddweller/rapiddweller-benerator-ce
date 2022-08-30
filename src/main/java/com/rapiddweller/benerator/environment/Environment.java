@@ -15,7 +15,7 @@ import java.util.Objects;
  * Specifies one or more systems and optional plain settings.<br/><br/>
  * Created: 03.11.2021 14:56:30
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class Environment implements Named {
 

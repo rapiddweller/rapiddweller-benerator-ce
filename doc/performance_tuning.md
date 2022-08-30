@@ -1,5 +1,10 @@
 # Benerator Performance Tuning
 
+## Finding Bottlenecks
+Benerator logs a short summary of the data generation tasks in the file `benerator.log`.
+If you have performance issues in a complex data generation project, an analysis of 
+this file should quickly exhibit which generation section causes the performance issues.
+
 ## Using Enterprise Edition
 
 Benerator Enterprise Edition enables you to generate and anonymize data concurrently,

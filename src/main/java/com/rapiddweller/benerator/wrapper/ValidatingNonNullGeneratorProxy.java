@@ -34,7 +34,7 @@ import com.rapiddweller.common.Validator;
  * Generator proxy that uses another generator for creating values and filters out invalid ones.<br/><br/>
  * Created: 01.10.2021 09:25:24
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class ValidatingNonNullGeneratorProxy<E> extends ValidatingGeneratorProxy<E> implements NonNullGenerator<E> {
 

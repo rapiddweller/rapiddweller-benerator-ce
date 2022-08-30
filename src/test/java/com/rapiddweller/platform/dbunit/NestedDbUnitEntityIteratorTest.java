@@ -35,17 +35,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests the DBUnitXmlEntityImporter with a standard and a flat dataset file.<br/>
- * <br/>
+ * Tests the DBUnitXmlEntityImporter with a standard and a flat dataset file.<br/><br/>
  * Created: 05.08.2007 08:05:10
- *
  * @author Volker Bergmann
  */
-public class DbUnitEntityIterableTest extends AbstractEntityIteratorTest { // TODO split off tests for the 2 *Iterator classes
-
-  /**
-   * Test normal dataset.
-   */
+public class NestedDbUnitEntityIteratorTest extends AbstractDbUnitIteratorTest {
   @Test
   public void testNormalDataset() {
     NestedDbUnitEntityIterator iterator = new NestedDbUnitEntityIterator(
@@ -53,41 +47,4 @@ public class DbUnitEntityIterableTest extends AbstractEntityIteratorTest { // TO
         new DefaultBeneratorContext());
     check(iterator);
   }
-
-  /**
-   * Test flat dataset.
-   */
-  @Test
-  public void testFlatDataset() {
-    FlatDbUnitEntityIterator iterator = new FlatDbUnitEntityIterator(
-        "com/rapiddweller/platform/importer/dbunit/person+role-dbunit.flat.xml",
-        new DefaultBeneratorContext());
-    check(iterator);
-  }
-
-  // helpers ---------------------------------------------------------------------------------------------------------
-
-  private void check(AbstractDbUnitEntityIterator iterator) {
-    assertEquals(createPerson("Alice", "23"), DataUtil.nextNotNullData(iterator));
-    assertEquals(createPerson("Bob", "34"), DataUtil.nextNotNullData(iterator));
-    assertEquals(createPerson("Charly", "45"), DataUtil.nextNotNullData(iterator));
-    assertEquals(createRole("Admin"), DataUtil.nextNotNullData(iterator));
-    assertEquals(createRole("User"), DataUtil.nextNotNullData(iterator));
-    assertUnavailable(iterator);
-    iterator.close();
-  }
-
-  private Entity createPerson(String name, String age) {
-    Entity person = new Entity(createComplexType("PERSON"));
-    person.setComponent("name", name);
-    person.setComponent("age", age);
-    return person;
-  }
-
-  private Entity createRole(String name) {
-    Entity role = new Entity(createComplexType("ROLE"));
-    role.setComponent("name", name);
-    return role;
-  }
-
 }

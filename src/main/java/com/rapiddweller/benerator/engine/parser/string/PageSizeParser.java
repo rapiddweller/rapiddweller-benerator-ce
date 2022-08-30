@@ -13,7 +13,7 @@ import com.rapiddweller.common.Expression;
  * Parses a page size.<br/><br/>
  * Created: 10.12.2021 18:09:42
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class PageSizeParser extends AbstractParser<Expression<Long>> {
 

@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the {@link MemorySensor}.<br/><br/>
  * Created: 23.12.2021 11:10:20
  * @author Volker Bergmann
- * @since 2.1.0
+ * @since 3.0.0
  */
 public class MemorySensorTest {
 

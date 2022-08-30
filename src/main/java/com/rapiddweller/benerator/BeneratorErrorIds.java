@@ -270,8 +270,8 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <pre-parse-generate> ------------------------------------------------------------------------------
 
-  public static final String SYN_PRE_PARSE_GENERATE_ATTR = "BEN-0392"; // TODO remove?
-  public static final String SYN_PRE_PARSE_GENERATE_TARGET = "BEN-0393"; // TODO remove?
+  public static final String SYN_PRE_PARSE_GENERATE_ATTR = "BEN-0392"; // TODO check if pre-parse can be avoided, if yes, remove this
+  public static final String SYN_PRE_PARSE_GENERATE_TARGET = "BEN-0393"; // TODO check if pre-parse can be avoided, if yes, remove this
 
   // Syntax Errors regarding <generate> ------------------------------------------------------------------------------
 
