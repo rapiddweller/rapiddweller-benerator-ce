@@ -36,6 +36,7 @@
                 <include>org.postgresql:postgresql:jar</include>
                 <include>org.firebirdsql.jdbc:jaybird:jar</include>
                 <include>javax.resource:connector-api:jar</include>
+                <include>org.mongodb:mongo-java-driver:jar</include>
             </includes>
         </dependencySet>
         <dependencySet>
