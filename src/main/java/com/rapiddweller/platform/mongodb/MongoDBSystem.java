@@ -37,6 +37,12 @@ public class MongoDBSystem extends CustomStorageSystem {
   public MongoDBSystem(DataModel dataModel, String id, String host, Integer port, String database, String user,
                        String password, String authenticationDatabase, String authMechanism, Boolean clean) {
     super(id, dataModel);
+    if (authenticationDatabase == null) {
+      authenticationDatabase = "admin";
+    }
+    if (authMechanism == null) {
+      authMechanism = "SCRAM-SHA-1";
+    }
     mongoDBClientProvider = new MongoDBClientProvider(host, port, database, user, password, authenticationDatabase, authMechanism);
     mongoDBClient = mongoDBClientProvider.createMongoDBClient();
     if (TRUE.equals(clean)) {

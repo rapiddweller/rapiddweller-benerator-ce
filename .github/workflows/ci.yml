@@ -202,6 +202,7 @@ jobs:
           target.db.database=benerator
           target.db.user=benerator
           target.db.password=benerator
+          target.db.authenticationDatabase=benerator
           target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
       - name: set db properties for mongodb connection2
         run: |
@@ -211,6 +212,7 @@ jobs:
           mongoDatabase=benerator
           mongoUser=benerator
           mongoPassword=benerator
+          mongoAuthenticationDatabase=benerator
           mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
       - name: set db properties for postgres connection
         run: |

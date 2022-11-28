@@ -86,9 +86,9 @@ public class MongoDBParser extends AbstractBeneratorDescriptorParser {
     Expression<String> user = parseScriptableStringAttribute(ATT_USER, element);
     Expression<String> password = parseScriptableStringAttribute(ATT_PASSWORD, element);
     //mongo db authdb
-    Expression<String> authdb = parseScriptableStringAttribute(ATT_AUTH_DB, element);
+    Expression<String> authdb = parseScriptableString(element, ATT_AUTH_DB, SYN_MONGO_AUTH_DB);
     // mongo db authMechanism
-    Expression<String> authMechanism = parseScriptableStringAttribute(ATT_AUTH_MECHANISM, element);
+    Expression<String> authMechanism = parseScriptableString(element, ATT_AUTH_MECHANISM, SYN_MONGO_AUTH_MECHANISM);
     Expression<Boolean> clean = parseBooleanExpressionAttribute(ATT_CLEAN, element);
     return new MongoDBStatement(id, environment, system, host, port, database, user, password, authdb, authMechanism, clean,
         context.getResourceManager());

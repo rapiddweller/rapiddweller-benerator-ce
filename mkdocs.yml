@@ -49,13 +49,24 @@ use_directory_urls: false
 
 plugins:
   - search
-  - with-pdf:
-      author: rapiddweller GmbH & Volker Bergmann
-      copyright: Copyright &copy; 2006 - 2021 rapiddweller GmbH & Volker Bergmann
-      toc_level: 1
-      cover_title: rapiddweller-benerator-ce
-      cover_subtitle: manual
-      output_path: rapiddweller-benerator-ce-manual.pdf
+  - print-site:
+      add_to_navigation: false
+      print_page_title: 'rapiddweller Benerator EE'
+      add_print_site_banner: true
+      # Table of contents
+      add_table_of_contents: true
+      toc_title: 'Content'
+      toc_depth: 1
+      # Content-related
+      add_full_urls: false
+      enumerate_headings: true
+      enumerate_figures: true
+      add_cover_page: true
+      cover_page_template: ""
+      path_to_pdf: ""
+      include_css: true
+      enabled: true
+      exclude:
 
 markdown_extensions:
   - markdown.extensions.codehilite:
@@ -70,8 +81,7 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_div_format
-  - pymdownx.tabbed:
-      alternate_style: true
+  - pymdownx.tabbed
   - pymdownx.snippets
   - tables
   - abbr
@@ -100,6 +110,7 @@ nav:
   - Command Line Tools: command_line_tools.md
   - Domains: domains.md
   - Component Reference: component_reference.md
+  - No SQL Databases: no_sql_support.md
   - Using DB Sanity: using_db_sanity.md
   - Maven Benerator Plugin: maven_benerator_plugin.md
   - Extending Benerator: extending_benerator.md
@@ -111,11 +122,11 @@ nav:
 
 extra:
   social:
-    - icon: fontawesome/brands/github-square
+    - icon: fontawesome/brands/square-github
       link: https://github.com/rapiddweller/rapiddweller-benerator-ce
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/rapiddweller
-    - icon: fontawesome/brands/facebook-square
+    - icon: fontawesome/brands/square-facebook
       link: https://www.facebook.com/rapiddweller/
-    - icon: fontawesome/brands/twitter-square
+    - icon: fontawesome/brands/square-twitter
       link: https://twitter.com/intent/follow?screen_name=rapiddweller
