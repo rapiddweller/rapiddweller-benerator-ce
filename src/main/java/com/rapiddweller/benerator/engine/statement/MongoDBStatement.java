@@ -20,13 +20,15 @@ public class MongoDBStatement implements Statement {
     private final Expression<Integer> port;
     private final Expression<String> database;
     private final Expression<String> user;
+    private final Expression<String> authenticationDatabase;
+    private final Expression<String> authMechanism;
     private final Expression<String> password;
     private final Expression<Boolean> clean;
     private final ResourceManager resourceManager;
 
     public MongoDBStatement(Expression<String> id, Expression<String> environment, Expression<String> system, Expression<String> host, Expression<Integer> port,
                             Expression<String> database, Expression<String> user, Expression<String> password,
-                            Expression<Boolean> clean, ResourceManager resourceManager) {
+                            Expression<String> authenticationDatabase, Expression<String> authMechanism, Expression<Boolean> clean, ResourceManager resourceManager) {
         this.id = id;
         this.environment = environment;
         this.system = system;
@@ -35,6 +37,8 @@ public class MongoDBStatement implements Statement {
         this.database = database;
         this.user = user;
         this.password = password;
+        this.authenticationDatabase = authenticationDatabase;
+        this.authMechanism = authMechanism;
         this.clean = clean;
         this.resourceManager = resourceManager;
     }
@@ -65,6 +69,8 @@ public class MongoDBStatement implements Statement {
                 database.evaluate(context),
                 user.evaluate(context),
                 password.evaluate(context),
+                authenticationDatabase.evaluate(context),
+                authMechanism.evaluate(context),
                 clean.evaluate(context));
     }
  }

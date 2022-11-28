@@ -96,6 +96,12 @@ public class DescriptorConstants {
   public static final String ATT_TABLE = "table";
 
   public static final String ATT_PASSWORD = "password";
+
+  //mongo db authentication database
+  public static final String ATT_AUTH_DB = "authDb";
+
+  //mongo db authentication mechanism
+    public static final String ATT_AUTH_MECHANISM = "authMechanism";
   public static final String ATT_USER = "user";
   public static final String ATT_DRIVER = "driver";
   public static final String ATT_URL = "url";
