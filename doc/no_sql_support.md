@@ -52,9 +52,15 @@ Benerator supports MongoDB and can be used like this:
          database="{ftl:${mongoDatabase}}"
          user="{ftl:${mongoUser}}" 
          password="{ftl:${mongoPassword}}" 
+         authenticationDatabase="{ftl:${mongoAuthenticationDatabase}}"
+         authenticationMechanism="{ftl:${mongoAuthenticationMechanism}}"
          clean="{ftl:${mongoClean?c}}"
 />
 ```
+
+The parameter **authenticationDatabase** and **authenticationMechanism** are optional. 
+If **authenticationDatabase** is not set, the admin database will be used. 
+If **authenticationMechanism** is not set, SCRAM-SHA-1 will be used.
 
 An [environment file](./environment_files.md#Environment Files) can also be used:
 
