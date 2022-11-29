@@ -642,6 +642,8 @@ public class BeneratorErrorIds {
   public static final String SYN_MONGO_CLEAN = "BEN-2407";
   public static final String SYN_MONGO_ENV = "BEN-2408";
   public static final String SYN_MONGO_SYS = "BEN-2409";
+  public static final String SYN_MONGO_AUTH_DB = "BEN-2410";
+  public static final String SYN_MONGO_AUTH_MECHANISM = "BEN-2411";
 
   // Syntax Errors regarding <meta-model> ------------------------------------------------------------------------------
 

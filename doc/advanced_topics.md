@@ -90,10 +90,9 @@ Precondition: Verified local benerator installation (cp. [Installation](installa
 
 In this example, two jars from maven central are used for demo purposes: 
 
-1. Download following jars locally
-   - https://repo1.maven.org/maven2/org/apache/commons/commons-text/1.9/commons-text-1.9.jar
-   - https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar
-
+1. Download following jars locally  
+* [commons-lang3-3.9.jar](https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.jar)
+* [commons-io-2.6.jar](https://repo1.maven.org/maven2/commons-io/commons-io/2.6/commons-io-2.6.jar)
 2. Move the jars into the `lib\` folder of your benerator installation
    e.g. ( e.g. `C:\Program Files\Development\rapiddweller-benerator-ce\lib\`). Avoid creating 
    any subfolder(s) in the `lib\` directory and place the jar file(s) in the lib folders root level. 
@@ -194,9 +193,9 @@ finally query its 'sum' property value with a script expression:
 
 ## Querying data from a system to variables
 
-Querying is discussed in **[Data Generation Concepts](data_generation_concepts.md##querying-information-from-a-system)**.
+Querying is discussed in Data Generation Concepts.
 
-Benerator supports to store multiple values in **[Variables](data_generation_concepts.md#variables)** at runtime 
+Benerator supports to store multiple values in variables at runtime 
 that can be accessed array-like to use the data for multiple attributes i.e. fulfill multi-field constraints. 
 
 Given a variable named `productInfo` 
@@ -279,8 +278,6 @@ As an example, here is a query which only returns products whose name starts wit
 ```xml
 <variable name="product" source="store" type="product" selector="_candidate.name.startsWith('A')"/>
 ```
-
-TODO akell: Explain new features
 
 ## Datasets
 
