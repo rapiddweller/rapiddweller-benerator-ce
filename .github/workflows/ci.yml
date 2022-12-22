@@ -123,19 +123,15 @@ jobs:
     services:
       mongodb:
         # Docker Hub image
-        image: aashreys/mongo-auth:latest
+        image: mongo:latest
         # Provide the password for postgres
         env:
           DB_HOST: mongodb
           DB_PORT: "27017"
           DB_CONNECTION: "benerator"
           # mongodb
-          AUTH: "yes"
-          MONGODB_ADMIN_USER: "admin"
-          MONGODB_ADMIN_PASS: "root"
-          MONGODB_APPLICATION_DATABASE: "benerator"
-          MONGODB_APPLICATION_USER: "benerator"
-          MONGODB_APPLICATION_PASS: "benerator"
+          MONGO_INITDB_ROOT_USERNAME: "benerator",
+          MONGO_INITDB_ROOT_PASSWORD: "benerator"
       # Label used to access the service container
       postgres:
         # Docker Hub image
@@ -204,7 +200,7 @@ jobs:
           target.db.database=benerator
           target.db.user=benerator
           target.db.password=benerator
-          target.db.authenticationDatabase=benerator
+          target.db.authenticationDatabase=admin
           target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
       - name: set db properties for mongodb connection2
         run: |
@@ -876,7 +872,7 @@ jobs:
       - E2ET_files-jdk11
       - E2ET_watermark-jdk11
       - E2ET_memstore-jdk11
-    container: maven:3.6-adoptopenjdk-11
+    container: ubuntu-latest
     defaults:
       run:
         shell: bash

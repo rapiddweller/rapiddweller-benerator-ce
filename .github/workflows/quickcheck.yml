@@ -30,13 +30,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Cache SonarCloud packages
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Cache Maven packages
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -64,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v3.1.1
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
@@ -72,9 +72,10 @@ jobs:
             maven-${{ matrix.os }}-java${{ matrix.java }}-
             maven-${{ matrix.os }}-
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
-          java-version: ${{ matrix.java }}
+          java-version: 11
+          distribution: zulu
       - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
 
   test_IT_jdk11:
@@ -86,19 +87,15 @@ jobs:
     services:
       mongodb:
         # Docker Hub image
-        image: aashreys/mongo-auth:latest
+        image: mongo:latest
         # Provide the password for postgres
         env:
           DB_HOST: mongodb
           DB_PORT: "27017"
           DB_CONNECTION: "benerator"
           # mongodb
-          AUTH: "yes"
-          MONGODB_ADMIN_USER: "admin"
-          MONGODB_ADMIN_PASS: "root"
-          MONGODB_APPLICATION_DATABASE: "benerator"
-          MONGODB_APPLICATION_USER: "benerator"
-          MONGODB_APPLICATION_PASS: "benerator"
+          MONGO_INITDB_ROOT_USERNAME: "benerator",
+          MONGO_INITDB_ROOT_PASSWORD: "benerator"
       # Label used to access the service container
       postgres:
         # Docker Hub image
@@ -177,7 +174,7 @@ jobs:
           mongoDatabase=benerator
           mongoUser=benerator
           mongoPassword=benerator
-          mongoAuthenticationDatabase=benerator
+          mongoAuthenticationDatabase=admin
           mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
       - name: set db properties for postgres connection
         run: |
