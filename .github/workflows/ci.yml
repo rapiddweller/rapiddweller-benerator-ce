@@ -26,7 +26,7 @@ jobs:
         shell: bash
     steps:
       - run: export
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: set ARTIFACT_ID
         run: |
           ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
@@ -50,7 +50,7 @@ jobs:
           echo "echo ARTIFACT_FULLNAME=${ARTIFACT_FULLNAME} >> \$GITHUB_ENV" >> dot.env
       - run: export
       - name: Upload setupfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: setup
           path: dot.env
@@ -65,22 +65,22 @@ jobs:
       - setup
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
       - name: Upload build artifact for assembly
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build_jdk11
           path: target/*.jar
@@ -97,9 +97,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v2.1.1
+        uses: actions/cache@v3.1.1
         with:
           path: ~/.m2/repository
           key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
@@ -187,9 +187,9 @@ jobs:
           ORACLE_ENABLE_XDB: 'true'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -267,11 +267,11 @@ jobs:
         shell: bash
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -303,20 +303,20 @@ jobs:
     needs: [ test_UT_multiplatform, test_IT_jdk11, build_jdk11 ]
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build_jdk11
           path: target
@@ -325,7 +325,7 @@ jobs:
         run: cd target && ls
       - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
       - name: Upload dist test
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: assembly_jdk11_test
           path: |
@@ -338,9 +338,9 @@ jobs:
   E2ET_helper-scripts_jdk11:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -359,12 +359,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -383,7 +383,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
       - run: benerator $BENERATOR_HOME/demo/script/scriptdb.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_script-jdk11-log
           path: benerator.log
@@ -396,12 +396,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -418,7 +418,7 @@ jobs:
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/memstore/memstore.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_memstore-jdk11-log
           path: benerator.log
@@ -431,12 +431,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -453,7 +453,7 @@ jobs:
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/watermark/watermark.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_watermark-jdk11-log
           path: benerator.log
@@ -466,12 +466,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -488,7 +488,7 @@ jobs:
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/anon/anon.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_anon-jdk11-log
           path: benerator.log
@@ -501,12 +501,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -528,7 +528,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/db/dbenv-old.ben.xml
       - run: benerator $BENERATOR_HOME/demo/db/dbenvconf.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_db-jdk11-log
           path: benerator.log
@@ -541,12 +541,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -572,7 +572,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/file/import_fixed_width.ben.xml
       - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_files-jdk11-log
           path: benerator.log
@@ -585,12 +585,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -607,7 +607,7 @@ jobs:
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_hsqlmem-jdk11-log
           path: benerator.log
@@ -641,12 +641,12 @@ jobs:
           --health-retries 5
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -676,7 +676,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
       - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_postgresql-jdk11-log
           path: benerator.log
@@ -703,12 +703,12 @@ jobs:
           MYSQL_DATABASE: "benerator"
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -736,7 +736,7 @@ jobs:
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mysql.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_mysql-jdk11-log
           path: benerator.log
@@ -758,12 +758,12 @@ jobs:
           SA_PASSWORD: Benerator123!
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -792,7 +792,7 @@ jobs:
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mssql.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_mssql-jdk11-log
           path: benerator.log
@@ -813,12 +813,12 @@ jobs:
           ORACLE_ENABLE_XDB: 'true'
     steps:
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: assembly_jdk11_test
           path: target
@@ -848,7 +848,7 @@ jobs:
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-oracle.ben.xml
       - name: Upload logfile
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: E2ET_oracle-jdk11-log
           path: benerator.log
@@ -877,15 +877,15 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
@@ -920,20 +920,20 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download dot.env
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup
       - run: bash dot.env
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build_jdk11
           path: target
