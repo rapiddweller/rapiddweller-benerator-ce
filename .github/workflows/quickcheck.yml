@@ -94,7 +94,7 @@ jobs:
           DB_PORT: "27017"
           DB_CONNECTION: "benerator"
           # mongodb
-          MONGO_INITDB_ROOT_USERNAME: "benerator",
+          MONGO_INITDB_ROOT_USERNAME: "benerator"
           MONGO_INITDB_ROOT_PASSWORD: "benerator"
       # Label used to access the service container
       postgres:
