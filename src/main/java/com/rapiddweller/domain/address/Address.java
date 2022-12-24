@@ -65,17 +65,19 @@ public class Address {
                  City city, State state, Country country,
                  PhoneNumber privatePhone, PhoneNumber officePhone,
                  PhoneNumber mobilePhone, PhoneNumber fax) {
-    this.street = street;
-    this.houseNumber = houseNumber;
-    this.street2 = null;
-    this.postalCode = postalCode;
+
+    // if value is null set empty string, use the value of the attribute
+    this.street = (street != null ? street : "");
+    this.houseNumber = (houseNumber != null ? houseNumber : "");
+    this.postalCode = (postalCode != null ? postalCode : "");
     this.city = city;
-    this.state = state;
+    this.state = (state != null ? state : new State());
     this.country = country;
-    this.privatePhone = privatePhone;
-    this.officePhone = officePhone;
-    this.mobilePhone = mobilePhone;
-    this.fax = fax;
+    this.privatePhone = (privatePhone != null ? privatePhone : new PhoneNumber());
+    this.officePhone = (officePhone != null ? officePhone : new PhoneNumber());
+    this.mobilePhone = (mobilePhone != null ? mobilePhone : new PhoneNumber());
+    this.fax = (fax != null ? fax : new PhoneNumber());
+
   }
 
   public String getStreet() {
