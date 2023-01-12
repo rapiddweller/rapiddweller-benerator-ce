@@ -832,6 +832,8 @@
             <xs:attribute type="xs:string" name="database"/>
             <xs:attribute type="xs:string" name="user"/>
             <xs:attribute type="xs:string" name="password"/>
+            <xs:attribute type="xs:string" name="authenticationDatabase"/>
+            <xs:attribute type="xs:string" name="authenticationMechanism"/>
             <xs:attribute type="scriptable-boolean" name="clean"/>
             <xs:attribute name="environment" type="xs:string"/>
             <xs:attribute name="system" type="xs:string"/>

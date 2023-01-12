@@ -65,6 +65,9 @@ public class Address {
                  City city, State state, Country country,
                  PhoneNumber privatePhone, PhoneNumber officePhone,
                  PhoneNumber mobilePhone, PhoneNumber fax) {
+
+    // if value is null set empty string, use the value
+    
     this.street = street;
     this.houseNumber = houseNumber;
     this.street2 = null;

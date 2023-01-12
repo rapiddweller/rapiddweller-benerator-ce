@@ -58,7 +58,9 @@
     <comment>define databases</comment>
     <comment>define a mongodb database that will be referred by the id 'mongodb' subsequently</comment>
     <mongodb id="mongodb" host="{ftl:${mongoHost}}" port="{ftl:${mongoPort}}" database="{ftl:${mongoDatabase}}"
-             user="{ftl:${mongoUser}}" password="{ftl:${mongoPassword}}" clean="{ftl:${mongoClean?c}}"/>
+             user="{ftl:${mongoUser}}" password="{ftl:${mongoPassword}}"
+             authenticationDatabase="{ftl:${mongoAuthenticationDatabase}}"/>
+             clean="{ftl:${mongoClean?c}}"/>
 
     <comment>define a postgres database that will be referred by the id 'postgres' subsequently</comment>
     <database id="postgres" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
