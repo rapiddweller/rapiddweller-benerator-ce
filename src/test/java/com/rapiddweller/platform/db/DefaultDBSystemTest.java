@@ -54,6 +54,7 @@ import static org.junit.Assert.*;
 /**
  * Tests {@link DefaultDBSystem}.<br/><br/>
  * Created at 26.12.2008 03:40:44
+ *
  * @author Volker Bergmann
  * @since 0.5.6
  */
@@ -101,7 +102,7 @@ public class DefaultDBSystemTest extends ABCTest {
   @Test
   public void testGettersAndSetters() {
     assertEquals("sa", db.getEnvironment());
-    assertNull(db.getSystem());
+    assertEquals("h2", db.getSystem());
     assertEquals(DRIVER, db.getDriver());
     assertEquals("jdbc:h2:mem:benerator", db.getUrl());
     assertEquals("sa", db.getUser());
@@ -336,7 +337,8 @@ public class DefaultDBSystemTest extends ABCTest {
     assertEquals("DefaultDBSystem[sa@jdbc:h2:mem:benerator]", db.toString());
     assertEquals("h2", db.getDbType());
     assertEquals(1, db.invalidationCount());
-    assertEquals("ConvertingDataSource[QueryDataSource[SELECT * FROM TEST] -> ResultSetConverter]", db.queryEntityIds("TEST", "SELECT * FROM TEST", null).toString());
+    assertEquals("ConvertingDataSource[QueryDataSource[SELECT * FROM TEST] -> ResultSetConverter]",
+        db.queryEntityIds("TEST", "SELECT * FROM TEST", null).toString());
     assertEquals(2, db.countEntities("TEST"));
     assertEquals("TEST[ID=1, NAME=Alice]", db.queryEntityById("TEST", 1).toString());
     assertNull(db.getCatalog());
