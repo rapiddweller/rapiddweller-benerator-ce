@@ -77,6 +77,7 @@ CREATE TABLE db_order
     customer_id integer       NOT NULL,
     total_price decimal(8, 2) NOT NULL,
     created_at  timestamp     NOT NULL,
+    order_date  date          NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (customer_id) REFERENCES db_customer (id)
 );

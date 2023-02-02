@@ -96,7 +96,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   // singleton code --------------------------------------------------------------------------------------------------
 
   private static final SimpleTypeGeneratorFactory INSTANCE = new SimpleTypeGeneratorFactory();
-  private static final Map<String, String>  dbFunctionsMap;
+  private static final Map<String, String> dbFunctionsMap;
 
 
   static {
@@ -171,7 +171,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         if (!StringUtil.isEmpty(subSelector)) {
           generator = createStorageSystemQueryGenerator(context, subSelector, (StorageSystem) sourceObject);
           generator = WrapperFactory.applyHeadCycler(generator);
-        } else if (selector != null){
+        } else if (selector != null) {
           generator = createStorageSystemQueryGenerator(context, selector, (StorageSystem) sourceObject);
         } else {
           throw ExceptionFactory.getInstance().configurationError(
@@ -264,18 +264,18 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     PrimitiveType primitiveType = descriptor.getPrimitiveType();
     if ("".equals(constant)) {
       generator = new ConstantGenerator<>("");
-    }
-    else if (primitiveType == PrimitiveType.DATE || primitiveType == PrimitiveType.TIMESTAMP &&
-        Arrays.stream(dbTimeFunctions).anyMatch(tf -> Objects.requireNonNull(constant).toUpperCase().startsWith(tf))) {
-      // check if constant is a database time function
-      generator = new ConstantGenerator(new Date());
-    }
-    else if (constant != null) {
-      Object value = LiteralParserConverter.parse(constant);
-      if (primitiveType != null) {
-        value = AnyConverter.convert(value, primitiveType.getJavaType());
+    } else if (constant != null) {
+      if (primitiveType == PrimitiveType.DATE || primitiveType == PrimitiveType.TIMESTAMP &&
+          Arrays.stream(dbTimeFunctions).anyMatch(tf -> Objects.requireNonNull(constant).toUpperCase().startsWith(tf))) {
+        // check if constant is a database time function
+        generator = new ConstantGenerator(new Date());
+      } else {
+        Object value = LiteralParserConverter.parse(constant);
+        if (primitiveType != null) {
+          value = AnyConverter.convert(value, primitiveType.getJavaType());
+        }
+        generator = new ConstantGenerator(value);
       }
-      generator = new ConstantGenerator(value);
     }
     return generator;
   }
