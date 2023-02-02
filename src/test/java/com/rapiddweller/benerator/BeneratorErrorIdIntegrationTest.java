@@ -247,14 +247,6 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
-  public void test_0205_syn_setup_defaultLineSeparator() {
-    BeneratorResult result = runFile("test_0205_syn_setup_defLineSep_none.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_LINE_SEPARATOR,
-        "Illegal attribute value for setup.defaultLineSeparator: 'none'. " +
-            "File test_0205_syn_setup_defLineSep_none.ben.xml, line 1", ExitCodes.SYNTAX_ERROR, result);
-  }
-
-  @Test
   public void test_0206_syn_setup_defaultLocale() {
     BeneratorResult result = runFile("test_0206_syn_setup_defLocale.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_LOCALE,

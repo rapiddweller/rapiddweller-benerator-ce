@@ -68,6 +68,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 /**
  * {@link XMLElementParser} implementation for parsing a Benerator descriptor file's root XML element.<br/><br/>
  * Created: 14.12.2010 19:48:00
+ *
  * @author Volker Bergmann
  * @since 0.6.4
  */
@@ -84,12 +85,12 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
   protected static final AttrInfo<Boolean> DEFAULT_NULL = new AttrInfo<>(
       ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, new BooleanParser(), FALSE);
 
-    protected static final AttrInfo<String> DEFAULT_ENCODING = new AttrInfo<>(
+  protected static final AttrInfo<String> DEFAULT_ENCODING = new AttrInfo<>(
       ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, new PlainEncodingParser(), Encodings.UTF_8);
 
   protected static final AttrInfo<String> DEFAULT_LINE_SEPARATOR = new AttrInfo<>(
-    ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR,
-      new RegexBasedStringParser("line separator", "(\\r)?\\n"), SystemInfo.LF);
+      ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR,
+      null, SystemInfo.LF);
 
   protected static final AttrInfo<String> DEFAULT_LOCALE = new AttrInfo<>(
       ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), Locale.getDefault().toString());
@@ -98,10 +99,10 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
       ATT_DEFAULT_TIME_ZONE, false, SYN_SETUP_DEF_TIMEZONE, new ZoneIdParser(), ZoneId.systemDefault().getId());
 
   protected static final AttrInfo<String> DEFAULT_DATASET = new AttrInfo<>(
-    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(), Country.getDefault().getIsoCode());
+      ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(), Country.getDefault().getIsoCode());
 
   protected static final AttrInfo<Integer> DEFAULT_PAGE_SIZE = new AttrInfo<>(
-    ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, new PositiveIntegerParser(), "1");
+      ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, new PositiveIntegerParser(), "1");
 
   protected static final AttrInfo<Character> DEFAULT_SEPARATOR = new AttrInfo<>(
       ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR, new CharacterParser(), ",");
@@ -168,8 +169,8 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     }
     // create root statement and configure its children
     BeneratorRootStatement rootStatement = new BeneratorRootStatement(map);
-    Statement[] currentComponentPath = new Statement[] { rootStatement };
-    Element[] currentXmlPath = new Element[] { element };
+    Statement[] currentComponentPath = new Statement[] {rootStatement};
+    Element[] currentXmlPath = new Element[] {element};
     List<Statement> subStatements = context.parseChildElementsOf(element, currentXmlPath, currentComponentPath);
     rootStatement.setSubStatements(subStatements);
     return rootStatement;
