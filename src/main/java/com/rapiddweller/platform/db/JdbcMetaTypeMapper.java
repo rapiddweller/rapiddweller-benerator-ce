@@ -95,7 +95,7 @@ public class JdbcMetaTypeMapper {
       if (lcName.startsWith("timestamp")) {
         return PrimitiveType.TIMESTAMP.getName();
       } else if (lcName.endsWith("char") || lcName.startsWith("xml")
-          || lcName.endsWith("varchar2") || lcName.endsWith("clob")) {
+          || lcName.endsWith("varchar2") || lcName.endsWith("clob") || lcName.startsWith("sysname")) {
         return PrimitiveType.STRING.getName();
       } else if (!acceptUnknown) {
         throw BeneratorExceptionFactory.getInstance().configurationError(
