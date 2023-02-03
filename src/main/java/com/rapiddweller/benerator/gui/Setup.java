@@ -267,7 +267,7 @@ public class Setup implements ObservableBean, Serializable {
         db = "<database>";
       }
       setDbUrl(MessageFormat.format(urlPattern,
-          "<host>", driver.getDefaultPort(), db));
+          "localhost", driver.getDefaultPort(), db));
       setDbDriver(driver.getDriverClass());
       setDbUser(driver.getDefaultUser());
       setDbSchema(driver.getDefaultSchema());
