@@ -86,9 +86,9 @@ CREATE TABLE db_order
 (
     id          int(10) NOT NULL,
     customer_id int(10) NOT NULL,
-    total_price float(8, 2
-) NOT NULL,
-  created_at  DATETIME NOT NULL,
+    total_price float(8, 2) NOT NULL,
+    created_at  DATETIME NOT NULL,
+    order_date  DATE NOT NULL,
   PRIMARY KEY (id),
   KEY db_order_customer_fk (customer_id),
   CONSTRAINT db_order_customer_fk FOREIGN KEY (customer_id) REFERENCES db_customer (id)

@@ -60,6 +60,8 @@ public class Setup implements ObservableBean, Serializable {
   private static final String DEFAULT_DB_URL = "jdbc:h2:mem:benerator";
   private static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
   private static final String DEFAULT_DB_USER = "sa";
+
+  private static final String DEFAULT_DB_CATALOG = "";
   private static final String DEFAULT_DB_SCHEMA = "PUBLIC";
   private static final String DEFAULT_DB_PASSWORD = "";
 
@@ -115,6 +117,7 @@ public class Setup implements ObservableBean, Serializable {
     setDbUser(DEFAULT_DB_USER);
     setDbPassword(DEFAULT_DB_PASSWORD);
     setDbUrl(DEFAULT_DB_URL);
+    setDbCatalog(DEFAULT_DB_CATALOG);
     setDbSchema(DEFAULT_DB_SCHEMA);
     setDbSnapshot("dbunit");
     if (archetype == null) {
@@ -268,6 +271,7 @@ public class Setup implements ObservableBean, Serializable {
       setDbDriver(driver.getDriverClass());
       setDbUser(driver.getDefaultUser());
       setDbSchema(driver.getDefaultSchema());
+      setDbCatalog(driver.getDefaultCatalog());
     }
   }
 
