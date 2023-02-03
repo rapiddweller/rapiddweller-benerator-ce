@@ -1,6 +1,18 @@
 # Changelog
 
 <!--lint disable no-duplicate-headings-->
+## 3.0.1
+
+### Release Highlights
+ - authDb and authMechanism for mongodb platform is configurable now
+ - db functions to set actual timestamp or date is handled correctly now
+
+#### Bug Fixes
+ - #329 Default value of 'now()' in date column causes error
+ - #354 Project wizard generated file returns Error BEN-0205 when run
+
+
+---
 
 ## 3.0.0
 
