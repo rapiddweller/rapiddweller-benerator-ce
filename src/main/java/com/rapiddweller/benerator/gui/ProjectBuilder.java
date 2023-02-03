@@ -290,7 +290,7 @@ public class ProjectBuilder implements Runnable {
 
   private Exception createSnapshotIfNecessary() {
     Exception exception = null;
-    if (setup.isDatabaseProject() && !"none".equals(setup.getDbSnapshot()) && !setup.isShopProject()) {
+    if (setup.isDatabaseProject() && !"none".equals(setup.getDbSnapshot()) && !setup.isShopProject() && !setup.getDbDriver().contains("h2")) {
       try {
         createDbSnapshot();
       } catch (Exception e) {
