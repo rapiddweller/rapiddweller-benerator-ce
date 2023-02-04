@@ -81,6 +81,7 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.TypeMapper;
 import com.rapiddweller.platform.db.postgres.JSONPGObject;
+import com.rapiddweller.platform.db.postgres.PGgeometry;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
 import org.slf4j.LoggerFactory;
@@ -117,6 +118,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10" + ".2.0.4");
       // little trick to satisfy SonarCube which thinks this is an IP address
   private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
+  public static final String FROM = " from ";
+  public static final String SELECT = "select ";
+  public static final String WHERE = " where ";
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   protected static LoggerEscalator escalator = new LoggerEscalator();
@@ -622,7 +626,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       sql = specText;
     } else {
       // SELECTOR is expected to be the argument of a WHERE clause
-      sql = s2 + colsSpec + " from " + tableSpec + s3 + specText;
+      sql = s2 + colsSpec + FROM + tableSpec + s3 + specText;
     }
     sql = "{" + spec.getEngineId() + ":" + sql + "}";
     return sql;
@@ -630,12 +634,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
 
   private static String renderTemplateSelectorQuery(String tableSpec, String colsSpec, ScriptSpec spec, String specText) {
     String sql;// SELECTOR is a template expression
-    if (StringUtil.startsWithIgnoreCase(specText, "select ")) {
+    if (StringUtil.startsWithIgnoreCase(specText, SELECT)) {
       // SELECTOR is expected to be a complete and valid SQL query
       sql = specText;
     } else {
       // SELECTOR is expected to be the argument of a WHERE clause
-      sql = "select " + colsSpec + " from " + tableSpec + " where " + specText;
+      sql = SELECT + colsSpec + FROM + tableSpec + WHERE + specText;
     }
     sql = "{" + spec.getEngineId() + ":" + sql + "}";
     return sql;
@@ -644,12 +648,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   private static String renderStaticSelectorQuery(String tableSpec, String colsSpec, String specText) {
     String sql;
     // SELECTOR is static text
-    if (StringUtil.startsWithIgnoreCase(specText, "select ")) {
+    if (StringUtil.startsWithIgnoreCase(specText, SELECT)) {
       // SELECTOR is expected to be a complete and valid SQL query
       sql = specText;
     } else {
       // SELECTOR is expected to be the static argument of a WHERE clause
-      sql = "select " + colsSpec + " from " + tableSpec;
+      sql = SELECT + colsSpec + FROM + tableSpec;
       if (!StringUtil.isEmpty(specText)) {
         sql += " WHERE " + specText;
       }
@@ -696,18 +700,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
         if (info.type != null) {
           jdbcValue = AnyConverter.convert(jdbcValue, info.type);
         }
-        try {
-          boolean criticalOracleType =
-              (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
-          if (jdbcValue != null || criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
-            statement.setObject(i + 1, jdbcValue);
-          } else {
-            statement.setNull(i + 1, info.sqlType);
-          }
-        } catch (SQLException e) {
-          throw BeneratorExceptionFactory.getInstance().illegalArgument(
-              "error setting column " + tableName + '.' + info.name, e);
-        }
+        handleOracleType(tableName, statement, i, info, jdbcValue);
       }
       if (batch) {
         statement.addBatch();
@@ -720,6 +713,21 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       }
     } catch (Exception e) {
       throw BeneratorExceptionFactory.getInstance().serviceFailed("Error in persisting " + entity, e);
+    }
+  }
+
+  private void handleOracleType(String tableName, PreparedStatement statement, int i, ColumnInfo info, Object jdbcValue) {
+    try {
+      boolean criticalOracleType =
+          (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
+      if (jdbcValue != null || criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
+        statement.setObject(i + 1, jdbcValue);
+      } else {
+        statement.setNull(i + 1, info.sqlType);
+      }
+    } catch (SQLException e) {
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
+          "error setting column " + tableName + '.' + info.name, e);
     }
   }
 
@@ -947,7 +955,10 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       typeToWrite = UUID.class;
     } else if ("JSON".equals(columnType.getName())) { // Special treatment for Postgres JSON type
       typeToWrite = JSONPGObject.class;
-    } else {
+    } else if ("GEOMETRY".equals(columnType.getName())) {
+        typeToWrite = PGgeometry.class;
+    }
+    else {
       SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
       PrimitiveType primitiveType = type.getPrimitiveType();
       if (primitiveType == null) {

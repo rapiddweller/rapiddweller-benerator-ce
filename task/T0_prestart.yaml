@@ -43,7 +43,7 @@
           - "37017:27017"
       postgres:
         name: postgres_local
-        docker_image: postgres:latest
+        docker_image: postgis/postgis
         network: "{{ network }}"
         volumes:
           - ./scripts/:/docker-entrypoint-initdb.d/
