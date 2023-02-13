@@ -24,10 +24,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-DROP TABLE db_order_item;
-DROP TABLE db_order;
-DROP TABLE db_customer;
-DROP TABLE db_user;
-DROP TABLE db_role;
-DROP TABLE db_product;
-DROP TABLE db_category;
+DROP TABLE IF EXISTS db_order_item;
+DROP TABLE IF EXISTS db_order;
+DROP TABLE IF EXISTS db_customer;
+DROP TABLE IF EXISTS db_user;
+DROP TABLE IF EXISTS db_role;
+DROP TABLE IF EXISTS db_product;
+DROP TABLE IF EXISTS db_category;
+

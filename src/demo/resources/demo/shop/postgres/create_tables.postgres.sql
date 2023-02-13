@@ -76,7 +76,8 @@ create TABLE IF NOT EXISTS db_order
     id          integer       NOT NULL DEFAULT nextval('seq_id_gen'),
     customer_id integer       NOT NULL,
     total_price decimal(8, 2) NOT NULL,
-    created_at  timestamp     NOT NULL,
+    order_date   date          NOT NULL default now(),
+    created_at  timestamp     NOT NULL default now(),
     PRIMARY KEY (id),
     CONSTRAINT db_order_customer_fk FOREIGN KEY (customer_id) REFERENCES db_customer (id)
 );

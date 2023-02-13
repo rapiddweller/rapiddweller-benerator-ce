@@ -125,7 +125,7 @@
         <build_number>${buildNumber}</build_number>
         <_rd_common_version>2.0.0-jdk-11</_rd_common_version>
         <_rd_format_version>1.1.5-jdk-11</_rd_format_version>
-        <_rd_jdbacl_version>1.1.12-jdk-11</_rd_jdbacl_version>
+        <_rd_jdbacl_version>1.1.14-jdk-11</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11</_rd_script_version>
         <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
         <database_h2.version>2.1.210</database_h2.version>
@@ -136,7 +136,7 @@
         <database_mysql-connector-java.version>8.0.29</database_mysql-connector-java.version>
         <database_oracle.version>21.8.0.0</database_oracle.version>
         <database_postgresql.version>42.5.1</database_postgresql.version>
-        <database_mariadb-java-client.version>3.1.0</database_mariadb-java-client.version>
+        <database_mariadb-java-client.version>3.1.1</database_mariadb-java-client.version>
         <mongodb.version>3.12.11</mongodb.version>
         <dependency_antlr-runtime.version>3.5.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
@@ -145,8 +145,8 @@
         <dependency_slf4j.version>2.0.6</dependency_slf4j.version>
         <dependency_log4j.version>2.19.0</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scriptengine_freemarker.version>2.3.31</scriptengine_freemarker.version>
-        <scriptengine_graalvm.version>22.3.0</scriptengine_graalvm.version>
+        <scriptengine_freemarker.version>2.3.32</scriptengine_freemarker.version>
+        <scriptengine_graalvm.version>22.3.1</scriptengine_graalvm.version>
         <test_junit.version>4.13.2</test_junit.version>
     </properties>
 
@@ -250,7 +250,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.11.0</version>
+            <version>5.0.0</version>
             <scope>test</scope>
         </dependency>
         <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
@@ -489,7 +489,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M7</version>
+                <version>3.0.0-M8</version>
                 <configuration>
                     <skipTests>${skipUTs}</skipTests>
                     <useSystemClassLoader>false</useSystemClassLoader>
@@ -502,7 +502,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M7</version>
+                <version>3.0.0-M8</version>
                 <configuration>
                     <includes>
                         <include>**/*ShopDemoIntegrationExtDBTest.class</include>
@@ -629,7 +629,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M7</version>
+                <version>3.0.0-M8</version>
                 <reportSets>
                     <reportSet>
                         <!-- defines aggregate unit test report -->

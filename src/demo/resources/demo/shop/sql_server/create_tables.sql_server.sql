@@ -76,7 +76,8 @@ CREATE TABLE db_order
     id          int           NOT NULL,
     customer_id int           NOT NULL,
     total_price decimal(8, 2) NOT NULL,
-    created_at  datetime      NOT NULL,
+    created_at  datetime      NOT NULL default getdate(),
+    order_date  smalldatetime NOT NULL default getdate(),
     PRIMARY KEY (id),
     CONSTRAINT db_order_customer_fk FOREIGN KEY (customer_id) REFERENCES db_customer (id)
 );

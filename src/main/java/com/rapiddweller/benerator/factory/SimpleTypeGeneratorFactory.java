@@ -46,6 +46,7 @@ import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.accessor.GraphAccessor;
 import com.rapiddweller.common.converter.AnyConverter;
@@ -61,6 +62,7 @@ import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.format.util.DataFileUtil;
+import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.UnionSimpleTypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
@@ -74,8 +76,11 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.GRANULARITY;
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.MAX;
@@ -91,6 +96,16 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   // singleton code --------------------------------------------------------------------------------------------------
 
   private static final SimpleTypeGeneratorFactory INSTANCE = new SimpleTypeGeneratorFactory();
+  private static final Map<String, String> dbFunctionsMap;
+
+
+  static {
+    try {
+      dbFunctionsMap = IOUtil.readProperties("com/rapiddweller/benerator/dbFunction.properties");
+    } catch (Exception e) {
+      throw ExceptionFactory.getInstance().configurationError("Failed to read extension type map", e);
+    }
+  }
 
   public static SimpleTypeGeneratorFactory getInstance() {
     return INSTANCE;
@@ -156,7 +171,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         if (!StringUtil.isEmpty(subSelector)) {
           generator = createStorageSystemQueryGenerator(context, subSelector, (StorageSystem) sourceObject);
           generator = WrapperFactory.applyHeadCycler(generator);
-        } else if (selector != null){
+        } else if (selector != null) {
           generator = createStorageSystemQueryGenerator(context, selector, (StorageSystem) sourceObject);
         } else {
           throw ExceptionFactory.getInstance().configurationError(
@@ -245,15 +260,22 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     Generator<?> generator = null;
     // check for constant
     String constant = descriptor.getConstant();
+    String[] dbTimeFunctions = dbFunctionsMap.get("timeFunctions").split(",");
+    PrimitiveType primitiveType = descriptor.getPrimitiveType();
     if ("".equals(constant)) {
       generator = new ConstantGenerator<>("");
     } else if (constant != null) {
-      Object value = LiteralParserConverter.parse(constant);
-      PrimitiveType primitiveType = descriptor.getPrimitiveType();
-      if (primitiveType != null) {
-        value = AnyConverter.convert(value, primitiveType.getJavaType());
+      if (primitiveType == PrimitiveType.DATE || primitiveType == PrimitiveType.TIMESTAMP &&
+          Arrays.stream(dbTimeFunctions).anyMatch(tf -> Objects.requireNonNull(constant).toUpperCase().startsWith(tf))) {
+        // check if constant is a database time function
+        generator = new ConstantGenerator(new Date());
+      } else {
+        Object value = LiteralParserConverter.parse(constant);
+        if (primitiveType != null) {
+          value = AnyConverter.convert(value, primitiveType.getJavaType());
+        }
+        generator = new ConstantGenerator(value);
       }
-      generator = new ConstantGenerator(value);
     }
     return generator;
   }

@@ -81,6 +81,7 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.TypeMapper;
 import com.rapiddweller.platform.db.postgres.JSONPGObject;
+import com.rapiddweller.platform.db.postgres.PGgeometry;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
 import org.slf4j.LoggerFactory;
@@ -107,14 +108,19 @@ import static com.rapiddweller.jdbacl.SQLUtil.createCatSchTabString;
 /**
  * Abstract class that serves as parent for classes which connect to databases using JDBC.<br/><br/>
  * Created: 07.01.2013 08:11:25
+ *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public abstract class AbstractDBSystem extends AbstractStorageSystem implements ConnectionProvider {
 
   private static final int DEFAULT_FETCH_SIZE = 100;
-  private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10" + ".2.0.4"); // little trick to satisfy SonarCube which thinks this is an IP address
+  private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10" + ".2.0.4");
+      // little trick to satisfy SonarCube which thinks this is an IP address
   private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
+  public static final String FROM = " from ";
+  public static final String SELECT = "select ";
+  public static final String WHERE = " where ";
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   protected static LoggerEscalator escalator = new LoggerEscalator();
@@ -247,7 +253,18 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   }
 
   public String getSystem() {
-    return system;
+    return extractSystemNameFromUrl();
+  }
+
+  private String extractSystemNameFromUrl() {
+    // jdbc url always starts with jdbc: followed by the system name and a colon
+    if (url != null && url.startsWith("jdbc:")) {
+      int colon = url.indexOf(':', 5);
+      if (colon > 0) {
+        return url.substring(5, colon);
+      }
+    }
+    return "unknown";
   }
 
   public String getDriver() {
@@ -298,7 +315,13 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
     this.schemaName = StringUtil.emptyToNull(StringUtil.trim(schema));
   }
 
-  /** @deprecated  */
+  public void setSystem(String system) {
+    this.system = system;
+  }
+
+  /**
+   * @deprecated
+   */
   @Deprecated
   public void setTableFilter(String tableFilter) {
     setIncludeTables(tableFilter);
@@ -603,7 +626,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       sql = specText;
     } else {
       // SELECTOR is expected to be the argument of a WHERE clause
-      sql = s2 + colsSpec + " from " + tableSpec + s3 + specText;
+      sql = s2 + colsSpec + FROM + tableSpec + s3 + specText;
     }
     sql = "{" + spec.getEngineId() + ":" + sql + "}";
     return sql;
@@ -611,12 +634,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
 
   private static String renderTemplateSelectorQuery(String tableSpec, String colsSpec, ScriptSpec spec, String specText) {
     String sql;// SELECTOR is a template expression
-    if (StringUtil.startsWithIgnoreCase(specText, "select ")) {
+    if (StringUtil.startsWithIgnoreCase(specText, SELECT)) {
       // SELECTOR is expected to be a complete and valid SQL query
       sql = specText;
     } else {
       // SELECTOR is expected to be the argument of a WHERE clause
-      sql = "select " + colsSpec + " from " + tableSpec + " where " + specText;
+      sql = SELECT + colsSpec + FROM + tableSpec + WHERE + specText;
     }
     sql = "{" + spec.getEngineId() + ":" + sql + "}";
     return sql;
@@ -625,12 +648,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
   private static String renderStaticSelectorQuery(String tableSpec, String colsSpec, String specText) {
     String sql;
     // SELECTOR is static text
-    if (StringUtil.startsWithIgnoreCase(specText, "select ")) {
+    if (StringUtil.startsWithIgnoreCase(specText, SELECT)) {
       // SELECTOR is expected to be a complete and valid SQL query
       sql = specText;
     } else {
       // SELECTOR is expected to be the static argument of a WHERE clause
-      sql = "select " + colsSpec + " from " + tableSpec;
+      sql = SELECT + colsSpec + FROM + tableSpec;
       if (!StringUtil.isEmpty(specText)) {
         sql += " WHERE " + specText;
       }
@@ -650,7 +673,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
         VersionNumber driverVersion = VersionNumber.valueOf(metaData.getDriverVersion());
         if (driverVersion.compareTo(MIN_ORACLE_VERSION) < 0) {
           logger.warn("Your Oracle driver has a bug in metadata support. Please update to 10.2.0.4 or newer. " +
-                  "You can use that driver for accessing an Oracle 9 server as well.");
+              "You can use that driver for accessing an Oracle 9 server as well.");
         }
       } catch (SQLException e) {
         throw BeneratorExceptionFactory.getInstance().configurationError("Error getting database meta data", e);
@@ -677,18 +700,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
         if (info.type != null) {
           jdbcValue = AnyConverter.convert(jdbcValue, info.type);
         }
-        try {
-          boolean criticalOracleType =
-              (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
-          if (jdbcValue != null || criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
-            statement.setObject(i + 1, jdbcValue);
-          } else {
-            statement.setNull(i + 1, info.sqlType);
-          }
-        } catch (SQLException e) {
-            throw BeneratorExceptionFactory.getInstance().illegalArgument(
-                "error setting column " + tableName + '.' + info.name, e);
-        }
+        handleOracleType(tableName, statement, i, info, jdbcValue);
       }
       if (batch) {
         statement.addBatch();
@@ -701,6 +713,21 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       }
     } catch (Exception e) {
       throw BeneratorExceptionFactory.getInstance().serviceFailed("Error in persisting " + entity, e);
+    }
+  }
+
+  private void handleOracleType(String tableName, PreparedStatement statement, int i, ColumnInfo info, Object jdbcValue) {
+    try {
+      boolean criticalOracleType =
+          (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
+      if (jdbcValue != null || criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
+        statement.setObject(i + 1, jdbcValue);
+      } else {
+        statement.setNull(i + 1, info.sqlType);
+      }
+    } catch (SQLException e) {
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
+          "error setting column " + tableName + '.' + info.name, e);
     }
   }
 
@@ -928,7 +955,10 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       typeToWrite = UUID.class;
     } else if ("JSON".equals(columnType.getName())) { // Special treatment for Postgres JSON type
       typeToWrite = JSONPGObject.class;
-    } else {
+    } else if ("GEOMETRY".equals(columnType.getName())) {
+        typeToWrite = PGgeometry.class;
+    }
+    else {
       SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
       PrimitiveType primitiveType = type.getPrimitiveType();
       if (primitiveType == null) {

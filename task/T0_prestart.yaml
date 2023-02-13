@@ -30,21 +30,20 @@
           - "39001:9001"
       mongodb:
         name: mongodb_local
-        docker_image: aashreys/mongo-auth:latest
+        docker_image: mongo:latest
         network: "{{ network }}"
         env: {
-          AUTH: "yes",
-          MONGODB_ADMIN_USER: "admin",
-          MONGODB_ADMIN_PASS: "root",
-          MONGODB_APPLICATION_DATABASE: "benerator",
-          MONGODB_APPLICATION_USER: "benerator",
-          MONGODB_APPLICATION_PASS: "benerator",
+          DB_HOST: mongodb,
+          DB_PORT: "27017",
+          DB_CONNECTION: "benerator",
+          MONGO_INITDB_ROOT_USERNAME: "benerator",
+          MONGO_INITDB_ROOT_PASSWORD: "benerator"
         }
         published_ports:
           - "37017:27017"
       postgres:
         name: postgres_local
-        docker_image: postgres:latest
+        docker_image: postgis/postgis
         network: "{{ network }}"
         volumes:
           - ./scripts/:/docker-entrypoint-initdb.d/
@@ -68,7 +67,7 @@
           - "33306:3306"
       mssql:
         name: mssql_local
-        docker_image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        docker_image: mcr.microsoft.com/azure-sql-edge
         network: "{{ network }}"
         env: {
           ACCEPT_EULA: Y,

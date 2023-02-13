@@ -91,6 +91,7 @@ CREATE TABLE db_order
     customer_id number(10) NOT NULL,
     total_price number(8,2) NOT NULL,
     created_at  timestamp with time zone NOT NULL,
+    order_date  date NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT db_order_customer_fk FOREIGN KEY (customer_id) REFERENCES db_customer (id)
 );
