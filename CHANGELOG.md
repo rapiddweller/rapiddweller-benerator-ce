@@ -1,6 +1,30 @@
 # Changelog
 
 <!--lint disable no-duplicate-headings-->
+## 3.1.0
+
+### Release Highlights
+- integrated faker library for data generation as FakerGenerator 
+- extend postgres dialect make geo data processable 
+
+#### Bug Fixes
+- #350 Support geometry data type for Postgres (postgis extension)
+
+#### Depenency Updated
+- downgrade slf4j-api to versions 1.7.36
+- database_mssqldb to 12.2.0.jre11
+- database_jaybird to 5.0.1.java11
+- database_icu4j to 72.1
+- database_oracle to 21.8.0.0
+- database_postgresql to 42.5.3
+- database_mariadb to 3.1.1
+- dependency_log4j to 2.19.0
+- scriptengine_freemarker to 2.3.32
+- scriptengine_graalvm to 22.3.1
+- _rd_jdbacl_version to 1.1.14-jdk-11
+
+---
+
 ## 3.0.1
 
 ### Release Highlights
