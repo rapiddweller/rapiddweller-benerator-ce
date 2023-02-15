@@ -6,8 +6,8 @@
 
 <memstore id="mem"/>
 <import domains="faker,organization,address"/>
-    
-    <setting name="count" value="100"></setting>
+
+    <setting name="count" value="100"/>
 
     <generate type="faker_data" count="{count}" consumer="mem" >
         <attribute name="no" generator="IncrementGenerator" />
@@ -18,6 +18,9 @@
         <attribute name="flight" generator="new FakerGenerator('aviation','aircraft')" locale="de_CH"/>
         <attribute name="HarryPotter" generator="new FakerGenerator('harryPotter','character')" locale="vi"/>
         <attribute name="spell" generator="new FakerGenerator('harryPotter','spell')" locale="de_CH"/>
+        <attribute name="spell_default_local" generator="new FakerGenerator('harryPotter','spell')"/>
+        <attribute name="business" generator="new FakerGenerator('Business','creditCardNumber')"/>
+        <attribute name="ChuckNorris" generator="new FakerGenerator('ChuckNorris', 'fact')"/>
     </generate>
 
     <echo>Check if enough data has been generated</echo>
