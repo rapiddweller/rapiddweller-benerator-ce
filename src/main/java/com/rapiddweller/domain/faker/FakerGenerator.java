@@ -1,4 +1,4 @@
-package com.rapiddweller.domain.java_faker;
+package com.rapiddweller.domain.faker;
 
 import com.github.javafaker.Faker;
 import com.rapiddweller.benerator.GeneratorContext;
@@ -6,7 +6,6 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.dataset.DatasetBasedGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.domain.person.Person;
 
 import java.lang.reflect.Method;
 import java.util.Locale;

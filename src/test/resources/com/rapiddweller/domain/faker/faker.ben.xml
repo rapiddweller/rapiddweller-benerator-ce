@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <setup xmlns="https://www.benerator.de/schema/3.0.0"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/rapiddweller-benerator-ce-3.0.0.xsd"
-       defaultDataset="false"
->
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
 
-<import domains="java_faker,organization,address"/>
+<memstore id="mem"/>
+<import domains="faker,organization,address"/>
+    
     <setting name="count" value="100"></setting>
 
-    <generate type="java_faker_data" count="{count}" consumer="Result" >
+    <generate type="faker_data" count="{count}" consumer="mem" >
         <attribute name="no" generator="IncrementGenerator" />
         <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="zh_CN"/>
         <attribute name="cat" generator="new FakerGenerator('cat','name')" locale="zh_CN"/>
@@ -19,4 +20,11 @@
         <attribute name="spell" generator="new FakerGenerator('harryPotter','spell')" locale="de_CH"/>
     </generate>
 
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="faker_data" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="faker_data.counter != 100">
+        <error>Not enough data has been generated</error>
+    </if>
 </setup>

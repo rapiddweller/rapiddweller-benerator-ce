@@ -1,4 +1,4 @@
-package com.rapiddweller.domain.java_faker;
+package com.rapiddweller.domain.faker;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
