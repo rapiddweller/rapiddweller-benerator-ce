@@ -316,5 +316,162 @@ Provides classes specific for the United States of America:
 
 * **SSNGenerator**: Generates Social Security Numbers
 
-* **SSNValidator**: Validates Social Security Numbers and can be used as Benerator validator and as ConstraintValidator in Java Bean Validation (JSR
-  303)
+* **SSNValidator**: Validates Social Security Numbers and can be used as Benerator validator and as ConstraintValidator in Java Bean Validation (JSR 303)
+
+## faker domain
+
+The faker package provides the Generator class with library base on Java Faker (as well as Perl's Data::Faker library)
+
+* **FakerGenerator** : Generates data for many topics such as book, food, music... 
+
+Because this Generator has many topics, each topic has many properties, you have to choose topic and property and put it into 
+the 'generator' as parameters (like this `generator="new FakerGenerator('topic'','property')"`).
+
+Some topics have different data which base on the locale, you can change it by manual setting 'locale'.
+
+You can use the FakerGenerator like this:
+
+```xml
+<import domains="faker"/>
+
+<generate type="data" count="5" consumer="ConsoleExporter">
+    <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="en_US"/>
+    <attribute name="HarryPotter" generator="new FakerGenerator('harryPotter','character')" locale="en"/>
+    <attribute name="dinner" generator="new FakerGenerator('food','dish')" locale="de_CH"/>
+</generate>
+```
+
+to get output similar to this:
+
+```
+data[name=Maira Lubowitz MD, HarryPotter=Pomona Sprout, dinner=French Fries with Sausages]
+data[name=Mr. Josue Kreiger, HarryPotter=Fang, dinner=Chicken Milanese]
+data[name=Henry Skiles, HarryPotter=Parvati Patil, dinner=Scotch Eggs]
+data[name=Minda Breitenberg, HarryPotter=Helga Hufflepuff, dinner=Lasagne]
+data[name=Nakita Schamberger, HarryPotter=Aragog, dinner=Poke]
+```
+
+### Supported topics:
+
+FakerGenerator can generate data for the following topics (with properties):
+
+| Topic                       | Property name |
+|:----------------------------|---------------|
+| address                     |lastName, postcode, city, cityName, latitude, timeZone, zipCode, firstName, streetName, streetAddressNumber, streetAddress, secondaryAddress, stateAbbr, streetSuffix, streetPrefix, citySuffix, cityPrefix, longitude, countryCode, buildingNumber, fullAddress, state, country|
+| ancient                     |god, titan, hero, primordial|
+| animal                      |name|
+| app                         |author, name, version|
+| aquaTeenHungerForce         |character|
+| artist                      |name|
+| avatar                      |image|
+| aviation                    |METAR, aircraft, airport|
+| backToTheFuture             |character, date, quote|
+| barcode                     |data, typeAndData, type|
+| basketball                  |coaches, teams, players, positions|
+| beer                        |hop, style, yeast, malt, name|
+| bojackHorseman              |quotes, characters, tongueTwisters|
+| book                        |author, title, genre, publisher|
+| buffy                       |quotes, bigBads, episodes, characters, celebrities|
+| business                    |creditCardNumber, creditCardType, creditCardExpiry|
+| cat                         |breed, registry, name|
+| chuckNorris                 |fact|
+| code                        |isbn10, isbn13, isbnGs1, imei, ean8, gtin8, ean13, gtin13, isbnGroup, isbnRegistrant, asin|
+| coin                        |flip|
+| color                       |hex, name|
+| commerce                    |material, price, color, department, productName, promotionCode|
+| company                     |suffix, industry, buzzword, bs, logo, profession, catchPhrase, url, name|
+| country                     |currency, capital, countryCode2, countryCode3, currencyCode, flag, name|
+| crypto                      |sha512, sha1, md5, sha256|
+| currency                    |code, name|
+| demographic                 |demonym, sex, race, maritalStatus, educationalAttainment|
+| disease                     |surgery, internalDisease, neurology, paediatrics, gynecologyAndObstetrics, dermatolory, ophthalmologyAndOtorhinolaryngology|
+| dog                         |breed, age, sound, gender, memePhrase, coatLength, name, size|
+| dragonBall                  |character|
+| dune                        |title, saying, planet, character, quote|
+| educator                    |course, campus, secondarySchool, university|
+| elderScrolls                |creature, lastName, city, race, dragon, firstName, region, quote|
+| englandfootball             |team, league|
+| esports                     |team, game, league, player, event|
+| file                        |mimeType, extension, fileName|
+| finance                     |iban, bic, creditCard|
+| food                        |spice, fruit, dish, sushi, ingredient, vegetable, measurement|
+| friends                     |character, location, quote|
+| funnyName                   |name|
+| gameOfThrones               |city, house, dragon, character, quote|
+| gender                      |binaryTypes, shortBinaryTypes, types|
+| hacker                      |noun, ingverb, verb, abbreviation, adjective|
+| harryPotter                 |house, book, spell, character, location, quote|
+| hipster                     |word|
+| hitchhikersGuideToTheGalaxy |specie, starship, planet, marvinQuote, character, location, quote|
+| hobbit                      |character, thorinsCompany, location, quote|
+| howIMetYourMother           |highFive, catchPhrase, character, quote|
+| idNumber                    |ssnValid, validSvSeSsn, invalidSvSeSsn, invalid, valid|
+| internet                    |password, ipV4Cidr, ipV6Cidr, slug, uuid, image, avatar, emailAddress, safeEmailAddress, domainName, domainWord, domainSuffix, macAddress, ipV4Address, privateIpV4Address, publicIpV4Address, ipV6Address, userAgentAny, url|
+| job                         |title, seniority, keySkills, position, field|
+| kaamelott                   |character, quote|
+| leagueOfLegends             |champion, rank, summonerSpell, masteries, location, quote|
+| lebowski                    |actor, character, quote|
+| lordOfTheRings              |character, location|
+| lorem                       |sentence, word, characters, paragraph|
+| matz                        |quote|
+| medical                     |symptoms, medicineName, diseaseName, hospitalName|
+| mountain                    |name, range|
+| music                       |chord, genre, instrument, key|
+| name                        |fullName, lastName, suffix, title, username, nameWithMiddle, firstName, bloodGroup, name, prefix|
+| nation                      |nationality, capitalCity, flag, language|
+| number                      |digit|
+| overwatch                   |hero, location, quote|
+| phoneNumber                 |cellPhone, extension, subscriberNumber, phoneNumber|
+| photography                 |term, brand, camera, lens, imageTag, aperture, shutter, iso, genre|
+| pokemon                     |name, location|
+| princessBride               |character, quote|
+| programmingLanguage         |creator, name|
+| relationships               |direct, extended, inLaw, spouse, sibling, any, parent|
+| rickAndMorty                |character, location, quote|
+| robin                       |quote|
+| rockBand                    |name|
+| shakespeare                 |hamletQuote, asYouLikeItQuote, kingRichardIIIQuote, romeoAndJulietQuote|
+| sip                         |successResponsePhrase, redirectResponsePhrase, bodyString, nameAddress, provisionalResponsePhrase, clientErrorResponsePhrase, serverErrorResponsePhrase, globalErrorResponsePhrase, method, contentType|
+| slackEmoji                  |emoji, nature, custom, activity, people, foodAndDrink, celebration, travelAndPlaces, objectsAndSymbols|
+| space                       |company, galaxy, nebula, moon, planet, star, agency, starCluster, constellation, agencyAbbreviation, nasaSpaceCraft, distanceMeasurement, meteorite|
+| starCraft                   |unit, planet, building, character|
+| starTrek                    |specie, klingon, villain, character, location|
+| stock                       |nsdqSymbol, nyseSymbol|
+| superhero                   |suffix, power, descriptor, name, prefix|
+| team                        |creature, sport, name, state|
+| twinPeaks                   |character, location, quote|
+| university                  |suffix, name, prefix|
+| weather                     |description, temperatureCelsius, temperatureFahrenheit|
+| witcher                     |school, monster, witcher, character, location, quote|
+| yoda                        |quote|
+| zelda                       |game, character|
+
+### Supported Locales
+
+| Language | code              |
+|----------|-------------------|
+|Bulgarian| bg                |
+|Catalan| ca, ca_CAT, da_DK |
+|German|de, de_AT, de_CH|
+|English|en, en_AU, en_au_ocker, en_BORK, en_CA, en_GB, en_IND, en_MS, en_NEP, en_NG, en_NZ, en_PAK, en_SG, en_UG, en_US, en_ZA|
+|Spanish|es, es_MX|
+|Finnish|fi_FI|
+|French|fr|
+|Hungarian|hu|
+|Indonesian|in_ID|
+|Italian|it|
+|Japanese|ja|
+|Korean|ko|
+|Norwegian Bokmål|nb_NO|
+|Dutch|nl|
+|Polish|pl|
+|Portuguese|pt, pt_BR|
+|Russian|ru|
+|Slovak|sk|
+|Swedish|sv, sv_SE|
+|Turkish|tr|
+|Ukrainian|uk|
+|Vietnamese|vi|
+|Chinese|zh_CN, zh_TW|
+
+
