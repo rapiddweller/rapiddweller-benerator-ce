@@ -337,7 +337,7 @@ You can use the FakerGenerator like this:
 <generate type="data" count="5" consumer="ConsoleExporter">
     <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="en_US"/>
     <attribute name="HarryPotter" generator="new FakerGenerator('harryPotter','character')" locale="en"/>
-    <attribute name="dinner" generator="new FakerGenerator('food','dish')" locale="de_CH"/>
+    <attribute name="dinner" type="string" generator="new FakerGenerator('food','dish')" locale="de_CH"/>
 </generate>
 ```
 
@@ -355,96 +355,740 @@ data[name=Nakita Schamberger, HarryPotter=Aragog, dinner=Poke]
 
 FakerGenerator can generate data for the following topics (with properties):
 
-| Topic                       | Property name |
-|:----------------------------|---------------|
-| address                     |lastName, postcode, city, cityName, latitude, timeZone, zipCode, firstName, streetName, streetAddressNumber, streetAddress, secondaryAddress, stateAbbr, streetSuffix, streetPrefix, citySuffix, cityPrefix, longitude, countryCode, buildingNumber, fullAddress, state, country|
-| ancient                     |god, titan, hero, primordial|
-| animal                      |name|
-| app                         |author, name, version|
-| aquaTeenHungerForce         |character|
-| artist                      |name|
-| avatar                      |image|
-| aviation                    |METAR, aircraft, airport|
-| backToTheFuture             |character, date, quote|
-| barcode                     |data, typeAndData, type|
-| basketball                  |coaches, teams, players, positions|
-| beer                        |hop, style, yeast, malt, name|
-| bojackHorseman              |quotes, characters, tongueTwisters|
-| book                        |author, title, genre, publisher|
-| buffy                       |quotes, bigBads, episodes, characters, celebrities|
-| business                    |creditCardNumber, creditCardType, creditCardExpiry|
-| cat                         |breed, registry, name|
-| chuckNorris                 |fact|
-| code                        |isbn10, isbn13, isbnGs1, imei, ean8, gtin8, ean13, gtin13, isbnGroup, isbnRegistrant, asin|
-| coin                        |flip|
-| color                       |hex, name|
-| commerce                    |material, price, color, department, productName, promotionCode|
-| company                     |suffix, industry, buzzword, bs, logo, profession, catchPhrase, url, name|
-| country                     |currency, capital, countryCode2, countryCode3, currencyCode, flag, name|
-| crypto                      |sha512, sha1, md5, sha256|
-| currency                    |code, name|
-| demographic                 |demonym, sex, race, maritalStatus, educationalAttainment|
-| disease                     |surgery, internalDisease, neurology, paediatrics, gynecologyAndObstetrics, dermatolory, ophthalmologyAndOtorhinolaryngology|
-| dog                         |breed, age, sound, gender, memePhrase, coatLength, name, size|
-| dragonBall                  |character|
-| dune                        |title, saying, planet, character, quote|
-| educator                    |course, campus, secondarySchool, university|
-| elderScrolls                |creature, lastName, city, race, dragon, firstName, region, quote|
-| englandfootball             |team, league|
-| esports                     |team, game, league, player, event|
-| file                        |mimeType, extension, fileName|
-| finance                     |iban, bic, creditCard|
-| food                        |spice, fruit, dish, sushi, ingredient, vegetable, measurement|
-| friends                     |character, location, quote|
-| funnyName                   |name|
-| gameOfThrones               |city, house, dragon, character, quote|
-| gender                      |binaryTypes, shortBinaryTypes, types|
-| hacker                      |noun, ingverb, verb, abbreviation, adjective|
-| harryPotter                 |house, book, spell, character, location, quote|
-| hipster                     |word|
-| hitchhikersGuideToTheGalaxy |specie, starship, planet, marvinQuote, character, location, quote|
-| hobbit                      |character, thorinsCompany, location, quote|
-| howIMetYourMother           |highFive, catchPhrase, character, quote|
-| idNumber                    |ssnValid, validSvSeSsn, invalidSvSeSsn, invalid, valid|
-| internet                    |password, ipV4Cidr, ipV6Cidr, slug, uuid, image, avatar, emailAddress, safeEmailAddress, domainName, domainWord, domainSuffix, macAddress, ipV4Address, privateIpV4Address, publicIpV4Address, ipV6Address, userAgentAny, url|
-| job                         |title, seniority, keySkills, position, field|
-| kaamelott                   |character, quote|
-| leagueOfLegends             |champion, rank, summonerSpell, masteries, location, quote|
-| lebowski                    |actor, character, quote|
-| lordOfTheRings              |character, location|
-| lorem                       |sentence, word, characters, paragraph|
-| matz                        |quote|
-| medical                     |symptoms, medicineName, diseaseName, hospitalName|
-| mountain                    |name, range|
-| music                       |chord, genre, instrument, key|
-| name                        |fullName, lastName, suffix, title, username, nameWithMiddle, firstName, bloodGroup, name, prefix|
-| nation                      |nationality, capitalCity, flag, language|
-| number                      |digit|
-| overwatch                   |hero, location, quote|
-| phoneNumber                 |cellPhone, extension, subscriberNumber, phoneNumber|
-| photography                 |term, brand, camera, lens, imageTag, aperture, shutter, iso, genre|
-| pokemon                     |name, location|
-| princessBride               |character, quote|
-| programmingLanguage         |creator, name|
-| relationships               |direct, extended, inLaw, spouse, sibling, any, parent|
-| rickAndMorty                |character, location, quote|
-| robin                       |quote|
-| rockBand                    |name|
-| shakespeare                 |hamletQuote, asYouLikeItQuote, kingRichardIIIQuote, romeoAndJulietQuote|
-| sip                         |successResponsePhrase, redirectResponsePhrase, bodyString, nameAddress, provisionalResponsePhrase, clientErrorResponsePhrase, serverErrorResponsePhrase, globalErrorResponsePhrase, method, contentType|
-| slackEmoji                  |emoji, nature, custom, activity, people, foodAndDrink, celebration, travelAndPlaces, objectsAndSymbols|
-| space                       |company, galaxy, nebula, moon, planet, star, agency, starCluster, constellation, agencyAbbreviation, nasaSpaceCraft, distanceMeasurement, meteorite|
-| starCraft                   |unit, planet, building, character|
-| starTrek                    |specie, klingon, villain, character, location|
-| stock                       |nsdqSymbol, nyseSymbol|
-| superhero                   |suffix, power, descriptor, name, prefix|
-| team                        |creature, sport, name, state|
-| twinPeaks                   |character, location, quote|
-| university                  |suffix, name, prefix|
-| weather                     |description, temperatureCelsius, temperatureFahrenheit|
-| witcher                     |school, monster, witcher, character, location, quote|
-| yoda                        |quote|
-| zelda                       |game, character|
+### Topic: address
+
+| Property name | Type |
+|---|---|
+| state | String |
+| country | String |
+| lastName | String |
+| firstName | String |
+| streetName | String |
+| zipCode | String |
+| stateAbbr | String |
+| citySuffix | String |
+| cityPrefix | String |
+| city | String |
+| cityName | String |
+| latitude | String |
+| longitude | String |
+| timeZone | String |
+| streetAddressNumber | String |
+| streetAddress | String |
+| secondaryAddress | String |
+| streetSuffix | String |
+| streetPrefix | String |
+| countryCode | String |
+| buildingNumber | String |
+| fullAddress | String |
+
+### Topic: ancient
+
+| Property name | Type |
+|---|---|
+| god | String |
+| primordial | String |
+| titan | String |
+| hero | String |
+
+### Topic: animal
+
+| Property name | Type |
+|---|---|
+| name | String |
+
+### Topic: app
+
+| Property name | Type |
+|---|---|
+| name | String |
+| version | String |
+| author | String |
+
+### Topic: aquaTeenHungerForce
+
+| Property name | Type |
+|---|---|
+| character | String |
+
+### Topic: artist
+
+| Property name | Type |
+|---|---|
+| name | String |
+
+### Topic: avatar
+
+| Property name | Type |
+|---|---|
+| image | String |
+
+### Topic: aviation
+
+| Property name | Type |
+|---|---|
+| aircraft | String |
+| airport | String |
+| METAR | String |
+
+### Topic: backToTheFuture
+
+| Property name | Type |
+|---|---|
+| character | String |
+| quote | String |
+| date | String |
+
+### Topic: beer
+
+| Property name | Type |
+|---|---|
+| name | String |
+| style | String |
+| hop | String |
+| yeast | String |
+| malt | String |
+
+### Topic: book
+
+| Property name | Type |
+|---|---|
+| genre | String |
+| title | String |
+| author | String |
+| publisher | String |
+
+### Topic: bool
+
+| Property name | Type |
+|---|---|
+| bool | boolean |
+
+### Topic: buffy
+
+| Property name | Type |
+|---|---|
+| characters | String |
+| quotes | String |
+| bigBads | String |
+| episodes | String |
+| celebrities | String |
+
+### Topic: business
+
+| Property name | Type |
+|---|---|
+| creditCardNumber | String |
+| creditCardType | String |
+| creditCardExpiry | String |
+
+### Topic: cat
+
+| Property name | Type |
+|---|---|
+| name | String |
+| registry | String |
+| breed | String |
+
+### Topic: chuckNorris
+
+| Property name | Type |
+|---|---|
+| fact | String |
+
+### Topic: code
+
+| Property name | Type |
+|---|---|
+| asin | String |
+| isbnGs1 | String |
+| isbnGroup | String |
+| isbn10 | String |
+| isbn13 | String |
+| imei | String |
+| ean8 | String |
+| gtin8 | String |
+| ean13 | String |
+| gtin13 | String |
+| isbnRegistrant | String |
+
+### Topic: color
+
+| Property name | Type |
+|---|---|
+| name | String |
+| hex | String |
+
+### Topic: commerce
+
+| Property name | Type |
+|---|---|
+| color | String |
+| department | String |
+| material | String |
+| price | String |
+| productName | String |
+| promotionCode | String |
+
+### Topic: company
+
+| Property name | Type |
+|---|---|
+| name | String |
+| bs | String |
+| suffix | String |
+| url | String |
+| industry | String |
+| profession | String |
+| buzzword | String |
+| logo | String |
+| catchPhrase | String |
+
+### Topic: country
+
+| Property name | Type |
+|---|---|
+| name | String |
+| flag | String |
+| currencyCode | String |
+| currency | String |
+| capital | String |
+| countryCode2 | String |
+| countryCode3 | String |
+
+### Topic: crypto
+
+| Property name | Type |
+|---|---|
+| md5 | String |
+| sha1 | String |
+| sha256 | String |
+| sha512 | String |
+
+### Topic: currency
+
+| Property name | Type |
+|---|---|
+| name | String |
+| code | String |
+
+### Topic: date
+
+| Property name | Type |
+|---|---|
+| birthday | Date |
+
+### Topic: demographic
+
+| Property name | Type |
+|---|---|
+| race | String |
+| demonym | String |
+| sex | String |
+| educationalAttainment | String |
+| maritalStatus | String |
+
+### Topic: dog
+
+| Property name | Type |
+|---|---|
+| name | String |
+| size | String |
+| breed | String |
+| sound | String |
+| memePhrase | String |
+| age | String |
+| coatLength | String |
+| gender | String |
+
+### Topic: dragonBall
+
+| Property name | Type |
+|---|---|
+| character | String |
+
+### Topic: dune
+
+| Property name | Type |
+|---|---|
+| character | String |
+| quote | String |
+| title | String |
+| planet | String |
+| saying | String |
+
+### Topic: educator
+
+| Property name | Type |
+|---|---|
+| university | String |
+| course | String |
+| campus | String |
+| secondarySchool | String |
+
+### Topic: elderScrolls
+
+| Property name | Type |
+|---|---|
+| quote | String |
+| region | String |
+| lastName | String |
+| firstName | String |
+| city | String |
+| race | String |
+| dragon | String |
+| creature | String |
+
+### Topic: esports
+
+| Property name | Type |
+|---|---|
+| event | String |
+| game | String |
+| player | String |
+| league | String |
+| team | String |
+
+### Topic: file
+
+| Property name | Type |
+|---|---|
+| fileName | String |
+| extension | String |
+| mimeType | String |
+
+### Topic: finance
+
+| Property name | Type |
+|---|---|
+| creditCard | String |
+| bic | String |
+| iban | String |
+
+### Topic: food
+
+| Property name | Type |
+|---|---|
+| ingredient | String |
+| spice | String |
+| dish | String |
+| fruit | String |
+| vegetable | String |
+| sushi | String |
+| measurement | String |
+
+### Topic: friends
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| quote | String |
+
+### Topic: funnyName
+
+| Property name | Type |
+|---|---|
+| name | String |
+
+### Topic: gameOfThrones
+
+| Property name | Type |
+|---|---|
+| character | String |
+| quote | String |
+| city | String |
+| dragon | String |
+| house | String |
+
+### Topic: hacker
+
+| Property name | Type |
+|---|---|
+| adjective | String |
+| noun | String |
+| verb | String |
+| ingverb | String |
+| abbreviation | String |
+
+### Topic: harryPotter
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| quote | String |
+| book | String |
+| spell | String |
+| house | String |
+
+### Topic: hipster
+
+| Property name | Type |
+|---|---|
+| word | String |
+
+### Topic: hitchhikersGuideToTheGalaxy
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| quote | String |
+| planet | String |
+| specie | String |
+| starship | String |
+| marvinQuote | String |
+
+### Topic: hobbit
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| quote | String |
+| thorinsCompany | String |
+
+### Topic: howIMetYourMother
+
+| Property name | Type |
+|---|---|
+| character | String |
+| quote | String |
+| highFive | String |
+| catchPhrase | String |
+
+### Topic: idNumber
+
+| Property name | Type |
+|---|---|
+| valid | String |
+| invalid | String |
+| ssnValid | String |
+| validSvSeSsn | String |
+| invalidSvSeSsn | String |
+
+### Topic: internet
+
+| Property name | Type |
+|---|---|
+| url | String |
+| image | String |
+| domainName | String |
+| domainWord | String |
+| password | String |
+| macAddress | String |
+| ipV4Cidr | String |
+| ipV6Cidr | String |
+| slug | String |
+| uuid | String |
+| avatar | String |
+| emailAddress | String |
+| safeEmailAddress | String |
+| domainSuffix | String |
+| ipV4Address | String |
+| privateIpV4Address | String |
+| publicIpV4Address | String |
+| ipV6Address | String |
+| userAgentAny | String |
+
+### Topic: job
+
+| Property name | Type |
+|---|---|
+| position | String |
+| field | String |
+| title | String |
+| seniority | String |
+| keySkills | String |
+
+### Topic: leagueOfLegends
+
+| Property name | Type |
+|---|---|
+| location | String |
+| quote | String |
+| champion | String |
+| masteries | String |
+| rank | String |
+| summonerSpell | String |
+
+### Topic: lebowski
+
+| Property name | Type |
+|---|---|
+| character | String |
+| quote | String |
+| actor | String |
+
+### Topic: lordOfTheRings
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+
+### Topic: lorem
+
+| Property name | Type           |
+|---|----------------|
+| character | char           |
+| word | String         |
+| words | List\<String\> |
+| characters | String         |
+| sentence | String         |
+| paragraph | String         |
+
+### Topic: matz
+
+| Property name | Type |
+|---|---|
+| quote | String |
+
+### Topic: medical
+
+| Property name | Type |
+|---|---|
+| symptoms | String |
+| medicineName | String |
+| diseaseName | String |
+| hospitalName | String |
+
+### Topic: music
+
+| Property name | Type |
+|---|---|
+| key | String |
+| chord | String |
+| genre | String |
+| instrument | String |
+
+### Topic: name
+
+| Property name | Type |
+|---|---|
+| name | String |
+| prefix | String |
+| suffix | String |
+| lastName | String |
+| fullName | String |
+| firstName | String |
+| title | String |
+| username | String |
+| bloodGroup | String |
+| nameWithMiddle | String |
+
+### Topic: nation
+
+| Property name | Type |
+|---|---|
+| flag | String |
+| language | String |
+| nationality | String |
+| capitalCity | String |
+
+### Topic: number
+
+| Property name | Type |
+|---|---|
+| digit | String |
+| randomDigit | int |
+| randomDigitNotZero | int |
+| randomNumber | long |
+
+### Topic: overwatch
+
+| Property name | Type |
+|---|---|
+| location | String |
+| quote | String |
+| hero | String |
+
+### Topic: phoneNumber
+
+| Property name | Type |
+|---|---|
+| extension | String |
+| cellPhone | String |
+| phoneNumber | String |
+| subscriberNumber | String |
+
+### Topic: pokemon
+
+| Property name | Type |
+|---|---|
+| name | String |
+| location | String |
+
+### Topic: princessBride
+
+| Property name | Type |
+|---|---|
+| character | String |
+| quote | String |
+
+### Topic: programmingLanguage
+
+| Property name | Type |
+|---|---|
+| name | String |
+| creator | String |
+
+### Topic: relationships
+
+| Property name | Type |
+|---|---|
+| parent | String |
+| direct | String |
+| any | String |
+| extended | String |
+| inLaw | String |
+| spouse | String |
+| sibling | String |
+
+### Topic: rickAndMorty
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| quote | String |
+
+### Topic: robin
+
+| Property name | Type |
+|---|---|
+| quote | String |
+
+### Topic: rockBand
+
+| Property name | Type |
+|---|---|
+| name | String |
+
+### Topic: shakespeare
+
+| Property name | Type |
+|---|---|
+| hamletQuote | String |
+| asYouLikeItQuote | String |
+| kingRichardIIIQuote | String |
+| romeoAndJulietQuote | String |
+
+### Topic: slackEmoji
+
+| Property name | Type |
+|---|---|
+| people | String |
+| nature | String |
+| activity | String |
+| custom | String |
+| emoji | String |
+| foodAndDrink | String |
+| celebration | String |
+| travelAndPlaces | String |
+| objectsAndSymbols | String |
+
+### Topic: space
+
+| Property name | Type |
+|---|---|
+| planet | String |
+| moon | String |
+| galaxy | String |
+| nebula | String |
+| star | String |
+| agency | String |
+| meteorite | String |
+| company | String |
+| starCluster | String |
+| constellation | String |
+| agencyAbbreviation | String |
+| nasaSpaceCraft | String |
+| distanceMeasurement | String |
+
+### Topic: starTrek
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| specie | String |
+| villain | String |
+
+### Topic: stock
+
+| Property name | Type |
+|---|---|
+| nsdqSymbol | String |
+| nyseSymbol | String |
+
+### Topic: superhero
+
+| Property name | Type |
+|---|---|
+| name | String |
+| prefix | String |
+| suffix | String |
+| descriptor | String |
+| power | String |
+
+### Topic: team
+
+| Property name | Type |
+|---|---|
+| name | String |
+| state | String |
+| sport | String |
+| creature | String |
+
+### Topic: twinPeaks
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| quote | String |
+
+### Topic: university
+
+| Property name | Type |
+|---|---|
+| name | String |
+| prefix | String |
+| suffix | String |
+
+### Topic: weather
+
+| Property name | Type |
+|---|---|
+| description | String |
+| temperatureCelsius | String |
+| temperatureFahrenheit | String |
+
+### Topic: witcher
+
+| Property name | Type |
+|---|---|
+| location | String |
+| character | String |
+| quote | String |
+| school | String |
+| monster | String |
+| witcher | String |
+
+### Topic: yoda
+
+| Property name | Type |
+|---|---|
+| quote | String |
+
+### Topic: zelda
+
+| Property name | Type |
+|---|---|
+| character | String |
+| game | String |
 
 ### Supported Locales
 

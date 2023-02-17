@@ -7,27 +7,38 @@
 <memstore id="mem"/>
 <import domains="faker,organization,address"/>
 
-    <setting name="count" value="100"/>
+    <setting name="count" value="1000"/>
 
     <generate type="faker_data" count="{count}" consumer="mem" >
         <attribute name="no" generator="IncrementGenerator" />
         <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="zh_CN"/>
-        <attribute name="cat" generator="new FakerGenerator('cat','name')" locale="zh_CN"/>
-        <attribute name="dinner" generator="new FakerGenerator('food','dish')" locale="zh_CN"/>
+        <attribute name="cat" generator="new FakerGenerator('cat','name')" locale="en"/>
+        <attribute name="cat_breed" generator="new FakerGenerator('cat','breed')" locale="en"/>
+        <attribute name="dinner" generator="new FakerGenerator('food','dish')" locale="en"/>
         <attribute name="god" generator="new FakerGenerator('ancient','god')" locale="vi"/>
-        <attribute name="flight" generator="new FakerGenerator('aviation','aircraft')" locale="de_CH"/>
+        <attribute name="flight" generator="new FakerGenerator('aviation','aircraft')" locale="de"/>
         <attribute name="HarryPotter" generator="new FakerGenerator('harryPotter','character')" locale="vi"/>
         <attribute name="spell" generator="new FakerGenerator('harryPotter','spell')" locale="de_CH"/>
         <attribute name="spell_default_local" generator="new FakerGenerator('harryPotter','spell')"/>
         <attribute name="business" generator="new FakerGenerator('Business','creditCardNumber')"/>
         <attribute name="ChuckNorris" generator="new FakerGenerator('ChuckNorris', 'fact')"/>
+        <attribute name="domain" generator="new FakerGenerator('internet', 'domainName')"/>
+        <attribute name="sport" generator="new FakerGenerator('esports', 'game')"/>
+        <attribute name="job_title" generator="new FakerGenerator('job', 'title')"/>
+        <attribute name="job_position" generator="new FakerGenerator('job', 'position')"/>
+        <attribute name="university" type="string" generator="new FakerGenerator('educator', 'university')"/>
+        <attribute name="shakespeare" type="string" generator="new FakerGenerator('shakespeare', 'hamletQuote')"/>
+        <attribute name="instrument" type="string" generator="new FakerGenerator('music', 'instrument')"/>
+        <attribute name="number" type="int" generator="new FakerGenerator('number', 'randomDigit')"/>
+        <attribute name="long_number" type="long" generator="new FakerGenerator('number', 'randomNumber')"/>
+        <attribute name="boolean" type="boolean" generator="new FakerGenerator('bool', 'bool')"/>
     </generate>
 
     <echo>Check if enough data has been generated</echo>
     <iterate type="faker_data" source="mem" consumer="ConsoleExporter">
         <attribute name="counter" type="int" generator="IncrementGenerator"/>
     </iterate>
-    <if test="faker_data.counter != 100">
+    <if test="faker_data.counter != 1000">
         <error>Not enough data has been generated</error>
     </if>
 </setup>
