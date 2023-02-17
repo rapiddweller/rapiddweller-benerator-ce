@@ -61,6 +61,7 @@
                 <include>xml-apis:xml-apis:jar</include>
                 <include>org.apache.logging.log4j:*:jar</include>
                 <include>org.slf4j:*:jar</include>
+                <include>com.github.javafaker:*:jar</include>
             </includes>
         </dependencySet>
     </dependencySets>

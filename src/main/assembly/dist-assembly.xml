@@ -197,6 +197,7 @@
                 <include>org.glassfish.jaxb:jaxb-runtime:jar</include>
                 <include>org.apache.logging.log4j:*:jar</include>
                 <include>org.slf4j:*:jar</include>
+                <include>com.github.javafaker:*:jar</include>
             </includes>
         </dependencySet>
     </dependencySets>
