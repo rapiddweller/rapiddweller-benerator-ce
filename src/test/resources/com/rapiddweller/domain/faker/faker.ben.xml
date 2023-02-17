@@ -11,105 +11,351 @@
 
     <generate type="faker_data" count="{count}" consumer="mem" >
         <attribute name="no" generator="IncrementGenerator" />
-        <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="zh_CN"/>
-        <attribute name="cat" generator="new FakerGenerator('cat','name')" locale="en"/>
-        <attribute name="cat_breed" generator="new FakerGenerator('cat','breed')" locale="en"/>
-        <attribute name="dinner" generator="new FakerGenerator('food','dish')" locale="en"/>
-        <attribute name="god" generator="new FakerGenerator('ancient','god')" locale="vi"/>
-        <attribute name="flight" generator="new FakerGenerator('aviation','aircraft')" locale="de"/>
-        <attribute name="HarryPotter" generator="new FakerGenerator('harryPotter','character')" locale="vi"/>
-        <attribute name="spell" generator="new FakerGenerator('harryPotter','spell')" locale="de_CH"/>
-        <attribute name="spell_default_local" generator="new FakerGenerator('harryPotter','spell')"/>
-        <attribute name="business" generator="new FakerGenerator('Business','creditCardNumber')"/>
-        <attribute name="ChuckNorris" generator="new FakerGenerator('ChuckNorris', 'fact')"/>
-        <attribute name="domain" generator="new FakerGenerator('internet', 'domainName')"/>
-        <attribute name="sport" generator="new FakerGenerator('esports', 'game')"/>
-        <attribute name="job_title" generator="new FakerGenerator('job', 'title')"/>
-        <attribute name="job_position" generator="new FakerGenerator('job', 'position')"/>
-        <attribute name="university" type="string" generator="new FakerGenerator('educator', 'university')"/>
-        <attribute name="shakespeare" type="string" generator="new FakerGenerator('shakespeare', 'hamletQuote')"/>
-        <attribute name="instrument" type="string" generator="new FakerGenerator('music', 'instrument')"/>
-        <attribute name="number" type="int" generator="new FakerGenerator('number', 'randomDigit')"/>
-        <attribute name="long_number" type="long" generator="new FakerGenerator('number', 'randomNumber')"/>
-        <attribute name="boolean" type="boolean" generator="new FakerGenerator('bool', 'bool')"/>
         <attribute name="address_state" generator="new FakerGenerator('address','state')"/>
+        <attribute name="address_country" generator="new FakerGenerator('address','country')"/>
+        <attribute name="address_lastName" generator="new FakerGenerator('address','lastName')"/>
+        <attribute name="address_streetName" generator="new FakerGenerator('address','streetName')"/>
+        <attribute name="address_zipCode" generator="new FakerGenerator('address','zipCode')"/>
+        <attribute name="address_stateAbbr" generator="new FakerGenerator('address','stateAbbr')"/>
+        <attribute name="address_citySuffix" generator="new FakerGenerator('address','citySuffix')"/>
+        <attribute name="address_cityPrefix" generator="new FakerGenerator('address','cityPrefix')"/>
+        <attribute name="address_city" generator="new FakerGenerator('address','city')"/>
+        <attribute name="address_cityName" generator="new FakerGenerator('address','cityName')"/>
+        <attribute name="address_latitude" generator="new FakerGenerator('address','latitude')"/>
+        <attribute name="address_longitude" generator="new FakerGenerator('address','longitude')"/>
+        <attribute name="address_timeZone" generator="new FakerGenerator('address','timeZone')"/>
+        <attribute name="address_firstName" generator="new FakerGenerator('address','firstName')"/>
+        <attribute name="address_streetAddressNumber" generator="new FakerGenerator('address','streetAddressNumber')"/>
+        <attribute name="address_streetAddress" generator="new FakerGenerator('address','streetAddress')"/>
+        <attribute name="address_secondaryAddress" generator="new FakerGenerator('address','secondaryAddress')"/>
+        <attribute name="address_streetSuffix" generator="new FakerGenerator('address','streetSuffix')"/>
+        <attribute name="address_streetPrefix" generator="new FakerGenerator('address','streetPrefix')"/>
+        <attribute name="address_countryCode" generator="new FakerGenerator('address','countryCode')"/>
+        <attribute name="address_buildingNumber" generator="new FakerGenerator('address','buildingNumber')"/>
+        <attribute name="address_fullAddress" generator="new FakerGenerator('address','fullAddress')"/>
         <attribute name="ancient_god" generator="new FakerGenerator('ancient','god')"/>
+        <attribute name="ancient_primordial" generator="new FakerGenerator('ancient','primordial')"/>
+        <attribute name="ancient_titan" generator="new FakerGenerator('ancient','titan')"/>
+        <attribute name="ancient_hero" generator="new FakerGenerator('ancient','hero')"/>
         <attribute name="animal_name" generator="new FakerGenerator('animal','name')"/>
         <attribute name="app_name" generator="new FakerGenerator('app','name')"/>
+        <attribute name="app_version" generator="new FakerGenerator('app','version')"/>
+        <attribute name="app_author" generator="new FakerGenerator('app','author')"/>
         <attribute name="aquaTeenHungerForce_character" generator="new FakerGenerator('aquaTeenHungerForce','character')"/>
         <attribute name="artist_name" generator="new FakerGenerator('artist','name')"/>
         <attribute name="avatar_image" generator="new FakerGenerator('avatar','image')"/>
         <attribute name="aviation_aircraft" generator="new FakerGenerator('aviation','aircraft')"/>
+        <attribute name="aviation_airport" generator="new FakerGenerator('aviation','airport')"/>
+        <attribute name="aviation_METAR" generator="new FakerGenerator('aviation','METAR')"/>
         <attribute name="backToTheFuture_character" generator="new FakerGenerator('backToTheFuture','character')"/>
+        <attribute name="backToTheFuture_quote" generator="new FakerGenerator('backToTheFuture','quote')"/>
+        <attribute name="backToTheFuture_date" generator="new FakerGenerator('backToTheFuture','date')"/>
         <attribute name="beer_name" generator="new FakerGenerator('beer','name')"/>
+        <attribute name="beer_style" generator="new FakerGenerator('beer','style')"/>
+        <attribute name="beer_hop" generator="new FakerGenerator('beer','hop')"/>
+        <attribute name="beer_yeast" generator="new FakerGenerator('beer','yeast')"/>
+        <attribute name="beer_malt" generator="new FakerGenerator('beer','malt')"/>
         <attribute name="book_genre" generator="new FakerGenerator('book','genre')"/>
+        <attribute name="book_title" generator="new FakerGenerator('book','title')"/>
+        <attribute name="book_author" generator="new FakerGenerator('book','author')"/>
+        <attribute name="book_publisher" generator="new FakerGenerator('book','publisher')"/>
         <attribute name="bool_bool" generator="new FakerGenerator('bool','bool')"/>
+        <attribute name="buffy_characters" generator="new FakerGenerator('buffy','characters')"/>
         <attribute name="buffy_quotes" generator="new FakerGenerator('buffy','quotes')"/>
+        <attribute name="buffy_bigBads" generator="new FakerGenerator('buffy','bigBads')"/>
+        <attribute name="buffy_episodes" generator="new FakerGenerator('buffy','episodes')"/>
+        <attribute name="buffy_celebrities" generator="new FakerGenerator('buffy','celebrities')"/>
         <attribute name="business_creditCardNumber" generator="new FakerGenerator('business','creditCardNumber')"/>
+        <attribute name="business_creditCardType" generator="new FakerGenerator('business','creditCardType')"/>
+        <attribute name="business_creditCardExpiry" generator="new FakerGenerator('business','creditCardExpiry')"/>
         <attribute name="cat_name" generator="new FakerGenerator('cat','name')"/>
+        <attribute name="cat_breed" generator="new FakerGenerator('cat','breed')"/>
+        <attribute name="cat_registry" generator="new FakerGenerator('cat','registry')"/>
         <attribute name="chuckNorris_fact" generator="new FakerGenerator('chuckNorris','fact')"/>
         <attribute name="code_asin" generator="new FakerGenerator('code','asin')"/>
+        <attribute name="code_isbnGs1" generator="new FakerGenerator('code','isbnGs1')"/>
+        <attribute name="code_isbnGroup" generator="new FakerGenerator('code','isbnGroup')"/>
+        <attribute name="code_isbn10" generator="new FakerGenerator('code','isbn10')"/>
+        <attribute name="code_isbn13" generator="new FakerGenerator('code','isbn13')"/>
+        <attribute name="code_imei" generator="new FakerGenerator('code','imei')"/>
+        <attribute name="code_ean8" generator="new FakerGenerator('code','ean8')"/>
+        <attribute name="code_gtin8" generator="new FakerGenerator('code','gtin8')"/>
+        <attribute name="code_ean13" generator="new FakerGenerator('code','ean13')"/>
+        <attribute name="code_gtin13" generator="new FakerGenerator('code','gtin13')"/>
+        <attribute name="code_isbnRegistrant" generator="new FakerGenerator('code','isbnRegistrant')"/>
         <attribute name="color_name" generator="new FakerGenerator('color','name')"/>
+        <attribute name="color_hex" generator="new FakerGenerator('color','hex')"/>
         <attribute name="commerce_color" generator="new FakerGenerator('commerce','color')"/>
+        <attribute name="commerce_department" generator="new FakerGenerator('commerce','department')"/>
+        <attribute name="commerce_material" generator="new FakerGenerator('commerce','material')"/>
+        <attribute name="commerce_price" generator="new FakerGenerator('commerce','price')"/>
+        <attribute name="commerce_productName" generator="new FakerGenerator('commerce','productName')"/>
+        <attribute name="commerce_promotionCode" generator="new FakerGenerator('commerce','promotionCode')"/>
         <attribute name="company_name" generator="new FakerGenerator('company','name')"/>
+        <attribute name="company_bs" generator="new FakerGenerator('company','bs')"/>
+        <attribute name="company_suffix" generator="new FakerGenerator('company','suffix')"/>
+        <attribute name="company_url" generator="new FakerGenerator('company','url')"/>
+        <attribute name="company_industry" generator="new FakerGenerator('company','industry')"/>
+        <attribute name="company_profession" generator="new FakerGenerator('company','profession')"/>
+        <attribute name="company_buzzword" generator="new FakerGenerator('company','buzzword')"/>
+        <attribute name="company_logo" generator="new FakerGenerator('company','logo')"/>
+        <attribute name="company_catchPhrase" generator="new FakerGenerator('company','catchPhrase')"/>
         <attribute name="country_name" generator="new FakerGenerator('country','name')"/>
+        <attribute name="country_flag" generator="new FakerGenerator('country','flag')"/>
+        <attribute name="country_currencyCode" generator="new FakerGenerator('country','currencyCode')"/>
+        <attribute name="country_currency" generator="new FakerGenerator('country','currency')"/>
+        <attribute name="country_capital" generator="new FakerGenerator('country','capital')"/>
+        <attribute name="country_countryCode3" generator="new FakerGenerator('country','countryCode3')"/>
+        <attribute name="country_countryCode2" generator="new FakerGenerator('country','countryCode2')"/>
         <attribute name="crypto_md5" generator="new FakerGenerator('crypto','md5')"/>
+        <attribute name="crypto_sha1" generator="new FakerGenerator('crypto','sha1')"/>
+        <attribute name="crypto_sha256" generator="new FakerGenerator('crypto','sha256')"/>
+        <attribute name="crypto_sha512" generator="new FakerGenerator('crypto','sha512')"/>
         <attribute name="currency_name" generator="new FakerGenerator('currency','name')"/>
+        <attribute name="currency_code" generator="new FakerGenerator('currency','code')"/>
         <attribute name="date_birthday" generator="new FakerGenerator('date','birthday')"/>
         <attribute name="demographic_demonym" generator="new FakerGenerator('demographic','demonym')"/>
+        <attribute name="demographic_sex" generator="new FakerGenerator('demographic','sex')"/>
+        <attribute name="demographic_race" generator="new FakerGenerator('demographic','race')"/>
+        <attribute name="demographic_educationalAttainment" generator="new FakerGenerator('demographic','educationalAttainment')"/>
+        <attribute name="demographic_maritalStatus" generator="new FakerGenerator('demographic','maritalStatus')"/>
         <attribute name="dog_name" generator="new FakerGenerator('dog','name')"/>
+        <attribute name="dog_size" generator="new FakerGenerator('dog','size')"/>
+        <attribute name="dog_breed" generator="new FakerGenerator('dog','breed')"/>
+        <attribute name="dog_sound" generator="new FakerGenerator('dog','sound')"/>
+        <attribute name="dog_memePhrase" generator="new FakerGenerator('dog','memePhrase')"/>
+        <attribute name="dog_age" generator="new FakerGenerator('dog','age')"/>
+        <attribute name="dog_coatLength" generator="new FakerGenerator('dog','coatLength')"/>
+        <attribute name="dog_gender" generator="new FakerGenerator('dog','gender')"/>
         <attribute name="dragonBall_character" generator="new FakerGenerator('dragonBall','character')"/>
         <attribute name="dune_character" generator="new FakerGenerator('dune','character')"/>
+        <attribute name="dune_quote" generator="new FakerGenerator('dune','quote')"/>
+        <attribute name="dune_saying" generator="new FakerGenerator('dune','saying')"/>
+        <attribute name="dune_title" generator="new FakerGenerator('dune','title')"/>
+        <attribute name="dune_planet" generator="new FakerGenerator('dune','planet')"/>
+        <attribute name="educator_university" generator="new FakerGenerator('educator','university')"/>
         <attribute name="educator_course" generator="new FakerGenerator('educator','course')"/>
+        <attribute name="educator_campus" generator="new FakerGenerator('educator','campus')"/>
+        <attribute name="educator_secondarySchool" generator="new FakerGenerator('educator','secondarySchool')"/>
         <attribute name="elderScrolls_quote" generator="new FakerGenerator('elderScrolls','quote')"/>
+        <attribute name="elderScrolls_region" generator="new FakerGenerator('elderScrolls','region')"/>
+        <attribute name="elderScrolls_lastName" generator="new FakerGenerator('elderScrolls','lastName')"/>
+        <attribute name="elderScrolls_city" generator="new FakerGenerator('elderScrolls','city')"/>
+        <attribute name="elderScrolls_firstName" generator="new FakerGenerator('elderScrolls','firstName')"/>
+        <attribute name="elderScrolls_creature" generator="new FakerGenerator('elderScrolls','creature')"/>
+        <attribute name="elderScrolls_race" generator="new FakerGenerator('elderScrolls','race')"/>
+        <attribute name="elderScrolls_dragon" generator="new FakerGenerator('elderScrolls','dragon')"/>
         <attribute name="esports_event" generator="new FakerGenerator('esports','event')"/>
+        <attribute name="esports_team" generator="new FakerGenerator('esports','team')"/>
+        <attribute name="esports_player" generator="new FakerGenerator('esports','player')"/>
+        <attribute name="esports_league" generator="new FakerGenerator('esports','league')"/>
+        <attribute name="esports_game" generator="new FakerGenerator('esports','game')"/>
         <attribute name="file_fileName" generator="new FakerGenerator('file','fileName')"/>
+        <attribute name="file_extension" generator="new FakerGenerator('file','extension')"/>
+        <attribute name="file_mimeType" generator="new FakerGenerator('file','mimeType')"/>
         <attribute name="finance_creditCard" generator="new FakerGenerator('finance','creditCard')"/>
+        <attribute name="finance_bic" generator="new FakerGenerator('finance','bic')"/>
+        <attribute name="finance_iban" generator="new FakerGenerator('finance','iban')"/>
         <attribute name="food_ingredient" generator="new FakerGenerator('food','ingredient')"/>
+        <attribute name="food_spice" generator="new FakerGenerator('food','spice')"/>
+        <attribute name="food_dish" generator="new FakerGenerator('food','dish')"/>
+        <attribute name="food_fruit" generator="new FakerGenerator('food','fruit')"/>
+        <attribute name="food_vegetable" generator="new FakerGenerator('food','vegetable')"/>
+        <attribute name="food_sushi" generator="new FakerGenerator('food','sushi')"/>
+        <attribute name="food_measurement" generator="new FakerGenerator('food','measurement')"/>
         <attribute name="friends_location" generator="new FakerGenerator('friends','location')"/>
+        <attribute name="friends_character" generator="new FakerGenerator('friends','character')"/>
+        <attribute name="friends_quote" generator="new FakerGenerator('friends','quote')"/>
         <attribute name="funnyName_name" generator="new FakerGenerator('funnyName','name')"/>
         <attribute name="gameOfThrones_character" generator="new FakerGenerator('gameOfThrones','character')"/>
+        <attribute name="gameOfThrones_quote" generator="new FakerGenerator('gameOfThrones','quote')"/>
+        <attribute name="gameOfThrones_city" generator="new FakerGenerator('gameOfThrones','city')"/>
+        <attribute name="gameOfThrones_house" generator="new FakerGenerator('gameOfThrones','house')"/>
+        <attribute name="gameOfThrones_dragon" generator="new FakerGenerator('gameOfThrones','dragon')"/>
         <attribute name="hacker_adjective" generator="new FakerGenerator('hacker','adjective')"/>
+        <attribute name="hacker_noun" generator="new FakerGenerator('hacker','noun')"/>
+        <attribute name="hacker_verb" generator="new FakerGenerator('hacker','verb')"/>
+        <attribute name="hacker_ingverb" generator="new FakerGenerator('hacker','ingverb')"/>
+        <attribute name="hacker_abbreviation" generator="new FakerGenerator('hacker','abbreviation')"/>
         <attribute name="harryPotter_location" generator="new FakerGenerator('harryPotter','location')"/>
+        <attribute name="harryPotter_character" generator="new FakerGenerator('harryPotter','character')"/>
+        <attribute name="harryPotter_quote" generator="new FakerGenerator('harryPotter','quote')"/>
+        <attribute name="harryPotter_book" generator="new FakerGenerator('harryPotter','book')"/>
+        <attribute name="harryPotter_house" generator="new FakerGenerator('harryPotter','house')"/>
+        <attribute name="harryPotter_spell" generator="new FakerGenerator('harryPotter','spell')"/>
         <attribute name="hipster_word" generator="new FakerGenerator('hipster','word')"/>
         <attribute name="hitchhikersGuideToTheGalaxy_location" generator="new FakerGenerator('hitchhikersGuideToTheGalaxy','location')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_character" generator="new FakerGenerator('hitchhikersGuideToTheGalaxy','character')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_quote" generator="new FakerGenerator('hitchhikersGuideToTheGalaxy','quote')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_specie" generator="new FakerGenerator('hitchhikersGuideToTheGalaxy','specie')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_starship" generator="new FakerGenerator('hitchhikersGuideToTheGalaxy','starship')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_planet" generator="new FakerGenerator('hitchhikersGuideToTheGalaxy','planet')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_marvinQuote" generator="new FakerGenerator('hitchhikersGuideToTheGalaxy','marvinQuote')"/>
         <attribute name="hobbit_location" generator="new FakerGenerator('hobbit','location')"/>
+        <attribute name="hobbit_character" generator="new FakerGenerator('hobbit','character')"/>
+        <attribute name="hobbit_quote" generator="new FakerGenerator('hobbit','quote')"/>
+        <attribute name="hobbit_thorinsCompany" generator="new FakerGenerator('hobbit','thorinsCompany')"/>
         <attribute name="howIMetYourMother_character" generator="new FakerGenerator('howIMetYourMother','character')"/>
+        <attribute name="howIMetYourMother_quote" generator="new FakerGenerator('howIMetYourMother','quote')"/>
+        <attribute name="howIMetYourMother_highFive" generator="new FakerGenerator('howIMetYourMother','highFive')"/>
+        <attribute name="howIMetYourMother_catchPhrase" generator="new FakerGenerator('howIMetYourMother','catchPhrase')"/>
         <attribute name="idNumber_valid" generator="new FakerGenerator('idNumber','valid')"/>
+        <attribute name="idNumber_invalid" generator="new FakerGenerator('idNumber','invalid')"/>
+        <attribute name="idNumber_ssnValid" generator="new FakerGenerator('idNumber','ssnValid')"/>
+        <attribute name="idNumber_validSvSeSsn" generator="new FakerGenerator('idNumber','validSvSeSsn')"/>
+        <attribute name="idNumber_invalidSvSeSsn" generator="new FakerGenerator('idNumber','invalidSvSeSsn')"/>
         <attribute name="internet_url" generator="new FakerGenerator('internet','url')"/>
+        <attribute name="internet_image" generator="new FakerGenerator('internet','image')"/>
+        <attribute name="internet_domainName" generator="new FakerGenerator('internet','domainName')"/>
+        <attribute name="internet_domainWord" generator="new FakerGenerator('internet','domainWord')"/>
+        <attribute name="internet_password" generator="new FakerGenerator('internet','password')"/>
+        <attribute name="internet_macAddress" generator="new FakerGenerator('internet','macAddress')"/>
+        <attribute name="internet_ipV4Cidr" generator="new FakerGenerator('internet','ipV4Cidr')"/>
+        <attribute name="internet_ipV6Cidr" generator="new FakerGenerator('internet','ipV6Cidr')"/>
+        <attribute name="internet_slug" generator="new FakerGenerator('internet','slug')"/>
+        <attribute name="internet_uuid" generator="new FakerGenerator('internet','uuid')"/>
+        <attribute name="internet_avatar" generator="new FakerGenerator('internet','avatar')"/>
+        <attribute name="internet_emailAddress" generator="new FakerGenerator('internet','emailAddress')"/>
+        <attribute name="internet_safeEmailAddress" generator="new FakerGenerator('internet','safeEmailAddress')"/>
+        <attribute name="internet_domainSuffix" generator="new FakerGenerator('internet','domainSuffix')"/>
+        <attribute name="internet_ipV4Address" generator="new FakerGenerator('internet','ipV4Address')"/>
+        <attribute name="internet_privateIpV4Address" generator="new FakerGenerator('internet','privateIpV4Address')"/>
+        <attribute name="internet_publicIpV4Address" generator="new FakerGenerator('internet','publicIpV4Address')"/>
+        <attribute name="internet_ipV6Address" generator="new FakerGenerator('internet','ipV6Address')"/>
+        <attribute name="internet_userAgentAny" generator="new FakerGenerator('internet','userAgentAny')"/>
         <attribute name="job_position" generator="new FakerGenerator('job','position')"/>
+        <attribute name="job_field" generator="new FakerGenerator('job','field')"/>
+        <attribute name="job_seniority" generator="new FakerGenerator('job','seniority')"/>
+        <attribute name="job_keySkills" generator="new FakerGenerator('job','keySkills')"/>
+        <attribute name="job_title" generator="new FakerGenerator('job','title')"/>
         <attribute name="leagueOfLegends_location" generator="new FakerGenerator('leagueOfLegends','location')"/>
+        <attribute name="leagueOfLegends_quote" generator="new FakerGenerator('leagueOfLegends','quote')"/>
+        <attribute name="leagueOfLegends_champion" generator="new FakerGenerator('leagueOfLegends','champion')"/>
+        <attribute name="leagueOfLegends_masteries" generator="new FakerGenerator('leagueOfLegends','masteries')"/>
+        <attribute name="leagueOfLegends_rank" generator="new FakerGenerator('leagueOfLegends','rank')"/>
+        <attribute name="leagueOfLegends_summonerSpell" generator="new FakerGenerator('leagueOfLegends','summonerSpell')"/>
         <attribute name="lebowski_character" generator="new FakerGenerator('lebowski','character')"/>
+        <attribute name="lebowski_quote" generator="new FakerGenerator('lebowski','quote')"/>
+        <attribute name="lebowski_actor" generator="new FakerGenerator('lebowski','actor')"/>
         <attribute name="lordOfTheRings_location" generator="new FakerGenerator('lordOfTheRings','location')"/>
+        <attribute name="lordOfTheRings_character" generator="new FakerGenerator('lordOfTheRings','character')"/>
         <attribute name="lorem_character" generator="new FakerGenerator('lorem','character')"/>
+        <attribute name="lorem_word" generator="new FakerGenerator('lorem','word')"/>
+        <attribute name="lorem_words" generator="new FakerGenerator('lorem','words')"/>
+        <attribute name="lorem_characters" generator="new FakerGenerator('lorem','characters')"/>
+        <attribute name="lorem_sentence" generator="new FakerGenerator('lorem','sentence')"/>
+        <attribute name="lorem_paragraph" generator="new FakerGenerator('lorem','paragraph')"/>
         <attribute name="matz_quote" generator="new FakerGenerator('matz','quote')"/>
         <attribute name="medical_symptoms" generator="new FakerGenerator('medical','symptoms')"/>
+        <attribute name="medical_medicineName" generator="new FakerGenerator('medical','medicineName')"/>
+        <attribute name="medical_diseaseName" generator="new FakerGenerator('medical','diseaseName')"/>
+        <attribute name="medical_hospitalName" generator="new FakerGenerator('medical','hospitalName')"/>
         <attribute name="music_key" generator="new FakerGenerator('music','key')"/>
+        <attribute name="music_chord" generator="new FakerGenerator('music','chord')"/>
+        <attribute name="music_genre" generator="new FakerGenerator('music','genre')"/>
+        <attribute name="music_instrument" generator="new FakerGenerator('music','instrument')"/>
         <attribute name="name_name" generator="new FakerGenerator('name','name')"/>
+        <attribute name="name_prefix" generator="new FakerGenerator('name','prefix')"/>
+        <attribute name="name_suffix" generator="new FakerGenerator('name','suffix')"/>
+        <attribute name="name_lastName" generator="new FakerGenerator('name','lastName')"/>
+        <attribute name="name_fullName" generator="new FakerGenerator('name','fullName')"/>
+        <attribute name="name_firstName" generator="new FakerGenerator('name','firstName')"/>
+        <attribute name="name_title" generator="new FakerGenerator('name','title')"/>
+        <attribute name="name_username" generator="new FakerGenerator('name','username')"/>
+        <attribute name="name_bloodGroup" generator="new FakerGenerator('name','bloodGroup')"/>
+        <attribute name="name_nameWithMiddle" generator="new FakerGenerator('name','nameWithMiddle')"/>
         <attribute name="nation_flag" generator="new FakerGenerator('nation','flag')"/>
+        <attribute name="nation_language" generator="new FakerGenerator('nation','language')"/>
+        <attribute name="nation_nationality" generator="new FakerGenerator('nation','nationality')"/>
+        <attribute name="nation_capitalCity" generator="new FakerGenerator('nation','capitalCity')"/>
         <attribute name="number_digit" generator="new FakerGenerator('number','digit')"/>
+        <attribute name="number_randomDigit" generator="new FakerGenerator('number','randomDigit')"/>
+        <attribute name="number_randomDigitNotZero" generator="new FakerGenerator('number','randomDigitNotZero')"/>
+        <attribute name="number_randomNumber" generator="new FakerGenerator('number','randomNumber')"/>
         <attribute name="overwatch_location" generator="new FakerGenerator('overwatch','location')"/>
+        <attribute name="overwatch_quote" generator="new FakerGenerator('overwatch','quote')"/>
+        <attribute name="overwatch_hero" generator="new FakerGenerator('overwatch','hero')"/>
         <attribute name="phoneNumber_extension" generator="new FakerGenerator('phoneNumber','extension')"/>
+        <attribute name="phoneNumber_cellPhone" generator="new FakerGenerator('phoneNumber','cellPhone')"/>
+        <attribute name="phoneNumber_phoneNumber" generator="new FakerGenerator('phoneNumber','phoneNumber')"/>
+        <attribute name="phoneNumber_subscriberNumber" generator="new FakerGenerator('phoneNumber','subscriberNumber')"/>
         <attribute name="pokemon_name" generator="new FakerGenerator('pokemon','name')"/>
+        <attribute name="pokemon_location" generator="new FakerGenerator('pokemon','location')"/>
         <attribute name="princessBride_character" generator="new FakerGenerator('princessBride','character')"/>
+        <attribute name="princessBride_quote" generator="new FakerGenerator('princessBride','quote')"/>
         <attribute name="programmingLanguage_name" generator="new FakerGenerator('programmingLanguage','name')"/>
+        <attribute name="programmingLanguage_creator" generator="new FakerGenerator('programmingLanguage','creator')"/>
         <attribute name="relationships_parent" generator="new FakerGenerator('relationships','parent')"/>
+        <attribute name="relationships_direct" generator="new FakerGenerator('relationships','direct')"/>
+        <attribute name="relationships_any" generator="new FakerGenerator('relationships','any')"/>
+        <attribute name="relationships_extended" generator="new FakerGenerator('relationships','extended')"/>
+        <attribute name="relationships_inLaw" generator="new FakerGenerator('relationships','inLaw')"/>
+        <attribute name="relationships_spouse" generator="new FakerGenerator('relationships','spouse')"/>
+        <attribute name="relationships_sibling" generator="new FakerGenerator('relationships','sibling')"/>
         <attribute name="rickAndMorty_location" generator="new FakerGenerator('rickAndMorty','location')"/>
+        <attribute name="rickAndMorty_character" generator="new FakerGenerator('rickAndMorty','character')"/>
+        <attribute name="rickAndMorty_quote" generator="new FakerGenerator('rickAndMorty','quote')"/>
         <attribute name="robin_quote" generator="new FakerGenerator('robin','quote')"/>
         <attribute name="rockBand_name" generator="new FakerGenerator('rockBand','name')"/>
         <attribute name="shakespeare_hamletQuote" generator="new FakerGenerator('shakespeare','hamletQuote')"/>
+        <attribute name="shakespeare_asYouLikeItQuote" generator="new FakerGenerator('shakespeare','asYouLikeItQuote')"/>
+        <attribute name="shakespeare_kingRichardIIIQuote" generator="new FakerGenerator('shakespeare','kingRichardIIIQuote')"/>
+        <attribute name="shakespeare_romeoAndJulietQuote" generator="new FakerGenerator('shakespeare','romeoAndJulietQuote')"/>
         <attribute name="slackEmoji_people" generator="new FakerGenerator('slackEmoji','people')"/>
+        <attribute name="slackEmoji_nature" generator="new FakerGenerator('slackEmoji','nature')"/>
+        <attribute name="slackEmoji_activity" generator="new FakerGenerator('slackEmoji','activity')"/>
+        <attribute name="slackEmoji_custom" generator="new FakerGenerator('slackEmoji','custom')"/>
+        <attribute name="slackEmoji_emoji" generator="new FakerGenerator('slackEmoji','emoji')"/>
+        <attribute name="slackEmoji_foodAndDrink" generator="new FakerGenerator('slackEmoji','foodAndDrink')"/>
+        <attribute name="slackEmoji_celebration" generator="new FakerGenerator('slackEmoji','celebration')"/>
+        <attribute name="slackEmoji_travelAndPlaces" generator="new FakerGenerator('slackEmoji','travelAndPlaces')"/>
+        <attribute name="slackEmoji_objectsAndSymbols" generator="new FakerGenerator('slackEmoji','objectsAndSymbols')"/>
+        <attribute name="space_company" generator="new FakerGenerator('space','company')"/>
         <attribute name="space_planet" generator="new FakerGenerator('space','planet')"/>
+        <attribute name="space_moon" generator="new FakerGenerator('space','moon')"/>
+        <attribute name="space_galaxy" generator="new FakerGenerator('space','galaxy')"/>
+        <attribute name="space_nebula" generator="new FakerGenerator('space','nebula')"/>
+        <attribute name="space_star" generator="new FakerGenerator('space','star')"/>
+        <attribute name="space_agency" generator="new FakerGenerator('space','agency')"/>
+        <attribute name="space_meteorite" generator="new FakerGenerator('space','meteorite')"/>
+        <attribute name="space_starCluster" generator="new FakerGenerator('space','starCluster')"/>
+        <attribute name="space_constellation" generator="new FakerGenerator('space','constellation')"/>
+        <attribute name="space_agencyAbbreviation" generator="new FakerGenerator('space','agencyAbbreviation')"/>
+        <attribute name="space_nasaSpaceCraft" generator="new FakerGenerator('space','nasaSpaceCraft')"/>
+        <attribute name="space_distanceMeasurement" generator="new FakerGenerator('space','distanceMeasurement')"/>
         <attribute name="starTrek_location" generator="new FakerGenerator('starTrek','location')"/>
+        <attribute name="starTrek_character" generator="new FakerGenerator('starTrek','character')"/>
+        <attribute name="starTrek_specie" generator="new FakerGenerator('starTrek','specie')"/>
+        <attribute name="starTrek_villain" generator="new FakerGenerator('starTrek','villain')"/>
         <attribute name="stock_nsdqSymbol" generator="new FakerGenerator('stock','nsdqSymbol')"/>
+        <attribute name="stock_nyseSymbol" generator="new FakerGenerator('stock','nyseSymbol')"/>
         <attribute name="superhero_name" generator="new FakerGenerator('superhero','name')"/>
+        <attribute name="superhero_prefix" generator="new FakerGenerator('superhero','prefix')"/>
+        <attribute name="superhero_suffix" generator="new FakerGenerator('superhero','suffix')"/>
+        <attribute name="superhero_descriptor" generator="new FakerGenerator('superhero','descriptor')"/>
+        <attribute name="superhero_power" generator="new FakerGenerator('superhero','power')"/>
         <attribute name="team_name" generator="new FakerGenerator('team','name')"/>
+        <attribute name="team_state" generator="new FakerGenerator('team','state')"/>
+        <attribute name="team_sport" generator="new FakerGenerator('team','sport')"/>
+        <attribute name="team_creature" generator="new FakerGenerator('team','creature')"/>
         <attribute name="twinPeaks_location" generator="new FakerGenerator('twinPeaks','location')"/>
+        <attribute name="twinPeaks_character" generator="new FakerGenerator('twinPeaks','character')"/>
+        <attribute name="twinPeaks_quote" generator="new FakerGenerator('twinPeaks','quote')"/>
         <attribute name="university_name" generator="new FakerGenerator('university','name')"/>
+        <attribute name="university_prefix" generator="new FakerGenerator('university','prefix')"/>
+        <attribute name="university_suffix" generator="new FakerGenerator('university','suffix')"/>
         <attribute name="weather_description" generator="new FakerGenerator('weather','description')"/>
+        <attribute name="weather_temperatureCelsius" generator="new FakerGenerator('weather','temperatureCelsius')"/>
+        <attribute name="weather_temperatureFahrenheit" generator="new FakerGenerator('weather','temperatureFahrenheit')"/>
         <attribute name="witcher_location" generator="new FakerGenerator('witcher','location')"/>
+        <attribute name="witcher_character" generator="new FakerGenerator('witcher','character')"/>
+        <attribute name="witcher_quote" generator="new FakerGenerator('witcher','quote')"/>
+        <attribute name="witcher_witcher" generator="new FakerGenerator('witcher','witcher')"/>
+        <attribute name="witcher_school" generator="new FakerGenerator('witcher','school')"/>
+        <attribute name="witcher_monster" generator="new FakerGenerator('witcher','monster')"/>
         <attribute name="yoda_quote" generator="new FakerGenerator('yoda','quote')"/>
         <attribute name="zelda_character" generator="new FakerGenerator('zelda','character')"/>
+        <attribute name="zelda_game" generator="new FakerGenerator('zelda','game')"/>
     </generate>
 
     <echo>Check if enough data has been generated</echo>
