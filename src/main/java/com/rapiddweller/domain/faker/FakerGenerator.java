@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
  *
  */
 
-public class FakerGenerator extends CompositeGenerator<String>
-    implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
+public class FakerGenerator extends CompositeGenerator
+    implements DatasetBasedGenerator, NonNullGenerator {
 
   private static final String REGION_NESTING = "com/rapiddweller/dataset/region";
   private String datasetName;
@@ -38,16 +38,20 @@ public class FakerGenerator extends CompositeGenerator<String>
     this(Locale.getDefault());
   }
 
+  public FakerGenerator(Class generatedType) {
+    this(generatedType, Locale.getDefault(), "name", "fullName");
+  }
+
   public FakerGenerator(Locale locale) {
-    this(locale, "name", "fullName");
+    this(Object.class, locale, "name", "fullName");
   }
 
   public FakerGenerator(String topic, String property) {
-    this(Locale.getDefault(), topic, property);
+    this(Object.class, Locale.getDefault(), topic, property);
   }
 
-  public FakerGenerator(Locale locale, String topic, String property) {
-    super(String.class);
+  public FakerGenerator(Class generatedType, Locale locale, String topic, String property) {
+    super(generatedType);
     this.locale = locale;
     this.topic = topic;
     this.property = property;
@@ -80,7 +84,7 @@ public class FakerGenerator extends CompositeGenerator<String>
   }
 
   @Override
-  public String generateForDataset(String dataset) {
+  public Object generateForDataset(String dataset) {
     return null;
   }
 
@@ -102,12 +106,12 @@ public class FakerGenerator extends CompositeGenerator<String>
   }
 
   @Override
-  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+  public ProductWrapper generate(ProductWrapper wrapper) {
     return wrapper.wrap(generate());
   }
 
   @Override
-  public String generate() {
+  public Object generate() {
     return fakerHandler(topic, property);
   }
 
@@ -122,21 +126,33 @@ public class FakerGenerator extends CompositeGenerator<String>
   // get method from faker case insensitive
   public Method getMethodIgnoreCase(String methodName, String fakerPart, Class<?> clazz) {
 
+    //prevent to access toString method
+    if (methodName.equalsIgnoreCase("toString")){
+      throw new IllegalArgumentError("Can't find " + fakerPart + " " + methodName + " in faker library");
+    }
+
     List<Method> methods = getMethodsIgnoreCase(clazz, methodName);
     if (methods.isEmpty()) {
       throw new IllegalArgumentError("Can't find " + fakerPart + " " + methodName + " in faker library");
     }
-    return methods.get(0);
+
+    //only use method with no parameter
+    for (Method m : methods){
+      if (m.getParameterTypes().length==0){
+        return m;
+      }
+    }
+    throw new IllegalArgumentError(fakerPart + " " + methodName + " is not supported");
   }
 
-  private String fakerHandler(String topic, String property) {
-    String result;
+  private Object fakerHandler(String topic, String property) {
+    Object result;
     try {
       Method method = getMethodIgnoreCase(topic, "topic", faker.getClass());
       Object obj = method.invoke(faker);
 
       Method md = getMethodIgnoreCase(property, "property", obj.getClass());
-      result = (String) md.invoke(obj);
+      result = md.invoke(obj);
 
     } catch (InvocationTargetException | IllegalAccessException e) {
       throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
