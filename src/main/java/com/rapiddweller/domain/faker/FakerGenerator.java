@@ -126,8 +126,9 @@ public class FakerGenerator extends CompositeGenerator
   // get method from faker case insensitive
   public Method getMethodIgnoreCase(String methodName, String fakerPart, Class<?> clazz) {
 
-    //prevent to access toString method
-    if (methodName.equalsIgnoreCase("toString")){
+    //prevent to access toString and getClass method
+    if (methodName.equalsIgnoreCase("toString")
+      && methodName.equalsIgnoreCase("getClass")){
       throw new IllegalArgumentError("Can't find " + fakerPart + " " + methodName + " in faker library");
     }
 
