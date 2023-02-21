@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <memstore id="mem"/>
+
+    <import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data500" count="{count}" consumer="mem" >
+        <attribute name="file_fileName" generator="new DataFakerGenerator('file','fileName')"/>
+        <attribute name="file_extension" generator="new DataFakerGenerator('file','extension')"/>
+        <attribute name="file_mimeType" generator="new DataFakerGenerator('file','mimeType')"/>
+        <attribute name="finalSpace_character" generator="new DataFakerGenerator('finalSpace','character')"/>
+        <attribute name="finalSpace_quote" generator="new DataFakerGenerator('finalSpace','quote')"/>
+        <attribute name="finalSpace_vehicle" generator="new DataFakerGenerator('finalSpace','vehicle')"/>
+        <attribute name="finance_creditCard" generator="new DataFakerGenerator('finance','creditCard')"/>
+        <attribute name="finance_bic" generator="new DataFakerGenerator('finance','bic')"/>
+        <attribute name="finance_iban" generator="new DataFakerGenerator('finance','iban')"/>
+        <attribute name="food_ingredient" generator="new DataFakerGenerator('food','ingredient')"/>
+        <attribute name="food_spice" generator="new DataFakerGenerator('food','spice')"/>
+        <attribute name="food_dish" generator="new DataFakerGenerator('food','dish')"/>
+        <attribute name="food_fruit" generator="new DataFakerGenerator('food','fruit')"/>
+        <attribute name="food_vegetable" generator="new DataFakerGenerator('food','vegetable')"/>
+        <attribute name="food_sushi" generator="new DataFakerGenerator('food','sushi')"/>
+        <attribute name="food_measurement" generator="new DataFakerGenerator('food','measurement')"/>
+        <attribute name="football_positions" generator="new DataFakerGenerator('football','positions')"/>
+        <attribute name="football_teams" generator="new DataFakerGenerator('football','teams')"/>
+        <attribute name="football_coaches" generator="new DataFakerGenerator('football','coaches')"/>
+        <attribute name="football_players" generator="new DataFakerGenerator('football','players')"/>
+        <attribute name="football_competitions" generator="new DataFakerGenerator('football','competitions')"/>
+        <attribute name="formula1_team" generator="new DataFakerGenerator('formula1','team')"/>
+        <attribute name="formula1_driver" generator="new DataFakerGenerator('formula1','driver')"/>
+        <attribute name="formula1_circuit" generator="new DataFakerGenerator('formula1','circuit')"/>
+        <attribute name="formula1_grandPrix" generator="new DataFakerGenerator('formula1','grandPrix')"/>
+        <attribute name="friends_location" generator="new DataFakerGenerator('friends','location')"/>
+        <attribute name="friends_character" generator="new DataFakerGenerator('friends','character')"/>
+        <attribute name="friends_quote" generator="new DataFakerGenerator('friends','quote')"/>
+        <attribute name="fullMetalAlchemist_character" generator="new DataFakerGenerator('fullMetalAlchemist','character')"/>
+        <attribute name="fullMetalAlchemist_country" generator="new DataFakerGenerator('fullMetalAlchemist','country')"/>
+        <attribute name="fullMetalAlchemist_city" generator="new DataFakerGenerator('fullMetalAlchemist','city')"/>
+        <attribute name="funnyName_name" generator="new DataFakerGenerator('funnyName','name')"/>
+        <attribute name="futurama_location" generator="new DataFakerGenerator('futurama','location')"/>
+        <attribute name="futurama_character" generator="new DataFakerGenerator('futurama','character')"/>
+        <attribute name="futurama_quote" generator="new DataFakerGenerator('futurama','quote')"/>
+        <attribute name="futurama_hermesCatchPhrase" generator="new DataFakerGenerator('futurama','hermesCatchPhrase')"/>
+        <attribute name="gameOfThrones_character" generator="new DataFakerGenerator('gameOfThrones','character')"/>
+        <attribute name="gameOfThrones_quote" generator="new DataFakerGenerator('gameOfThrones','quote')"/>
+        <attribute name="gameOfThrones_house" generator="new DataFakerGenerator('gameOfThrones','house')"/>
+        <attribute name="gameOfThrones_city" generator="new DataFakerGenerator('gameOfThrones','city')"/>
+        <attribute name="gameOfThrones_dragon" generator="new DataFakerGenerator('gameOfThrones','dragon')"/>
+        <attribute name="garmentSize_size" generator="new DataFakerGenerator('garmentSize','size')"/>
+        <attribute name="gender_types" generator="new DataFakerGenerator('gender','types')"/>
+        <attribute name="gender_binaryTypes" generator="new DataFakerGenerator('gender','binaryTypes')"/>
+        <attribute name="getContext_getLocale" generator="new DataFakerGenerator('getContext','getLocale')"/>
+        <attribute name="getContext_getSingletonLocale" generator="new DataFakerGenerator('getContext','getSingletonLocale')"/>
+        <attribute name="getContext_getLocaleChain" generator="new DataFakerGenerator('getContext','getLocaleChain')"/>
+        <attribute name="getContext_getRandomService" generator="new DataFakerGenerator('getContext','getRandomService')"/>
+        <attribute name="ghostbusters_character" generator="new DataFakerGenerator('ghostbusters','character')"/>
+        <attribute name="ghostbusters_quote" generator="new DataFakerGenerator('ghostbusters','quote')"/>
+        <attribute name="ghostbusters_actor" generator="new DataFakerGenerator('ghostbusters','actor')"/>
+        <attribute name="gratefulDead_players" generator="new DataFakerGenerator('gratefulDead','players')"/>
+        <attribute name="gratefulDead_songs" generator="new DataFakerGenerator('gratefulDead','songs')"/>
+        <attribute name="greekPhilosopher_name" generator="new DataFakerGenerator('greekPhilosopher','name')"/>
+        <attribute name="greekPhilosopher_quote" generator="new DataFakerGenerator('greekPhilosopher','quote')"/>
+        <attribute name="hacker_verb" generator="new DataFakerGenerator('hacker','verb')"/>
+        <attribute name="hacker_adjective" generator="new DataFakerGenerator('hacker','adjective')"/>
+        <attribute name="hacker_noun" generator="new DataFakerGenerator('hacker','noun')"/>
+        <attribute name="hacker_ingverb" generator="new DataFakerGenerator('hacker','ingverb')"/>
+        <attribute name="hacker_abbreviation" generator="new DataFakerGenerator('hacker','abbreviation')"/>
+        <attribute name="halfLife_location" generator="new DataFakerGenerator('halfLife','location')"/>
+        <attribute name="halfLife_character" generator="new DataFakerGenerator('halfLife','character')"/>
+        <attribute name="halfLife_enemy" generator="new DataFakerGenerator('halfLife','enemy')"/>
+        <attribute name="harryPotter_location" generator="new DataFakerGenerator('harryPotter','location')"/>
+        <attribute name="harryPotter_character" generator="new DataFakerGenerator('harryPotter','character')"/>
+        <attribute name="harryPotter_quote" generator="new DataFakerGenerator('harryPotter','quote')"/>
+        <attribute name="harryPotter_book" generator="new DataFakerGenerator('harryPotter','book')"/>
+        <attribute name="harryPotter_house" generator="new DataFakerGenerator('harryPotter','house')"/>
+        <attribute name="harryPotter_spell" generator="new DataFakerGenerator('harryPotter','spell')"/>
+        <attribute name="hashing_md2" generator="new DataFakerGenerator('hashing','md2')"/>
+        <attribute name="hashing_md5" generator="new DataFakerGenerator('hashing','md5')"/>
+        <attribute name="hashing_sha1" generator="new DataFakerGenerator('hashing','sha1')"/>
+        <attribute name="hashing_sha384" generator="new DataFakerGenerator('hashing','sha384')"/>
+        <attribute name="hashing_sha256" generator="new DataFakerGenerator('hashing','sha256')"/>
+        <attribute name="hashing_sha512" generator="new DataFakerGenerator('hashing','sha512')"/>
+        <attribute name="hearthstone_wildRank" generator="new DataFakerGenerator('hearthstone','wildRank')"/>
+        <attribute name="hearthstone_mainProfession" generator="new DataFakerGenerator('hearthstone','mainProfession')"/>
+        <attribute name="hearthstone_mainCharacter" generator="new DataFakerGenerator('hearthstone','mainCharacter')"/>
+        <attribute name="hearthstone_mainPattern" generator="new DataFakerGenerator('hearthstone','mainPattern')"/>
+        <attribute name="hearthstone_battlegroundsScore" generator="new DataFakerGenerator('hearthstone','battlegroundsScore')"/>
+        <attribute name="hearthstone_standardRank" generator="new DataFakerGenerator('hearthstone','standardRank')"/>
+        <attribute name="heroesOfTheStorm_quote" generator="new DataFakerGenerator('heroesOfTheStorm','quote')"/>
+        <attribute name="heroesOfTheStorm_hero" generator="new DataFakerGenerator('heroesOfTheStorm','hero')"/>
+        <attribute name="heroesOfTheStorm_heroClass" generator="new DataFakerGenerator('heroesOfTheStorm','heroClass')"/>
+        <attribute name="heroesOfTheStorm_battleground" generator="new DataFakerGenerator('heroesOfTheStorm','battleground')"/>
+        <attribute name="heyArnold_locations" generator="new DataFakerGenerator('heyArnold','locations')"/>
+        <attribute name="heyArnold_characters" generator="new DataFakerGenerator('heyArnold','characters')"/>
+        <attribute name="heyArnold_quotes" generator="new DataFakerGenerator('heyArnold','quotes')"/>
+        <attribute name="hipster_word" generator="new DataFakerGenerator('hipster','word')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_location" generator="new DataFakerGenerator('hitchhikersGuideToTheGalaxy','location')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_character" generator="new DataFakerGenerator('hitchhikersGuideToTheGalaxy','character')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_quote" generator="new DataFakerGenerator('hitchhikersGuideToTheGalaxy','quote')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_species" generator="new DataFakerGenerator('hitchhikersGuideToTheGalaxy','species')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_starship" generator="new DataFakerGenerator('hitchhikersGuideToTheGalaxy','starship')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_planet" generator="new DataFakerGenerator('hitchhikersGuideToTheGalaxy','planet')"/>
+        <attribute name="hitchhikersGuideToTheGalaxy_marvinQuote" generator="new DataFakerGenerator('hitchhikersGuideToTheGalaxy','marvinQuote')"/>
+        <attribute name="hobbit_location" generator="new DataFakerGenerator('hobbit','location')"/>
+        <attribute name="hobbit_character" generator="new DataFakerGenerator('hobbit','character')"/>
+        <attribute name="hobbit_quote" generator="new DataFakerGenerator('hobbit','quote')"/>
+        <attribute name="hobbit_thorinsCompany" generator="new DataFakerGenerator('hobbit','thorinsCompany')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data500" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data500.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

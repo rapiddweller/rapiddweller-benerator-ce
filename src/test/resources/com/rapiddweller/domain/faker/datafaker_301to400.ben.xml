@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+<memstore id="mem"/>
+
+<import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data400" count="{count}" consumer="mem" >
+        <attribute name="disease_surgery" generator="new DataFakerGenerator('disease','surgery')"/>
+        <attribute name="disease_internalDisease" generator="new DataFakerGenerator('disease','internalDisease')"/>
+        <attribute name="disease_paediatrics" generator="new DataFakerGenerator('disease','paediatrics')"/>
+        <attribute name="disease_gynecologyAndObstetrics" generator="new DataFakerGenerator('disease','gynecologyAndObstetrics')"/>
+        <attribute name="disease_dermatolory" generator="new DataFakerGenerator('disease','dermatolory')"/>
+        <attribute name="disease_dermatology" generator="new DataFakerGenerator('disease','dermatology')"/>
+        <attribute name="doctorWho_character" generator="new DataFakerGenerator('doctorWho','character')"/>
+        <attribute name="doctorWho_quote" generator="new DataFakerGenerator('doctorWho','quote')"/>
+        <attribute name="doctorWho_species" generator="new DataFakerGenerator('doctorWho','species')"/>
+        <attribute name="doctorWho_doctor" generator="new DataFakerGenerator('doctorWho','doctor')"/>
+        <attribute name="doctorWho_actor" generator="new DataFakerGenerator('doctorWho','actor')"/>
+        <attribute name="doctorWho_catchPhrase" generator="new DataFakerGenerator('doctorWho','catchPhrase')"/>
+        <attribute name="dog_name" generator="new DataFakerGenerator('dog','name')"/>
+        <attribute name="dog_size" generator="new DataFakerGenerator('dog','size')"/>
+        <attribute name="dog_sound" generator="new DataFakerGenerator('dog','sound')"/>
+        <attribute name="dog_memePhrase" generator="new DataFakerGenerator('dog','memePhrase')"/>
+        <attribute name="dog_age" generator="new DataFakerGenerator('dog','age')"/>
+        <attribute name="dog_coatLength" generator="new DataFakerGenerator('dog','coatLength')"/>
+        <attribute name="dog_gender" generator="new DataFakerGenerator('dog','gender')"/>
+        <attribute name="dog_breed" generator="new DataFakerGenerator('dog','breed')"/>
+        <attribute name="doraemon_location" generator="new DataFakerGenerator('doraemon','location')"/>
+        <attribute name="doraemon_character" generator="new DataFakerGenerator('doraemon','character')"/>
+        <attribute name="doraemon_gadget" generator="new DataFakerGenerator('doraemon','gadget')"/>
+        <attribute name="dragonBall_character" generator="new DataFakerGenerator('dragonBall','character')"/>
+        <attribute name="drone_name" generator="new DataFakerGenerator('drone','name')"/>
+        <attribute name="drone_iso" generator="new DataFakerGenerator('drone','iso')"/>
+        <attribute name="drone_weight" generator="new DataFakerGenerator('drone','weight')"/>
+        <attribute name="drone_flightTime" generator="new DataFakerGenerator('drone','flightTime')"/>
+        <attribute name="drone_maxSpeed" generator="new DataFakerGenerator('drone','maxSpeed')"/>
+        <attribute name="drone_maxAscentSpeed" generator="new DataFakerGenerator('drone','maxAscentSpeed')"/>
+        <attribute name="drone_maxDescentSpeed" generator="new DataFakerGenerator('drone','maxDescentSpeed')"/>
+        <attribute name="drone_maxAltitude" generator="new DataFakerGenerator('drone','maxAltitude')"/>
+        <attribute name="drone_maxFlightDistance" generator="new DataFakerGenerator('drone','maxFlightDistance')"/>
+        <attribute name="drone_maxWindResistance" generator="new DataFakerGenerator('drone','maxWindResistance')"/>
+        <attribute name="drone_maxAngularVelocity" generator="new DataFakerGenerator('drone','maxAngularVelocity')"/>
+        <attribute name="drone_maxTiltAngle" generator="new DataFakerGenerator('drone','maxTiltAngle')"/>
+        <attribute name="drone_operatingTemperature" generator="new DataFakerGenerator('drone','operatingTemperature')"/>
+        <attribute name="drone_batteryCapacity" generator="new DataFakerGenerator('drone','batteryCapacity')"/>
+        <attribute name="drone_batteryVoltage" generator="new DataFakerGenerator('drone','batteryVoltage')"/>
+        <attribute name="drone_batteryType" generator="new DataFakerGenerator('drone','batteryType')"/>
+        <attribute name="drone_batteryWeight" generator="new DataFakerGenerator('drone','batteryWeight')"/>
+        <attribute name="drone_chargingTemperature" generator="new DataFakerGenerator('drone','chargingTemperature')"/>
+        <attribute name="drone_maxChargingPower" generator="new DataFakerGenerator('drone','maxChargingPower')"/>
+        <attribute name="drone_maxResolution" generator="new DataFakerGenerator('drone','maxResolution')"/>
+        <attribute name="drone_photoFormat" generator="new DataFakerGenerator('drone','photoFormat')"/>
+        <attribute name="drone_videoFormat" generator="new DataFakerGenerator('drone','videoFormat')"/>
+        <attribute name="drone_maxShutterSpeed" generator="new DataFakerGenerator('drone','maxShutterSpeed')"/>
+        <attribute name="drone_minShutterSpeed" generator="new DataFakerGenerator('drone','minShutterSpeed')"/>
+        <attribute name="drone_shutterSpeedUnits" generator="new DataFakerGenerator('drone','shutterSpeedUnits')"/>
+        <attribute name="dumbAndDumber_character" generator="new DataFakerGenerator('dumbAndDumber','character')"/>
+        <attribute name="dumbAndDumber_quote" generator="new DataFakerGenerator('dumbAndDumber','quote')"/>
+        <attribute name="dumbAndDumber_actor" generator="new DataFakerGenerator('dumbAndDumber','actor')"/>
+        <attribute name="dune_character" generator="new DataFakerGenerator('dune','character')"/>
+        <attribute name="dune_quote" generator="new DataFakerGenerator('dune','quote')"/>
+        <attribute name="dune_title" generator="new DataFakerGenerator('dune','title')"/>
+        <attribute name="dune_planet" generator="new DataFakerGenerator('dune','planet')"/>
+        <attribute name="dune_saying" generator="new DataFakerGenerator('dune','saying')"/>
+        <attribute name="dungeonsAndDragons_alignments" generator="new DataFakerGenerator('dungeonsAndDragons','alignments')"/>
+        <attribute name="dungeonsAndDragons_cities" generator="new DataFakerGenerator('dungeonsAndDragons','cities')"/>
+        <attribute name="dungeonsAndDragons_klasses" generator="new DataFakerGenerator('dungeonsAndDragons','klasses')"/>
+        <attribute name="dungeonsAndDragons_languages" generator="new DataFakerGenerator('dungeonsAndDragons','languages')"/>
+        <attribute name="dungeonsAndDragons_monsters" generator="new DataFakerGenerator('dungeonsAndDragons','monsters')"/>
+        <attribute name="dungeonsAndDragons_races" generator="new DataFakerGenerator('dungeonsAndDragons','races')"/>
+        <attribute name="dungeonsAndDragons_backgrounds" generator="new DataFakerGenerator('dungeonsAndDragons','backgrounds')"/>
+        <attribute name="dungeonsAndDragons_meleeWeapons" generator="new DataFakerGenerator('dungeonsAndDragons','meleeWeapons')"/>
+        <attribute name="dungeonsAndDragons_rangedWeapons" generator="new DataFakerGenerator('dungeonsAndDragons','rangedWeapons')"/>
+        <attribute name="educator_course" generator="new DataFakerGenerator('educator','course')"/>
+        <attribute name="educator_campus" generator="new DataFakerGenerator('educator','campus')"/>
+        <attribute name="educator_university" generator="new DataFakerGenerator('educator','university')"/>
+        <attribute name="educator_subjectWithNumber" generator="new DataFakerGenerator('educator','subjectWithNumber')"/>
+        <attribute name="educator_secondarySchool" generator="new DataFakerGenerator('educator','secondarySchool')"/>
+        <attribute name="eldenRing_location" generator="new DataFakerGenerator('eldenRing','location')"/>
+        <attribute name="eldenRing_spell" generator="new DataFakerGenerator('eldenRing','spell')"/>
+        <attribute name="eldenRing_weapon" generator="new DataFakerGenerator('eldenRing','weapon')"/>
+        <attribute name="eldenRing_skill" generator="new DataFakerGenerator('eldenRing','skill')"/>
+        <attribute name="eldenRing_npc" generator="new DataFakerGenerator('eldenRing','npc')"/>
+        <attribute name="elderScrolls_quote" generator="new DataFakerGenerator('elderScrolls','quote')"/>
+        <attribute name="elderScrolls_region" generator="new DataFakerGenerator('elderScrolls','region')"/>
+        <attribute name="elderScrolls_lastName" generator="new DataFakerGenerator('elderScrolls','lastName')"/>
+        <attribute name="elderScrolls_creature" generator="new DataFakerGenerator('elderScrolls','creature')"/>
+        <attribute name="elderScrolls_city" generator="new DataFakerGenerator('elderScrolls','city')"/>
+        <attribute name="elderScrolls_firstName" generator="new DataFakerGenerator('elderScrolls','firstName')"/>
+        <attribute name="elderScrolls_race" generator="new DataFakerGenerator('elderScrolls','race')"/>
+        <attribute name="elderScrolls_dragon" generator="new DataFakerGenerator('elderScrolls','dragon')"/>
+        <attribute name="electricalComponents_active" generator="new DataFakerGenerator('electricalComponents','active')"/>
+        <attribute name="electricalComponents_passive" generator="new DataFakerGenerator('electricalComponents','passive')"/>
+        <attribute name="electricalComponents_electromechanical" generator="new DataFakerGenerator('electricalComponents','electromechanical')"/>
+        <attribute name="emoji_cat" generator="new DataFakerGenerator('emoji','cat')"/>
+        <attribute name="emoji_smiley" generator="new DataFakerGenerator('emoji','smiley')"/>
+        <attribute name="englandfootball_team" generator="new DataFakerGenerator('englandfootball','team')"/>
+        <attribute name="englandfootball_league" generator="new DataFakerGenerator('englandfootball','league')"/>
+        <attribute name="esports_event" generator="new DataFakerGenerator('esports','event')"/>
+        <attribute name="esports_team" generator="new DataFakerGenerator('esports','team')"/>
+        <attribute name="esports_player" generator="new DataFakerGenerator('esports','player')"/>
+        <attribute name="esports_league" generator="new DataFakerGenerator('esports','league')"/>
+        <attribute name="esports_game" generator="new DataFakerGenerator('esports','game')"/>
+        <attribute name="familyGuy_location" generator="new DataFakerGenerator('familyGuy','location')"/>
+        <attribute name="familyGuy_character" generator="new DataFakerGenerator('familyGuy','character')"/>
+        <attribute name="familyGuy_quote" generator="new DataFakerGenerator('familyGuy','quote')"/>
+        <attribute name="famousLastWords_lastWords" generator="new DataFakerGenerator('famousLastWords','lastWords')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data400" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data400.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

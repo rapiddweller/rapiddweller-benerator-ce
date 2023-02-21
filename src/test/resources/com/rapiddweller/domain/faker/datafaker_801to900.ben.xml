@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <memstore id="mem"/>
+
+    <import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data900" count="{count}" consumer="mem" >
+        <attribute name="slackEmoji_people" generator="new DataFakerGenerator('slackEmoji','people')"/>
+        <attribute name="slackEmoji_nature" generator="new DataFakerGenerator('slackEmoji','nature')"/>
+        <attribute name="slackEmoji_custom" generator="new DataFakerGenerator('slackEmoji','custom')"/>
+        <attribute name="slackEmoji_foodAndDrink" generator="new DataFakerGenerator('slackEmoji','foodAndDrink')"/>
+        <attribute name="slackEmoji_celebration" generator="new DataFakerGenerator('slackEmoji','celebration')"/>
+        <attribute name="slackEmoji_travelAndPlaces" generator="new DataFakerGenerator('slackEmoji','travelAndPlaces')"/>
+        <attribute name="slackEmoji_objectsAndSymbols" generator="new DataFakerGenerator('slackEmoji','objectsAndSymbols')"/>
+        <attribute name="sonicTheHedgehog_character" generator="new DataFakerGenerator('sonicTheHedgehog','character')"/>
+        <attribute name="sonicTheHedgehog_zone" generator="new DataFakerGenerator('sonicTheHedgehog','zone')"/>
+        <attribute name="sonicTheHedgehog_game" generator="new DataFakerGenerator('sonicTheHedgehog','game')"/>
+        <attribute name="soulKnight_characters" generator="new DataFakerGenerator('soulKnight','characters')"/>
+        <attribute name="soulKnight_buffs" generator="new DataFakerGenerator('soulKnight','buffs')"/>
+        <attribute name="soulKnight_statues" generator="new DataFakerGenerator('soulKnight','statues')"/>
+        <attribute name="soulKnight_weapons" generator="new DataFakerGenerator('soulKnight','weapons')"/>
+        <attribute name="soulKnight_bosses" generator="new DataFakerGenerator('soulKnight','bosses')"/>
+        <attribute name="soulKnight_enemies" generator="new DataFakerGenerator('soulKnight','enemies')"/>
+        <attribute name="southPark_characters" generator="new DataFakerGenerator('southPark','characters')"/>
+        <attribute name="southPark_quotes" generator="new DataFakerGenerator('southPark','quotes')"/>
+        <attribute name="space_company" generator="new DataFakerGenerator('space','company')"/>
+        <attribute name="space_planet" generator="new DataFakerGenerator('space','planet')"/>
+        <attribute name="space_moon" generator="new DataFakerGenerator('space','moon')"/>
+        <attribute name="space_galaxy" generator="new DataFakerGenerator('space','galaxy')"/>
+        <attribute name="space_nebula" generator="new DataFakerGenerator('space','nebula')"/>
+        <attribute name="space_star" generator="new DataFakerGenerator('space','star')"/>
+        <attribute name="space_agency" generator="new DataFakerGenerator('space','agency')"/>
+        <attribute name="space_meteorite" generator="new DataFakerGenerator('space','meteorite')"/>
+        <attribute name="space_starCluster" generator="new DataFakerGenerator('space','starCluster')"/>
+        <attribute name="space_constellation" generator="new DataFakerGenerator('space','constellation')"/>
+        <attribute name="space_agencyAbbreviation" generator="new DataFakerGenerator('space','agencyAbbreviation')"/>
+        <attribute name="space_nasaSpaceCraft" generator="new DataFakerGenerator('space','nasaSpaceCraft')"/>
+        <attribute name="space_distanceMeasurement" generator="new DataFakerGenerator('space','distanceMeasurement')"/>
+        <attribute name="spongebob_characters" generator="new DataFakerGenerator('spongebob','characters')"/>
+        <attribute name="spongebob_quotes" generator="new DataFakerGenerator('spongebob','quotes')"/>
+        <attribute name="spongebob_episodes" generator="new DataFakerGenerator('spongebob','episodes')"/>
+        <attribute name="starCraft_unit" generator="new DataFakerGenerator('starCraft','unit')"/>
+        <attribute name="starCraft_character" generator="new DataFakerGenerator('starCraft','character')"/>
+        <attribute name="starCraft_planet" generator="new DataFakerGenerator('starCraft','planet')"/>
+        <attribute name="starCraft_building" generator="new DataFakerGenerator('starCraft','building')"/>
+        <attribute name="starTrek_location" generator="new DataFakerGenerator('starTrek','location')"/>
+        <attribute name="starTrek_character" generator="new DataFakerGenerator('starTrek','character')"/>
+        <attribute name="starTrek_villain" generator="new DataFakerGenerator('starTrek','villain')"/>
+        <attribute name="starWars_character" generator="new DataFakerGenerator('starWars','character')"/>
+        <attribute name="starWars_species" generator="new DataFakerGenerator('starWars','species')"/>
+        <attribute name="starWars_planets" generator="new DataFakerGenerator('starWars','planets')"/>
+        <attribute name="starWars_vehicles" generator="new DataFakerGenerator('starWars','vehicles')"/>
+        <attribute name="starWars_droids" generator="new DataFakerGenerator('starWars','droids')"/>
+        <attribute name="starWars_quotes" generator="new DataFakerGenerator('starWars','quotes')"/>
+        <attribute name="starWars_wookieWords" generator="new DataFakerGenerator('starWars','wookieWords')"/>
+        <attribute name="starWars_alternateCharacterSpelling" generator="new DataFakerGenerator('starWars','alternateCharacterSpelling')"/>
+        <attribute name="stargate_characters" generator="new DataFakerGenerator('stargate','characters')"/>
+        <attribute name="stargate_planets" generator="new DataFakerGenerator('stargate','planets')"/>
+        <attribute name="stargate_quotes" generator="new DataFakerGenerator('stargate','quotes')"/>
+        <attribute name="stock_nsdqSymbol" generator="new DataFakerGenerator('stock','nsdqSymbol')"/>
+        <attribute name="stock_nyseSymbol" generator="new DataFakerGenerator('stock','nyseSymbol')"/>
+        <attribute name="strangerThings_character" generator="new DataFakerGenerator('strangerThings','character')"/>
+        <attribute name="strangerThings_quote" generator="new DataFakerGenerator('strangerThings','quote')"/>
+        <attribute name="streetFighter_moves" generator="new DataFakerGenerator('streetFighter','moves')"/>
+        <attribute name="streetFighter_characters" generator="new DataFakerGenerator('streetFighter','characters')"/>
+        <attribute name="streetFighter_quotes" generator="new DataFakerGenerator('streetFighter','quotes')"/>
+        <attribute name="streetFighter_stages" generator="new DataFakerGenerator('streetFighter','stages')"/>
+        <attribute name="studioGhibli_character" generator="new DataFakerGenerator('studioGhibli','character')"/>
+        <attribute name="studioGhibli_quote" generator="new DataFakerGenerator('studioGhibli','quote')"/>
+        <attribute name="studioGhibli_movie" generator="new DataFakerGenerator('studioGhibli','movie')"/>
+        <attribute name="subscription_plans" generator="new DataFakerGenerator('subscription','plans')"/>
+        <attribute name="subscription_statuses" generator="new DataFakerGenerator('subscription','statuses')"/>
+        <attribute name="subscription_paymentMethods" generator="new DataFakerGenerator('subscription','paymentMethods')"/>
+        <attribute name="subscription_subscriptionTerms" generator="new DataFakerGenerator('subscription','subscriptionTerms')"/>
+        <attribute name="subscription_paymentTerms" generator="new DataFakerGenerator('subscription','paymentTerms')"/>
+        <attribute name="suits_characters" generator="new DataFakerGenerator('suits','characters')"/>
+        <attribute name="suits_quotes" generator="new DataFakerGenerator('suits','quotes')"/>
+        <attribute name="superMario_locations" generator="new DataFakerGenerator('superMario','locations')"/>
+        <attribute name="superMario_games" generator="new DataFakerGenerator('superMario','games')"/>
+        <attribute name="superMario_characters" generator="new DataFakerGenerator('superMario','characters')"/>
+        <attribute name="superSmashBros_stage" generator="new DataFakerGenerator('superSmashBros','stage')"/>
+        <attribute name="superSmashBros_fighter" generator="new DataFakerGenerator('superSmashBros','fighter')"/>
+        <attribute name="superhero_name" generator="new DataFakerGenerator('superhero','name')"/>
+        <attribute name="superhero_prefix" generator="new DataFakerGenerator('superhero','prefix')"/>
+        <attribute name="superhero_suffix" generator="new DataFakerGenerator('superhero','suffix')"/>
+        <attribute name="superhero_descriptor" generator="new DataFakerGenerator('superhero','descriptor')"/>
+        <attribute name="superhero_power" generator="new DataFakerGenerator('superhero','power')"/>
+        <attribute name="supernatural_character" generator="new DataFakerGenerator('supernatural','character')"/>
+        <attribute name="supernatural_creature" generator="new DataFakerGenerator('supernatural','creature')"/>
+        <attribute name="supernatural_weapon" generator="new DataFakerGenerator('supernatural','weapon')"/>
+        <attribute name="swordArtOnline_location" generator="new DataFakerGenerator('swordArtOnline','location')"/>
+        <attribute name="swordArtOnline_item" generator="new DataFakerGenerator('swordArtOnline','item')"/>
+        <attribute name="swordArtOnline_realName" generator="new DataFakerGenerator('swordArtOnline','realName')"/>
+        <attribute name="swordArtOnline_gameName" generator="new DataFakerGenerator('swordArtOnline','gameName')"/>
+        <attribute name="tea_type" generator="new DataFakerGenerator('tea','type')"/>
+        <attribute name="tea_variety" generator="new DataFakerGenerator('tea','variety')"/>
+        <attribute name="team_name" generator="new DataFakerGenerator('team','name')"/>
+        <attribute name="team_state" generator="new DataFakerGenerator('team','state')"/>
+        <attribute name="team_creature" generator="new DataFakerGenerator('team','creature')"/>
+        <attribute name="team_sport" generator="new DataFakerGenerator('team','sport')"/>
+        <attribute name="text_character" generator="new DataFakerGenerator('text','character')"/>
+        <attribute name="text_text" generator="new DataFakerGenerator('text','text')"/>
+        <attribute name="text_uppercaseCharacter" generator="new DataFakerGenerator('text','uppercaseCharacter')"/>
+        <attribute name="text_lowercaseCharacter" generator="new DataFakerGenerator('text','lowercaseCharacter')"/>
+        <attribute name="theExpanse_locations" generator="new DataFakerGenerator('theExpanse','locations')"/>
+        <attribute name="theExpanse_characters" generator="new DataFakerGenerator('theExpanse','characters')"/>
+        <attribute name="theExpanse_ships" generator="new DataFakerGenerator('theExpanse','ships')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data900" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data900.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>
