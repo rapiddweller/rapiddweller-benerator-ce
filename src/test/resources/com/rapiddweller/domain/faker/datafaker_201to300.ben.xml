@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <memstore id="mem"/>
+
+    <import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data300" count="{count}" consumer="mem" >
+        <attribute name="commerce_productName" generator="new DataFakerGenerator('commerce','productName')"/>
+        <attribute name="commerce_promotionCode" generator="new DataFakerGenerator('commerce','promotionCode')"/>
+        <attribute name="community_character" generator="new DataFakerGenerator('community','character')"/>
+        <attribute name="community_quote" generator="new DataFakerGenerator('community','quote')"/>
+        <attribute name="company_name" generator="new DataFakerGenerator('company','name')"/>
+        <attribute name="company_bs" generator="new DataFakerGenerator('company','bs')"/>
+        <attribute name="company_suffix" generator="new DataFakerGenerator('company','suffix')"/>
+        <attribute name="company_url" generator="new DataFakerGenerator('company','url')"/>
+        <attribute name="company_industry" generator="new DataFakerGenerator('company','industry')"/>
+        <attribute name="company_profession" generator="new DataFakerGenerator('company','profession')"/>
+        <attribute name="company_buzzword" generator="new DataFakerGenerator('company','buzzword')"/>
+        <attribute name="company_logo" generator="new DataFakerGenerator('company','logo')"/>
+        <attribute name="company_catchPhrase" generator="new DataFakerGenerator('company','catchPhrase')"/>
+        <attribute name="computer_type" generator="new DataFakerGenerator('computer','type')"/>
+        <attribute name="computer_platform" generator="new DataFakerGenerator('computer','platform')"/>
+        <attribute name="computer_linux" generator="new DataFakerGenerator('computer','linux')"/>
+        <attribute name="computer_windows" generator="new DataFakerGenerator('computer','windows')"/>
+        <attribute name="computer_brand" generator="new DataFakerGenerator('computer','brand')"/>
+        <attribute name="computer_macos" generator="new DataFakerGenerator('computer','macos')"/>
+        <attribute name="computer_operatingSystem" generator="new DataFakerGenerator('computer','operatingSystem')"/>
+        <attribute name="construction_materials" generator="new DataFakerGenerator('construction','materials')"/>
+        <attribute name="construction_roles" generator="new DataFakerGenerator('construction','roles')"/>
+        <attribute name="construction_trades" generator="new DataFakerGenerator('construction','trades')"/>
+        <attribute name="construction_heavyEquipment" generator="new DataFakerGenerator('construction','heavyEquipment')"/>
+        <attribute name="construction_subcontractCategories" generator="new DataFakerGenerator('construction','subcontractCategories')"/>
+        <attribute name="construction_standardCostCodes" generator="new DataFakerGenerator('construction','standardCostCodes')"/>
+        <attribute name="control_location" generator="new DataFakerGenerator('control','location')"/>
+        <attribute name="control_character" generator="new DataFakerGenerator('control','character')"/>
+        <attribute name="control_quote" generator="new DataFakerGenerator('control','quote')"/>
+        <attribute name="control_hiss" generator="new DataFakerGenerator('control','hiss')"/>
+        <attribute name="control_theBoard" generator="new DataFakerGenerator('control','theBoard')"/>
+        <attribute name="control_objectOfPower" generator="new DataFakerGenerator('control','objectOfPower')"/>
+        <attribute name="control_alteredItem" generator="new DataFakerGenerator('control','alteredItem')"/>
+        <attribute name="control_alteredWorldEvent" generator="new DataFakerGenerator('control','alteredWorldEvent')"/>
+        <attribute name="cosmere_aons" generator="new DataFakerGenerator('cosmere','aons')"/>
+        <attribute name="cosmere_shards" generator="new DataFakerGenerator('cosmere','shards')"/>
+        <attribute name="cosmere_surges" generator="new DataFakerGenerator('cosmere','surges')"/>
+        <attribute name="cosmere_metals" generator="new DataFakerGenerator('cosmere','metals')"/>
+        <attribute name="cosmere_heralds" generator="new DataFakerGenerator('cosmere','heralds')"/>
+        <attribute name="cosmere_sprens" generator="new DataFakerGenerator('cosmere','sprens')"/>
+        <attribute name="cosmere_shardWorlds" generator="new DataFakerGenerator('cosmere','shardWorlds')"/>
+        <attribute name="cosmere_knightsRadiant" generator="new DataFakerGenerator('cosmere','knightsRadiant')"/>
+        <attribute name="cosmere_allomancers" generator="new DataFakerGenerator('cosmere','allomancers')"/>
+        <attribute name="cosmere_feruchemists" generator="new DataFakerGenerator('cosmere','feruchemists')"/>
+        <attribute name="country_name" generator="new DataFakerGenerator('country','name')"/>
+        <attribute name="country_flag" generator="new DataFakerGenerator('country','flag')"/>
+        <attribute name="country_currencyCode" generator="new DataFakerGenerator('country','currencyCode')"/>
+        <attribute name="country_currency" generator="new DataFakerGenerator('country','currency')"/>
+        <attribute name="country_capital" generator="new DataFakerGenerator('country','capital')"/>
+        <attribute name="country_countryCode2" generator="new DataFakerGenerator('country','countryCode2')"/>
+        <attribute name="country_countryCode3" generator="new DataFakerGenerator('country','countryCode3')"/>
+        <attribute name="cowboyBebop_character" generator="new DataFakerGenerator('cowboyBebop','character')"/>
+        <attribute name="cowboyBebop_quote" generator="new DataFakerGenerator('cowboyBebop','quote')"/>
+        <attribute name="cowboyBebop_song" generator="new DataFakerGenerator('cowboyBebop','song')"/>
+        <attribute name="cowboyBebop_episode" generator="new DataFakerGenerator('cowboyBebop','episode')"/>
+        <attribute name="cpf_valid" generator="new DataFakerGenerator('cpf','valid')"/>
+        <attribute name="cpf_invalid" generator="new DataFakerGenerator('cpf','invalid')"/>
+        <attribute name="cricket_formats" generator="new DataFakerGenerator('cricket','formats')"/>
+        <attribute name="cricket_teams" generator="new DataFakerGenerator('cricket','teams')"/>
+        <attribute name="cricket_players" generator="new DataFakerGenerator('cricket','players')"/>
+        <attribute name="cricket_tournaments" generator="new DataFakerGenerator('cricket','tournaments')"/>
+        <attribute name="cryptoCoin_coin" generator="new DataFakerGenerator('cryptoCoin','coin')"/>
+        <attribute name="cultureSeries_books" generator="new DataFakerGenerator('cultureSeries','books')"/>
+        <attribute name="cultureSeries_civs" generator="new DataFakerGenerator('cultureSeries','civs')"/>
+        <attribute name="cultureSeries_planets" generator="new DataFakerGenerator('cultureSeries','planets')"/>
+        <attribute name="cultureSeries_cultureShips" generator="new DataFakerGenerator('cultureSeries','cultureShips')"/>
+        <attribute name="cultureSeries_cultureShipClasses" generator="new DataFakerGenerator('cultureSeries','cultureShipClasses')"/>
+        <attribute name="cultureSeries_cultureShipClassAbvs" generator="new DataFakerGenerator('cultureSeries','cultureShipClassAbvs')"/>
+        <attribute name="currency_name" generator="new DataFakerGenerator('currency','name')"/>
+        <attribute name="currency_code" generator="new DataFakerGenerator('currency','code')"/>
+        <attribute name="darkSouls_classes" generator="new DataFakerGenerator('darkSouls','classes')"/>
+        <attribute name="darkSouls_stats" generator="new DataFakerGenerator('darkSouls','stats')"/>
+        <attribute name="darkSouls_covenants" generator="new DataFakerGenerator('darkSouls','covenants')"/>
+        <attribute name="darkSouls_shield" generator="new DataFakerGenerator('darkSouls','shield')"/>
+        <attribute name="date_birthday" generator="new DataFakerGenerator('date','birthday')"/>
+        <attribute name="dcComics_name" generator="new DataFakerGenerator('dcComics','name')"/>
+        <attribute name="dcComics_heroine" generator="new DataFakerGenerator('dcComics','heroine')"/>
+        <attribute name="dcComics_villain" generator="new DataFakerGenerator('dcComics','villain')"/>
+        <attribute name="dcComics_title" generator="new DataFakerGenerator('dcComics','title')"/>
+        <attribute name="dcComics_hero" generator="new DataFakerGenerator('dcComics','hero')"/>
+        <attribute name="demographic_race" generator="new DataFakerGenerator('demographic','race')"/>
+        <attribute name="demographic_demonym" generator="new DataFakerGenerator('demographic','demonym')"/>
+        <attribute name="demographic_sex" generator="new DataFakerGenerator('demographic','sex')"/>
+        <attribute name="demographic_educationalAttainment" generator="new DataFakerGenerator('demographic','educationalAttainment')"/>
+        <attribute name="demographic_maritalStatus" generator="new DataFakerGenerator('demographic','maritalStatus')"/>
+        <attribute name="departed_character" generator="new DataFakerGenerator('departed','character')"/>
+        <attribute name="departed_quote" generator="new DataFakerGenerator('departed','quote')"/>
+        <attribute name="departed_actor" generator="new DataFakerGenerator('departed','actor')"/>
+        <attribute name="dessert_variety" generator="new DataFakerGenerator('dessert','variety')"/>
+        <attribute name="dessert_topping" generator="new DataFakerGenerator('dessert','topping')"/>
+        <attribute name="dessert_flavor" generator="new DataFakerGenerator('dessert','flavor')"/>
+        <attribute name="detectiveConan_characters" generator="new DataFakerGenerator('detectiveConan','characters')"/>
+        <attribute name="detectiveConan_vehicles" generator="new DataFakerGenerator('detectiveConan','vehicles')"/>
+        <attribute name="detectiveConan_gadgets" generator="new DataFakerGenerator('detectiveConan','gadgets')"/>
+        <attribute name="device_platform" generator="new DataFakerGenerator('device','platform')"/>
+        <attribute name="device_modelName" generator="new DataFakerGenerator('device','modelName')"/>
+        <attribute name="device_serial" generator="new DataFakerGenerator('device','serial')"/>
+        <attribute name="device_manufacturer" generator="new DataFakerGenerator('device','manufacturer')"/>
+        <attribute name="disease_ophthalmologyAndOtorhinolaryngology" generator="new DataFakerGenerator('disease','ophthalmologyAndOtorhinolaryngology')"/>
+        <attribute name="disease_neurology" generator="new DataFakerGenerator('disease','neurology')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data300" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data300.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

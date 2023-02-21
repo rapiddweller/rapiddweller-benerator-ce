@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+<memstore id="mem"/>
+
+<import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data100" count="{count}" consumer="mem" >
+        <attribute name="address_state" generator="new DataFakerGenerator('address','state')"/>
+        <attribute name="address_country" generator="new DataFakerGenerator('address','country')"/>
+        <attribute name="address_streetName" generator="new DataFakerGenerator('address','streetName')"/>
+        <attribute name="address_zipCode" generator="new DataFakerGenerator('address','zipCode')"/>
+        <attribute name="address_postcode" generator="new DataFakerGenerator('address','postcode')"/>
+        <attribute name="address_stateAbbr" generator="new DataFakerGenerator('address','stateAbbr')"/>
+        <attribute name="address_citySuffix" generator="new DataFakerGenerator('address','citySuffix')"/>
+        <attribute name="address_cityPrefix" generator="new DataFakerGenerator('address','cityPrefix')"/>
+        <attribute name="address_city" generator="new DataFakerGenerator('address','city')"/>
+        <attribute name="address_cityName" generator="new DataFakerGenerator('address','cityName')"/>
+        <attribute name="address_latitude" generator="new DataFakerGenerator('address','latitude')"/>
+        <attribute name="address_longitude" generator="new DataFakerGenerator('address','longitude')"/>
+        <attribute name="address_latLon" generator="new DataFakerGenerator('address','latLon')"/>
+        <attribute name="address_lonLat" generator="new DataFakerGenerator('address','lonLat')"/>
+        <attribute name="address_timeZone" generator="new DataFakerGenerator('address','timeZone')"/>
+        <attribute name="address_streetAddressNumber" generator="new DataFakerGenerator('address','streetAddressNumber')"/>
+        <attribute name="address_streetAddress" generator="new DataFakerGenerator('address','streetAddress')"/>
+        <attribute name="address_secondaryAddress" generator="new DataFakerGenerator('address','secondaryAddress')"/>
+        <attribute name="address_streetSuffix" generator="new DataFakerGenerator('address','streetSuffix')"/>
+        <attribute name="address_streetPrefix" generator="new DataFakerGenerator('address','streetPrefix')"/>
+        <attribute name="address_countryCode" generator="new DataFakerGenerator('address','countryCode')"/>
+        <attribute name="address_buildingNumber" generator="new DataFakerGenerator('address','buildingNumber')"/>
+        <attribute name="address_fullAddress" generator="new DataFakerGenerator('address','fullAddress')"/>
+        <attribute name="ancient_god" generator="new DataFakerGenerator('ancient','god')"/>
+        <attribute name="ancient_primordial" generator="new DataFakerGenerator('ancient','primordial')"/>
+        <attribute name="ancient_titan" generator="new DataFakerGenerator('ancient','titan')"/>
+        <attribute name="ancient_hero" generator="new DataFakerGenerator('ancient','hero')"/>
+        <attribute name="animal_name" generator="new DataFakerGenerator('animal','name')"/>
+        <attribute name="app_name" generator="new DataFakerGenerator('app','name')"/>
+        <attribute name="app_version" generator="new DataFakerGenerator('app','version')"/>
+        <attribute name="app_author" generator="new DataFakerGenerator('app','author')"/>
+        <attribute name="appliance_equipment" generator="new DataFakerGenerator('appliance','equipment')"/>
+        <attribute name="appliance_brand" generator="new DataFakerGenerator('appliance','brand')"/>
+        <attribute name="aquaTeenHungerForce_character" generator="new DataFakerGenerator('aquaTeenHungerForce','character')"/>
+        <attribute name="artist_name" generator="new DataFakerGenerator('artist','name')"/>
+        <attribute name="australia_locations" generator="new DataFakerGenerator('australia','locations')"/>
+        <attribute name="australia_animals" generator="new DataFakerGenerator('australia','animals')"/>
+        <attribute name="australia_states" generator="new DataFakerGenerator('australia','states')"/>
+        <attribute name="avatar_image" generator="new DataFakerGenerator('avatar','image')"/>
+        <attribute name="aviation_aircraft" generator="new DataFakerGenerator('aviation','aircraft')"/>
+        <attribute name="aviation_airport" generator="new DataFakerGenerator('aviation','airport')"/>
+        <attribute name="aviation_METAR" generator="new DataFakerGenerator('aviation','METAR')"/>
+        <attribute name="aws_region" generator="new DataFakerGenerator('aws','region')"/>
+        <attribute name="aws_accountId" generator="new DataFakerGenerator('aws','accountId')"/>
+        <attribute name="aws_acmARN" generator="new DataFakerGenerator('aws','acmARN')"/>
+        <attribute name="aws_albARN" generator="new DataFakerGenerator('aws','albARN')"/>
+        <attribute name="aws_subnetId" generator="new DataFakerGenerator('aws','subnetId')"/>
+        <attribute name="aws_vpcId" generator="new DataFakerGenerator('aws','vpcId')"/>
+        <attribute name="aws_albTargetGroupARN" generator="new DataFakerGenerator('aws','albTargetGroupARN')"/>
+        <attribute name="aws_route53ZoneId" generator="new DataFakerGenerator('aws','route53ZoneId')"/>
+        <attribute name="aws_securityGroupId" generator="new DataFakerGenerator('aws','securityGroupId')"/>
+        <attribute name="azure_region" generator="new DataFakerGenerator('azure','region')"/>
+        <attribute name="azure_tenantId" generator="new DataFakerGenerator('azure','tenantId')"/>
+        <attribute name="azure_firewall" generator="new DataFakerGenerator('azure','firewall')"/>
+        <attribute name="azure_virtualWan" generator="new DataFakerGenerator('azure','virtualWan')"/>
+        <attribute name="azure_serviceBus" generator="new DataFakerGenerator('azure','serviceBus')"/>
+        <attribute name="azure_keyVault" generator="new DataFakerGenerator('azure','keyVault')"/>
+        <attribute name="azure_subscriptionId" generator="new DataFakerGenerator('azure','subscriptionId')"/>
+        <attribute name="azure_resourceGroup" generator="new DataFakerGenerator('azure','resourceGroup')"/>
+        <attribute name="azure_managementGroup" generator="new DataFakerGenerator('azure','managementGroup')"/>
+        <attribute name="azure_applicationGateway" generator="new DataFakerGenerator('azure','applicationGateway')"/>
+        <attribute name="azure_bastionHost" generator="new DataFakerGenerator('azure','bastionHost')"/>
+        <attribute name="azure_loadBalancer" generator="new DataFakerGenerator('azure','loadBalancer')"/>
+        <attribute name="azure_networkSecurityGroup" generator="new DataFakerGenerator('azure','networkSecurityGroup')"/>
+        <attribute name="azure_virtualNetwork" generator="new DataFakerGenerator('azure','virtualNetwork')"/>
+        <attribute name="azure_appServiceEnvironment" generator="new DataFakerGenerator('azure','appServiceEnvironment')"/>
+        <attribute name="azure_appServicePlan" generator="new DataFakerGenerator('azure','appServicePlan')"/>
+        <attribute name="azure_loadTesting" generator="new DataFakerGenerator('azure','loadTesting')"/>
+        <attribute name="azure_staticWebApp" generator="new DataFakerGenerator('azure','staticWebApp')"/>
+        <attribute name="azure_virtualMachine" generator="new DataFakerGenerator('azure','virtualMachine')"/>
+        <attribute name="azure_storageAccount" generator="new DataFakerGenerator('azure','storageAccount')"/>
+        <attribute name="azure_containerRegistry" generator="new DataFakerGenerator('azure','containerRegistry')"/>
+        <attribute name="azure_containerApps" generator="new DataFakerGenerator('azure','containerApps')"/>
+        <attribute name="azure_containerAppsEnvironment" generator="new DataFakerGenerator('azure','containerAppsEnvironment')"/>
+        <attribute name="azure_containerInstance" generator="new DataFakerGenerator('azure','containerInstance')"/>
+        <attribute name="azure_cosmosDBDatabase" generator="new DataFakerGenerator('azure','cosmosDBDatabase')"/>
+        <attribute name="azure_sqlDatabase" generator="new DataFakerGenerator('azure','sqlDatabase')"/>
+        <attribute name="azure_mysqlDatabase" generator="new DataFakerGenerator('azure','mysqlDatabase')"/>
+        <attribute name="azure_postgreSQLDatabase" generator="new DataFakerGenerator('azure','postgreSQLDatabase')"/>
+        <attribute name="azure_serviceBusQueue" generator="new DataFakerGenerator('azure','serviceBusQueue')"/>
+        <attribute name="azure_serviceBusTopic" generator="new DataFakerGenerator('azure','serviceBusTopic')"/>
+        <attribute name="azure_logAnalytics" generator="new DataFakerGenerator('azure','logAnalytics')"/>
+        <attribute name="babylon5_character" generator="new DataFakerGenerator('babylon5','character')"/>
+        <attribute name="babylon5_quote" generator="new DataFakerGenerator('babylon5','quote')"/>
+        <attribute name="backToTheFuture_character" generator="new DataFakerGenerator('backToTheFuture','character')"/>
+        <attribute name="backToTheFuture_quote" generator="new DataFakerGenerator('backToTheFuture','quote')"/>
+        <attribute name="backToTheFuture_date" generator="new DataFakerGenerator('backToTheFuture','date')"/>
+        <attribute name="barcode_type" generator="new DataFakerGenerator('barcode','type')"/>
+        <attribute name="barcode_gtin14" generator="new DataFakerGenerator('barcode','gtin14')"/>
+        <attribute name="barcode_gtin12" generator="new DataFakerGenerator('barcode','gtin12')"/>
+        <attribute name="barcode_ean8" generator="new DataFakerGenerator('barcode','ean8')"/>
+        <attribute name="barcode_gtin8" generator="new DataFakerGenerator('barcode','gtin8')"/>
+        <attribute name="barcode_gtin13" generator="new DataFakerGenerator('barcode','gtin13')"/>
+        <attribute name="barcode_ean13" generator="new DataFakerGenerator('barcode','ean13')"/>
+        <attribute name="baseball_positions" generator="new DataFakerGenerator('baseball','positions')"/>
+        <attribute name="baseball_teams" generator="new DataFakerGenerator('baseball','teams')"/>
+        <attribute name="baseball_coaches" generator="new DataFakerGenerator('baseball','coaches')"/>
+        <attribute name="baseball_players" generator="new DataFakerGenerator('baseball','players')"/>
+        <attribute name="basketball_positions" generator="new DataFakerGenerator('basketball','positions')"/>
+        <attribute name="basketball_teams" generator="new DataFakerGenerator('basketball','teams')"/>
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data100" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data100.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>
