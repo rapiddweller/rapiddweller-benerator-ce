@@ -1,6 +1,7 @@
 package com.rapiddweller.domain.faker;
 
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Test;
 
 public class DataFakerIntegrationTest extends AbstractBeneratorIntegrationTest {
@@ -55,5 +56,10 @@ public class DataFakerIntegrationTest extends AbstractBeneratorIntegrationTest {
     @Test
     public void testDataFaker1000() {
         parseAndExecuteFile(PREFIX_PATH + "/datafaker_901to990.ben.xml");
+    }
+
+    @Test(expected = IllegalArgumentError.class)
+    public void testMissingProperty(){
+        parseAndExecuteFile(PREFIX_PATH + "/datafaker_errortest.ben.xml");
     }
 }
