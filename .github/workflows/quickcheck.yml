@@ -76,7 +76,10 @@ jobs:
         with:
           java-version: 11
           distribution: zulu
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+      - name: MAVEN_CLI_OPTS
+        env:
+          MAVEN_OPTS: "-Xmx3000m"
+        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
 
   test_IT_jdk11:
     runs-on: ubuntu-latest
