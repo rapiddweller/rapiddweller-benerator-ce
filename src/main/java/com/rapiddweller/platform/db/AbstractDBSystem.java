@@ -953,7 +953,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
     int sqlType = columnType.getJdbcType();
     if ("UUID".equals(columnType.getName())) { // Special treatment for Postgres UUID types
       typeToWrite = UUID.class;
-    } else if ("JSON".equals(columnType.getName())) { // Special treatment for Postgres JSON type
+    } else if ("JSON".equals(columnType.getName()) || "JSONB".equals(columnType.getName())) { // Special treatment for Postgres JSON type
       typeToWrite = JSONPGObject.class;
     } else if ("GEOMETRY".equals(columnType.getName())) {
         typeToWrite = PGgeometry.class;
