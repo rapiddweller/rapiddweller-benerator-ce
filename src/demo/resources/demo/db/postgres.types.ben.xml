@@ -14,35 +14,35 @@
         id          INT PRIMARY KEY,
         "boolean"   BOOLEAN NOT NULL,
         "char"      CHAR(1) NOT NULL,
-        "date"      DATE NOT NULL,
+        "date"      DATE NOT NULL DEFAULT CURRENT_DATE,
         "double"    DOUBLE PRECISION NOT NULL,
         "float"     REAL NOT NULL,
         "int"       INT NOT NULL,
         "long"      BIGINT NOT NULL,
         "short"     SMALLINT NOT NULL,
         "string"    VARCHAR(30) NOT NULL,
-        "timestamp" TIMESTAMP NOT NULL,
+        "timestamp" TIMESTAMP NOT NULL DEFAULT now(),
         "text"      TEXT NOT NULL,
         "binary"    BYTEA NOT NULL,
         "json"      JSON NOT NULL,
-        "jsonb"     JSONB NOT NULL
+        "jsonb"     JSONB NOT NULL,
+        "genom"     GEOMETRY NOT NULL
         );
     </execute>
     <generate type="db_all_types" count="10" consumer="database">
         <attribute name="id" type="int" min="1" max="1000000"/>
         <attribute name="boolean" type="boolean"/>
         <attribute name="char" type="string"/>
-        <attribute name="date" type="date" generator="CurrentDateTimeGenerator"/>
         <attribute name="double" type="double" min="0" max="100"/>
         <attribute name="float" type="float" min="0" max="100"/>
         <attribute name="int" type="int" min="0" max="100"/>
         <attribute name="long" type="long" min="0" max="100"/>
         <attribute name="short" type="short" min="0" max="100"/>
         <attribute name="string" type="string" pattern="[A-Z]{5}"/>
-        <attribute name="timestamp" type="timestamp" generator="CurrentDateTimeGenerator"/>
         <attribute name="text" type="string" pattern="[A-Z]{5}"/>
         <attribute name="binary" type="binary"/>
         <attribute name="json" constant='{{"test": "321"}}'/>
         <attribute name="jsonb" constant='{{"test": "321"}}'/>
+        <attribute name="genom" constant="polygon((1 1, 1 2, 2 2, 2 1, 1 1))"/>
     </generate>
 </setup>

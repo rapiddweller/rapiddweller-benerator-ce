@@ -99,7 +99,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres:12.2-alpine
+        image: postgis/postgis
         # Provide the password for postgres
         env:
           DB_HOST: postgres
@@ -187,6 +187,14 @@ jobs:
           dbSchema=public
           idStrategy=increment
           idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+      - name: set env file for postgres connection
+        run: |
+          echo "
+          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+          postgres.db.driver=org.postgresql.Driver
+          postgres.db.user=root
+          postgres.db.password=Benerator123!
+          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
       - name: set db properties for mysql connetion
         run: |
           echo "

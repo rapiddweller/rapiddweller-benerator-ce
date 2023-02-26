@@ -91,6 +91,16 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   }
 
   /**
+   * postgres type test
+   */
+  @Test
+  public void PostgresTypeTest() {
+    assumeTestActive("postgres");
+    BeneratorContext benCtx = parseAndExecuteFile("demo/db/postgres.types.ben.xml");
+    Assert.assertEquals("demo/db", benCtx.getContextUri());
+  }
+
+  /**
    * Demo postgres shop.
    */
   @Test
