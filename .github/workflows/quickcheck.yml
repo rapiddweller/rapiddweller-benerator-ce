@@ -10,7 +10,7 @@ env:
 
 jobs:
 
-    ###################### Sonar ######################
+  ###################### Sonar ######################
 
   sonar:
     if: ${{ (!contains(github.event.head_commit.message, 'dependabot'))  && (!contains(github.event.head_commit.message, 'Bump')) }}
@@ -76,10 +76,7 @@ jobs:
         with:
           java-version: 11
           distribution: zulu
-      - name: MAVEN_CLI_OPTS
-        env:
-          MAVEN_OPTS: "-Xmx3000m"
-        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
 
   test_IT_jdk11:
     runs-on: ubuntu-latest
