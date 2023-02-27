@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="runBen test EE" type="Application" factoryName="Application" show_console_on_std_err="true" show_console_on_std_out="true">
+    <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
+    <option name="MAIN_CLASS_NAME" value="com.rapiddweller.benerator_ee.main.EEBenerator" />
+    <module name="rapiddweller-benerator-ee" />
+    <option name="PROGRAM_PARAMETERS" value="j-json.ben.xml" />
+    <option name="WORKING_DIRECTORY" value="$USER_HOME$/ben_demos/j-json" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.rapiddweller.benerator.main.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
