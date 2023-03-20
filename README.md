@@ -31,6 +31,12 @@ export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-3.1.0-jdk-11-dist
 export PATH=$BENERATOR_HOME/bin:$PATH 
 chmod a+x $BENERATOR_HOME/bin/*.sh
 ```
+#### Mac  
+
+Install with Homebrew
+```shell
+brew install benerator
+```
 
 #### Windows 10 PowerShell  
 ```powershell
