@@ -34,6 +34,8 @@ chmod a+x $BENERATOR_HOME/bin/*.sh
 #### Mac  
 
 Install with Homebrew
+Link to Homebrew Formular [here](https://formulae.brew.sh/formula/benerator) 
+
 ```shell
 brew install benerator
 ```
