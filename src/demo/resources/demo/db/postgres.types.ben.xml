@@ -26,7 +26,7 @@
         "binary"    BYTEA NOT NULL,
         "json"      JSON NOT NULL,
         "jsonb"     JSONB NOT NULL,
-        "textarray" TEXT[] NOT NULL
+        "genom"     GEOMETRY NOT NULL
         );
     </execute>
     <generate type="db_all_types" count="10" consumer="database">

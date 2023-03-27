@@ -102,14 +102,14 @@ public class DefineDatabaseStatement implements Statement {
     String envName = null;
     String systemName = null;
     String idValue = id.evaluate(context);
-    // check if environement is null or empty set to default "environment"
-    if (environment == null || ExpressionUtil.evaluate(environment, context).isEmpty()) {
+    // check if environement is null and no url set ... set environment to default "environment"
+    if (environment == null && url == null) {
       envName = "environment";
     }
     else {
       envName = ExpressionUtil.evaluate(environment, context);
     }
-    if (system == null || system.evaluate(context).isEmpty()) {
+    if (system == null && environment == null && url == null) {
       systemName = idValue;
     }
     else {
