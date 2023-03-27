@@ -43,6 +43,6 @@
         <attribute name="binary" type="binary"/>
         <attribute name="json" constant='{{"test": "321"}}'/>
         <attribute name="jsonb" constant='{{"test": "321"}}'/>
-        <attribute name="textarray" constant='["test1", "test2"]'/>
+        <attribute name="genom" constant="polygon((1 1, 1 2, 2 2, 2 1, 1 1))"/>
     </generate>
 </setup>
