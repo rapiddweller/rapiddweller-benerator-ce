@@ -29,7 +29,7 @@
         "textarray" TEXT[] NOT NULL
         );
     </execute>
-    <generate type="db_all_types" count="10" consumer="database">
+    <generate type="db_all_types" count="10" consumer="database, ConsoleExporter">
         <attribute name="id" type="int" min="1" max="1000000"/>
         <attribute name="boolean" type="boolean"/>
         <attribute name="char" type="string"/>

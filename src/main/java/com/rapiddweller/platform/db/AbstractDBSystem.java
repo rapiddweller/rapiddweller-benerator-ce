@@ -957,8 +957,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       typeToWrite = JSONPGObject.class;
     } else if ("GEOMETRY".equals(columnType.getName())) {
         typeToWrite = PGgeometry.class;
-    }
-    else {
+    } else if ("_TEXT".equals(columnType.getName())) {
+        typeToWrite = String[].class;
+    } else {
       SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
       PrimitiveType primitiveType = type.getPrimitiveType();
       if (primitiveType == null) {
