@@ -166,6 +166,16 @@ jobs:
           target.db.password=benerator
           target.db.authenticationDatabase=admin
           target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+      - name: set db default env for mongodb connection
+        run: |
+          echo "
+          db.db.host=mongodb
+          db.db.port=27017
+          db.db.database=benerator
+          db.db.user=benerator
+          db.db.password=benerator
+          db.db.authenticationDatabase=admin
+          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
       - name: set db properties for mongodb connection2
         run: |
           echo "

@@ -99,10 +99,25 @@ public class DefineDatabaseStatement implements Statement {
   @SuppressWarnings("deprecation")
   public boolean execute(BeneratorContext context) {
     logger.debug("Instantiating database with id '{}'", id);
+    String envName = null;
+    String systemName = null;
     String idValue = id.evaluate(context);
+    // check if environement is null or empty set to default "environment"
+    if (environment == null || ExpressionUtil.evaluate(environment, context).isEmpty()) {
+      envName = "environment";
+    }
+    else {
+      envName = ExpressionUtil.evaluate(environment, context);
+    }
+    if (system == null || system.evaluate(context).isEmpty()) {
+      systemName = idValue;
+    }
+    else {
+      systemName = ExpressionUtil.evaluate(system, context);
+    }
 
     // DB config is based on the (optional) environment setting
-    AbstractDBSystem db = accessDatabase(idValue, ExpressionUtil.evaluate(environment, context), ExpressionUtil.evaluate(system, context), context);
+    AbstractDBSystem db = accessDatabase(idValue, envName, systemName, context);
 
     // The user may override single or all settings from the environment configuration
     String urlValue = ExpressionUtil.evaluate(url, context);
