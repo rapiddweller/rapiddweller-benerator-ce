@@ -314,7 +314,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${database_postgresql.version}</version>
-            <scope>provided</scope>
         </dependency>
         <!--  xml support -->
         <dependency>

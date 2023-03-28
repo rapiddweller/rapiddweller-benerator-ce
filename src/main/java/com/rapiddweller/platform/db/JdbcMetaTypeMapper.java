@@ -98,10 +98,7 @@ public class JdbcMetaTypeMapper {
           || lcName.endsWith("varchar2") || lcName.endsWith("clob") || lcName.startsWith("sysname")) {
         return PrimitiveType.STRING.getName();
       } else if (lcName.startsWith("_text")) {
-          PrimitiveType arrayTextType = PrimitiveType.getInstance("_text");
-          arrayTextType = arrayTextType == null ?
-                  new PrimitiveType("_text", String[].class) : arrayTextType;
-          return arrayTextType.getName();
+          return PrimitiveType.ARRAY.getName();
       } else if (!acceptUnknown) {
         throw BeneratorExceptionFactory.getInstance().configurationError(
             "Platform specific SQL type (" + jdbcType + ") not mapped: " + columnType.getName());
