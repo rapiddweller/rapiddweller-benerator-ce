@@ -101,7 +101,7 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
   }
 
   @Override
-  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+  public synchronized ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
     assertInitialized();
     if (iterator == null) {
       iterator = source.iterator(); // iterator initialized lazily to reflect context state at invocation
@@ -115,7 +115,7 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
   }
 
   @Override
-  public void reset() {
+  public synchronized void reset() {
     IOUtil.close(iterator);
     iterator = null;
     super.reset();
