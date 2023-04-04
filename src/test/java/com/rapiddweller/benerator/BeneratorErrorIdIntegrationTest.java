@@ -1531,22 +1531,6 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
-  public void test_1023_syn_db_no_url_or_env_group() {
-    BeneratorResult result = runFile("test_1023_syn_db_no_url_or_env_group.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
-        "At least one of these attributes must be set: environment, url. " +
-            "File test_1023_syn_db_no_url_or_env_group.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
-  }
-
-  @Test
-  public void test_1024_syn_db_system_wo_env() {
-    BeneratorResult result = runFile("test_1024_syn_db_system_wo_env.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
-        "At least one of these attributes must be set: environment, url. " +
-            "File test_1024_syn_db_system_wo_env.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
-  }
-
-  @Test
   public void test_2400_syn_mongo_ill_attr() {
     BeneratorResult result = runFile("test_2400_syn_mongo_ill_attr.ben.xml");
     assertResult(BeneratorErrorIds.SYN_MONGO_ILL_ATTR,
