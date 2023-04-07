@@ -6,6 +6,10 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class using as model for generate class
+ * that help writing array data to postgres
+ */
 public class PGArrayObject extends PGobject {
 
     private Object objectValue;

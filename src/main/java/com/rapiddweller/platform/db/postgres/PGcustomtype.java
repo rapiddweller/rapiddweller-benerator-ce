@@ -7,7 +7,8 @@ import javassist.*;
 import java.io.IOException;
 
 /**
- * create classes to handle postgres custom type
+ * create classes will generate handle class
+ * which help writing special data type to postgres
   */
 public class PGcustomtype {
 

@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Helper class for writing CIDR to Postgres.<br/><br/>
+ * Helper class for writing TIME to Postgres.<br/><br/>
  * Created: 03.30.2023 18:02:42
  * @author rapiddweller
  * @since 3.1.0
