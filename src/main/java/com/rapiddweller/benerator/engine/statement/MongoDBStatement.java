@@ -6,6 +6,7 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.platform.mongodb.MongoDBSystem;
 
+import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,15 +56,36 @@ public class MongoDBStatement implements Statement {
   }
 
   private MongoDBSystem createMongoDBSystem(BeneratorContext context) {
-    if (environment != null) {
+    String envName = null;
+    String systemName = null;
+
+    if (host==null && environment==null) {
+      // check if environement is null or empty set to default "environment"
+      envName = "environment";
+    }
+
+    if (envName != null || environment != null) {
+      logger.debug("Instantiating mongodb with id '{}'", id);
+      String idValue = id.evaluate(context);
+
+      if (envName == null) {
+        envName = ExpressionUtil.evaluate(environment, context);
+      }
+
+      if (system == null || ExpressionUtil.evaluate(system, context).isEmpty()) {
+        systemName = idValue;
+      }
+      else {
+        systemName = ExpressionUtil.evaluate(system, context);
+      }
       return new MongoDBSystem(
           id.evaluate(context),
-          environment.evaluate(context),
-          system.evaluate(context),
+          envName,
+          systemName,
           context);
     } else {
       // check each attribute separately if null before evaluate
-      String hostTemp = (this.host != null) ? this.host.evaluate(context) : null;
+      String hostTemp = this.host.evaluate(context);
       Integer portTemp = (this.port != null) ? this.port.evaluate(context) : null;
       String databaseTemp = (this.database != null) ? this.database.evaluate(context) : null;
       String userTemp = (this.user != null) ? this.user.evaluate(context) : null;

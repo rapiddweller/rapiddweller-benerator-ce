@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup>
+
+    <import platforms="db"/>
+    <database id="target" environment="database_new"/>
+    <execute type="sql" target="target">
+        create table sample (
+        id int primary key
+        );
+    </execute>
+    <generate type="SAMPLE" count="1" consumer="target"/>
+</setup>

@@ -51,7 +51,7 @@
     <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
 
     <comment>define a mongodb database that will be referred by the id 'db' subsequently</comment>
-    <mongodb id="db" environment="mongodb" system="target"/>
+    <mongodb id="db"/>
 
     <pre-parse-generate target="db"/>
 

@@ -82,6 +82,7 @@ import static com.rapiddweller.common.xml.XMLAssert.mutuallyExcludeAttrGroups;
 /**
  * Parses a &lt;database&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:40:56
+ *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -94,58 +95,58 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
   public static final AttrInfo<Expression<String>> SYSTEM = CommonAttrs.system(BeneratorErrorIds.SYN_DB_SYSTEM, false);
 
   public static final AttrInfo<Expression<String>> URL = new AttrInfo<>(
-    ATT_URL, false, BeneratorErrorIds.SYN_DB_URL, new ScriptableParser<>(new JdbcUrlParser()));
+      ATT_URL, false, BeneratorErrorIds.SYN_DB_URL, new ScriptableParser<>(new JdbcUrlParser()));
 
   public static final AttrInfo<Expression<String>> DRIVER = new AttrInfo<>(
-    ATT_DRIVER, false, BeneratorErrorIds.SYN_DB_DRIVER,
+      ATT_DRIVER, false, BeneratorErrorIds.SYN_DB_DRIVER,
       new ScriptableParser<>(new FullyQualifiedClassNameParser(false)));
 
   public static final AttrInfo<Expression<String>> USER = new AttrInfo<>(
-    ATT_USER, false, BeneratorErrorIds.SYN_DB_USER, new ScriptableParser<>(new IdParser()));
+      ATT_USER, false, BeneratorErrorIds.SYN_DB_USER, new ScriptableParser<>(new IdParser()));
 
   public static final AttrInfo<Expression<String>> PASSWORD = new AttrInfo<>(
-    ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PWD, new ScriptableParser<>(new StringParser("db password")));
+      ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PWD, new ScriptableParser<>(new StringParser("db password")));
 
   public static final AttrInfo<Expression<String>> CATALOG = new AttrInfo<>(
-    ATT_CATALOG, false, BeneratorErrorIds.SYN_DB_CATALOG, new ScriptableParser<>(new IdParser()));
+      ATT_CATALOG, false, BeneratorErrorIds.SYN_DB_CATALOG, new ScriptableParser<>(new IdParser()));
 
   public static final AttrInfo<Expression<String>> SCHEMA = new AttrInfo<>(
-    ATT_SCHEMA, false, BeneratorErrorIds.SYN_DB_SCHEMA, new ScriptableParser<>(new IdParser()));
+      ATT_SCHEMA, false, BeneratorErrorIds.SYN_DB_SCHEMA, new ScriptableParser<>(new IdParser()));
 
   public static final AttrInfo<Expression<String>> TABLE_FILTER = new AttrInfo<>(
-    ATT_TABLE_FILTER, false, BeneratorErrorIds.SYN_DB_TABLE_FILTER,
+      ATT_TABLE_FILTER, false, BeneratorErrorIds.SYN_DB_TABLE_FILTER,
       new ScriptableParser<>(new StringParser("tableFilter expression")));
 
   public static final AttrInfo<Expression<String>> INCL_TABLES = new AttrInfo<>(
-    ATT_INCL_TABLES, false, BeneratorErrorIds.SYN_DB_INCLUDE_TABLES,
+      ATT_INCL_TABLES, false, BeneratorErrorIds.SYN_DB_INCLUDE_TABLES,
       new ScriptableParser<>(new StringParser("includeTables expression")));
 
   public static final AttrInfo<Expression<String>> EXCL_TABLES = new AttrInfo<>(
-    ATT_EXCL_TABLES, false, BeneratorErrorIds.SYN_DB_EXCLUDE_TABLES,
+      ATT_EXCL_TABLES, false, BeneratorErrorIds.SYN_DB_EXCLUDE_TABLES,
       new ScriptableParser<>(new StringParser("excludeTables expression")));
 
   public static final AttrInfo<Expression<Boolean>> META_CACHE = new AttrInfo<>(
-    ATT_META_CACHE, false, BeneratorErrorIds.SYN_DB_META_CACHE,
+      ATT_META_CACHE, false, BeneratorErrorIds.SYN_DB_META_CACHE,
       new ScriptableParser<>(new BooleanParser()), FALSE);
 
   public static final AttrInfo<Expression<Boolean>> BATCH = new AttrInfo<>(
-  ATT_BATCH, false, BeneratorErrorIds.SYN_DB_BATCH,
+      ATT_BATCH, false, BeneratorErrorIds.SYN_DB_BATCH,
       new ScriptableParser<>(new BooleanParser()), FALSE);
 
   public static final AttrInfo<Expression<Integer>> FETCH_SIZE = new AttrInfo<>(
-  ATT_FETCH_SIZE, false, BeneratorErrorIds.SYN_DB_FETCH_SIZE,
+      ATT_FETCH_SIZE, false, BeneratorErrorIds.SYN_DB_FETCH_SIZE,
       new ScriptableParser<>(new NonNegativeIntegerParser()), "100");
 
   public static final AttrInfo<Expression<Boolean>> READ_ONLY = new AttrInfo<>(
-  ATT_READ_ONLY, false, BeneratorErrorIds.SYN_DB_READ_ONLY,
+      ATT_READ_ONLY, false, BeneratorErrorIds.SYN_DB_READ_ONLY,
       new ScriptableParser<>(new BooleanParser()), FALSE);
 
   public static final AttrInfo<Expression<Boolean>> LAZY = new AttrInfo<>(
-  ATT_LAZY, false, BeneratorErrorIds.SYN_DB_LAZY,
+      ATT_LAZY, false, BeneratorErrorIds.SYN_DB_LAZY,
       new ScriptableParser<>(new BooleanParser()), "true");
 
   public static final AttrInfo<Expression<Boolean>> ACC_UNK_COL_TYPES = new AttrInfo<>(
-  ATT_ACC_UNK_COL_TYPES, false, BeneratorErrorIds.SYN_DB_ACCEPT_UNK_COL_TYPES,
+      ATT_ACC_UNK_COL_TYPES, false, BeneratorErrorIds.SYN_DB_ACCEPT_UNK_COL_TYPES,
       new ScriptableParser<>(new BooleanParser()));
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_DB_ILLEGAL_ATTR,
@@ -217,11 +218,12 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     @Override
     public boolean valid(Element element) {
       assertNoTextContent(element, BeneratorErrorIds.SYN_DB);
-      assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
-          ATT_ENVIRONMENT, ATT_URL);
+      // has been removed because it is not necessary anymore
+      //      assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
+      //          ATT_ENVIRONMENT, ATT_URL);
       mutuallyExcludeAttrGroups(element, BeneratorErrorIds.SYN_DB_URL_AND_ENV_GROUP,
-          new String[] { ATT_ENVIRONMENT, ATT_SYSTEM },
-          new String[] { ATT_URL, ATT_DRIVER });
+          new String[] {ATT_ENVIRONMENT, ATT_SYSTEM},
+          new String[] {ATT_URL, ATT_DRIVER});
       assertGroupComplete(BeneratorErrorIds.SYN_DB_URL_GROUP_INCOMPLETE, element, ATT_URL, ATT_DRIVER);
       // For backwards compatibility, it is allowed to leave out ATT_SYSTEM.
       // When dropping that, then enable the following check
