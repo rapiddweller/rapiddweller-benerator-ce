@@ -995,18 +995,16 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       typeToWrite = PGtime.class;
     } else if ("BIT".equals(columnType.getName()) || "VARBIT".equals(columnType.getName())) {
       typeToWrite = PGbit.class;
-    } else if ("_TEXT".equals(columnType.getName())) { // Special treatment for Postgres array type
-      typeToWrite = String[].class;
-    } else if ("_INT4".equals(columnType.getName())) {
-      typeToWrite = Integer[].class;
-    } else if ("_BOOL".equals(columnType.getName())) {
-      typeToWrite = Boolean[].class;
-//    } else if ("ADDRESS".equals(columnType.getName())) { // test postgres composite type
-//      typeToWrite = PGaddress.class;
+    }
+    else if (columnType.getJdbcType() == Types.ARRAY) { //  Special treatment for Postgres array type
+      String customClassName = "PGCustomClass" + columnType.getName();
+      PGcustomtype customClass = new PGcustomtype(customClassName);
+      Class clazz = customClass.generateClass(columnType.getName(), true);
+      typeToWrite = clazz;
     } else if (postgresqlSpecialTypes.stream().anyMatch(columnType.getName()::equalsIgnoreCase)) { // make custom class to treat postgres custom data type
       String customClassName = "PGCustomClass" + columnType.getName();
       PGcustomtype customClass = new PGcustomtype(customClassName);
-      Class clazz = customClass.generateNewClass(columnType.getName());
+      Class clazz = customClass.generateClass(columnType.getName(), false);
       typeToWrite = clazz;
     } else {
       SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();

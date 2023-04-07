@@ -88,9 +88,6 @@ public class JdbcMetaTypeMapper {
                                     boolean acceptUnknown) {
     int jdbcType = columnType.getJdbcType();
     PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
-//    if (jdbcType == 2002) { // Temporarily open to check postgres composite data (Struct type)
-//      return PrimitiveType.ARRAY.getName();
-//    }
     if (primitiveType != null) {
       return primitiveType.getName();
     } else {
