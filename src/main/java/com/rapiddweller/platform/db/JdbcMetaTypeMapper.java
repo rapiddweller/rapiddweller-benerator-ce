@@ -47,7 +47,7 @@ public class JdbcMetaTypeMapper {
   static {
 
     TYPE_MAP = CollectionUtil.buildMap(
-        // Types.ARRAY is not supported
+        Types.ARRAY, PrimitiveType.ARRAY,
         Types.BIGINT, PrimitiveType.LONG,
         Types.BINARY, PrimitiveType.BINARY,
         Types.BIT, PrimitiveType.BYTE,
@@ -88,6 +88,9 @@ public class JdbcMetaTypeMapper {
                                     boolean acceptUnknown) {
     int jdbcType = columnType.getJdbcType();
     PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
+//    if (jdbcType == 2002) { // Temporarily open to check postgres composite data (Struct type)
+//      return PrimitiveType.ARRAY.getName();
+//    }
     if (primitiveType != null) {
       return primitiveType.getName();
     } else {
@@ -97,8 +100,6 @@ public class JdbcMetaTypeMapper {
       } else if (lcName.endsWith("char") || lcName.startsWith("xml")
           || lcName.endsWith("varchar2") || lcName.endsWith("clob") || lcName.startsWith("sysname")) {
         return PrimitiveType.STRING.getName();
-      } else if (lcName.startsWith("_text")) {
-          return PrimitiveType.ARRAY.getName();
       } else if (!acceptUnknown) {
         throw BeneratorExceptionFactory.getInstance().configurationError(
             "Platform specific SQL type (" + jdbcType + ") not mapped: " + columnType.getName());

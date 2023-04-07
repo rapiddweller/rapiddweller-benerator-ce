@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 http://benerator.de/schema/rapiddweller-benerator-ce-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <import platforms="db" domains="address, faker"/>
+    <database id="database" environment="conf" system="postgres"/>
+    <execute type="sql" target="database">
+        DROP TABLE IF EXISTS "db_all_types";
+
+        DROP TYPE IF EXISTS "mood";
+        CREATE TYPE mood AS ENUM ('sad', 'ok', 'happy');
+
+        -- Create a composite data type
+        DROP TYPE IF EXISTS "address";
+        CREATE TYPE address AS (
+            street VARCHAR(50),
+            city VARCHAR(50),
+            state CHAR(52),
+            zipcode VARCHAR(10)
+        );
+
+            CREATE TABLE IF NOT EXISTS "db_all_types"
+        (
+        -- Numeric Types
+        id                      SERIAL PRIMARY KEY,
+        smallint_column         SMALLINT NOT NULL,
+        integer_column          INTEGER NOT NULL,
+        bigint_column           BIGINT NOT NULL,
+        decimal_column          DECIMAL(6,2) NOT NULL,
+        numeric_column          NUMERIC(6,2) NOT NULL,
+        real_column             REAL NOT NULL,
+        double_precision_column DOUBLE PRECISION NOT NULL,
+
+        -- Character Types
+        char_column             CHAR(10) NOT NULL,
+        character_column        CHARACTER(10) NOT NULL,
+        varchar_column          VARCHAR(10) NOT NULL,
+        text_column             TEXT NOT NULL,
+
+        -- Date/Time Types
+        date_column             DATE NOT NULL,
+        time_column             TIME NOT NULL,
+        timestamp_column        TIMESTAMP NOT NULL DEFAULT now(),
+        interval_column         INTERVAL NOT NULL,
+
+        -- Monetary Types
+        money_column            MONEY NOT NULL,
+
+        -- Binary Types
+        bytea_column            BYTEA NOT NULL,
+
+        -- Boolean Types
+        boolean_column          BOOLEAN NOT NULL,
+
+        -- Enumerated Types
+        enum_column mood NOT NULL,
+
+        -- Geometric Types
+        point_column POINT NOT NULL,
+        line_segment_column LSEG NOT NULL,
+        box_column BOX NOT NULL,
+        path_column PATH NOT NULL,
+        polygon_column POLYGON NOT NULL,
+        circle_column CIRCLE NOT NULL,
+
+        -- Text Search Types
+        -- tsvector_column TSVECTOR NOT NULL,
+        -- tsquery_column TSQUERY NOT NULL,
+
+        -- UUID Type
+        uuid_column             UUID NOT NULL,
+
+        -- Network Address Type
+        inet_column             INET NOT NULL,
+        cidr_column             CIDR NOT NULL,
+
+        -- JSON Type
+        json_column             JSON NOT NULL,
+        jsonb_column            JSONB NOT NULL,
+
+        -- Bit String Type
+        bit_column BIT(8) NOT NULL,
+        varbit_column VARBIT(8) NOT NULL,
+
+        -- XML Types
+        xml_column XML NOT NULL,
+        -- xml_array_column XML[] NOT NULL,
+
+        -- Range Types
+        int4range_column INT4RANGE NOT NULL,
+        numrange_column NUMRANGE NOT NULL,
+        tsrange_column TSRANGE NOT NULL,
+        tstzrange_column TSTZRANGE NOT NULL,
+        daterange_column DATERANGE NOT NULL,
+
+        -- Arrays Types
+        integer_array_column    INTEGER[] NOT NULL,
+        text_array_column       TEXT[] NOT NULL,
+        bool_array_col          BOOLEAN[] NOT NULL,
+        -- custom_type_array_column custom_type[] NOT NULL,
+
+        -- Composite Types
+        -- address_column address NOT NULL,
+        -- custom_type_array_of_composite_type_column custom_type_composite[] NOT NULL,
+
+        -- Object Identifiers Type
+        oid_column OID NOT NULL,
+
+        geometry_column        GEOMETRY NOT NULL
+        );
+    </execute>
+    <generate type="db_all_types" count="20" consumer="database, ConsoleExporter">
+        <attribute name="id" type="int" generator="IncrementGenerator"/>
+        <attribute name="numeric_column" min="0" max="1000"/>
+        <attribute name="decimal_column" min="0" max="1000"/>
+
+        <attribute name="date_column" type="date" generator="DateGenerator" />
+        <attribute name="time_column" generator="DateGenerator"/>
+        <attribute name="date_column" generator="DateGenerator"/>
+        <attribute name="timestamp_column" />
+        <attribute name="interval_column" values="'2 days', '1 hour 30 minutes','10 seconds','1 week'" />
+
+        <attribute name="money_column" min="0" max="1000" />
+
+        <attribute name="bytea_column" />
+
+        <attribute name="enum_column" type="string" values="'sad', 'ok', 'happy'" />
+        <attribute name="point_column" values="'(1, 2)', '(4, 5)'" />
+        <attribute name="line_segment_column" values="'[(1,2),(3,4)]'"/>
+        <attribute name="box_column" values="'(1,2),(3,4)'"/>
+        <attribute name="path_column" values="'[(1,2),(3,4),(5,6)]'"/>
+        <attribute name="polygon_column" values="'((1,2),(3,4),(5,6),(1,2))'"/>
+        <attribute name="circle_column" values="'((1,2),5)'"/>
+
+        <attribute name="uuid_column" script="{java.util.UUID.randomUUID()}"/>
+        
+        <attribute name="inet_column" generator="new DataFakerGenerator('internet','ipV6Address')"/>
+        <attribute name="cidr_column" values="'192.168.1.0/24', '255.255.255.0/24'" />
+
+        <attribute name="json_column" constant='{{"test": "321"}}'/>
+        <attribute name="jsonb_column" constant='{{"test": "321"}}'/>
+
+        <attribute name="bit_column" type="binary" values="'01100101','10001101'"/>
+        <attribute name="varbit_column" type="binary" values="'01100101','10001101'"/>
+
+        <attribute name="int4range_column" values="'[1, 5]'"/>
+        <attribute name="numrange_column" values="'[1.5, 4.25]'"/>
+        <attribute name="tsrange_column" values="'[2023-04-06 12:00:00, 2023-04-07 12:00:00)'"/>
+        <attribute name="tstzrange_column" values="'[2023-04-06 12:00:00+03,2023-04-07 12:00:00+03)'"/>
+        <attribute name="daterange_column" values="'[2023-04-06,2023-04-07)'"/>
+
+        <attribute name="integer_array_column" type="object" constant="1,2,3,4,7" />
+        <attribute name="text_array_column" constant='start,ongoing,finish'/>
+        <attribute name="bool_array_col" type="object" constant='true, false, true' />
+
+<!--        <variable name="address" generator="AddressGenerator" />-->
+<!--        <attribute name="address_column" type="object" script="{'(' + address.street + ',' + address.city.name + ',' + address.state.name + ',' + address.postalCode + ')'}" />-->
+        <attribute name="oid_column" type="short" min="0" max="1000"/>
+        <attribute name="geometry_column" constant="POINT(1 2)" />
+
+    </generate>
+</setup>
