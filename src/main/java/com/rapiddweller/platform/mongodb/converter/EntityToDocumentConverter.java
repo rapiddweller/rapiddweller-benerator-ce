@@ -19,8 +19,15 @@ public class EntityToDocumentConverter extends ThreadSafeConverter<Entity, Docum
         Document document = new Document();
         for (Map.Entry<String, Object> component : entity.getComponents().entrySet()) {
             Object value = component.getValue();
-            if (value instanceof Entity)
-                value = convert((Entity) value);
+            if (value instanceof Entity) {
+                // Cast field with key=="$numberLong"
+                Entity subEntity = (Entity) component.getValue();
+                if (subEntity.get("$numberLong") != null) {
+                    value = Long.parseLong((String) subEntity.get("$numberLong"));
+                } else {
+                    value = convert((Entity) value);
+                }
+            }
             else if (value instanceof List)
                 value = convertList((List<?>) value);
             else if (value instanceof Set)
