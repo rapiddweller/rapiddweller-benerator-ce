@@ -512,6 +512,7 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <excludes>
                         <exclude>**/*ShopDemoIntegrationExtDBTest*.class</exclude>
+                        <exclude>**/*PostgresDataTypeIntegrationTest*.class</exclude>
                     </excludes>
                     <!--suppress UnresolvedMavenProperty -->
                     <argLine>${surefire.jacoco.args}</argLine>
@@ -523,6 +524,7 @@
                 <configuration>
                     <includes>
                         <include>**/*ShopDemoIntegrationExtDBTest.class</include>
+                        <include>**/*PostgresDataTypeIntegrationTest.class</include>
                     </includes>
                     <skipTests>${skipTests}</skipTests>
                     <skipITs>${skipITs}</skipITs>
