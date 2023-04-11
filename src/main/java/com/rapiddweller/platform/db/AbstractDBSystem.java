@@ -90,6 +90,7 @@ import org.slf4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -915,43 +916,14 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
     List<ColumnInfo> normalInfos = new ArrayList<>(componentDescriptors.size());
     ComplexTypeDescriptor entityDescriptor = entity.descriptor();
 
-    // set postgresql regular data types to list
-    List<String> regularTypes = new ArrayList<>();
-    Properties prop = new Properties();
-    try (FileInputStream inputStream =
-                 new FileInputStream("src/main/resources/com/rapiddweller/dataset/postgresqldatatype.set.properties")){
-      prop.load(inputStream);
-      // get all properties as a set
-      Set<String> propertyNames = prop.stringPropertyNames();
-      // iterate over the set of properties
-      for (String name : propertyNames) {
-        String value = prop.getProperty(name);
-        regularTypes.add(value);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    // set postgresql special data types to list
-    List<String> postgresqlSpecialTypes = new ArrayList<>();
-    try {
-      DatabaseMetaData metaData = getConnection().getMetaData();
-      ResultSet rs = metaData.getTypeInfo();
-      while (rs.next()) {
-        String dataTypeName = rs.getString("TYPE_NAME");
-        if (!regularTypes.contains(dataTypeName)) {
-          postgresqlSpecialTypes.add(dataTypeName);
-        }
-      }
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    // get special data type of data system
+    List<String> specialTypes = getSpecialDataTypes();
 
     // get write columns information
     for (ComponentDescriptor colDescriptor : componentDescriptors) {
       String columnName = colDescriptor.getName();
       if (!ignoreColumn(colDescriptor, entityDescriptor, columnName)) {
-        ColumnInfo info = getWriteColumnInfo(entity, entityDescriptor, table, colDescriptor, postgresqlSpecialTypes);
+        ColumnInfo info = getWriteColumnInfo(entity, entityDescriptor, table, colDescriptor, specialTypes);
         if (pkColumnNames.contains(columnName)) {
           pkInfos.add(info);
         } else {
@@ -976,32 +948,88 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
     return (attrDescriptor != null && attrDescriptor.getMode() == Mode.ignored);
   }
 
+  // get special data type of data system, using later to handle special cases
+  private List<String> getSpecialDataTypes() {
+    String dbProductName = getDbMetaData().getDatabaseProductName();
+
+    List<String> specialTypes = new ArrayList<>();
+
+    // check if using postgresql
+    if (dbProductName!=null && dbProductName.toLowerCase().contains("postgresql")){
+      // set postgresql regular data types to list
+      List<String> regularTypes = new ArrayList<>();
+      ClassLoader loader = Thread.currentThread().getContextClassLoader();
+      Properties prop = new Properties();
+      try (InputStream inputStream = loader.getResourceAsStream(
+              "com/rapiddweller/dataset/postgresqldatatype.set.properties")){
+        prop.load(inputStream);
+        // get all properties as a set
+        Set<String> propertyNames = prop.stringPropertyNames();
+        // iterate over the set of properties
+        for (String name : propertyNames) {
+          String value = prop.getProperty(name);
+          regularTypes.add(value);
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      // set postgresql special data types to list
+      List<String> postgresqlSpecialTypes = new ArrayList<>();
+      try {
+        DatabaseMetaData metaData = getConnection().getMetaData();
+        ResultSet rs = metaData.getTypeInfo();
+        while (rs.next()) {
+          String dataTypeName = rs.getString("TYPE_NAME");
+          if (!regularTypes.contains(dataTypeName.toLowerCase())) {
+            postgresqlSpecialTypes.add(dataTypeName);
+          }
+        }
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+
+      specialTypes.addAll(postgresqlSpecialTypes);
+    }
+
+    return specialTypes;
+  }
+
   private ColumnInfo getWriteColumnInfo(Entity entity, ComplexTypeDescriptor entityDescriptor,
                                         DBTable table, ComponentDescriptor dbCompDescriptor,
-                                        List<String> postgresqlSpecialTypes) {
+                                        List<String> specialTypes) {
     String name = dbCompDescriptor.getName();
     DBColumn column = table.getColumn(name);
     DBDataType columnType = column.getType();
     Class<?> typeToWrite;
     int sqlType = columnType.getJdbcType();
 
-    if ("UUID".equals(columnType.getName())) { // Special treatment for Postgres UUID types
-      typeToWrite = UUID.class;
-    } else if ("JSON".equals(columnType.getName()) || "JSONB".equals(columnType.getName())) { // Special treatment for Postgres JSON type
-      typeToWrite = JSONPGObject.class;
-    } else if ("GEOMETRY".equals(columnType.getName())) {
-      typeToWrite = PGgeometry.class;
-    } else if ("TIME".equals(columnType.getName())) {
-      typeToWrite = PGtime.class;
-    } else if ("BIT".equals(columnType.getName()) || "VARBIT".equals(columnType.getName())) {
-      typeToWrite = PGbit.class;
+    String dbProductName = getDbMetaData().getDatabaseProductName();
+
+    // check is postgresql db
+    boolean isPostgres = false;
+    if (dbProductName!=null && dbProductName.toLowerCase().contains("postgresql")) {
+      isPostgres = true;
     }
-    else if (columnType.getJdbcType() == Types.ARRAY) { //  Special treatment for Postgres array type
+
+    if (isPostgres && "UUID".equals(columnType.getName())) { // Special treatment for Postgres UUID types
+      typeToWrite = UUID.class;
+    } else if (isPostgres && "JSON".equals(columnType.getName()) || "JSONB".equals(columnType.getName())) { // Special treatment for Postgres JSON type
+      typeToWrite = JSONPGObject.class;
+    } else if (isPostgres && "GEOMETRY".equals(columnType.getName())) {
+      typeToWrite = PGgeometry.class;
+    } else if (isPostgres && "TIME".equals(columnType.getName())) {
+      typeToWrite = PGtime.class;
+    } else if (isPostgres && "BIT".equals(columnType.getName()) || "VARBIT".equals(columnType.getName())) {
+      typeToWrite = PGbit.class;
+    } else if (isPostgres &&
+            columnType.getJdbcType() == Types.ARRAY) { //  Special treatment for Postgres array type
       String customClassName = "PGCustomClass" + columnType.getName();
       PGcustomtype customClass = new PGcustomtype(customClassName);
       Class clazz = customClass.generateClass(columnType.getName(), true);
       typeToWrite = clazz;
-    } else if (postgresqlSpecialTypes.stream().anyMatch(columnType.getName()::equalsIgnoreCase)) { // make custom class to treat postgres custom data type
+    } else if (isPostgres &&
+            specialTypes.stream().anyMatch(columnType.getName()::equalsIgnoreCase)) { // make custom class to treat postgres custom data type
       String customClassName = "PGCustomClass" + columnType.getName();
       PGcustomtype customClass = new PGcustomtype(customClassName);
       Class clazz = customClass.generateClass(columnType.getName(), false);

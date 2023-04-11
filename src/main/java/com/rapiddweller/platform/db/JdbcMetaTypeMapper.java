@@ -88,6 +88,7 @@ public class JdbcMetaTypeMapper {
                                     boolean acceptUnknown) {
     int jdbcType = columnType.getJdbcType();
     PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
+    if (columnType.getJdbcType()==2002){return PrimitiveType.ARRAY.getName();}
     if (primitiveType != null) {
       return primitiveType.getName();
     } else {

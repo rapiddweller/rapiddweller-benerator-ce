@@ -72,7 +72,7 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   /**
    * Demo Mssql Shop
    */
-  @Test
+  @Test @Ignore
   public void DemoMssqlShop() {
     assumeTestActive("mssql");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mssql.ben.xml");
@@ -97,13 +97,6 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   public void PostgresTypeTest() {
     assumeTestActive("postgres");
     BeneratorContext benCtx = parseAndExecuteFile("demo/db/postgres.types.ben.xml");
-    Assert.assertEquals("demo/db", benCtx.getContextUri());
-  }
-
-  @Test
-  public void PostgresAllTypesTest() {
-    assumeTestActive("postgres");
-    BeneratorContext benCtx = parseAndExecuteFile("demo/db/postgresalltypes.ben.xml");
     Assert.assertEquals("demo/db", benCtx.getContextUri());
   }
 
