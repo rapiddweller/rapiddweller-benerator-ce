@@ -72,7 +72,7 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   /**
    * Demo Mssql Shop
    */
-  @Test @Ignore
+  @Test
   public void DemoMssqlShop() {
     assumeTestActive("mssql");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mssql.ben.xml");

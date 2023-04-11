@@ -10,7 +10,7 @@ import java.io.IOException;
  * create classes will generate handle class
  * which help writing special data type to postgres
   */
-public class PGcustomtype {
+public class PGcustomtype extends ClassLoader {
 
     private String newClassName;
 
@@ -18,31 +18,39 @@ public class PGcustomtype {
 
     public PGcustomtype(String className) {
         this.classPool = ClassPool.getDefault();
+        classPool.insertClassPath(new ClassClassPath(this.getClass()));
         this.newClassName = className;
     }
 
     public Class<?> generateClass(String type, boolean isTypeArray) {
 
+        // use newClassName class if already exist
         Class<?> existClass = null;
         try {
             existClass = Class.forName(newClassName);
         } catch (ClassNotFoundException e) {
-            // do nothing
+            existClass = null;
         }
 
         if (existClass == null) {
             try {
+                // check newClassName class exist again with classPool
+                CtClass oldClass = classPool.getOrNull(newClassName);
+                if (oldClass !=null) {
+                    byte[] b = oldClass.toBytecode();
+                    return defineClass(newClassName, b, 0, b.length);
+                }
+
                 CtClass newClass;
                 if (isTypeArray) {
                     newClass = generateClassFromPGArrayObject(type);
                 } else {
                     newClass = generateClassFromPGobject(type);
                 }
-
-                // Write the generated class to disk
-                newClass.writeFile("com/rapiddweller/platform/db/postgres/template");
-                return newClass.toClass();
-            } catch (IOException | CannotCompileException | NotFoundException e) {
+                // Write the generated temporary class to disk for correction
+//                newClass.writeFile("com/rapiddweller/platform/db/postgres/template");
+                return newClass.toClass(this.getClass().getClassLoader(), getClass().getProtectionDomain());
+            } catch (CannotCompileException | NotFoundException | IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -50,7 +58,7 @@ public class PGcustomtype {
         }
     }
 
-    public CtClass generateClassFromPGobject(String type) throws CannotCompileException, NotFoundException {
+    private CtClass generateClassFromPGobject(String type) throws CannotCompileException, NotFoundException {
 
         CtClass newClass = classPool.makeClass(newClassName, classPool.get(PGobject.class.getName()));
 
@@ -59,14 +67,14 @@ public class PGcustomtype {
                 new CtClass[]{classPool.get(Object.class.getName())},
                 newClass);
 
-        String body = String.format("{super(); this.setType(\"%s\"); this.setValue($1.toString());}", type);
+        String body = String.format("{super(); this.setType(\"%s\"); this.setValue(String.valueOf($1));}", type);
         constructor.setBody(body);
         newClass.addConstructor(constructor);
 
         return newClass;
     }
 
-    public CtClass generateClassFromPGArrayObject(String type) throws CannotCompileException, NotFoundException {
+    private CtClass generateClassFromPGArrayObject(String type) throws CannotCompileException, NotFoundException {
 
         CtClass newClass = classPool.makeClass(newClassName, classPool.get(PGArrayObject.class.getName()));
 
