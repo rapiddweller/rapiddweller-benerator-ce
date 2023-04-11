@@ -47,7 +47,7 @@ public class JdbcMetaTypeMapper {
   static {
 
     TYPE_MAP = CollectionUtil.buildMap(
-        // Types.ARRAY is not supported
+        Types.ARRAY, PrimitiveType.ARRAY,
         Types.BIGINT, PrimitiveType.LONG,
         Types.BINARY, PrimitiveType.BINARY,
         Types.BIT, PrimitiveType.BYTE,
@@ -88,6 +88,7 @@ public class JdbcMetaTypeMapper {
                                     boolean acceptUnknown) {
     int jdbcType = columnType.getJdbcType();
     PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
+    if (columnType.getJdbcType()==2002){return PrimitiveType.ARRAY.getName();}
     if (primitiveType != null) {
       return primitiveType.getName();
     } else {

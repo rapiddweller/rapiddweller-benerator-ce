@@ -148,6 +148,7 @@
         <scriptengine_freemarker.version>2.3.32</scriptengine_freemarker.version>
         <scriptengine_graalvm.version>22.3.1</scriptengine_graalvm.version>
         <test_junit.version>4.13.2</test_junit.version>
+        <dependency_javassist.version>3.28.0-GA</dependency_javassist.version>
     </properties>
 
     <dependencies>
@@ -268,6 +269,12 @@
             <version>${database_derbyclient.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${dependency_javassist.version}</version>
+        </dependency>
+
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -314,7 +321,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${database_postgresql.version}</version>
-            <scope>provided</scope>
         </dependency>
         <!--  xml support -->
         <dependency>
