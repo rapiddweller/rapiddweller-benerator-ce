@@ -5,7 +5,7 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PostgresDataTypeTest extends AbstractBeneratorIntegrationTest {
+public class PostgresDataTypeIntegrationTest extends AbstractBeneratorIntegrationTest {
     /**
      * postgres type test
      */
