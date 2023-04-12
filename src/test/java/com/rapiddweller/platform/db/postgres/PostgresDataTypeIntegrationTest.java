@@ -22,4 +22,11 @@ public class PostgresDataTypeIntegrationTest extends AbstractBeneratorIntegratio
         BeneratorContext benCtx = parseAndExecuteFile("demo/db/postgresalltypes.ben.xml");
         Assert.assertEquals("demo/db", benCtx.getContextUri());
     }
+
+    @Test
+    public void PostgresCompositeTest() {
+        assumeTestActive("postgres");
+        BeneratorContext benCtx = parseAndExecuteFile("demo/db/postgres-composite.ben.xml");
+        Assert.assertEquals("demo/db", benCtx.getContextUri());
+    }
 }

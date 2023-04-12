@@ -47,7 +47,7 @@ public class PGcustomtype extends ClassLoader {
                 } else {
                     newClass = generateClassFromPGobject(type);
                 }
-                // Write the generated temporary class to disk for correction
+                // Write the generated temporary class to disk, use for correction purpose
 //                newClass.writeFile("com/rapiddweller/platform/db/postgres/template");
                 return newClass.toClass(this.getClass().getClassLoader(), getClass().getProtectionDomain());
             } catch (CannotCompileException | NotFoundException | IOException e) {

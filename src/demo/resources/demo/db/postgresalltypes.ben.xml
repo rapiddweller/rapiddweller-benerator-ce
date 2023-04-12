@@ -14,16 +14,7 @@
         DROP TYPE IF EXISTS "mood";
         CREATE TYPE mood AS ENUM ('sad', 'ok', 'happy');
 
-        -- Create a composite data type
-        DROP TYPE IF EXISTS "address";
-        CREATE TYPE address AS (
-            street VARCHAR(50),
-            city VARCHAR(50),
-            state CHAR(52),
-            zipcode VARCHAR(10)
-        );
-
-            CREATE TABLE IF NOT EXISTS "db_all_types"
+        CREATE TABLE IF NOT EXISTS "db_all_types"
         (
         -- Numeric Types
         id                      SERIAL PRIMARY KEY,
@@ -175,8 +166,5 @@
         <attribute name="oid_column" type="short" min="0" max="1000"/>
         <attribute name="tsvector_column"/>
         <attribute name="tsquery_column"/>
-
-<!--        <variable name="address" generator="AddressGenerator" />-->
-<!--        <attribute name="address_column" type="object" script="{'(' + address.street + ',' + address.city.name + ',' + address.state.name + ',' + address.postalCode + ')'}" />-->
     </generate>
 </setup>
