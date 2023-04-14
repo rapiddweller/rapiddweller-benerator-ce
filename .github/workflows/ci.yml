@@ -816,7 +816,7 @@ jobs:
           postgres.db.driver=org.postgresql.Driver
           postgres.db.user=root
           postgres.db.password=Benerator123!
-          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
+          postgres.db.schema=public" > $ARTIFACT_FULLNAME/demo/db/conf/conf.env.properties
       - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
       - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
