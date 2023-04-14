@@ -57,7 +57,7 @@
         path_column             PATH NOT NULL,
         polygon_column          POLYGON NOT NULL,
         circle_column           CIRCLE NOT NULL,
-        geometry_column         GEOMETRY NOT NULL,
+        -- geometry_column         GEOMETRY NOT NULL,
 
         -- UUID Type
         uuid_column             UUID NOT NULL,
@@ -130,7 +130,7 @@
         <attribute name="path_column" values="'[(1,2),(3,4),(5,6)]'"/>
         <attribute name="polygon_column" values="'((1,2),(3,4),(5,6),(1,2))'"/>
         <attribute name="circle_column" values="'((1,2),5)'"/>
-        <attribute name="geometry_column" constant="POINT(1 2)" />
+<!--        <attribute name="geometry_column" constant="POINT(1 2)" />-->
         <attribute name="uuid_column" script="{java.util.UUID.randomUUID()}"/>
         <attribute name="inet_column" generator="new DataFakerGenerator('internet','ipV6Address')"/>
         <attribute name="cidr_column" values="'192.168.1.0/24', '255.255.255.0/24'" />
