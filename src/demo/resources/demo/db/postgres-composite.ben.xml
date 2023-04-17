@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 http://benerator.de/schema/rapiddweller-benerator-ce-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <import platforms="db" domains="address, faker"/>
+    <database id="database" environment="conf" system="postgres"/>
+    <execute type="sql" target="database">
+
+        DROP TABLE IF EXISTS "composite_type";
+
+        -- Create a composite data type
+        DROP TYPE IF EXISTS "address" CASCADE;
+        CREATE TYPE address AS (
+        street VARCHAR(50),
+        city VARCHAR(50),
+        state CHAR(52),
+        zipcode INTEGER
+        );
+
+        CREATE TABLE IF NOT EXISTS "composite_type"
+        (
+        "id"                   int PRIMARY KEY,
+        "address_column"       address NOT NULL,
+        "address_array_column" address[] NOT NULL
+        );
+    </execute>
+
+    <generate type="composite_type" count="20" consumer="database, ConsoleExporter">
+        <attribute name="id" type="int" generator="IncrementGenerator"/>
+
+        <variable name="address" generator="AddressGenerator" />
+        <attribute name="address_column" type="object" script="{'(' + address.street + ',' + address.city.name + ',' + address.state.name + ',' + address.postalCode + ')'}" />
+
+        <generate type="address_array" count="1">
+            <variable name="address" generator="AddressGenerator" />
+            <value type="object" script="{'(' + address.street + ',' + address.city.name + ',' + address.state.name + ',' + address.postalCode + ')'}"/>
+            <variable name="address" generator="AddressGenerator" />
+            <value type="object" script="{'(' + address.street + ',' + address.city.name + ',' + address.state.name + ',' + address.postalCode + ')'}"/>
+            <variable name="address" generator="AddressGenerator" />
+            <value type="object" script="{'(' + address.street + ',' + address.city.name + ',' + address.state.name + ',' + address.postalCode + ')'}"/>
+        </generate>
+        <attribute name="address_array_column" script="address_array" />
+    </generate>
+</setup>

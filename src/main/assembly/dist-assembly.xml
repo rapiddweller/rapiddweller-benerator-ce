@@ -198,6 +198,8 @@
                 <include>org.apache.logging.log4j:*:jar</include>
                 <include>org.slf4j:*:jar</include>
                 <include>com.github.javafaker:*:jar</include>
+                <include>net.datafaker:*:jar</include>
+                <include>org.javassist:javassist:jar</include>
             </includes>
         </dependencySet>
     </dependencySets>

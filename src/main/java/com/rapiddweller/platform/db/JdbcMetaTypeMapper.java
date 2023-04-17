@@ -70,7 +70,7 @@ public class JdbcMetaTypeMapper {
         Types.REAL, PrimitiveType.DOUBLE,
         Types.REF, PrimitiveType.STRING, // TODO test
         Types.SMALLINT, PrimitiveType.SHORT,
-        // Types.STRUCT is not supported
+        Types.STRUCT, PrimitiveType.ARRAY,
         Types.TIME, PrimitiveType.DATE,
         Types.TIMESTAMP, PrimitiveType.TIMESTAMP,
         Types.TIMESTAMP_WITH_TIMEZONE, PrimitiveType.ZONED_DATE_TIME,
@@ -88,7 +88,7 @@ public class JdbcMetaTypeMapper {
                                     boolean acceptUnknown) {
     int jdbcType = columnType.getJdbcType();
     PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
-    if (columnType.getJdbcType()==2002){return PrimitiveType.ARRAY.getName();}
+
     if (primitiveType != null) {
       return primitiveType.getName();
     } else {

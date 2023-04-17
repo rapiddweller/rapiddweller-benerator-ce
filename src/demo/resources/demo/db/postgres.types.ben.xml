@@ -8,8 +8,8 @@
     <import platforms="db"/>
     <database id="database" environment="conf" system="postgres"/>
     <execute type="sql" target="database">
-        DROP TABLE IF EXISTS "db_all_types";
-        CREATE TABLE IF NOT EXISTS "db_all_types"
+        DROP TABLE IF EXISTS "db_postgres_types";
+        CREATE TABLE IF NOT EXISTS "db_postgres_types"
         (
         id          INT PRIMARY KEY,
         "boolean"   BOOLEAN NOT NULL,
@@ -29,7 +29,7 @@
         "genom"     GEOMETRY NOT NULL
         );
     </execute>
-    <generate type="db_all_types" count="10" consumer="database, ConsoleExporter">
+    <generate type="db_postgres_types" count="10" consumer="database, ConsoleExporter">
         <attribute name="id" type="int" min="1" max="1000000"/>
         <attribute name="boolean" type="boolean"/>
         <attribute name="char" type="string"/>

@@ -14,21 +14,19 @@ public class PGArrayObject extends PGobject {
 
     private Object objectValue;
     public PGArrayObject(String str) throws SQLException {
-        setValue(String.format("{%s}",str));
+        setValue(str);
     }
 
-    public PGArrayObject(Object[] objects) throws SQLException {
-        StringBuilder str = new StringBuilder();
+    public PGArrayObject(Object[] objects) throws SQLException { StringBuilder str = new StringBuilder();
         for (int i = 0; i < objects.length; i++) {
+            String obj = "\"" + String.valueOf(objects[i]) + "\""; // each array element should have surrounded by ""
             if(i==0){
-                str.append(objects[i]);
+                str.append(obj);
             } else {
-                str.append(","+objects[i]);
+                str.append("," + obj);
             }
         }
-        List<Object> arr = Arrays.asList(objects);
-        String value = arr.toString().replaceAll("[\\[\\]]", "");
-        setValue(String.format("{%s}",value));
+        setValue(String.format("{%s}", str)); // string surrounded by {} tell PGobject that this value is ARRAY
     }
 
     public Object getObjectValue(){

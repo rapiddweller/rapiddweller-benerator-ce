@@ -14,16 +14,7 @@
         DROP TYPE IF EXISTS "mood";
         CREATE TYPE mood AS ENUM ('sad', 'ok', 'happy');
 
-        -- Create a composite data type
-        DROP TYPE IF EXISTS "address";
-        CREATE TYPE address AS (
-            street VARCHAR(50),
-            city VARCHAR(50),
-            state CHAR(52),
-            zipcode VARCHAR(10)
-        );
-
-            CREATE TABLE IF NOT EXISTS "db_all_types"
+        CREATE TABLE IF NOT EXISTS "db_all_types"
         (
         -- Numeric Types
         id                      SERIAL PRIMARY KEY,
@@ -66,7 +57,7 @@
         path_column             PATH NOT NULL,
         polygon_column          POLYGON NOT NULL,
         circle_column           CIRCLE NOT NULL,
-        geometry_column         GEOMETRY NOT NULL,
+        -- geometry_column         GEOMETRY NOT NULL,
 
         -- UUID Type
         uuid_column             UUID NOT NULL,
@@ -139,7 +130,7 @@
         <attribute name="path_column" values="'[(1,2),(3,4),(5,6)]'"/>
         <attribute name="polygon_column" values="'((1,2),(3,4),(5,6),(1,2))'"/>
         <attribute name="circle_column" values="'((1,2),5)'"/>
-        <attribute name="geometry_column" constant="POINT(1 2)" />
+<!--        <attribute name="geometry_column" constant="POINT(1 2)" />-->
         <attribute name="uuid_column" script="{java.util.UUID.randomUUID()}"/>
         <attribute name="inet_column" generator="new DataFakerGenerator('internet','ipV6Address')"/>
         <attribute name="cidr_column" values="'192.168.1.0/24', '255.255.255.0/24'" />
@@ -175,8 +166,5 @@
         <attribute name="oid_column" type="short" min="0" max="1000"/>
         <attribute name="tsvector_column"/>
         <attribute name="tsquery_column"/>
-
-<!--        <variable name="address" generator="AddressGenerator" />-->
-<!--        <attribute name="address_column" type="object" script="{'(' + address.street + ',' + address.city.name + ',' + address.state.name + ',' + address.postalCode + ')'}" />-->
     </generate>
 </setup>

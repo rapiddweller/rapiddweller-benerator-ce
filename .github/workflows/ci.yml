@@ -798,7 +798,8 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: |
+      - name: set db properties for postgres connection
+        run: |
           echo "
           dbUrl=jdbc:postgresql://postgres:5432/benerator
           dbDriver=org.postgresql.Driver
@@ -808,10 +809,20 @@ jobs:
           dbSchema=public
           idStrategy=increment
           idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+      - name: set env file for postgres connection
+        run: |
+          echo "
+          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+          postgres.db.driver=org.postgresql.Driver
+          postgres.db.user=root
+          postgres.db.password=Benerator123!
+          postgres.db.schema=public" > $ARTIFACT_FULLNAME/demo/db/conf/conf.env.properties
       - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
       - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
       - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/postgresalltypes.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/postgres-composite.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
         with:
