@@ -371,7 +371,7 @@ public class ProjectBuilder implements Runnable {
   }
 
   private void copyImportFile(File importFile) {
-    if (importFile == null) {
+    if (importFile == null || importFile.getName().isBlank()) {
       return;
     }
     if (importFile.exists()) {
