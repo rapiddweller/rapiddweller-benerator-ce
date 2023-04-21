@@ -31,6 +31,6 @@
 
     <echo>Generating 100 entries for testtable</echo>
     <generate type="accounts" consumer="db,ConsoleExporter" count="100">
-        <id name="id"/>
+        <id name="user_id" generator="IncrementGenerator"/>
     </generate>
 </setup>
