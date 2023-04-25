@@ -47,6 +47,7 @@ import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.format.html.parser.DefaultHTMLTokenizer;
 import com.rapiddweller.format.html.parser.HTMLTokenizer;
 import com.rapiddweller.format.text.LFNormalizingStringBuilder;
+import com.rapiddweller.jdbacl.JDBCDriverInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
@@ -64,15 +65,10 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
@@ -197,6 +193,41 @@ public class ProjectBuilder implements Runnable {
     FileUtil.copy(srcFile, dstFile, true);
   }
 
+  private static void appendDatabase(String nodeName, JDBCDriverInfo jdbcDriverInfo, Setup setup, DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) {
+
+    // create environment file "conf.env.properties"
+    String envName = "conf";
+    File envFile = new File(setup.getProjectFolder(), envName + ".env.properties");
+    StringBuilder builder = new StringBuilder();
+
+    // must set attributes Map first to avoid tokenizer change after call defineDbAttributes() functions
+    Map<String, String> attributes = new HashMap<>(tokenizer.attributes());
+    Map<String, String> elements = defineDbAttributes(setup, tokenizer);
+    String DBMS = "";
+
+    if (jdbcDriverInfo != null){
+      DBMS = jdbcDriverInfo.getId().toLowerCase();
+    }
+    for (Map.Entry<String, String> element : elements.entrySet()){
+      if (element.getKey().equals("id")){
+        continue;
+      }
+      builder.append(String.format("%s.db.%s=%s\n", DBMS, element.getKey(), element.getValue()));
+    }
+    try (FileWriter envWriter = new FileWriter(envFile)){
+      envWriter.write(builder.toString());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    // config database tag attributes
+    attributes.put("environment", envName);
+    attributes.put("system", DBMS);
+
+    // continues to write project.ben.xml
+    appendElement(nodeName, attributes, writer, true);
+  }
+
   private static void processComment(DefaultHTMLTokenizer tokenizer, Setup setup, LFNormalizingStringBuilder writer) {
     try {
       String startText = tokenizer.text();
@@ -267,7 +298,7 @@ public class ProjectBuilder implements Runnable {
       // create db snapshot project.dbunit.xml
       Exception exception = createSnapshotIfNecessary();
 
-      // create project.ben.xml (including imports)
+      // create project.ben.xml (including imports, environment)
       createBeneratorXml();
 
       createEclipseProject();
@@ -480,7 +511,11 @@ public class ProjectBuilder implements Runnable {
       case HTMLTokenizer.CLOSED_TAG: {
         String nodeName = tokenizer.name();
         if (EL_DATABASE.equals(nodeName) && setup.isDatabaseProject()) {
-          appendElement(nodeName, defineDbAttributes(setup, tokenizer), writer, true);
+          // create env properties file and config database by using environment
+          appendDatabase(nodeName, setup.getJdbcDriverType(), setup, tokenizer, writer);
+
+          // old way to config database configuration - not using anymore
+//          appendElement(nodeName, defineDbAttributes(setup, tokenizer), writer, true);
         } else if (EL_EXECUTE.equals(nodeName)) {
           processExecute(setup, tokenizer, writer, nodeName);
         } else if (EL_GENERATE.equals(nodeName)) {
