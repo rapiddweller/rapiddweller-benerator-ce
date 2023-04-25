@@ -196,7 +196,7 @@ public class ProjectBuilder implements Runnable {
   private static void appendDatabase(String nodeName, JDBCDriverInfo jdbcDriverInfo, Setup setup, DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) {
 
     // create environment file "conf.env.properties"
-    String envName = "conf";
+    String envName = "environment";
     File envFile = new File(setup.getProjectFolder(), envName + ".env.properties");
     StringBuilder builder = new StringBuilder();
 
