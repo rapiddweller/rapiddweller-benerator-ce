@@ -6,6 +6,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 
 import java.util.Collection;
@@ -58,9 +59,12 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
     ProductWrapper<?> wrapper = context.getCurrentProduct();
     if (wrapper != null) {
       Object part = ((Entity) wrapper.unwrap()).getComponent(partName);
-      if (part != null) {
-        applyToPart(part, context);
+      // Init part and add into currentProduct
+      if (part == null) {
+        part = new Entity((ComplexTypeDescriptor) null, null);
+        ((Entity)context.getCurrentProduct().unwrap()).setComponent(partName, part);
       }
+      applyToPart(part, context);
     }
     return true;
   }
