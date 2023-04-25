@@ -35,5 +35,7 @@
     <generate type="simpledb" consumer="db,ConsoleExporter" count="100">
         <id name="id" mode="ignored" />
         <attribute name="user_id" generator="IncrementGenerator"/>
+        <attribute name="username" unique="true"/>
+        <attribute name="email" unique="true" />
     </generate>
 </setup>

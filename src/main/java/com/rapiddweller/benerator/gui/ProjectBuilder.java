@@ -193,7 +193,7 @@ public class ProjectBuilder implements Runnable {
     FileUtil.copy(srcFile, dstFile, true);
   }
 
-  private static void appendDatabase(String nodeName, JDBCDriverInfo jdbcDriverInfo, Setup setup, DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) {
+  private static void appendDatabase(String nodeName, Setup setup, DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) {
 
     // create environment file "conf.env.properties"
     String envName = "environment";
@@ -205,6 +205,7 @@ public class ProjectBuilder implements Runnable {
     Map<String, String> elements = defineDbAttributes(setup, tokenizer);
     String DBMS = "";
 
+    JDBCDriverInfo jdbcDriverInfo = setup.getJdbcDriverType();
     if (jdbcDriverInfo != null){
       DBMS = jdbcDriverInfo.getId().toLowerCase();
     }
@@ -512,7 +513,7 @@ public class ProjectBuilder implements Runnable {
         String nodeName = tokenizer.name();
         if (EL_DATABASE.equals(nodeName) && setup.isDatabaseProject()) {
           // create env properties file and config database by using environment
-          appendDatabase(nodeName, setup.getJdbcDriverType(), setup, tokenizer, writer);
+          appendDatabase(nodeName, setup, tokenizer, writer);
 
           // old way to config database configuration - not using anymore
 //          appendElement(nodeName, defineDbAttributes(setup, tokenizer), writer, true);
