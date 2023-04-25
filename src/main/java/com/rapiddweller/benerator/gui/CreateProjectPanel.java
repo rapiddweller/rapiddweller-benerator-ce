@@ -49,27 +49,8 @@ import com.rapiddweller.jdbacl.JDBCDriverInfo;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.TextArea;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -310,7 +291,15 @@ public class CreateProjectPanel extends JPanel {
         messages[i] = ToStringConverter.convert(error, "null");
       }
     }
-    JOptionPane.showMessageDialog(CreateProjectPanel.this, messages, "Error", JOptionPane.ERROR_MESSAGE);
+    String errorMessage = "";
+    for (String s : messages){
+      errorMessage = String.format("%s%s\n", errorMessage, s);
+    }
+
+    JLabel jLabel = new JLabel();
+    jLabel.setText(String.format("<html><div WIDTH=%d>%s</div></html>", 400, errorMessage));
+
+    JOptionPane.showMessageDialog(CreateProjectPanel.this, jLabel, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
 
