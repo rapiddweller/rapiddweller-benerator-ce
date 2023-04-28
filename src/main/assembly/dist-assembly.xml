@@ -170,6 +170,7 @@
                 <include>org.firebirdsql.jdbc:jaybird:jar</include>
                 <include>javax.resource:connector-api:jar</include>
                 <include>org.mongodb:mongo-java-driver:jar</include>
+                <include>com.ibm.db2:jcc:jar</include>
             </includes>
         </dependencySet>
         <dependencySet>

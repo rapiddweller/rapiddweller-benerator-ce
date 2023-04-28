@@ -12,25 +12,30 @@
     <database id="db"/>
 
 
-    <echo>Drop the testtable if it already exist. If it does not exist yet, the error message is ignored</echo>
+    <echo>Drop the simpledb if it already exist. If it does not exist yet, the error message is ignored</echo>
     <execute target="db" type="sql" onError="ignore">
-        DROP TABLE IF EXISTS accounts;
+        DROP TABLE IF EXISTS simpledb;
     </execute>
 
-    <echo>Creating testtable</echo>
+    <echo>Creating simpledb</echo>
     <execute target="db" type="sql">
-        CREATE TABLE accounts (
-        user_id serial PRIMARY KEY,
+        CREATE TABLE simpledb (
+        id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY,
+        user_id INT NOT NULL,
         username VARCHAR ( 50 ) UNIQUE NOT NULL,
         password VARCHAR ( 50 ) NOT NULL,
         email VARCHAR ( 255 ) UNIQUE NOT NULL,
         created_on TIMESTAMP NOT NULL,
-        last_login TIMESTAMP
+        last_login TIMESTAMP,
+        PRIMARY KEY (id)
         );
     </execute>
 
-    <echo>Generating 100 entries for testtable</echo>
-    <generate type="accounts" consumer="db,ConsoleExporter" count="100">
-        <id name="user_id" generator="IncrementGenerator"/>
+    <echo>Generating 100 entries for simpledb</echo>
+    <generate type="simpledb" consumer="db,ConsoleExporter" count="100">
+        <id name="id" mode="ignored" />
+        <attribute name="user_id" generator="IncrementGenerator"/>
+        <attribute name="username" unique="true"/>
+        <attribute name="email" unique="true" />
     </generate>
 </setup>

@@ -971,7 +971,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
           regularTypes.add(value);
         }
       } catch (IOException e) {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
 
       // set postgresql special data types to list

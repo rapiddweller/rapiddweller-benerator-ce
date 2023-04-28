@@ -207,6 +207,18 @@
             <version>${mongodb.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${database_postgresql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.db2</groupId>
+            <artifactId>jcc</artifactId>
+            <version>11.5.8.0</version>
+            <scope>provided</scope>
+        </dependency>
 
 
         <!-- rapiddweller dependencies -->
@@ -316,12 +328,6 @@
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
             <version>${scriptengine_graalvm.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${database_postgresql.version}</version>
-            <scope>provided</scope>
         </dependency>
         <!--  xml support -->
         <dependency>
