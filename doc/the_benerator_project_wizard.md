@@ -33,7 +33,7 @@ benerator-wizard -Duser.language=en
 
 The dialog looks like this:
 
-![](assets/benerator_projectwizard.jpg)
+![](assets/benerator_projectwizard.png)
 
 ## Configuring the project
 
@@ -58,9 +58,6 @@ If necessary, specify the database connection settings and test if they are righ
 
 When reproducing an existing database or creating a database snapshot, choose a snapshot file format: `DBUnit file`, `
 Excel(TM) document`, or `SQL file`. In all other cases, choose `None`.
-
-When reproducing an existing database, you need to provide Benerator with the DDL files for creating and dropping the related tables and sequences ('
-create tables' script and 'drop tables' script).
 
 Finally, you can explicitly choose system-dependent settings. If you leave these fields empty, Benerator will always take the individual settings of
 the system it is executed on.
