@@ -146,7 +146,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   private static ComponentBuilder<?> createPartBuilder(
       ComponentDescriptor part, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
-    if (iterationMode) {
+    var containerValue = part.getDetailValue("container");
+    if (iterationMode && (containerValue == null || !containerValue.equals("list"))) {
       if (part.getTypeDescriptor() instanceof ComplexTypeDescriptor) {
         return createPartModifier(part, context);
       } else {
