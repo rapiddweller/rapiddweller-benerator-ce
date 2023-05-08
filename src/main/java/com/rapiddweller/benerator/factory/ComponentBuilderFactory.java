@@ -379,7 +379,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     }
     String container = instance.getContainer();
     if (container == null) {
-      long defaultMinCount = (instance.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
+      long defaultMinCount = 1;
       Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, defaultMinCount, 1L, true, context);
       if (longCountGenerator instanceof ConstantGenerator
           && longCountGenerator.generate(new ProductWrapper<>()).unwrap() == 1L) {
