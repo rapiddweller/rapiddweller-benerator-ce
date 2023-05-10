@@ -186,6 +186,16 @@ jobs:
           mongoPassword=benerator
           mongoAuthenticationDatabase=admin
           mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+      - name: set db properties for mongodb connection3
+        run: |
+          echo "
+          mongodb.db.host=mongodb
+          mongodb.db.port=27017
+          mongodb.db.database=benerator
+          mongodb.db.user=benerator
+          mongodb.db.password=benerator
+          mongodb.db.authenticationDatabase=admin
+          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
       - name: set db properties for postgres connection
         run: |
           echo "
