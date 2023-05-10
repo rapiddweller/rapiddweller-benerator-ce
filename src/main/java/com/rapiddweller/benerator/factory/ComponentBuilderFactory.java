@@ -146,7 +146,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   private static ComponentBuilder<?> createPartBuilder(
       ComponentDescriptor part, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
-    if (iterationMode) {
+    var containerValue = part.getDetailValue("container");
+    if (iterationMode &&  containerValue == null) {
       if (part.getTypeDescriptor() instanceof ComplexTypeDescriptor) {
         return createPartModifier(part, context);
       } else {
@@ -378,7 +379,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     }
     String container = instance.getContainer();
     if (container == null) {
-      long defaultMinCount = (instance.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
+      long defaultMinCount = 1;
       Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, defaultMinCount, 1L, true, context);
       if (longCountGenerator instanceof ConstantGenerator
           && longCountGenerator.generate(new ProductWrapper<>()).unwrap() == 1L) {
