@@ -520,6 +520,7 @@
                     <excludes>
                         <exclude>**/*ShopDemoIntegrationExtDBTest*.class</exclude>
                         <exclude>**/*PostgresDataTypeIntegrationTest*.class</exclude>
+                        <exclude>**/*MongoDBSimpleIntegrationTest*.class</exclude>
                     </excludes>
                     <!--suppress UnresolvedMavenProperty -->
                     <argLine>${surefire.jacoco.args}</argLine>
@@ -532,6 +533,7 @@
                     <includes>
                         <include>**/*ShopDemoIntegrationExtDBTest.class</include>
                         <include>**/*PostgresDataTypeIntegrationTest.class</include>
+                        <include>**/*MongoDBSimpleIntegrationTest.class</include>
                     </includes>
                     <skipTests>${skipTests}</skipTests>
                     <skipITs>${skipITs}</skipITs>

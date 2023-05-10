@@ -5,7 +5,7 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MongoDBSimpleTest extends AbstractBeneratorIntegrationTest {
+public class MongoDBSimpleIntegrationTest extends AbstractBeneratorIntegrationTest {
     @Test
     public void mongoDBIdTest() {
         assumeTestActive("mongodb");
