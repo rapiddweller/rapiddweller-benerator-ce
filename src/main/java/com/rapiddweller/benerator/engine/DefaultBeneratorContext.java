@@ -575,4 +575,8 @@ public class DefaultBeneratorContext extends AbstractBeneratorContext implements
     return getClass() + "[" + currentProductName + "]";
   }
 
+  @Override
+  public String getCurrentProductName() {
+    return currentProductName;
+  }
 }
