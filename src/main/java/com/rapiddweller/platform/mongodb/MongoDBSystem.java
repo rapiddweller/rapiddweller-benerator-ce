@@ -108,7 +108,13 @@ public class MongoDBSystem extends CustomStorageSystem {
   @Override
   public DataSource<Entity> queryEntities(String collection, String query, Context context) {
     MongoDBDataSource mongoDBDataSource = new MongoDBDataSource(mongoDBClientProvider, collection, query, context);
-    DocumentToEntityConverter documentToEntityConverter = new DocumentToEntityConverter((ComplexTypeDescriptor) getTypeDescriptor(collection));
+    ComplexTypeDescriptor descriptor = (ComplexTypeDescriptor) getTypeDescriptor(collection);
+    if (descriptor == null) {
+      DataModel dm = new DataModel();
+      DescriptorProvider dp = new DefaultDescriptorProvider("default", dm);
+      descriptor = new ComplexTypeDescriptor(collection, dp);
+    }
+    DocumentToEntityConverter documentToEntityConverter = new DocumentToEntityConverter(descriptor);
     return new ConvertingDataSource<>(mongoDBDataSource, documentToEntityConverter);
   }
 
