@@ -3,3 +3,40 @@
   --md-primary-fg-color--dark: #5e949f;
   --md-typeset-a-color: #00bda4;
 }
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #323e4f;
+  --md-typeset-a-color: #00bda4;
+}
+[data-md-color-scheme="rapiddweller"]
+  [data-md-toggle="search"]:not(:checked)
+  ~ .md-header
+  .md-search__form::after {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  display: block;
+  padding: 0.1rem 0.4rem;
+  color: var(--md-default-bg-color);
+  font-weight: bold;
+  font-size: 0.8rem;
+  border: 0.05rem solid var(--md-default-bg-color--lighter);
+  border-radius: 0.1rem;
+  content: "/";
+}
+[data-md-color-scheme="slate"]
+  [data-md-toggle="search"]:not(:checked)
+  ~ .md-header
+  .md-search__form::after {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  display: block;
+  padding: 0.1rem 0.4rem;
+  color: var(--md-default-fg-color);
+  font-weight: bold;
+  font-size: 0.8rem;
+  border: 0.05rem solid var(--md-default-fg-color--lighter);
+  border-radius: 0.1rem;
+  content: "/";
+}
