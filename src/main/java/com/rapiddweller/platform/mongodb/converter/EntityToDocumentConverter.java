@@ -66,17 +66,16 @@ public class EntityToDocumentConverter extends ThreadSafeConverter<Entity, Docum
         return result;
     }
 
-    private Object[] convertArray(Object array) {
+    private List<Object> convertArray(Object array) {
         int length = Array.getLength(array);
-        Object[] result = new Object[length];
+        List<Object> result = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             Object element = Array.get(array, i);
             if (element instanceof Entity)
                 element = convert((Entity) element);
-            result[i] = element;
+            result.add(element);
         }
         return result;
     }
-
 
 }
