@@ -162,8 +162,7 @@ public class MongoDBSystem extends CustomStorageSystem {
   public void update(Entity entity) {
     String entityType = getEntityType(entity);
     addTypeDescriptor(entity.descriptor);
-    String idName = MongoDBUtils.getIdName(entity.descriptor);
-    mongoDBClient.replaceDocument(entityType, Filters.eq(idName, entity.get(idName)), convertEntityToDocument(entity));
+    mongoDBClient.replaceDocument(entityType, Filters.eq("_id", entity.get("_id")), convertEntityToDocument(entity));
   }
 
   private String getEntityType(Entity entity) {
