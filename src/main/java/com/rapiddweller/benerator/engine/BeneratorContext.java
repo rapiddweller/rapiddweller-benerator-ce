@@ -92,4 +92,5 @@ public interface BeneratorContext extends GeneratorContext, ScriptContext {
 
   BeneratorContext createSubContext(String productName);
 
+  String getCurrentProductName();
 }

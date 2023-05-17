@@ -329,4 +329,8 @@ public abstract class AbstractBeneratorSubContext extends AbstractBeneratorConte
     return getClass().getSimpleName() + "(" + currentProductName + ")";
   }
 
+  @Override
+  public String getCurrentProductName() {
+    return currentProductName;
+  }
 }
