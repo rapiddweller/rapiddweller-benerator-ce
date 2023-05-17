@@ -37,6 +37,7 @@ import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.common.ArrayUtil;
+import org.bson.types.ObjectId;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -193,6 +194,8 @@ public class Entity implements Composite {
       return copyArray(value);
     } else if (value instanceof List) {
       return copyList((List<Object>) value);
+    } else if (value instanceof ObjectId) {
+      return new ObjectId(value.toString());
     } else {
       throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
           "Don't know how to handle type: " + valueClass);
