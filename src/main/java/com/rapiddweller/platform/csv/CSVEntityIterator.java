@@ -38,7 +38,6 @@ import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.csv.CSVLineIterator;
 import com.rapiddweller.format.util.ConvertingDataIterator;
-import com.rapiddweller.format.util.DataIteratorAdapter;
 import com.rapiddweller.format.util.OrthogonalArrayIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
@@ -174,8 +173,7 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void init() {
-        DataIterator<String[]> cellIterator;
-        cellIterator = new CSVLineIterator(uri, separator, true, encoding);
+        DataIterator<String[]> cellIterator = new CSVLineIterator(uri, separator, true, encoding);
         if (!rowBased) {
             cellIterator = new OrthogonalArrayIterator<>(cellIterator);
         }
@@ -190,6 +188,7 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
 
         if (columns == null) {
             this.source = null;
+            cellIterator.close();
         } else {
             Converter<String[], Object[]> arrayConverter = new ArrayConverter(String.class, Object.class, preprocessor);
             Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
