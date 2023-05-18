@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/3.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <echo>Iterate empty csv</echo>
+    <iterate type="empty_csv" source="empty.csv" consumer="ConsoleExporter">
+        <attribute name="counter" generator="IncrementGenerator"/>
+    </iterate>
+
+    <echo>Iterate empty entity csv</echo>
+    <iterate type="empty_entity_csv" source="empty.ent.csv" consumer="ConsoleExporter">
+        <attribute name="counter" generator="IncrementGenerator"/>
+    </iterate>
+
+    <echo>Iterate empty weight csv</echo>
+    <iterate type="empty_weight_csv" source="empty.wgt.ent.csv" consumer="ConsoleExporter">
+        <attribute name="counter" generator="IncrementGenerator"/>
+    </iterate>
+
+    <echo>Iterate empty csv have header, no data</echo>
+    <iterate type="header_csv" source="empty_with_header.csv" consumer="ConsoleExporter">
+        <attribute name="counter" generator="IncrementGenerator"/>
+    </iterate>
+
+    <echo>Iterate empty entity csv have header, no data</echo>
+    <iterate type="header_entity_csv" source="empty_with_header.ent.csv" consumer="ConsoleExporter">
+        <attribute name="counter" generator="IncrementGenerator"/>
+    </iterate>
+
+    <echo>Iterate empty weight csv have header, no data</echo>
+    <iterate type="header_weight_csv" source="empty_with_header.wgt.ent.csv" consumer="ConsoleExporter">
+        <attribute name="counter" generator="IncrementGenerator"/>
+    </iterate>
+
+</setup>

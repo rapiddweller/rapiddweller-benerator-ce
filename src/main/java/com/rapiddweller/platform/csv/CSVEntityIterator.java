@@ -51,136 +51,149 @@ import java.util.List;
  * Iterates Entities in a CSV file.
  * When the property 'columns' is set, the CSV file is assumed to have no header row.<br/><br/>
  * Created: 07.04.2008 09:49:08
+ *
  * @author Volker Bergmann
  * @since 0.5.1
  */
 public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
 
-  private final String uri;
-  private final char separator;
-  private final String encoding;
-  private String[] columns;
-  private final Converter<String, ?> preprocessor;
-  private boolean expectingHeader;
-  private boolean rowBased;
+    private final String uri;
+    private final char separator;
+    private final String encoding;
+    private String[] columns;
+    private final Converter<String, ?> preprocessor;
+    private boolean expectingHeader;
+    private boolean rowBased;
 
-  private DataIterator<Entity> source;
+    private DataIterator<Entity> source;
 
-  private boolean initialized;
-  private final ComplexTypeDescriptor entityDescriptor;
+    private boolean initialized;
+    private final ComplexTypeDescriptor entityDescriptor;
 
-  // constructors ----------------------------------------------------------------------------------------------------
+    // constructors ----------------------------------------------------------------------------------------------------
 
-  public CSVEntityIterator(String uri, ComplexTypeDescriptor descriptor,
-                           Converter<String, ?> preprocessor, char separator,
-                           String encoding) {
-    if (!IOUtil.isURIAvailable(uri)) {
-      throw BeneratorExceptionFactory.getInstance().fileNotFound(uri, null);
+    public CSVEntityIterator(String uri, ComplexTypeDescriptor descriptor,
+                             Converter<String, ?> preprocessor, char separator,
+                             String encoding) {
+        if (!IOUtil.isURIAvailable(uri)) {
+            throw BeneratorExceptionFactory.getInstance().fileNotFound(uri, null);
+        }
+        this.uri = uri;
+        this.preprocessor = preprocessor;
+        this.separator = separator;
+        this.encoding = encoding;
+        this.entityDescriptor = descriptor;
+        this.initialized = false;
+        this.expectingHeader = true;
+        this.rowBased = (descriptor == null || descriptor.isRowBased() == null || descriptor.isRowBased());
     }
-    this.uri = uri;
-    this.preprocessor = preprocessor;
-    this.separator = separator;
-    this.encoding = encoding;
-    this.entityDescriptor = descriptor;
-    this.initialized = false;
-    this.expectingHeader = true;
-    this.rowBased = (descriptor == null || descriptor.isRowBased() == null || descriptor.isRowBased());
-  }
 
-  // properties ------------------------------------------------------------------------------------------------------
+    // properties ------------------------------------------------------------------------------------------------------
 
-  public static List<Entity> parseAll(String uri, char separator,
-                                      String encoding,
-                                      ComplexTypeDescriptor descriptor,
-                                      Converter<String, String> preprocessor)
-      throws FileNotFoundException {
-    List<Entity> list = new ArrayList<>();
-    try (CSVEntityIterator iterator = new CSVEntityIterator(uri, descriptor, preprocessor, separator, encoding)) {
-      DataContainer<Entity> container = new DataContainer<>();
-      while ((container = iterator.next(container)) != null) {
-        list.add(container.getData());
-      }
-      return list;
+    public static List<Entity> parseAll(String uri, char separator,
+                                        String encoding,
+                                        ComplexTypeDescriptor descriptor,
+                                        Converter<String, String> preprocessor)
+            throws FileNotFoundException {
+        List<Entity> list = new ArrayList<>();
+        try (CSVEntityIterator iterator = new CSVEntityIterator(uri, descriptor, preprocessor, separator, encoding)) {
+            DataContainer<Entity> container = new DataContainer<>();
+            while ((container = iterator.next(container)) != null) {
+                list.add(container.getData());
+            }
+            return list;
+        }
     }
-  }
 
-  public void setExpectingHeader(boolean expectHeader) {
-    this.expectingHeader = expectHeader;
-  }
-
-  public boolean isRowBased() {
-    return rowBased;
-  }
-
-  public void setRowBased(boolean rowBased) {
-    this.rowBased = rowBased;
-  }
-
-  @Override
-  public String[] getColumnNames() {
-    return columns;
-  }
-
-  // DataIterator interface ------------------------------------------------------------------------------------------
-
-  public void setColumns(String[] columns) {
-    this.expectingHeader = false;
-    if (ArrayUtil.isEmpty(columns)) {
-      this.columns = null;
-    } else {
-      this.columns = columns.clone();
-      StringUtil.trimAll(this.columns);
+    public void setExpectingHeader(boolean expectHeader) {
+        this.expectingHeader = expectHeader;
     }
-  }
 
-  @Override
-  public Class<Entity> getType() {
-    return Entity.class;
-  }
-
-  @Override
-  public DataContainer<Entity> next(DataContainer<Entity> container) {
-    assureInitialized();
-    return source.next(container);
-  }
-
-  @Override
-  public void close() {
-    IOUtil.close(source);
-  }
-
-  // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-  @Override
-  public String toString() {
-    return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" +
-        encoding + ", separator=" + separator +
-        ", entityName=" + entityDescriptor.getName() + "]";
-  }
-
-  // private helpers -------------------------------------------------------------------------------------------------
-
-  private void assureInitialized() {
-    if (!initialized) {
-      init();
-      initialized = true;
+    public boolean isRowBased() {
+        return rowBased;
     }
-  }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  private void init() {
-    DataIterator<String[]> cellIterator;
-    cellIterator = new CSVLineIterator(uri, separator, true, encoding);
-    if (!rowBased) {
-      cellIterator = new OrthogonalArrayIterator<>(cellIterator);
+    public void setRowBased(boolean rowBased) {
+        this.rowBased = rowBased;
     }
-    if (expectingHeader) {
-      setColumns(cellIterator.next(new DataContainer<>()).getData());
-    }
-    Converter<String[], Object[]> arrayConverter = new ArrayConverter(String.class, Object.class, preprocessor);
-    Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
-    Converter<String[], Entity> converter = new ConverterChain<>(arrayConverter, a2eConverter);
-    this.source = new ConvertingDataIterator<>(cellIterator, converter);
-  }
 
+    @Override
+    public String[] getColumnNames() {
+        return columns;
+    }
+
+    // DataIterator interface ------------------------------------------------------------------------------------------
+
+    public void setColumns(String[] columns) {
+        this.expectingHeader = false;
+        if (ArrayUtil.isEmpty(columns)) {
+            this.columns = null;
+        } else {
+            this.columns = columns.clone();
+            StringUtil.trimAll(this.columns);
+        }
+    }
+
+    @Override
+    public Class<Entity> getType() {
+        return Entity.class;
+    }
+
+    @Override
+    public DataContainer<Entity> next(DataContainer<Entity> container) {
+        assureInitialized();
+        if (source == null){
+            return null;
+        }
+        return source.next(container);
+    }
+
+    @Override
+    public void close() {
+        IOUtil.close(source);
+    }
+
+    // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" +
+                encoding + ", separator=" + separator +
+                ", entityName=" + entityDescriptor.getName() + "]";
+    }
+
+    // private helpers -------------------------------------------------------------------------------------------------
+
+    private void assureInitialized() {
+        if (!initialized) {
+            init();
+            initialized = true;
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void init() {
+        DataIterator<String[]> cellIterator = new CSVLineIterator(uri, separator, true, encoding);
+        if (!rowBased) {
+            cellIterator = new OrthogonalArrayIterator<>(cellIterator);
+        }
+        if (expectingHeader) {
+            DataContainer<String[]> dataContainer = cellIterator.next(new DataContainer<>());
+            if (dataContainer == null) {
+                setColumns(getColumnNames());
+            } else {
+                setColumns(dataContainer.getData());
+            }
+        }
+
+        if (columns == null) {
+            this.source = null;
+            cellIterator.close();
+        } else {
+            Converter<String[], Object[]> arrayConverter = new ArrayConverter(String.class, Object.class, preprocessor);
+            Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
+            Converter<String[], Entity> converter = new ConverterChain<>(arrayConverter, a2eConverter);
+            this.source = new ConvertingDataIterator<>(cellIterator, converter);
+        }
+    }
 }
