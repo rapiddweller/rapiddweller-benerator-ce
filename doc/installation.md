@@ -60,6 +60,26 @@ Otherwise, put a custom `log4j2.xml` file into the `BENERATOR_HOME/lib` director
 
 ## Mac OS X configuration
 
+### Installation using Homebrew (Recommended for Mac OS users)
+
+You can install Benerator on macOS using Homebrew, a popular package manager. First, you need to ensure Homebrew is installed on your system. If not, follow the instructions on the [Homebrew website](https://brew.sh/).
+
+Once Homebrew is installed, you can install Benerator by running the following command in your terminal:
+
+```shell
+brew install benerator
+```
+
+After the installation completes, you can verify the installation by checking the Benerator version:
+
+```shell
+benerator --version
+```
+
+This should display the installed version of Benerator.
+
+### Manual configuration
+
 On Mac OS X you need to provide Benerator with an explicit configuration of the JAVA_HOME path. See http://developer.apple.com/qa/qa2001/qa1170.html
 for a good introduction to the OS X way of setting up Java. It is based on aliases conventions. If you are not familiar with that, you should read the
 article. If Java 11 (or newer) is the default version you will use, you can simply define JAVA_HOME by adding the following line to your .profile: in
