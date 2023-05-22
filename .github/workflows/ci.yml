@@ -1157,6 +1157,16 @@ jobs:
         shell: bash
     steps:
       - name: generate key
-        run: curl -X POST --fail -F token=glptt-cabed6f72eca3fd6d87c7cafc5f253fd79265e45 -F ref=main https://gitlab.dwellerlab.com/api/v4/projects/181/trigger/pipeline
+        run: |
+          current_branch=${{ github.ref }}
+          current_branch=${current_branch#refs/heads/}
+          echo "Current branch $current_branch"
+#          if [[ "$current_branch" == "development" ]]; then
+          if [[ "$current_branch" == "dang-test-ci" ]]; then     
+               echo "Triggering EE Pipelines..."
+            curl -X POST --fail -F token=$EE_TOKEN -F ref=$current_branch https://gitlab.dwellerlab.com/api/v4/projects/112/trigger/pipeline
+          else
+            echo "The branch is not 'development'"
+          fi
         env:
-          GPG_PRIVATE_KEY_ENCODED: ${{ secrets.GPG_PRIVATE_KEY_ENCODED }}
+          EE_TOKEN: ${{ secrets.EE_TOKEN }}
