@@ -1143,3 +1143,17 @@ jobs:
           asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
           asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
           asset_content_type: application/zip
+
+  ###################### Trigger EE Pipeline ######################
+
+  trigger_ee_pipelines:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: trigger EE pipelines
+        if: startsWith(github.ref, 'refs/heads/development')
+        run: curl -X POST --fail -F token=$EE_TOKEN -F ref=development https://gitlab.dwellerlab.com/api/v4/projects/112/trigger/pipeline;
+        env:
+          EE_TOKEN: ${{ secrets.EE_TOKEN }}
