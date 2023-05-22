@@ -1159,7 +1159,7 @@ jobs:
       - name: trigger EE pipelines
         run:
           export current_branch=${{ github.ref }};
-#          export current_branch=${current_branch#refs/heads/}
+          export current_branch=${current_branch#refs/heads/};
           echo "Current branch $current_branch";
 ##          if [[ "$current_branch" == "development" ]]; then
 #          if [[ $current_branch = "dang-test-ci" ]]; then
