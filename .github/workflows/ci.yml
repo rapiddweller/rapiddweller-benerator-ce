@@ -1156,7 +1156,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: generate key
+      - name: trigger EE pipelines
         run: |
           current_branch=${{ github.ref }}
           current_branch=${current_branch#refs/heads/}
