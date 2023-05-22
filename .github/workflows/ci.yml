@@ -7,6 +7,7 @@ on:
     branches:
       - development
       - release-prep
+      - dang-test-ci
     paths-ignore:
       - '**.md'
 
@@ -1143,3 +1144,19 @@ jobs:
           asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
           asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
           asset_content_type: application/zip
+
+  ###################### Trigger EE Pipelines ######################
+
+  trigger_ee_pipelines:
+    runs-on: ubuntu-latest
+    needs:
+      - publish_jdk11
+#    container: maven:3.6-adoptopenjdk-11
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: generate key
+        run: curl -X POST --fail -F token=glptt-cabed6f72eca3fd6d87c7cafc5f253fd79265e45 -F ref=main https://gitlab.dwellerlab.com/api/v4/projects/181/trigger/pipeline
+        env:
+          GPG_PRIVATE_KEY_ENCODED: ${{ secrets.GPG_PRIVATE_KEY_ENCODED }}
