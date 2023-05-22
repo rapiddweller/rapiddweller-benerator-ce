@@ -1159,8 +1159,10 @@ jobs:
       - name: trigger EE pipelines
 #        if: startsWith(github.ref, 'refs/heads/developments')
         if: startsWith(github.ref, 'refs/heads/dang-test-ci')
-        run: curl -X POST --fail -F token=$EE_TOKEN -F ref=$current_branch https://gitlab.dwellerlab.com/api/v4/projects/112/trigger/pipeline;
-
+#        run: curl -X POST --fail -F token=$EE_TOKEN -F ref=$current_branch https://gitlab.dwellerlab.com/api/v4/projects/112/trigger/pipeline;
+        run:
+          echo $EE_TOKEN;
+          echo $CE_TOKEN;
 #          export current_branch=${{ github.ref }};
 #          export current_branch=${current_branch#refs/heads/};
 #          echo "Current branch $current_branch";
@@ -1175,3 +1177,4 @@ jobs:
 #          fi
         env:
           EE_TOKEN: ${{ secrets.EE_TOKEN }}
+          CE_TOKEN: ${{ secrets.CE_TOKEN }}
