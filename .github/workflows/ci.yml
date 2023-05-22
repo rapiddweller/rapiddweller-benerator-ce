@@ -18,1139 +18,1139 @@ env:
     ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
     echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
 jobs:
-  ###################### Setup ######################
-  setup:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - run: export
-      - uses: actions/checkout@v3
-      - name: set ARTIFACT_ID
-        run: |
-          ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
-          echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
-      - name: set RELEASE version
-        run: |
-          ARTIFACT_VERSION=${GITHUB_REF/refs\/tags\//}-$JAVA_JDKVERSION_TAG;
-          echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
-          echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
-        if: startsWith(github.ref, 'refs/tags/')
-      - name: set SNAPSHOT version
-        run: |
-          ARTIFACT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec);
-          echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
-          echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-      - name: set ARTIFACT_FULLNAME
-        run: |
-          echo "echo ARTIFACT_ID=${ARTIFACT_ID} >> \$GITHUB_ENV" >> dot.env
-          echo "echo ARTIFACT_VERSION=${ARTIFACT_VERSION} >> \$GITHUB_ENV" >> dot.env
-          echo "echo ARTIFACT_FULLNAME=${ARTIFACT_FULLNAME} >> \$GITHUB_ENV" >> dot.env
-      - run: export
-      - name: Upload setupfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: setup
-          path: dot.env
-          if-no-files-found: error
-          retention-days: 1
-
-  ###################### Test / Build ######################
-
-  build_jdk11:
-    runs-on: ubuntu-latest
-    needs:
-      - setup
-    container: maven:3.6-adoptopenjdk-11
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
-      - name: Upload build artifact for assembly
-        uses: actions/upload-artifact@v3
-        with:
-          name: build_jdk11
-          path: target/*.jar
-          if-no-files-found: error
-          retention-days: 5
-
-  test_UT_multiplatform:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        java: [ 11 ]
-      fail-fast: false
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-${{ matrix.os }}-java${{ matrix.java }}-
-            maven-${{ matrix.os }}-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-          cache: 'maven'
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
-
-  test_IT_jdk11:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    container: maven:3.6-adoptopenjdk-11
-    services:
-      mongodb:
-        image: mongo:latest
-        env:
-          DB_HOST: mongodb
-          DB_PORT: "27017"
-          DB_CONNECTION: "benerator"
-          MONGO_INITDB_ROOT_USERNAME: "benerator"
-          MONGO_INITDB_ROOT_PASSWORD: "benerator"
-      postgres:
-        image: postgis/postgis
-        env:
-          DB_HOST: postgres
-          DB_PORT: "5432"
-          DB_CONNECTION: "postgres"
-          # postgres
-          POSTGRES_DB: "benerator"
-          POSTGRES_USER: "root"
-          POSTGRES_PASSWORD: "Benerator123!"
-          POSTGRES_HOST_AUTH_METHOD: trust
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      # Label used to access the service container
-      mysql:
-        # Docker Hub image
-        image: mysql
-        # Provide the password for postgres
-        env:
-          DB_HOST: "mysql"
-          DB_PORT: "3306"
-          DB_CONNECTION: "mysql"
-          # mysql
-          MYSQL_ROOT_USER: "root"
-          MYSQL_ROOT_PASSWORD: "Benerator123!"
-          MYSQL_DATABASE: "benerator"
-      # Label used to access the service container
-      mssql:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-        # Provide the password for postgres
-        env:
-          DB_HOST: "mssql"
-          DB_PORT: "1433"
-          DB_CONNECTION: "mssql"
-          # mysql
-          ACCEPT_EULA: Y,
-          SA_PASSWORD: Benerator123!
-      # Label used to access the service container
-      oracle:
-        image: oracleinanutshell/oracle-xe-11g
-        # user: XDB PW: xdb
-        env:
-          ORACLE_ALLOW_REMOTE: 'true'
-          ORACLE_ENABLE_XDB: 'true'
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: set db properties for mongodb connection
-        run: |
-          echo "
-          target.db.host=mongodb
-          target.db.port=27017
-          target.db.database=benerator
-          target.db.user=benerator
-          target.db.password=benerator
-          target.db.authenticationDatabase=admin
-          target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
-      - name: set db default env for mongodb connection
-        run: |
-          echo "
-          db.db.host=mongodb
-          db.db.port=27017
-          db.db.database=benerator
-          db.db.user=benerator
-          db.db.password=benerator
-          db.db.authenticationDatabase=admin
-          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
-      - name: set db properties for mongodb connection2
-        run: |
-          echo "
-          mongoHost=mongodb
-          mongoPort=27017
-          mongoDatabase=benerator
-          mongoUser=benerator
-          mongoPassword=benerator
-          mongoAuthenticationDatabase=admin
-          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
-      - name: set env file for demo/db mongodb connection
-        run: |
-          echo "
-          mongodb.db.host=mongodb
-          mongodb.db.port=27017
-          mongodb.db.database=benerator
-          mongodb.db.user=benerator
-          mongodb.db.password=benerator
-          mongodb.db.authenticationDatabase=admin
-          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
-      - name: set db properties for postgres connection
-        run: |
-          echo "
-          dbUrl=jdbc:postgresql://postgres:5432/benerator
-          dbDriver=org.postgresql.Driver
-          dbUser=root
-          dbPassword=Benerator123!
-          dbCatalog=benerator
-          dbSchema=public
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
-      - name: set env file for postgres connection
-        run: |
-          echo "
-          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
-          postgres.db.driver=org.postgresql.Driver
-          postgres.db.user=root
-          postgres.db.password=Benerator123!
-          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
-      - name: set db properties for mysql connetion
-        run: |
-          echo "
-          dbUrl=jdbc:mysql://mysql:3306/benerator
-          dbDriver=com.mysql.cj.jdbc.Driver
-          dbCatalog=benerator
-          dbUser=root
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/mysql/shop.mysql.properties
-      - name: set db properties for mssql connetion
-        run: |
-          echo "
-          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
-          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
-          dbCatalog=master
-          dbSchema=dbo
-          dbUser=sa
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/sql_server/shop.sql_server.properties
-      - name: set db properties for oracle connetion
-        run: |
-          echo "
-          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
-          dbDriver=oracle.jdbc.driver.OracleDriver
-          dbUser=XDB
-          dbPassword=xdb
-          dbCatalog=XE
-          dbSchema=XDB
-          idStrategy=seqhilo
-          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false
-
-  sonar:
-    if: ${{ (!contains(github.event.head_commit.message, 'dependabot'))  && (!contains(github.event.head_commit.message, 'Bump')) }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    container: maven:3.6-adoptopenjdk-11
-    services:
-      mongodb:
-        image: mongo:latest
-        env:
-          DB_HOST: mongodb
-          DB_PORT: "27017"
-          DB_CONNECTION: "benerator"
-          MONGO_INITDB_ROOT_USERNAME: "benerator"
-          MONGO_INITDB_ROOT_PASSWORD: "benerator"
-      postgres:
-        image: postgis/postgis
-        env:
-          DB_HOST: postgres
-          DB_PORT: "5432"
-          DB_CONNECTION: "postgres"
-          # postgres
-          POSTGRES_DB: "benerator"
-          POSTGRES_USER: "root"
-          POSTGRES_PASSWORD: "Benerator123!"
-          POSTGRES_HOST_AUTH_METHOD: trust
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      # Label used to access the service container
-      mysql:
-        # Docker Hub image
-        image: mysql
-        # Provide the password for postgres
-        env:
-          DB_HOST: "mysql"
-          DB_PORT: "3306"
-          DB_CONNECTION: "mysql"
-          # mysql
-          MYSQL_ROOT_USER: "root"
-          MYSQL_ROOT_PASSWORD: "Benerator123!"
-          MYSQL_DATABASE: "benerator"
-      # Label used to access the service container
-      mssql:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-        # Provide the password for postgres
-        env:
-          DB_HOST: "mssql"
-          DB_PORT: "1433"
-          DB_CONNECTION: "mssql"
-          # mysql
-          ACCEPT_EULA: Y,
-          SA_PASSWORD: Benerator123!
-      # Label used to access the service container
-      oracle:
-        image: oracleinanutshell/oracle-xe-11g
-        # user: XDB PW: xdb
-        env:
-          ORACLE_ALLOW_REMOTE: 'true'
-          ORACLE_ENABLE_XDB: 'true'
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: set db properties for mongodb connection
-        run: |
-          echo "
-          target.db.host=mongodb
-          target.db.port=27017
-          target.db.database=benerator
-          target.db.user=benerator
-          target.db.password=benerator
-          target.db.authenticationDatabase=admin
-          target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
-      - name: set db default env for mongodb connection
-        run: |
-          echo "
-          db.db.host=mongodb
-          db.db.port=27017
-          db.db.database=benerator
-          db.db.user=benerator
-          db.db.password=benerator
-          db.db.authenticationDatabase=admin
-          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
-      - name: set db properties for mongodb connection2
-        run: |
-          echo "
-          mongoHost=mongodb
-          mongoPort=27017
-          mongoDatabase=benerator
-          mongoUser=benerator
-          mongoPassword=benerator
-          mongoAuthenticationDatabase=admin
-          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
-      - name: set env file for demo/db mongodb connection
-        run: |
-          echo "
-          mongodb.db.host=mongodb
-          mongodb.db.port=27017
-          mongodb.db.database=benerator
-          mongodb.db.user=benerator
-          mongodb.db.password=benerator
-          mongodb.db.authenticationDatabase=admin
-          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
-      - name: set db properties for postgres connection
-        run: |
-          echo "
-          dbUrl=jdbc:postgresql://postgres:5432/benerator
-          dbDriver=org.postgresql.Driver
-          dbUser=root
-          dbPassword=Benerator123!
-          dbCatalog=benerator
-          dbSchema=public
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
-      - name: set env file for postgres connection
-        run: |
-          echo "
-          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
-          postgres.db.driver=org.postgresql.Driver
-          postgres.db.user=root
-          postgres.db.password=Benerator123!
-          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
-      - name: set db properties for mysql connetion
-        run: |
-          echo "
-          dbUrl=jdbc:mysql://mysql:3306/benerator
-          dbDriver=com.mysql.cj.jdbc.Driver
-          dbCatalog=benerator
-          dbUser=root
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/mysql/shop.mysql.properties
-      - name: set db properties for mssql connetion
-        run: |
-          echo "
-          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
-          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
-          dbCatalog=master
-          dbSchema=dbo
-          dbUser=sa
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/sql_server/shop.sql_server.properties
-      - name: set db properties for oracle connetion
-        run: |
-          echo "
-          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
-          dbDriver=oracle.jdbc.driver.OracleDriver
-          dbUser=XDB
-          dbPassword=xdb
-          dbCatalog=XE
-          dbSchema=XDB
-          idStrategy=seqhilo
-          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
-      - name: run UT genrate report
-        run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=false -DskipITs=false
-      - name: analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn sonar:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
-
-  ###################### Assembly ######################
-
-  assembly_jdk11:
-    runs-on: ubuntu-latest
-    needs: [ test_UT_multiplatform, test_IT_jdk11, build_jdk11 ]
-    container: maven:3.6-adoptopenjdk-11
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: build_jdk11
-          path: target
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - name: check content of target
-        run: cd target && ls
-      - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
-      - name: Upload dist test
-        uses: actions/upload-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: |
-            target/*.tar.gz
-          if-no-files-found: error
-          retention-days: 1
-
-  ###################### E2ET ######################
-
-  E2ET_helper-scripts_jdk11:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-          cache: 'maven'
-      - run: bash script/1_install_mvn_dependencies.sh
-      - run: bash script/2_setup_benerator.sh
-      - run: bash script/3_execute_demos.sh
-
-  E2ET_script-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/script/scriptcode.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/script/scriptdb.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_script-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_memstore-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/memstore/memstore.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_memstore-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_watermark-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/watermark/watermark.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_watermark-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_anon-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/anon/anon.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_anon-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_db-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/db/hsqlmem.masstest.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/db/h2.multischema.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/db/dbenv-new.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/db/dbenv-old.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/db/dbenvconf.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_db-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_files-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/file/create_csv.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/create_dates.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/create_fixed_width.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/create_xls.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/create_xml.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/create_xml_by_script.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/csv_io.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/greetings_csv.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/import_fixed_width.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_files-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_hsqlmem-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_hsqlmem-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_postgresql-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres:12.2-alpine
-        # Provide the password for postgres
-        env:
-          DB_HOST: postgres
-          DB_PORT: "5432"
-          DB_CONNECTION: "postgres"
-          # postgres
-          POSTGRES_DB: "benerator"
-          POSTGRES_USER: "root"
-          POSTGRES_PASSWORD: "Benerator123!"
-          POSTGRES_HOST_AUTH_METHOD: trust
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - name: set db properties for postgres connection
-        run: |
-          echo "
-          dbUrl=jdbc:postgresql://postgres:5432/benerator
-          dbDriver=org.postgresql.Driver
-          dbUser=root
-          dbPassword=Benerator123!
-          dbCatalog=benerator
-          dbSchema=public
-          idStrategy=increment
-          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
-      - name: set env file for postgres connection
-        run: |
-          echo "
-          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
-          postgres.db.driver=org.postgresql.Driver
-          postgres.db.user=root
-          postgres.db.password=Benerator123!
-          postgres.db.schema=public" > $ARTIFACT_FULLNAME/demo/db/conf/conf.env.properties
-      - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
-      - run: sleep 30s
-      - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/db/postgresalltypes.ben.xml
-      - run: benerator $BENERATOR_HOME/demo/db/postgres-composite.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_postgresql-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_mysql-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    services:
-      # Label used to access the service container
-      mysql:
-        # Docker Hub image
-        image: mysql
-        # Provide the password for postgres
-        env:
-          DB_HOST: "mysql"
-          DB_PORT: "3306"
-          DB_CONNECTION: "mysql"
-          # mysql
-          MYSQL_ROOT_USER: "root"
-          MYSQL_ROOT_PASSWORD: "Benerator123!"
-          MYSQL_DATABASE: "benerator"
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: |
-          echo "
-          dbUrl=jdbc:mysql://mysql:3306/benerator
-          dbDriver=com.mysql.cj.jdbc.Driver
-          dbCatalog=benerator
-          dbUser=root
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
-      - run: cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
-      - run: sleep 60s
-      - run: benerator $BENERATOR_HOME/demo/shop/shop-mysql.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_mysql-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_mssql-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    services:
-      # Label used to access the service container
-      mssql:
-        # Docker Hub image
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-        # Provide the password for postgres
-        env:
-          ACCEPT_EULA: Y,
-          SA_PASSWORD: Benerator123!
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - run: |
-          echo "
-          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
-          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
-          dbCatalog=master
-          dbSchema=dbo
-          dbUser=sa
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
-      - run: cat $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
-      - run: sleep 60s
-      - run: benerator $BENERATOR_HOME/demo/shop/shop-mssql.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_mssql-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  E2ET_oracle-jdk11:
-    runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
-    needs: [ assembly_jdk11 ]
-    services:
-      # Label used to access the service container
-      oracle:
-        image: oracleinanutshell/oracle-xe-11g
-        # user: XDB PW: xdb
-        env:
-          ORACLE_ALLOW_REMOTE: 'true'
-          ORACLE_ENABLE_XDB: 'true'
-    steps:
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
-      - name: set db properties for oracle connetion
-        run: |
-          echo "
-          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
-          dbDriver=oracle.jdbc.driver.OracleDriver
-          dbUser=XDB
-          dbPassword=xdb
-          dbCatalog=XE
-          dbSchema=XDB
-          idStrategy=seqhilo
-          idParam=seq_id_gen" > $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
-      - run: cat $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
-      - run: sleep 60s
-      - run: benerator $BENERATOR_HOME/demo/shop/shop-oracle.ben.xml
-      - name: Upload logfile
-        uses: actions/upload-artifact@v3
-        with:
-          name: E2ET_oracle-jdk11-log
-          path: benerator.log
-          if-no-files-found: error
-          retention-days: 10
-
-  ###################### Release & Publish ######################
-
-  publish_jdk11:
-    runs-on: ubuntu-latest
-    needs:
-      - E2ET_oracle-jdk11
-      - E2ET_mssql-jdk11
-      - E2ET_mysql-jdk11
-      - E2ET_postgresql-jdk11
-      - E2ET_helper-scripts_jdk11
-      - E2ET_hsqlmem-jdk11
-      - E2ET_db-jdk11
-      - E2ET_script-jdk11
-      - E2ET_anon-jdk11
-      - E2ET_files-jdk11
-      - E2ET_watermark-jdk11
-      - E2ET_memstore-jdk11
-    container: maven:3.6-adoptopenjdk-11
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - run: apt update && apt -y install gnupg
-      - name: generate key
-        run: gpg --batch --import <(echo "$GPG_PRIVATE_KEY_ENCODED" | base64 -d)
-        env:
-          GPG_PRIVATE_KEY_ENCODED: ${{ secrets.GPG_PRIVATE_KEY_ENCODED }}
-      - name: Publish package
-        run: mvn -s .m2/settings.xml  clean deploy -P release -Dmaven.test.skip=true -Dmaven.install.skip=true
-        env:
-          OSSRH_USERTOKEN: ${{ secrets.OSSRH_USERTOKEN }}
-          OSSRH_USERTOKEN_KEY: ${{ secrets.OSSRH_USERTOKEN_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
-  release_jdk11:
-    runs-on: ubuntu-latest
-    needs:
-      - E2ET_oracle-jdk11
-      - E2ET_mssql-jdk11
-      - E2ET_mysql-jdk11
-      - E2ET_postgresql-jdk11
-      - E2ET_helper-scripts_jdk11
-      - E2ET_hsqlmem-jdk11
-      - E2ET_db-jdk11
-      - E2ET_script-jdk11
-      - E2ET_anon-jdk11
-      - E2ET_files-jdk11
-      - E2ET_watermark-jdk11
-      - E2ET_memstore-jdk11
-    if: startsWith(github.ref, 'refs/tags/')
-    container: maven:3.6-adoptopenjdk-11
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download dot.env
-        uses: actions/download-artifact@v3
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v3
-        with:
-          name: build_jdk11
-          path: target
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - name: check content of target
-        run: cd target && ls
-      - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ env.ARTIFACT_VERSION }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: true
-          prerelease: false
-      - name: Upload zip Release Asset
-        id: upload-release-asset-zip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.zip
-          asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.zip
-          asset_content_type: application/zip
-      - name: Upload tar.gz Release Asset
-        id: upload-release-asset-tar
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
-          asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
-          asset_content_type: application/zip
+#  ###################### Setup ######################
+#  setup:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    defaults:
+#      run:
+#        shell: bash
+#    steps:
+#      - run: export
+#      - uses: actions/checkout@v3
+#      - name: set ARTIFACT_ID
+#        run: |
+#          ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
+#          echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
+#      - name: set RELEASE version
+#        run: |
+#          ARTIFACT_VERSION=${GITHUB_REF/refs\/tags\//}-$JAVA_JDKVERSION_TAG;
+#          echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
+#          echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
+#        if: startsWith(github.ref, 'refs/tags/')
+#      - name: set SNAPSHOT version
+#        run: |
+#          ARTIFACT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec);
+#          echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
+#          echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
+#        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+#      - name: set ARTIFACT_FULLNAME
+#        run: |
+#          echo "echo ARTIFACT_ID=${ARTIFACT_ID} >> \$GITHUB_ENV" >> dot.env
+#          echo "echo ARTIFACT_VERSION=${ARTIFACT_VERSION} >> \$GITHUB_ENV" >> dot.env
+#          echo "echo ARTIFACT_FULLNAME=${ARTIFACT_FULLNAME} >> \$GITHUB_ENV" >> dot.env
+#      - run: export
+#      - name: Upload setupfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: setup
+#          path: dot.env
+#          if-no-files-found: error
+#          retention-days: 1
+#
+#  ###################### Test / Build ######################
+#
+#  build_jdk11:
+#    runs-on: ubuntu-latest
+#    needs:
+#      - setup
+#    container: maven:3.6-adoptopenjdk-11
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+#      - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
+#      - name: Upload build artifact for assembly
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: build_jdk11
+#          path: target/*.jar
+#          if-no-files-found: error
+#          retention-days: 5
+#
+#  test_UT_multiplatform:
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#        java: [ 11 ]
+#      fail-fast: false
+#
+#    runs-on: ${{ matrix.os }}
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up cache for ~./m2/repository
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2/repository
+#          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: |
+#            maven-${{ matrix.os }}-java${{ matrix.java }}-
+#            maven-${{ matrix.os }}-
+#      - name: Set up JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'zulu'
+#          java-version: '11'
+#          cache: 'maven'
+#      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+#
+#  test_IT_jdk11:
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        shell: bash
+#    container: maven:3.6-adoptopenjdk-11
+#    services:
+#      mongodb:
+#        image: mongo:latest
+#        env:
+#          DB_HOST: mongodb
+#          DB_PORT: "27017"
+#          DB_CONNECTION: "benerator"
+#          MONGO_INITDB_ROOT_USERNAME: "benerator"
+#          MONGO_INITDB_ROOT_PASSWORD: "benerator"
+#      postgres:
+#        image: postgis/postgis
+#        env:
+#          DB_HOST: postgres
+#          DB_PORT: "5432"
+#          DB_CONNECTION: "postgres"
+#          # postgres
+#          POSTGRES_DB: "benerator"
+#          POSTGRES_USER: "root"
+#          POSTGRES_PASSWORD: "Benerator123!"
+#          POSTGRES_HOST_AUTH_METHOD: trust
+#        # Set health checks to wait until postgres has started
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#      # Label used to access the service container
+#      mysql:
+#        # Docker Hub image
+#        image: mysql
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: "mysql"
+#          DB_PORT: "3306"
+#          DB_CONNECTION: "mysql"
+#          # mysql
+#          MYSQL_ROOT_USER: "root"
+#          MYSQL_ROOT_PASSWORD: "Benerator123!"
+#          MYSQL_DATABASE: "benerator"
+#      # Label used to access the service container
+#      mssql:
+#        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: "mssql"
+#          DB_PORT: "1433"
+#          DB_CONNECTION: "mssql"
+#          # mysql
+#          ACCEPT_EULA: Y,
+#          SA_PASSWORD: Benerator123!
+#      # Label used to access the service container
+#      oracle:
+#        image: oracleinanutshell/oracle-xe-11g
+#        # user: XDB PW: xdb
+#        env:
+#          ORACLE_ALLOW_REMOTE: 'true'
+#          ORACLE_ENABLE_XDB: 'true'
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: set db properties for mongodb connection
+#        run: |
+#          echo "
+#          target.db.host=mongodb
+#          target.db.port=27017
+#          target.db.database=benerator
+#          target.db.user=benerator
+#          target.db.password=benerator
+#          target.db.authenticationDatabase=admin
+#          target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+#      - name: set db default env for mongodb connection
+#        run: |
+#          echo "
+#          db.db.host=mongodb
+#          db.db.port=27017
+#          db.db.database=benerator
+#          db.db.user=benerator
+#          db.db.password=benerator
+#          db.db.authenticationDatabase=admin
+#          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
+#      - name: set db properties for mongodb connection2
+#        run: |
+#          echo "
+#          mongoHost=mongodb
+#          mongoPort=27017
+#          mongoDatabase=benerator
+#          mongoUser=benerator
+#          mongoPassword=benerator
+#          mongoAuthenticationDatabase=admin
+#          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+#      - name: set env file for demo/db mongodb connection
+#        run: |
+#          echo "
+#          mongodb.db.host=mongodb
+#          mongodb.db.port=27017
+#          mongodb.db.database=benerator
+#          mongodb.db.user=benerator
+#          mongodb.db.password=benerator
+#          mongodb.db.authenticationDatabase=admin
+#          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
+#      - name: set db properties for postgres connection
+#        run: |
+#          echo "
+#          dbUrl=jdbc:postgresql://postgres:5432/benerator
+#          dbDriver=org.postgresql.Driver
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          dbCatalog=benerator
+#          dbSchema=public
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+#      - name: set env file for postgres connection
+#        run: |
+#          echo "
+#          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+#          postgres.db.driver=org.postgresql.Driver
+#          postgres.db.user=root
+#          postgres.db.password=Benerator123!
+#          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
+#      - name: set db properties for mysql connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:mysql://mysql:3306/benerator
+#          dbDriver=com.mysql.cj.jdbc.Driver
+#          dbCatalog=benerator
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/mysql/shop.mysql.properties
+#      - name: set db properties for mssql connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
+#          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+#          dbCatalog=master
+#          dbSchema=dbo
+#          dbUser=sa
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/sql_server/shop.sql_server.properties
+#      - name: set db properties for oracle connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
+#          dbDriver=oracle.jdbc.driver.OracleDriver
+#          dbUser=XDB
+#          dbPassword=xdb
+#          dbCatalog=XE
+#          dbSchema=XDB
+#          idStrategy=seqhilo
+#          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
+#      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false
+#
+#  sonar:
+#    if: ${{ (!contains(github.event.head_commit.message, 'dependabot'))  && (!contains(github.event.head_commit.message, 'Bump')) }}
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        shell: bash
+#    container: maven:3.6-adoptopenjdk-11
+#    services:
+#      mongodb:
+#        image: mongo:latest
+#        env:
+#          DB_HOST: mongodb
+#          DB_PORT: "27017"
+#          DB_CONNECTION: "benerator"
+#          MONGO_INITDB_ROOT_USERNAME: "benerator"
+#          MONGO_INITDB_ROOT_PASSWORD: "benerator"
+#      postgres:
+#        image: postgis/postgis
+#        env:
+#          DB_HOST: postgres
+#          DB_PORT: "5432"
+#          DB_CONNECTION: "postgres"
+#          # postgres
+#          POSTGRES_DB: "benerator"
+#          POSTGRES_USER: "root"
+#          POSTGRES_PASSWORD: "Benerator123!"
+#          POSTGRES_HOST_AUTH_METHOD: trust
+#        # Set health checks to wait until postgres has started
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#      # Label used to access the service container
+#      mysql:
+#        # Docker Hub image
+#        image: mysql
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: "mysql"
+#          DB_PORT: "3306"
+#          DB_CONNECTION: "mysql"
+#          # mysql
+#          MYSQL_ROOT_USER: "root"
+#          MYSQL_ROOT_PASSWORD: "Benerator123!"
+#          MYSQL_DATABASE: "benerator"
+#      # Label used to access the service container
+#      mssql:
+#        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: "mssql"
+#          DB_PORT: "1433"
+#          DB_CONNECTION: "mssql"
+#          # mysql
+#          ACCEPT_EULA: Y,
+#          SA_PASSWORD: Benerator123!
+#      # Label used to access the service container
+#      oracle:
+#        image: oracleinanutshell/oracle-xe-11g
+#        # user: XDB PW: xdb
+#        env:
+#          ORACLE_ALLOW_REMOTE: 'true'
+#          ORACLE_ENABLE_XDB: 'true'
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: set db properties for mongodb connection
+#        run: |
+#          echo "
+#          target.db.host=mongodb
+#          target.db.port=27017
+#          target.db.database=benerator
+#          target.db.user=benerator
+#          target.db.password=benerator
+#          target.db.authenticationDatabase=admin
+#          target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+#      - name: set db default env for mongodb connection
+#        run: |
+#          echo "
+#          db.db.host=mongodb
+#          db.db.port=27017
+#          db.db.database=benerator
+#          db.db.user=benerator
+#          db.db.password=benerator
+#          db.db.authenticationDatabase=admin
+#          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
+#      - name: set db properties for mongodb connection2
+#        run: |
+#          echo "
+#          mongoHost=mongodb
+#          mongoPort=27017
+#          mongoDatabase=benerator
+#          mongoUser=benerator
+#          mongoPassword=benerator
+#          mongoAuthenticationDatabase=admin
+#          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+#      - name: set env file for demo/db mongodb connection
+#        run: |
+#          echo "
+#          mongodb.db.host=mongodb
+#          mongodb.db.port=27017
+#          mongodb.db.database=benerator
+#          mongodb.db.user=benerator
+#          mongodb.db.password=benerator
+#          mongodb.db.authenticationDatabase=admin
+#          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
+#      - name: set db properties for postgres connection
+#        run: |
+#          echo "
+#          dbUrl=jdbc:postgresql://postgres:5432/benerator
+#          dbDriver=org.postgresql.Driver
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          dbCatalog=benerator
+#          dbSchema=public
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+#      - name: set env file for postgres connection
+#        run: |
+#          echo "
+#          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+#          postgres.db.driver=org.postgresql.Driver
+#          postgres.db.user=root
+#          postgres.db.password=Benerator123!
+#          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
+#      - name: set db properties for mysql connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:mysql://mysql:3306/benerator
+#          dbDriver=com.mysql.cj.jdbc.Driver
+#          dbCatalog=benerator
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/mysql/shop.mysql.properties
+#      - name: set db properties for mssql connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
+#          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+#          dbCatalog=master
+#          dbSchema=dbo
+#          dbUser=sa
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/sql_server/shop.sql_server.properties
+#      - name: set db properties for oracle connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
+#          dbDriver=oracle.jdbc.driver.OracleDriver
+#          dbUser=XDB
+#          dbPassword=xdb
+#          dbCatalog=XE
+#          dbSchema=XDB
+#          idStrategy=seqhilo
+#          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
+#      - name: run UT genrate report
+#        run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=false -DskipITs=false
+#      - name: analyze
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        run: mvn sonar:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
+#
+#  ###################### Assembly ######################
+#
+#  assembly_jdk11:
+#    runs-on: ubuntu-latest
+#    needs: [ test_UT_multiplatform, test_IT_jdk11, build_jdk11 ]
+#    container: maven:3.6-adoptopenjdk-11
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: build_jdk11
+#          path: target
+#      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+#      - name: check content of target
+#        run: cd target && ls
+#      - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
+#      - name: Upload dist test
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: |
+#            target/*.tar.gz
+#          if-no-files-found: error
+#          retention-days: 1
+#
+#  ###################### E2ET ######################
+#
+#  E2ET_helper-scripts_jdk11:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'zulu'
+#          java-version: '11'
+#          cache: 'maven'
+#      - run: bash script/1_install_mvn_dependencies.sh
+#      - run: bash script/2_setup_benerator.sh
+#      - run: bash script/3_execute_demos.sh
+#
+#  E2ET_script-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: benerator $BENERATOR_HOME/demo/script/scriptcode.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/script/scriptdb.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_script-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_memstore-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: benerator $BENERATOR_HOME/demo/memstore/memstore.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_memstore-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_watermark-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: benerator $BENERATOR_HOME/demo/watermark/watermark.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_watermark-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_anon-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: benerator $BENERATOR_HOME/demo/anon/anon.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_anon-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_db-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: benerator $BENERATOR_HOME/demo/db/hsqlmem.masstest.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/db/h2.multischema.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/db/dbenv-new.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/db/dbenv-old.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/db/dbenvconf.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_db-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_files-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: benerator $BENERATOR_HOME/demo/file/create_csv.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/create_dates.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/create_fixed_width.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/create_xls.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/create_xml.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/create_xml_by_script.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/csv_io.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/greetings_csv.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/import_fixed_width.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_files-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_hsqlmem-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_hsqlmem-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_postgresql-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    services:
+#      # Label used to access the service container
+#      postgres:
+#        # Docker Hub image
+#        image: postgres:12.2-alpine
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: postgres
+#          DB_PORT: "5432"
+#          DB_CONNECTION: "postgres"
+#          # postgres
+#          POSTGRES_DB: "benerator"
+#          POSTGRES_USER: "root"
+#          POSTGRES_PASSWORD: "Benerator123!"
+#          POSTGRES_HOST_AUTH_METHOD: trust
+#        # Set health checks to wait until postgres has started
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - name: set db properties for postgres connection
+#        run: |
+#          echo "
+#          dbUrl=jdbc:postgresql://postgres:5432/benerator
+#          dbDriver=org.postgresql.Driver
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          dbCatalog=benerator
+#          dbSchema=public
+#          idStrategy=increment
+#          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+#      - name: set env file for postgres connection
+#        run: |
+#          echo "
+#          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+#          postgres.db.driver=org.postgresql.Driver
+#          postgres.db.user=root
+#          postgres.db.password=Benerator123!
+#          postgres.db.schema=public" > $ARTIFACT_FULLNAME/demo/db/conf/conf.env.properties
+#      - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+#      - run: sleep 30s
+#      - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/db/postgresalltypes.ben.xml
+#      - run: benerator $BENERATOR_HOME/demo/db/postgres-composite.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_postgresql-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_mysql-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    services:
+#      # Label used to access the service container
+#      mysql:
+#        # Docker Hub image
+#        image: mysql
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: "mysql"
+#          DB_PORT: "3306"
+#          DB_CONNECTION: "mysql"
+#          # mysql
+#          MYSQL_ROOT_USER: "root"
+#          MYSQL_ROOT_PASSWORD: "Benerator123!"
+#          MYSQL_DATABASE: "benerator"
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: |
+#          echo "
+#          dbUrl=jdbc:mysql://mysql:3306/benerator
+#          dbDriver=com.mysql.cj.jdbc.Driver
+#          dbCatalog=benerator
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
+#      - run: cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
+#      - run: sleep 60s
+#      - run: benerator $BENERATOR_HOME/demo/shop/shop-mysql.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_mysql-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_mssql-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    services:
+#      # Label used to access the service container
+#      mssql:
+#        # Docker Hub image
+#        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+#        # Provide the password for postgres
+#        env:
+#          ACCEPT_EULA: Y,
+#          SA_PASSWORD: Benerator123!
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - run: |
+#          echo "
+#          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
+#          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+#          dbCatalog=master
+#          dbSchema=dbo
+#          dbUser=sa
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
+#      - run: cat $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
+#      - run: sleep 60s
+#      - run: benerator $BENERATOR_HOME/demo/shop/shop-mssql.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_mssql-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  E2ET_oracle-jdk11:
+#    runs-on: ubuntu-latest
+#    container: maven:3.6-adoptopenjdk-11
+#    needs: [ assembly_jdk11 ]
+#    services:
+#      # Label used to access the service container
+#      oracle:
+#        image: oracleinanutshell/oracle-xe-11g
+#        # user: XDB PW: xdb
+#        env:
+#          ORACLE_ALLOW_REMOTE: 'true'
+#          ORACLE_ENABLE_XDB: 'true'
+#    steps:
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: assembly_jdk11_test
+#          path: target
+#      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+#      - name: setup benerator env
+#        run: |
+#          echo SHELL=/bin/bash >> $GITHUB_ENV
+#          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+#          echo $BENERATOR_HOME
+#          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+#      - name: set permission
+#        run: chmod -R 777 $BENERATOR_HOME/bin/
+#      - name: check if benerator is setup correctly
+#        run: benerator --version
+#      - name: set db properties for oracle connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
+#          dbDriver=oracle.jdbc.driver.OracleDriver
+#          dbUser=XDB
+#          dbPassword=xdb
+#          dbCatalog=XE
+#          dbSchema=XDB
+#          idStrategy=seqhilo
+#          idParam=seq_id_gen" > $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
+#      - run: cat $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
+#      - run: sleep 60s
+#      - run: benerator $BENERATOR_HOME/demo/shop/shop-oracle.ben.xml
+#      - name: Upload logfile
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: E2ET_oracle-jdk11-log
+#          path: benerator.log
+#          if-no-files-found: error
+#          retention-days: 10
+#
+#  ###################### Release & Publish ######################
+#
+#  publish_jdk11:
+#    runs-on: ubuntu-latest
+#    needs:
+#      - E2ET_oracle-jdk11
+#      - E2ET_mssql-jdk11
+#      - E2ET_mysql-jdk11
+#      - E2ET_postgresql-jdk11
+#      - E2ET_helper-scripts_jdk11
+#      - E2ET_hsqlmem-jdk11
+#      - E2ET_db-jdk11
+#      - E2ET_script-jdk11
+#      - E2ET_anon-jdk11
+#      - E2ET_files-jdk11
+#      - E2ET_watermark-jdk11
+#      - E2ET_memstore-jdk11
+#    container: maven:3.6-adoptopenjdk-11
+#    defaults:
+#      run:
+#        shell: bash
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+#      - run: apt update && apt -y install gnupg
+#      - name: generate key
+#        run: gpg --batch --import <(echo "$GPG_PRIVATE_KEY_ENCODED" | base64 -d)
+#        env:
+#          GPG_PRIVATE_KEY_ENCODED: ${{ secrets.GPG_PRIVATE_KEY_ENCODED }}
+#      - name: Publish package
+#        run: mvn -s .m2/settings.xml  clean deploy -P release -Dmaven.test.skip=true -Dmaven.install.skip=true
+#        env:
+#          OSSRH_USERTOKEN: ${{ secrets.OSSRH_USERTOKEN }}
+#          OSSRH_USERTOKEN_KEY: ${{ secrets.OSSRH_USERTOKEN_KEY }}
+#          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+#
+#  release_jdk11:
+#    runs-on: ubuntu-latest
+#    needs:
+#      - E2ET_oracle-jdk11
+#      - E2ET_mssql-jdk11
+#      - E2ET_mysql-jdk11
+#      - E2ET_postgresql-jdk11
+#      - E2ET_helper-scripts_jdk11
+#      - E2ET_hsqlmem-jdk11
+#      - E2ET_db-jdk11
+#      - E2ET_script-jdk11
+#      - E2ET_anon-jdk11
+#      - E2ET_files-jdk11
+#      - E2ET_watermark-jdk11
+#      - E2ET_memstore-jdk11
+#    if: startsWith(github.ref, 'refs/tags/')
+#    container: maven:3.6-adoptopenjdk-11
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Download dot.env
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: setup
+#      - run: bash dot.env
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: Download build_jdk11 for assembly
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: build_jdk11
+#          path: target
+#      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+#      - name: check content of target
+#        run: cd target && ls
+#      - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ github.ref }}
+#          release_name: Release ${{ env.ARTIFACT_VERSION }}
+#          body: |
+#            Changes in this Release
+#            - First Change
+#            - Second Change
+#          draft: true
+#          prerelease: false
+#      - name: Upload zip Release Asset
+#        id: upload-release-asset-zip
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.zip
+#          asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.zip
+#          asset_content_type: application/zip
+#      - name: Upload tar.gz Release Asset
+#        id: upload-release-asset-tar
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
+#          asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
+#          asset_content_type: application/zip
 
   ###################### Trigger EE Pipelines ######################
 
   trigger_ee_pipelines:
     runs-on: ubuntu-latest
     needs:
-      - publish_jdk11
+#      - publish_jdk11
 #    container: maven:3.6-adoptopenjdk-11
     defaults:
       run:
