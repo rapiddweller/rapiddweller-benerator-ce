@@ -1,250 +1,250 @@
-on:
-  push:
-    branches-ignore:
-      - master
-      - development
-
-env:
-  MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
-  JAVA_JDKVERSION_TAG: "jdk-11"
-
-jobs:
-
-  ###################### Sonar ######################
-
-  sonar:
-    if: ${{ (!contains(github.event.head_commit.message, 'dependabot'))  && (!contains(github.event.head_commit.message, 'Bump')) }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    container: maven:3.6-adoptopenjdk-11
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: run UT genrate report
-        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
-      - name: analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn sonar:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
-
-  ###################### Test / Build ######################
-
-
-  test_UT_multiplatform:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        java: [ 11 ]
-      fail-fast: false
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-${{ matrix.os }}-java${{ matrix.java }}-
-            maven-${{ matrix.os }}-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 11
-          distribution: zulu
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
-
-  test_IT_jdk11:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    container: maven:3.6-adoptopenjdk-11
-    services:
-      mongodb:
-        # Docker Hub image
-        image: mongo:latest
-        # Provide the password for postgres
-        env:
-          DB_HOST: mongodb
-          DB_PORT: "27017"
-          DB_CONNECTION: "benerator"
-          # mongodb
-          MONGO_INITDB_ROOT_USERNAME: "benerator"
-          MONGO_INITDB_ROOT_PASSWORD: "benerator"
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgis/postgis
-        # Provide the password for postgres
-        env:
-          DB_HOST: postgres
-          DB_PORT: "5432"
-          DB_CONNECTION: "postgres"
-          # postgres
-          POSTGRES_DB: "benerator"
-          POSTGRES_USER: "root"
-          POSTGRES_PASSWORD: "Benerator123!"
-          POSTGRES_HOST_AUTH_METHOD: trust
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      # Label used to access the service container
-      mysql:
-        # Docker Hub image
-        image: mysql
-        # Provide the password for postgres
-        env:
-          DB_HOST: "mysql"
-          DB_PORT: "3306"
-          DB_CONNECTION: "mysql"
-          # mysql
-          MYSQL_ROOT_USER: "root"
-          MYSQL_ROOT_PASSWORD: "Benerator123!"
-          MYSQL_DATABASE: "benerator"
-      # Label used to access the service container
-      mssql:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-        # Provide the password for postgres
-        env:
-          DB_HOST: "mssql"
-          DB_PORT: "1433"
-          DB_CONNECTION: "mssql"
-          # mysql
-          ACCEPT_EULA: Y,
-          SA_PASSWORD: Benerator123!
-      # Label used to access the service container
-      oracle:
-        image: oracleinanutshell/oracle-xe-11g
-        # user: XDB PW: xdb
-        env:
-          ORACLE_ALLOW_REMOTE: 'true'
-          ORACLE_ENABLE_XDB: 'true'
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: set db properties for mongodb connection
-        run: |
-          echo "
-          target.db.host=mongodb
-          target.db.port=27017
-          target.db.database=benerator
-          target.db.user=benerator
-          target.db.password=benerator
-          target.db.authenticationDatabase=admin
-          target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
-      - name: set db default env for mongodb connection
-        run: |
-          echo "
-          db.db.host=mongodb
-          db.db.port=27017
-          db.db.database=benerator
-          db.db.user=benerator
-          db.db.password=benerator
-          db.db.authenticationDatabase=admin
-          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
-      - name: set db properties for mongodb connection2
-        run: |
-          echo "
-          mongoHost=mongodb
-          mongoPort=27017
-          mongoDatabase=benerator
-          mongoUser=benerator
-          mongoPassword=benerator
-          mongoAuthenticationDatabase=admin
-          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
-      - name: set env file for demo/db mongodb connection
-        run: |
-          echo "
-          mongodb.db.host=mongodb
-          mongodb.db.port=27017
-          mongodb.db.database=benerator
-          mongodb.db.user=benerator
-          mongodb.db.password=benerator
-          mongodb.db.authenticationDatabase=admin
-          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
-      - name: set db properties for postgres connection
-        run: |
-          echo "
-          dbUrl=jdbc:postgresql://postgres:5432/benerator
-          dbDriver=org.postgresql.Driver
-          dbUser=root
-          dbPassword=Benerator123!
-          dbCatalog=benerator
-          dbSchema=public
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
-      - name: set env file for postgres connection
-        run: |
-          echo "
-          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
-          postgres.db.driver=org.postgresql.Driver
-          postgres.db.user=root
-          postgres.db.password=Benerator123!
-          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
-      - name: set db properties for mysql connetion
-        run: |
-          echo "
-          dbUrl=jdbc:mysql://mysql:3306/benerator
-          dbDriver=com.mysql.cj.jdbc.Driver
-          dbCatalog=benerator
-          dbUser=root
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/mysql/shop.mysql.properties
-      - name: set db properties for mssql connetion
-        run: |
-          echo "
-          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
-          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
-          dbCatalog=master
-          dbSchema=dbo
-          dbUser=sa
-          dbPassword=Benerator123!
-          idStrategy=increment
-          idParam=1010" > src/demo/resources/demo/shop/sql_server/shop.sql_server.properties
-      - name: set db properties for oracle connetion
-        run: |
-          echo "
-          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
-          dbDriver=oracle.jdbc.driver.OracleDriver
-          dbUser=XDB
-          dbPassword=xdb
-          dbCatalog=XE
-          dbSchema=XDB
-          idStrategy=seqhilo
-          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
-      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false
+#on:
+#  push:
+#    branches-ignore:
+#      - master
+#      - development
+#
+#env:
+#  MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
+#  JAVA_JDKVERSION_TAG: "jdk-11"
+#
+#jobs:
+#
+#  ###################### Sonar ######################
+#
+#  sonar:
+#    if: ${{ (!contains(github.event.head_commit.message, 'dependabot'))  && (!contains(github.event.head_commit.message, 'Bump')) }}
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        shell: bash
+#    container: maven:3.6-adoptopenjdk-11
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: Cache SonarCloud packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.sonar/cache
+#          key: ${{ runner.os }}-sonar
+#          restore-keys: ${{ runner.os }}-sonar
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: run UT genrate report
+#        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+#      - name: analyze
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        run: mvn sonar:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
+#
+#  ###################### Test / Build ######################
+#
+#
+#  test_UT_multiplatform:
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#        java: [ 11 ]
+#      fail-fast: false
+#
+#    runs-on: ${{ matrix.os }}
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up cache for ~./m2/repository
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2/repository
+#          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: |
+#            maven-${{ matrix.os }}-java${{ matrix.java }}-
+#            maven-${{ matrix.os }}-
+#      - name: Set up JDK
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: 11
+#          distribution: zulu
+#      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
+#
+#  test_IT_jdk11:
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        shell: bash
+#    container: maven:3.6-adoptopenjdk-11
+#    services:
+#      mongodb:
+#        # Docker Hub image
+#        image: mongo:latest
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: mongodb
+#          DB_PORT: "27017"
+#          DB_CONNECTION: "benerator"
+#          # mongodb
+#          MONGO_INITDB_ROOT_USERNAME: "benerator"
+#          MONGO_INITDB_ROOT_PASSWORD: "benerator"
+#      # Label used to access the service container
+#      postgres:
+#        # Docker Hub image
+#        image: postgis/postgis
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: postgres
+#          DB_PORT: "5432"
+#          DB_CONNECTION: "postgres"
+#          # postgres
+#          POSTGRES_DB: "benerator"
+#          POSTGRES_USER: "root"
+#          POSTGRES_PASSWORD: "Benerator123!"
+#          POSTGRES_HOST_AUTH_METHOD: trust
+#        # Set health checks to wait until postgres has started
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#      # Label used to access the service container
+#      mysql:
+#        # Docker Hub image
+#        image: mysql
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: "mysql"
+#          DB_PORT: "3306"
+#          DB_CONNECTION: "mysql"
+#          # mysql
+#          MYSQL_ROOT_USER: "root"
+#          MYSQL_ROOT_PASSWORD: "Benerator123!"
+#          MYSQL_DATABASE: "benerator"
+#      # Label used to access the service container
+#      mssql:
+#        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+#        # Provide the password for postgres
+#        env:
+#          DB_HOST: "mssql"
+#          DB_PORT: "1433"
+#          DB_CONNECTION: "mssql"
+#          # mysql
+#          ACCEPT_EULA: Y,
+#          SA_PASSWORD: Benerator123!
+#      # Label used to access the service container
+#      oracle:
+#        image: oracleinanutshell/oracle-xe-11g
+#        # user: XDB PW: xdb
+#        env:
+#          ORACLE_ALLOW_REMOTE: 'true'
+#          ORACLE_ENABLE_XDB: 'true'
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Cache Maven packages
+#        uses: actions/cache@v3
+#        with:
+#          path: ~/.m2
+#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: ${{ runner.os }}-m2
+#      - name: set db properties for mongodb connection
+#        run: |
+#          echo "
+#          target.db.host=mongodb
+#          target.db.port=27017
+#          target.db.database=benerator
+#          target.db.user=benerator
+#          target.db.password=benerator
+#          target.db.authenticationDatabase=admin
+#          target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+#      - name: set db default env for mongodb connection
+#        run: |
+#          echo "
+#          db.db.host=mongodb
+#          db.db.port=27017
+#          db.db.database=benerator
+#          db.db.user=benerator
+#          db.db.password=benerator
+#          db.db.authenticationDatabase=admin
+#          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
+#      - name: set db properties for mongodb connection2
+#        run: |
+#          echo "
+#          mongoHost=mongodb
+#          mongoPort=27017
+#          mongoDatabase=benerator
+#          mongoUser=benerator
+#          mongoPassword=benerator
+#          mongoAuthenticationDatabase=admin
+#          mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+#      - name: set env file for demo/db mongodb connection
+#        run: |
+#          echo "
+#          mongodb.db.host=mongodb
+#          mongodb.db.port=27017
+#          mongodb.db.database=benerator
+#          mongodb.db.user=benerator
+#          mongodb.db.password=benerator
+#          mongodb.db.authenticationDatabase=admin
+#          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
+#      - name: set db properties for postgres connection
+#        run: |
+#          echo "
+#          dbUrl=jdbc:postgresql://postgres:5432/benerator
+#          dbDriver=org.postgresql.Driver
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          dbCatalog=benerator
+#          dbSchema=public
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+#      - name: set env file for postgres connection
+#        run: |
+#          echo "
+#          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+#          postgres.db.driver=org.postgresql.Driver
+#          postgres.db.user=root
+#          postgres.db.password=Benerator123!
+#          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
+#      - name: set db properties for mysql connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:mysql://mysql:3306/benerator
+#          dbDriver=com.mysql.cj.jdbc.Driver
+#          dbCatalog=benerator
+#          dbUser=root
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/mysql/shop.mysql.properties
+#      - name: set db properties for mssql connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:sqlserver://mssql:1433;encrypt=true;trustServerCertificate=true;
+#          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+#          dbCatalog=master
+#          dbSchema=dbo
+#          dbUser=sa
+#          dbPassword=Benerator123!
+#          idStrategy=increment
+#          idParam=1010" > src/demo/resources/demo/shop/sql_server/shop.sql_server.properties
+#      - name: set db properties for oracle connetion
+#        run: |
+#          echo "
+#          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
+#          dbDriver=oracle.jdbc.driver.OracleDriver
+#          dbUser=XDB
+#          dbPassword=xdb
+#          dbCatalog=XE
+#          dbSchema=XDB
+#          idStrategy=seqhilo
+#          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
+#      - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false

@@ -1149,7 +1149,7 @@ jobs:
 
   trigger_ee_pipelines:
     runs-on: ubuntu-latest
-    needs:
+#    needs:
 #      - publish_jdk11
 #    container: maven:3.6-adoptopenjdk-11
     defaults:
