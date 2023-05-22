@@ -1162,7 +1162,7 @@ jobs:
           echo "2nd"
           current_branch=${{ github.ref }}
 #          current_branch=${current_branch#refs/heads/}
-#          echo "Current branch $current_branch"
+          echo "Current branch $current_branch"
 ##          if [[ "$current_branch" == "development" ]]; then
 #          if [[ "$current_branch" == "dang-test-ci" ]]; then
 #            echo "Triggering EE Pipelines..."
