@@ -1157,8 +1157,9 @@ jobs:
         shell: bash
     steps:
       - name: trigger EE pipelines
-        run: echo "1st"
-
+        run:
+          echo "1st"
+          echo "2nd"
 #          current_branch=${{ github.ref }};
 #          current_branch=${current_branch#refs/heads/};
 #          echo "Current branch $current_branch";
