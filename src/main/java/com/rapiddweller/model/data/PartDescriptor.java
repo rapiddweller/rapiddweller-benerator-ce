@@ -60,7 +60,6 @@ public class PartDescriptor extends ComponentDescriptor {
     super(name, provider, type, localType);
     setMinCount(minCount);
     setMaxCount(maxCount);
-    addConfig("visible", Boolean.class);
   }
 
 }
