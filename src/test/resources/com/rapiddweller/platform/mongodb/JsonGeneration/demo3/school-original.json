@@ -1,0 +1,160 @@
+{
+    "school": {
+        "name": "ABC University",
+        "location": {
+            "address": "123 Main Street",
+            "city": "New York",
+            "state": "NY",
+            "zipCode": "10001",
+            "country": "United States"
+        },
+        "departments": [
+            {
+                "name": "Computer Science",
+                "courses": [
+                    {
+                        "code": "CS101",
+                        "name": "Introduction to Computer Science",
+                        "credits": 3,
+                        "instructor": {
+                            "name": {
+                                "first": "John",
+                                "last": "Smith"
+                            },
+                            "email": "john.smith@example.com",
+                            "office": {
+                                "building": "Science Building",
+                                "room": "203"
+                            }
+                        },
+                        "students": [
+                            {
+                                "id": "S001",
+                                "name": {
+                                    "first": "Alice",
+                                    "last": "Johnson"
+                                },
+                                "grade": "A"
+                            },
+                            {
+                                "id": "S002",
+                                "name": {
+                                    "first": "Bob",
+                                    "last": "Williams"
+                                },
+                                "grade": "B+"
+                            }
+                        ]
+                    },
+                    {
+                        "code": "CS201",
+                        "name": "Data Structures and Algorithms",
+                        "credits": 4,
+                        "instructor": {
+                            "name": {
+                                "first": "Jane",
+                                "last": "Doe"
+                            },
+                            "email": "jane.doe@example.com",
+                            "office": {
+                                "building": "Science Building",
+                                "room": "305"
+                            }
+                        },
+                        "students": [
+                            {
+                                "id": "S001",
+                                "name": {
+                                    "first": "Alice",
+                                    "last": "Johnson"
+                                },
+                                "grade": "A-"
+                            },
+                            {
+                                "id": "S003",
+                                "name": {
+                                    "first": "Charlie",
+                                    "last": "Davis"
+                                },
+                                "grade": "B"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Business Administration",
+                "courses": [
+                    {
+                        "code": "BA101",
+                        "name": "Introduction to Business",
+                        "credits": 3,
+                        "instructor": {
+                            "name": {
+                                "first": "David",
+                                "last": "Wilson"
+                            },
+                            "email": "david.wilson@example.com",
+                            "office": {
+                                "building": "Business Building",
+                                "room": "102"
+                            }
+                        },
+                        "students": [
+                            {
+                                "id": "S002",
+                                "name": {
+                                    "first": "Bob",
+                                    "last": "Williams"
+                                },
+                                "grade": "A"
+                            },
+                            {
+                                "id": "S004",
+                                "name": {
+                                    "first": "Eva",
+                                    "last": "Brown"
+                                },
+                                "grade": "B+"
+                            }
+                        ]
+                    },
+                    {
+                        "code": "BA301",
+                        "name": "Strategic Management",
+                        "credits": 4,
+                        "instructor": {
+                            "name": {
+                                "first": "Sarah",
+                                "last": "Thomas"
+                            },
+                            "email": "sarah.thomas@example.com",
+                            "office": {
+                                "building": "Business Building",
+                                "room": "205"
+                            }
+                        },
+                        "students": [
+                            {
+                                "id": "S003",
+                                "name": {
+                                    "first": "Charlie",
+                                    "last": "Davis"
+                                },
+                                "grade": "A"
+                            },
+                            {
+                                "id": "S004",
+                                "name": {
+                                    "first": "Eva",
+                                    "last": "Brown"
+                                },
+                                "grade": "A-"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
