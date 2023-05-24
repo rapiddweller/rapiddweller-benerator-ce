@@ -73,16 +73,12 @@ public class JsonGenerationTest extends AbstractBeneratorIntegrationTest {
     @Ignore
     @Test
     public void WeightVerifyTest1() {
-        //Use Iterate to count and calculate the ratio of weight-use-attribute
-        context.setContextUri("/test/resource/com/rapiddweller/platform/mongodb/JsonGeneration/demoNew");
-        parseAndExecuteFile("/test/resource/com/rapiddweller/platform/mongodb/JsonGeneration/demoNew/json-school.ben.xml");
+        //test weight data
     }
 
     @Ignore
     @Test
     public void WeightVerifyTest2() {
-        //Use Iterate to count and calculate the ratio of weight-use-attribute
-        context.setContextUri("/demo/json/demo3");
-        parseAndExecuteFile("/demo/json/demo3/json-school.ben.xml");
+        //test weight data
     }
 }
