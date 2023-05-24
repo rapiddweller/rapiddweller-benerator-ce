@@ -52,7 +52,6 @@ import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.Converter;
-import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.model.data.AlternativeGroupDescriptor;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
@@ -147,8 +146,6 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   private static ComponentBuilder<?> createPartBuilder(
       ComponentDescriptor part, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
-    if (NullSafeComparator.equals(part.getDetailValue("visible"), false))
-      return null;
     var containerValue = part.getDetailValue("container");
     if (iterationMode &&  containerValue == null) {
       if (part.getTypeDescriptor() instanceof ComplexTypeDescriptor) {
