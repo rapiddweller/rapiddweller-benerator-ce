@@ -54,7 +54,6 @@ public class InstanceDescriptor extends FeatureDescriptor {
   public static final String COUNT = "count";
   public static final String NULL_QUOTA = "nullQuota";
   public static final String MODE = "mode";
-  public static final String VISIBLE = "visible";
 
 
   // attribute ---------------------------------------------------------------------------------------------------------
@@ -98,8 +97,6 @@ public class InstanceDescriptor extends FeatureDescriptor {
     addConfig(COUNT_DISTRIBUTION, String.class);
     addConfig(NULL_QUOTA, Double.class);
     addConfig(MODE, Mode.class);
-    addConfig(VISIBLE, Boolean.class);
-
   }
 
   // properties ------------------------------------------------------------------------------------------------------
