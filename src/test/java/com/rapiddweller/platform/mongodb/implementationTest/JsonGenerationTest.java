@@ -69,16 +69,13 @@ public class JsonGenerationTest extends AbstractBeneratorIntegrationTest {
         parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demo3/json-school.ben.xml");
         //check Benerator script and JSON file
     }
-
     @Ignore
     @Test
-    public void WeightVerifyTest1() {
-        //test weight data
-    }
-
-    @Ignore
-    @Test
-    public void WeightVerifyTest2() {
-        //test weight data
+    public void WeightCheckTest() {
+        //ON HOLD
+        //Generate People in JsonGeneration1Test, use iterate to count and check percentage
+//        context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/weightCheck");
+//        parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/weightCheck/weight-check.ben.xml");
+        //Please check Report on console
     }
 }

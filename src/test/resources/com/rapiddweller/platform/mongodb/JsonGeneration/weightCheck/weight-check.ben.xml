@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup>
+    <import domains="person, organization, address"/>
+    <import class="java.util.Date"/>
+
+    <memstore id="mem"/>
+
+    <comment>Generating People</comment>
+    <generate type="PEOPLE" count="1000"
+              consumer="mem">
+        <variable name="person"
+                  generator="new PersonGenerator{dataset='GB',locale='gb',minAgeYears='18', maxAgeYears='75',femaleQuota='0.5'}"/>
+        <variable name="addressGen"
+                  generator="new AddressGenerator{dataset='GB'}"/>
+        <variable name="randomDate"
+                  generator="new DateGenerator{max='2022-01-01',min='2000-01-01', distribution='random' }"/>
+        <variable name="startDateFromRandom"
+                  script="{new Date(randomDate.getTime()+1000*3600*24*365)}"/>
+        <attribute name="id" type="int"
+                   generator="IncrementGenerator"/>
+        <part name="name" count="1">
+            <attribute name="first" type="string"
+                       script="person.givenName"/>
+            <attribute name="last" type="string"
+                       script="person.familyName"/>
+        </part>
+        <attribute name="age" type="int"
+                   script="person.age"/>
+        <attribute name="gender" type="string"
+                   source="gender.wgt.csv" converter="new CaseConverter(false)"/>
+        <part name="contact" count="1">
+            <attribute name="email" type="string"
+                       script="person.email"/>
+            <attribute name="phone" type="string"
+                       script="{addressGen.officePhone.areaCode + '-' + addressGen.officePhone.localNumber}"/>
+        </part>
+        <part name="address" maxCount="2">
+            <attribute name="street" type="string"
+                       script="addressGen.street"/>
+            <attribute name="city" type="string"
+                       script="addressGen.city.name"/>
+            <attribute name="state" type="string"
+                       script="addressGen.state.name"/>
+            <attribute name="zipCode" type="string"
+                       script="addressGen.postalCode"/>
+            <attribute name="country" type="string"
+                       script="addressGen.country.displayName"/>
+        </part>
+        <part name="education" container="list" maxCount="3" minCount="1">
+            <part name="institution" source="institution.ent.csv"/>
+            <part name="degree" source="degree.ent.csv"/>
+            <attribute name="major" type="string"
+                       constant="Computer Science"/>
+            <attribute name="graduationYear" type="int"
+                       script="{randomDate.year+1900}"/>
+        </part>
+        <part name="skills" container="list" maxCount="5" minCount="2">
+            <attribute name="name" type="string" source="skill.wgt.csv"/>
+            <attribute name="level" type="string" source="level.wgt.csv"/>
+        </part>
+        <part name="employmentHistory" container="array" maxCount="5" minCount="1">
+            <part name="company">
+                <attribute name="name" type="string"
+                           generator="CompanyNameGenerator" dataset="GB" locale="gb_GB"/>
+                <attribute name="location" type="string"
+                           script="{addressGen.houseNumber+'-'+addressGen.street}"/>
+                <attribute name="industry" type="string"
+                           constant="Technology"/>
+            </part>
+            <attribute name="position" type="string"
+                       source="position.wgt.csv"/>
+            <attribute name="startDate" type="string"
+                       script="startDateFromRandom" converter="ToStringConverter"/>
+            <attribute name="endDate" type="string"
+                       script="{new Date(startDateFromRandom.getTime()+1000*3600*24*5)}" converter="ToStringConverter"/>
+        </part>
+    </generate>
+
+    <comment>Count and check gender.wgt.csv and skill.wgt.csv</comment>
+    <execute type="js">var femaleCount=0</execute>
+    <execute type="js">var maleCount=0</execute>
+    <execute type="js">var otherCount=0</execute>
+    <execute type="js">var java=0</execute>
+    <execute type="js">var csharp=0</execute>
+    <execute type="js">var js=0</execute>
+    <execute type="js">var python=0</execute>
+    <iterate type="PEOPLE" source="mem" consumer="ConsoleExporter">
+        <if test="PEOPLE.gender=='male'">
+            <then>
+                <execute type="js">maleCount=maleCount+1</execute>
+            </then>
+        </if>
+        <if test="PEOPLE.gender=='female'">
+            <then>
+                <execute type="js">femaleCount=femaleCount+1</execute>
+            </then>
+        </if>
+        <if test="PEOPLE.gender=='other'">
+            <then>
+                <execute type="js">otherCount=otherCount+1</execute>
+            </then>
+        </if>
+        <iterate type="skills" source="PEOPLE">
+            <if test="skills.name=='Java'">
+                <then>
+                    <execute type="js">java=java+1</execute>
+                </then>
+            </if>
+            <if test="skills.name=='C#'">
+                <then>
+                    <execute type="js">csharp=csharp+1</execute>
+                </then>
+            </if>
+            <if test="skills.name=='Javascript'">
+                <then>
+                    <execute type="js">js=js+1</execute>
+                </then>
+            </if>
+            <if test="skills.name=='Python'">
+                <then>
+                    <execute type="js">python=python+1</execute>
+                </then>
+            </if>
+        </iterate>
+    </iterate>
+    <comment>Report in console</comment>
+    <execute type="js">print(`REPORT\nPlease check the input and output to verify function of data.wgt.csv file`)</execute>
+    <execute type="js">print('--------------------------------------------------------')</execute>
+    <execute type="js">print('Test 1: gender.wgt.csv')</execute>
+    <execute type="js">print('Input: ')</execute>
+    <iterate type="gender" source="gender.ent.csv" consumer="ConsoleExporter">
+    </iterate>
+    <execute type="js">print('Output: ')</execute>
+    <execute type="js">var totalGender = maleCount + femaleCount + otherCount</execute>
+    <execute type="js">print(`Total male in user list: ${maleCount}, percentage: ${maleCount/totalGender}`)</execute>
+    <execute type="js">print(`Total female in user list: ${femaleCount}, percentage: ${femaleCount/totalGender}`)</execute>
+    <execute type="js">print(`Total other in user list: ${otherCount}, percentage: ${otherCount/totalGender}`)</execute>
+    <execute type="js">print('--------------------------------------------------------')</execute>
+    <execute type="js">print('Test 2: skill.wgt.csv')</execute>
+    <execute type="js">print('Input: ')</execute>
+    <iterate type="skill" source="skill.ent.csv" consumer="ConsoleExporter">
+    </iterate>
+    <execute type="js">print('Output: ')</execute>
+    <execute type="js">var totalSkill = java + csharp + js + python</execute>
+    <execute type="js">print(`Total java in skill list: ${java}, percentage: ${java/totalSkill}`)</execute>
+    <execute type="js">print(`Total c# in skill list: ${csharp}, percentage: ${csharp/totalSkill}`)</execute>
+    <execute type="js">print(`Total js in skill list: ${js}, percentage: ${js/totalSkill}`)</execute>
+    <execute type="js">print(`Total python in skill list: ${python}, percentage: ${python/totalSkill}`)</execute>
+    <execute type="js">print('--------------------------------------------------------')</execute>
+</setup>
