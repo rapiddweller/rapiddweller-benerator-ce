@@ -1,0 +1,16 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 http://benerator.de/schema/benerator-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <import domains="address" />
+    <generate type="numbers" count="100" consumer="ConsoleExporter">
+        <id name="id" type="int" generator="IncrementGenerator"/>
+        <variable name="address" generator="AddressGenerator" dataset="AU"/>
+        <attribute name="street" source="address.street"/>
+        <attribute name="city" source="address.city"/>
+        <attribute name="country" source="address.country"/>
+    </generate>
+
+</setup>
