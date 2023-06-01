@@ -103,6 +103,5 @@
                        converter="ToStringConverter"/>
         </part>
     </generate>
-    <iterate type="people3" source="mongo" consumer="ConsoleExporter,mem"/>
-    <generate type="people4" consumer="mongo"/>
+
 </setup>

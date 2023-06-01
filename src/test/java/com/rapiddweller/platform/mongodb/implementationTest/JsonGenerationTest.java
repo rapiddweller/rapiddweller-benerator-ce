@@ -43,28 +43,25 @@ public class JsonGenerationTest extends AbstractBeneratorIntegrationTest {
     private static final Logger logger = LoggerFactory.getLogger(JsonGenerationTest.class);
 
     //More intense JSON Structure Test
-//  @Ignore
     @Test
     public void JsonGeneration1Test() {
-        //People example with 4 nested layer of object/array
+        //People example with 4 nested layer of object/array and write to MongoDB server
         context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demo1");
         parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demo1/json-people.ben.xml");
         //check Benerator script and JSON file
     }
 
-    //  @Ignore
     @Test
     public void JsonGeneration2Test() {
-        //Store example with 6 nested layer of object/array
+        //Store example with 6 nested layer of object/array and write to MongoDB server
         context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demo2");
         parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demo2/json-product.ben.xml");
         //check Benerator script and JSON file
     }
 
-    //  @Ignore
     @Test
     public void JsonGeneration3Test() {
-        //School example with 6 nested layer of object/array
+        //School example with 6 nested layer of object/array and write to MongoDB server
         context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demo3");
         parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demo3/json-school.ben.xml");
         //check Benerator script and JSON file
