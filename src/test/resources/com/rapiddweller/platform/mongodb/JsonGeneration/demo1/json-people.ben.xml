@@ -14,7 +14,7 @@
 
     <comment>Generate People</comment>
     <!--    Use consumer="new JsonFileExporter(<Path>Ex:"src/test/resources/com/rapiddweller/platform/mongodb/JsonGeneration/demo1/people-json.ben.xml")" to export to JSON-->
-    <generate type="people5" count="{counts}" consumer="ConsoleExporter,mongo">
+    <generate type="people" count="{counts}" consumer="ConsoleExporter,mongo">
         <variable name="person"
                   generator="new PersonGenerator{dataset='GB',locale='gb',minAgeYears='18', maxAgeYears='75',femaleQuota='0.5'}"/>
         <variable name="addressGen"
@@ -104,5 +104,5 @@
         </part>
     </generate>
     <iterate type="people3" source="mongo" consumer="ConsoleExporter,mem"/>
-    <generate type="people4" source="mem" consumer="mongo"/>
+    <generate type="people4" consumer="mongo"/>
 </setup>
