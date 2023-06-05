@@ -389,7 +389,7 @@ central_america=MX,BS
 america=north_america,central_america,south_america
 south_america=AR,BR,EC
 asia=JP,IN,ID,KR,KP,MY,SG,TW,TH
-australia=AU,NZ
+oceania=AU,NZ
 ```
 
 ## Chaining generators
