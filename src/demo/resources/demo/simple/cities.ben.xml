@@ -7,7 +7,7 @@
     <import domains="address" />
     <generate type="numbers" count="100" consumer="ConsoleExporter">
         <id name="id" type="int" generator="IncrementGenerator"/>
-        <variable name="address" generator="AddressGenerator" dataset="CA"/>
+        <variable name="address" generator="AddressGenerator" dataset="iberia"/>
         <attribute name="street" source="address.street"/>
         <attribute name="city" source="address.city"/>
         <attribute name="country" source="address.country"/>
