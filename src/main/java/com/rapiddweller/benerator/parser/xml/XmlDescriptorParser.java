@@ -114,7 +114,7 @@ public class XmlDescriptorParser {
   }
 
   public static Object resolveScript(String name, String value, Context context) {
-    if (value == null || "script".equals(name)) {
+    if (value == null || "script".equals(name) || "dynamicSource".equals(name)) {
       return value;
     } else {
       return ScriptUtil.evaluate(value, context);
