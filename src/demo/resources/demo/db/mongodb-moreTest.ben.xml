@@ -1,0 +1,113 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://benerator.de/schema/benerator-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <import platforms="db" domains="address,person"/>
+    <!--    H2 DB-->
+    <database id="dbH2"
+              url="{dbUrl}"
+              driver="{dbDriver}"
+              schema="{dbSchema}"
+              user="{dbUser}"
+    />
+    <execute type="sql" target="db" uri="script/h2.initschema.sql"/>
+    <!--    Postgres DB-->
+    <database id="databasePostgres" environment="conf" system="postgres"/>
+    <execute type="sql" target="database">
+        DROP TABLE IF EXISTS "db_postgres_types";
+        CREATE TABLE IF NOT EXISTS "db_postgres_types"
+        (
+        id          INT PRIMARY KEY,
+        "boolean"   BOOLEAN NOT NULL,
+        "char"      CHAR(1) NOT NULL,
+        "date"      DATE NOT NULL DEFAULT CURRENT_DATE,
+        "double"    DOUBLE PRECISION NOT NULL,
+        "float"     REAL NOT NULL,
+        "int"       INT NOT NULL,
+        "long"      BIGINT NOT NULL,
+        "short"     SMALLINT NOT NULL,
+        "string"    VARCHAR(30) NOT NULL,
+        "timestamp" TIMESTAMP NOT NULL DEFAULT now(),
+        "text"      TEXT NOT NULL,
+        "binary"    BYTEA NOT NULL,
+        "json"      JSON NOT NULL,
+        "jsonb"     JSONB NOT NULL,
+        "genom"     GEOMETRY NOT NULL
+        );
+    </execute>
+    <generate type="db_postgres_types" count="10" consumer="databasePostgres">
+        <attribute name="id" type="int" min="1" max="1000000"/>
+        <attribute name="boolean" type="boolean"/>
+        <attribute name="char" type="string"/>
+        <attribute name="double" type="double" min="0" max="100"/>
+        <attribute name="float" type="float" min="0" max="100"/>
+        <attribute name="int" type="int" min="0" max="100"/>
+        <attribute name="long" type="long" min="0" max="100"/>
+        <attribute name="short" type="short" min="0" max="100"/>
+        <attribute name="string" type="string" pattern="[A-Z]{5}"/>
+        <attribute name="text" type="string" pattern="[A-Z]{5}"/>
+        <attribute name="binary" type="binary"/>
+        <attribute name="json" constant='{{"test": "321"}}'/>
+        <attribute name="jsonb" constant='{{"test": "321"}}'/>
+        <attribute name="genom" constant="polygon((1 1, 1 2, 2 2, 2 1, 1 1))"/>
+    </generate>
+    <!--    Mongo DB-->
+    <mongodb id="mongo" environment="environment" system="mongodb"/>
+
+    <setting name="counts" value="100"/>
+
+    <generate type="testben2" count="{counts}" consumer="mongo">
+        <id name="_id" type="object" generator="MongoDBObjectIdGenerator"/>
+        <attribute name="user_id" type="int" min="1" max="9999"/>
+        <attribute name="amount" type="double" generator="new RandomDoubleGenerator(10, 5000, 2)"/>
+        <attribute name="product" type="string" values="'Shirt', 'Pants', 'Shoes', 'Socks'"/>
+        <attribute name="country" type="string" generator="CountryGenerator" />
+        <variable name="person" generator="PersonGenerator"/>
+        <variable name="address" generator="AddressGenerator" />
+        <part name='customer'>
+            <attribute name="salutation" script="person.salutation"/>
+            <attribute name="first_name" script="person.givenName"/>
+            <attribute name="last_name" script="person.familyName"/>
+            <part name="house">
+                <attribute name="street" script="address.street"/>
+                <attribute name="houseNumber" script="address.houseNumber"/>
+                <attribute name="postalCode" script="address.postalCode"/>
+                <attribute name="city" script="address.city"/>
+                <attribute name="state" script="address.state"/>
+                <attribute name="country" script="address.country"/>
+                <part name="fromDBH2Type">
+                    <attribute name="street" script="address.street"/>
+                </part>
+                <part name="fromDBPostgresType">
+                    
+                </part>
+            </part>
+        </part>
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="testben2" source="mongo" consumer="mongo.inserter('insertedtable'),ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="testben2.counter != counts">
+        <echo lang="ftl">Wrong amount of data: ${testben2.counter} elements</echo>
+    </if>
+    <if test="testben2.counter == counts">
+        <echo lang="ftl">Success generated ${testben2.counter} data</echo>
+    </if>
+
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="insertedtable" source="mongo" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="insertedtable.counter != counts">
+        <echo lang="ftl">Wrong amount of data: ${insertedtable.counter} elements</echo>
+    </if>
+    <if test="insertedtable.counter == counts">
+        <echo lang="ftl">Success generated ${insertedtable.counter} data</echo>
+    </if>
+</setup>
