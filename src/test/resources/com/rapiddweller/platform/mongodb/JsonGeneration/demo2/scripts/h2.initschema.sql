@@ -1,8 +1,8 @@
-CREATE SCHEMA schema1;
+CREATE SCHEMA schemaH2;
 
-CREATE TABLE schema1.table1
+CREATE TABLE schemaH2.tableH2
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
+    id          INT PRIMARY KEY,
     string_value        varchar(30),
     long_value          BIGINT,
     bool_value          BOOLEAN,

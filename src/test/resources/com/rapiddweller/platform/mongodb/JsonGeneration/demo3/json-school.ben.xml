@@ -6,12 +6,12 @@
     <import domains="person,organization,address" platforms="xml"/>
 
     <mongodb id="mongo" environment="environment" system="mongodb"/>
-    <memstore id="mem"/>
+
     <pre-parse-generate target="mongo"/>
 
     <comment>Generating School JSON</comment>
     <!--    Use consumer="new JsonFileExporter(<Path>Ex:"src/test/resources/com/rapiddweller/platform/mongodb/JsonGeneration/demo3/school-result.json")" to export to JSON-->
-    <generate type="school" count="1" consumer="ConsoleExporter,mongo">
+    <generate type="school" count="10" consumer="ConsoleExporter,mongo">
         <!--Declare variable use for attribute-->
         <variable name="address"
                   generator="new AddressGenerator{dataset='DE'}"/>
@@ -84,6 +84,336 @@
                     <attribute name="dateData" type="date" generator="DateGenerator"/>
                 </part>
             </part>
+        </part>
+        <part name="extend1">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend2">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend3">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend4">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend5">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend6">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend7">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend8">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend9">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend10">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend11">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend12">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend13">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend14">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend15">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend16">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend17">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend18">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend19">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend20">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend21">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend22">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend23">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend24">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend25">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend26">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend27">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend28">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend29">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
+        </part>
+        <part name="extend30">
+            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+            <attribute name="longData" type="long" constant="123456789.987654321"/>
+            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+            <attribute name="objectData1" type="object" constant="123456789"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+            <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+            <attribute name="booleanData" type="boolean" constant="true"/>
+            <attribute name="dateData" type="date" generator="DateGenerator"/>
         </part>
     </generate>
 </setup>

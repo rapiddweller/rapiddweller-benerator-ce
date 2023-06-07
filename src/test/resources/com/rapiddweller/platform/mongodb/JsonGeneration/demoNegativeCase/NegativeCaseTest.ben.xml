@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd">
+
+    <import domains="person,organization,address"/>
+    <!--    Prepare MongoDB-->
+    <mongodb id="mongo" environment="environment" system="mongodb"/>
+    <memstore id="mem"/>
+    <pre-parse-generate target="mongo"/>
+
+    <generate type="emptyCollection" count="1" consumer="mongo">
+    </generate>
+    <!--    Empty Collection test-->
+    <iterate type="emptyCollection" source="mongo" consumer="ConsoleExporter">
+    </iterate>
+    <!--    Non-exist Collection Test-->
+    <iterate type="nonExistCollection" source="mongo" consumer="ConsoleExporter">
+    </iterate>
+</setup>

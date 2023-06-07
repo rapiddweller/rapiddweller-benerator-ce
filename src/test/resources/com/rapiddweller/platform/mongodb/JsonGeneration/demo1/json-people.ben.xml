@@ -10,7 +10,7 @@
     <memstore id="mem"/>
     <pre-parse-generate target="mongo"/>
 
-    <setting name="counts" value="10"/>
+    <setting name="counts" value="100"/>
 
     <comment>Generate People</comment>
     <!--    Use consumer="new JsonFileExporter(<Path>Ex:"src/test/resources/com/rapiddweller/platform/mongodb/JsonGeneration/demo1/people-json.ben.xml")" to export to JSON-->

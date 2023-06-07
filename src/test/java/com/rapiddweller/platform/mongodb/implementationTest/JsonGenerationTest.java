@@ -45,7 +45,7 @@ public class JsonGenerationTest extends AbstractBeneratorIntegrationTest {
     //More intense JSON Structure Test
     @Test
     public void JsonGeneration1Test() {
-        //People example with 4 nested layer of object/array and write to MongoDB server
+        //People example with 4 nested layer of object/array and write to MongoDB server, use lots of ent / wgt file and also check if percentage was right in WeightCheckTest(HOLD in CE edition)
         context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demo1");
         parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demo1/json-people.ben.xml");
         //check Benerator script and JSON file
@@ -53,7 +53,7 @@ public class JsonGenerationTest extends AbstractBeneratorIntegrationTest {
 
     @Test
     public void JsonGeneration2Test() {
-        //Store example with 6 nested layer of object/array and write to MongoDB server
+        //Store example with 6 nested layer of object/array, using some selector from H2/Postgres and write to MongoDB server, use iterate to check number collection, and try to iterate to some consumers: NoConsumer / LoggerConsumer / CSVEntityExporter / SQLEntityExporter (HOLD)
         context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demo2");
         parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demo2/json-product.ben.xml");
         //check Benerator script and JSON file
@@ -61,7 +61,7 @@ public class JsonGenerationTest extends AbstractBeneratorIntegrationTest {
 
     @Test
     public void JsonGeneration3Test() {
-        //School example with 6 nested layer of object/array and write to MongoDB server
+        //School example with 6 nested layer and wide structure of object/array and write to MongoDB server
         context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demo3");
         parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demo3/json-school.ben.xml");
         //check Benerator script and JSON file
@@ -74,5 +74,20 @@ public class JsonGenerationTest extends AbstractBeneratorIntegrationTest {
 //        context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/weightCheck");
 //        parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/weightCheck/weight-check.ben.xml");
         //Please check Report on console
+    }
+    @Test
+    public void NegativeCaseTest() {
+        //Negative cases test: Empty and Non-Exist Collection
+        context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demoNegativeCase");
+        parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demoNegativeCase/NegativeCaseTest.ben.xml");
+        //check Benerator script and JSON file
+    }
+    @Test
+    public void SeparateBeneratorTest() {
+        //Separate Benerator Generate and Iterate Test
+        context.setContextUri("/com/rapiddweller/platform/mongodb/JsonGeneration/demoSeparateBenRun");
+        parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demoSeparateBenRun/JsonGenTest.ben.xml");
+        parseAndExecuteFile("/com/rapiddweller/platform/mongodb/JsonGeneration/demoSeparateBenRun/JsonIterateTest.ben.xml");
+        //check Benerator script and JSON file
     }
 }
