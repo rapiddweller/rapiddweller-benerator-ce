@@ -69,7 +69,11 @@ public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
       if (componentDescriptor != null) {
         TypeDescriptor componentType = componentDescriptor.getTypeDescriptor();
         Object componentValue = entry.getValue();
-        if (componentType instanceof SimpleTypeDescriptor) {
+        // Ignore CurrentProduct converter when iterateMode has container=list
+        if (componentDescriptor.getContainer() != null) {
+          components.put(componentName, null);
+        }
+        else if (componentType instanceof SimpleTypeDescriptor) {
           Object javaValue = DescriptorUtil.convertType(componentValue, (SimpleTypeDescriptor) componentType);
           components.put(componentName, javaValue);
         } else if (componentValue instanceof Entity) {
