@@ -49,6 +49,8 @@ import java.util.Set;
 public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHolder { // TODO don't implement VariableHolder
 
   public static final String __SIMPLE_CONTENT = "__SIMPLE_CONTENT";
+  public static final String DYNAMIC_SOURCE = "dynamicSource";
+
 
   private NamedValueList<InstanceDescriptor> parts; // TODO use only ComponentDescriptors
 
@@ -166,6 +168,10 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
     parts.add(variable.getName(), variable);
   }
 
+  public String getDynamicSource() {
+    return (String) getDetailValue(DYNAMIC_SOURCE);
+  }
+
   // construction helper methods -------------------------------------------------------------------------------------
 
   public ComplexTypeDescriptor withComponent(ComponentDescriptor componentDescriptor) {
@@ -176,6 +182,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
   @Override
   protected void init() {
     super.init();
+    addConfig(DYNAMIC_SOURCE, String.class);
     this.parts = new NamedValueList<>(NamedValueList.INSENSITIVE);
   }
 
