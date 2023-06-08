@@ -28,6 +28,8 @@ package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 import org.graalvm.polyglot.Value;
 
 
@@ -78,6 +80,11 @@ public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
       return value.asDate();
     } else if (value.isNativePointer()) {
       return value.asNativePointer();
+    } else if (value.hasMembers()) {
+      // Convert the value to a java.util.Map
+      Entity result = new Entity((ComplexTypeDescriptor) null);
+      value.getMemberKeys().forEach(key -> result.setComponent(key, value2JavaConverter(value.getMember(key))));
+      return result;
     } else {
       return null;
     }
