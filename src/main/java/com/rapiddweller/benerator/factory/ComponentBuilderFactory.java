@@ -378,7 +378,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       return null;
     }
     String container = instance.getContainer();
-    if (container == null) {
+    if (container == null || container.equals("map")) {
       long defaultMinCount = 1;
       Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, defaultMinCount, 1L, true, context);
       if (longCountGenerator instanceof ConstantGenerator

@@ -39,6 +39,7 @@ import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.TypedEntitySourceAdapter;
+import com.rapiddweller.benerator.primitive.DynamicSourceGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.EntityPartSource;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
@@ -49,18 +50,16 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthRowTypeDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthUtil;
+import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.DataFileUtil;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.model.data.Uniqueness;
+import com.rapiddweller.model.data.*;
 import com.rapiddweller.benerator.FileFormat;
 import com.rapiddweller.benerator.FileFormats;
 import com.rapiddweller.platform.csv.CSVEntitySourceProvider;
 import com.rapiddweller.platform.dbunit.DbUnitEntitySource;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
+import com.rapiddweller.platform.xls.PlatformDescriptor;
 import com.rapiddweller.platform.xls.XLSEntitySourceProvider;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -85,6 +84,30 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   @Override
+  protected Generator<?> createExplicitGenerator(ComplexTypeDescriptor type, Uniqueness uniqueness, BeneratorContext context) {
+    Generator<?> generator = DescriptorUtil.getGeneratorByName(type, context);
+    if (generator == null && type.getDynamicSource() != null) {
+      generator = createDynamicSourceGenerator(type, uniqueness, context);
+    }
+    if (generator == null && type.getSource() != null) {
+      generator = createSourceGenerator(type, uniqueness, context);
+    }
+    if (generator == null) {
+      generator = createScriptGenerator(type);
+    }
+    return generator;
+  }
+
+  protected Generator<?> createDynamicSourceGenerator(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    String dynamicSourceText = descriptor.getDynamicSource();
+    if (dynamicSourceText != null) {
+      var dynamicSourceGenerator = FactoryUtil.createDynamicSourceGenerator(dynamicSourceText, uniqueness, context, descriptor, this);
+      return WrapperFactory.applyConverter(dynamicSourceGenerator, new ComponentTypeConverter(descriptor));
+    }
+    return null;
+  }
+
+  @Override
   protected Generator<?> applyComponentBuilders(Generator<?> source, boolean iterationMode, ComplexTypeDescriptor descriptor,
                                                 String instanceName, Uniqueness uniqueness, BeneratorContext context) {
     source = createMutatingEntityGenerator(instanceName, descriptor, uniqueness, context, source, iterationMode);
@@ -99,6 +122,19 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     if (sourceSpec == null) {
       return null;
     }
+    return createSourceFromSpec(sourceSpec,descriptor,uniqueness,context);
+  }
+
+  public Generator<Entity> resolveDynamicSourceGenerator(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    // if no sourceObject is specified, there's nothing to do
+    String sourceSpec = descriptor.getDynamicSource();
+    if (sourceSpec == null) {
+      return null;
+    }
+    return createSourceFromSpec(sourceSpec, descriptor,uniqueness,context);
+  }
+
+  private Generator<Entity> createSourceFromSpec(String sourceSpec, ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
     Object sourceObject;
     if (ScriptUtil.isScript(sourceSpec)) {
       Object tmp = ScriptUtil.evaluate(sourceSpec, context);
@@ -149,7 +185,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
             }
           } catch (Exception e) {
             throw BeneratorExceptionFactory.getInstance().internalError(
-                "Error resolving source: " + sourceSpec, e);
+                    "Error resolving source: " + sourceSpec, e);
           }
         }
       }
@@ -157,7 +193,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
 
     if (generator == null) {
       throw BeneratorFactory.getInstance().createExceptionFactory().syntaxErrorForText(
-          "source='" + sourceSpec + "'", "Unable to resolve source");
+              "source='" + sourceSpec + "'", "Unable to resolve source");
     }
     if (generator.getGeneratedType() != Entity.class) {
       generator = new SimpleTypeEntityGenerator(generator, descriptor);
