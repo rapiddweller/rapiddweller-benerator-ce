@@ -5,17 +5,24 @@
         defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
 
     <import domains="address" />
+<!--    <generate type="numbers" count="100" consumer="ConsoleExporter">-->
+<!--        <id name="id" type="int" generator="IncrementGenerator"/>-->
+<!--        <attribute name="iberia" generator="AddressGenerator" dataset="iberia"/>-->
+<!--        <attribute name="MC" generator="AddressGenerator" dataset="MC"/>-->
+<!--        <attribute name="oceania" generator="AddressGenerator" dataset="oceania"/>-->
+<!--        <attribute name="AT" generator="AddressGenerator" dataset="AT"/>-->
+<!--        <attribute name="LI" generator="AddressGenerator" dataset="LI"/>-->
+<!--        <attribute name="TH" generator="AddressGenerator" dataset="TH"/>-->
+<!--        <attribute name="north_america" generator="AddressGenerator" dataset="north_america"/>-->
+<!--        <attribute name="VE" generator="AddressGenerator" dataset="VE"/>-->
+<!--        <attribute name="VN" generator="AddressGenerator" dataset="VN"/>-->
+<!--        <attribute name="FR" generator="AddressGenerator" dataset="FR"/>-->
+<!--    </generate>-->
+
     <generate type="numbers" count="100" consumer="ConsoleExporter">
         <id name="id" type="int" generator="IncrementGenerator"/>
-        <attribute name="iberia" generator="AddressGenerator" dataset="iberia"/>
-        <attribute name="MC" generator="AddressGenerator" dataset="MC"/>
-        <attribute name="oceania" generator="AddressGenerator" dataset="oceania"/>
-        <attribute name="AT" generator="AddressGenerator" dataset="AT"/>
-        <attribute name="LI" generator="AddressGenerator" dataset="LI"/>
-        <attribute name="TH" generator="AddressGenerator" dataset="TH"/>
-        <attribute name="north_america" generator="AddressGenerator" dataset="north_america"/>
-        <attribute name="VE" generator="AddressGenerator" dataset="VE"/>
-        <attribute name="VN" generator="AddressGenerator" dataset="VN"/>
+        <variable name="address" generator="AddressGenerator" dataset="PT"/>
+        <attribute name="street" script="address.street" />
     </generate>
 
 </setup>
