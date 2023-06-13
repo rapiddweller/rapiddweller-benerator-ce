@@ -2,10 +2,10 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://www.benerator.de/schema/3.0.0"
         xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 http://benerator.de/schema/benerator-3.0.0.xsd"
-        defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator=";">
 
     <import domains="address" />
-    <generate type="numbers" count="100" consumer="ConsoleExporter">
+    <generate type="numbers" count="1" consumer="ConsoleExporter">
         <id name="id" type="int" generator="IncrementGenerator"/>
         <attribute name="western_europe" generator="AddressGenerator" dataset="western_europe"/>
         <attribute name="MC" generator="AddressGenerator" dataset="MC"/>
@@ -16,6 +16,16 @@
         <attribute name="north_america" generator="AddressGenerator" dataset="north_america"/>
         <attribute name="VE" generator="AddressGenerator" dataset="VE"/>
         <attribute name="VN" generator="AddressGenerator" dataset="VN"/>
+    </generate>
+
+<!--    generate city names for the specified regions-->
+    <echo message="north american cities:"/>
+
+    <generate type="city" consumer="ConsoleExporter" count="10">
+        <id name="id" type="int" generator="IncrementGenerator"/>
+        <attribute name="name" distribution="random" unique="true"
+                   source="/com/rapiddweller/benerator/csv/city_{0}.csv" encoding="UTF-8"
+                   dataset="america" nesting="com/rapiddweller/benerator/csv/area"/>
     </generate>
 
 </setup>

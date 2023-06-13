@@ -150,8 +150,13 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
     if (samples.isEmpty()) {
       throw new InvalidGeneratorSetupException("No samples defined in " + this);
     } else {
-      indexGenerator = distribution.createNumberGenerator(Integer.class, 0, samples.size() - 1, 1, unique);
-      indexGenerator.init(context);
+      if(distribution != null){
+        indexGenerator = distribution.createNumberGenerator(Integer.class, 0, samples.size() - 1, 1, unique);
+        indexGenerator.init(context);
+      } else {
+        indexGenerator = SequenceManager.RANDOM_SEQUENCE.createNumberGenerator(Integer.class, 0, samples.size() - 1, 1, unique);
+        indexGenerator.init(context);
+      }
     }
     super.init(context);
   }
