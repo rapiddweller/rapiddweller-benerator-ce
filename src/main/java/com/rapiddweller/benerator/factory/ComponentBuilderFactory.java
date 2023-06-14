@@ -29,15 +29,7 @@ package com.rapiddweller.benerator.factory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.StorageSystem;
-import com.rapiddweller.benerator.composite.AlternativeComponentBuilder;
-import com.rapiddweller.benerator.composite.ArrayElementBuilder;
-import com.rapiddweller.benerator.composite.AttributeProcessor;
-import com.rapiddweller.benerator.composite.ComponentBuilder;
-import com.rapiddweller.benerator.composite.ConditionalComponentBuilder;
-import com.rapiddweller.benerator.composite.GenerationStep;
-import com.rapiddweller.benerator.composite.PartModifier;
-import com.rapiddweller.benerator.composite.PlainEntityComponentBuilder;
-import com.rapiddweller.benerator.composite.SimplifyingSingleSourceArrayGenerator;
+import com.rapiddweller.benerator.composite.*;
 import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
@@ -45,25 +37,11 @@ import com.rapiddweller.benerator.distribution.sequence.ExpandSequence;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
-import com.rapiddweller.benerator.wrapper.AsIntegerGeneratorWrapper;
-import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
-import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
-import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.benerator.wrapper.*;
+import com.rapiddweller.benerator.wrapper.ItemListGenerator;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.model.data.AlternativeGroupDescriptor;
-import com.rapiddweller.model.data.ArrayElementDescriptor;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.ComponentDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.IdDescriptor;
-import com.rapiddweller.model.data.PartDescriptor;
-import com.rapiddweller.model.data.ReferenceDescriptor;
-import com.rapiddweller.model.data.SimpleTypeDescriptor;
-import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.model.data.Uniqueness;
+import com.rapiddweller.model.data.*;
 import com.rapiddweller.common.Expression;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -110,6 +88,10 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       result = createReferenceBuilder((ReferenceDescriptor) descriptor, context);
     } else if (descriptor instanceof IdDescriptor) {
       result = createIdBuilder((IdDescriptor) descriptor, ownerUniqueness, context);
+    } else if (descriptor instanceof ItemElementDescriptor) {
+      result = createItemElementBuilder(descriptor, ownerUniqueness, context);
+    } else if (descriptor instanceof ItemListDescriptor) {
+      result = createItemListBuilder(descriptor, ownerUniqueness, context);
     } else {
       throw BeneratorExceptionFactory.getInstance().configurationError(
           "Not a supported element: " + descriptor.getClass());
@@ -406,4 +388,17 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     }
   }
 
+  private static ComponentBuilder<?> createItemListBuilder(
+          ComponentDescriptor list, Uniqueness ownerUniqueness, BeneratorContext context) {
+    Generator<?> generator = createSingleInstanceGenerator(list, ownerUniqueness, context);
+    // wrap product within array list
+    generator = new ItemListGenerator(generator);
+    return builderFromGenerator(generator, list, context);
+  }
+
+  private static ComponentBuilder<?> createItemElementBuilder(
+          ComponentDescriptor list, Uniqueness ownerUniqueness, BeneratorContext context) {
+    Generator<?> generator = createSingleInstanceGenerator(list, ownerUniqueness, context);
+    return builderFromGenerator(generator, list, context);
+  }
 }

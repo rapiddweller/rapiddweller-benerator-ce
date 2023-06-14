@@ -89,6 +89,8 @@ public class DescriptorConstants {
   public static final String EL_PART = "part";
   public static final String EL_ATTRIBUTE = "attribute";
   public static final String EL_WAIT = "wait";
+  public static final String EL_ITEM = "item";
+  public static final String EL_LIST = "list";
 
   public static final String EL_TRANSCODING_TASK = "transcodingTask";
   public static final String EL_TRANSCODE = "transcode";

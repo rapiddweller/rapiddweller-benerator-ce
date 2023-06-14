@@ -28,12 +28,7 @@ package com.rapiddweller.benerator.parser;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.benerator.parser.xml.AttributeParser;
-import com.rapiddweller.benerator.parser.xml.IdParser;
-import com.rapiddweller.benerator.parser.xml.PartParser;
-import com.rapiddweller.benerator.parser.xml.ReferenceParser;
-import com.rapiddweller.benerator.parser.xml.SimpleTypeArrayElementParser;
-import com.rapiddweller.benerator.parser.xml.VariableParser;
+import com.rapiddweller.benerator.parser.xml.*;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
@@ -70,6 +65,7 @@ public class ModelParser {
   private final IdParser idParser;
   private final ReferenceParser referenceParser;
   private final SimpleTypeArrayElementParser simpleTypeArrayElementParser;
+  private final ItemListParser itemListParser;
 
   public ModelParser(BeneratorContext context, boolean nameRequired) {
     this.context = context;
@@ -79,6 +75,7 @@ public class ModelParser {
     this.idParser = new IdParser(context);
     this.referenceParser = new ReferenceParser(context);
     this.simpleTypeArrayElementParser = new SimpleTypeArrayElementParser(context);
+    this.itemListParser = new ItemListParser(this);
   }
 
   public BeneratorContext getContext() {
@@ -87,6 +84,10 @@ public class ModelParser {
 
   public PartParser getPartParser() {
     return partParser;
+  }
+
+  public ItemListParser getItemListParser() {
+    return itemListParser;
   }
 
   public static boolean isSimpleTypeComponent(String elementName) {

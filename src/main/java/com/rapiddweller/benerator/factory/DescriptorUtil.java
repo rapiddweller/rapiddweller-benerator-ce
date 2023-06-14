@@ -55,14 +55,7 @@ import com.rapiddweller.common.validator.AndValidator;
 import com.rapiddweller.common.validator.bean.BeanConstraintValidator;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
-import com.rapiddweller.model.data.ArrayTypeDescriptor;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.ComponentDescriptor;
-import com.rapiddweller.model.data.IdDescriptor;
-import com.rapiddweller.model.data.InstanceDescriptor;
-import com.rapiddweller.model.data.SimpleTypeDescriptor;
-import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.model.data.Uniqueness;
+import com.rapiddweller.model.data.*;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.common.Expression;
@@ -80,9 +73,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.COMPONENT_TYPES;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VALUE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VARIABLE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.MAX_LENGTH;
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.PATTERN;
 
@@ -479,6 +470,8 @@ public class DescriptorUtil {
         modelParser.getPartParser().parseComponentGeneration(child, (ComplexTypeDescriptor) type);
       } else if (EL_VALUE.equals(childType)) {
         modelParser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, valueCount++);
+      } else if (EL_LIST.equals(childType)) {
+        modelParser.getItemListParser().parse(child, (ComplexTypeDescriptor) type);
       }
     }
   }

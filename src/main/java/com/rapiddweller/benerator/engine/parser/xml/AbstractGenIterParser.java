@@ -281,6 +281,8 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
         handledMembers.add(instanceDescriptor.getName().toLowerCase());
       } else if (EL_VALUE.equals(childName)) {
         instanceDescriptor = modelParser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
+      } else if (EL_LIST.equals(childName)) {
+        instanceDescriptor = modelParser.getItemListParser().parse(child, (ComplexTypeDescriptor) type);
       }
 
       // ...handle non-member/variable child elements
