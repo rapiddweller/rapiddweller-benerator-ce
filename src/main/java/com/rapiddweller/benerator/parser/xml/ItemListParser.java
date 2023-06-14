@@ -30,7 +30,6 @@ public class ItemListParser extends AbstractComponentParser {
         String localTypeName = owner.getName() + "." + listName;
         result = new ItemListDescriptor(listName, descriptorProvider,
                 new ComplexTypeDescriptor(localTypeName, descriptorProvider, (ComplexTypeDescriptor) null));
-//        mapInstanceDetails(element, true, result);
 
         if (owner != null) {
             ComponentDescriptor parentComponent = owner.getComponent(result.getName());
@@ -57,7 +56,6 @@ public class ItemListParser extends AbstractComponentParser {
     }
 
     private void parseItem(Element element, ComplexTypeDescriptor owner) {
-
         for (Element childElement : XMLUtil.getChildElements(element)) {
             String childElementName = XMLUtil.localName(childElement);
             if (EL_PART.equals(childElementName)) {
