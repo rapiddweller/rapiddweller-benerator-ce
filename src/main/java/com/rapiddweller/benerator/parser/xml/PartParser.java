@@ -17,7 +17,10 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_PART;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
 
 /**
  * Parses &lt;part&gt; elements.<br/><br/>

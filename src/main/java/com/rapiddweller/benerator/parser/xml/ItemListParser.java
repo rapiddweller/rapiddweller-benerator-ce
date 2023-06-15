@@ -1,19 +1,21 @@
 package com.rapiddweller.benerator.parser.xml;
 
-import com.rapiddweller.benerator.BeneratorErrorIds;
-import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
-import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.common.xml.XMLUtil;
-import com.rapiddweller.model.data.*;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.ItemElementDescriptor;
+import com.rapiddweller.model.data.ItemListDescriptor;
+import com.rapiddweller.model.data.TypeDescriptor;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ITEM;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_LIST;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_PART;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
 
 public class ItemListParser extends AbstractComponentParser {
 
