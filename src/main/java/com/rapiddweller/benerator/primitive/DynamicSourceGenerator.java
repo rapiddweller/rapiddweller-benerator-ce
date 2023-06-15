@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2023 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -61,12 +61,6 @@ import com.rapiddweller.script.DatabeneScriptParser;
 
 import java.text.ParseException;
 
-/**
- * Creates {@link Object}s based on a Script.<br/><br/>
- * Created: 29.01.2008 17:19:24
- * @author Volker Bergmann
- * @since 0.4.0
- */
 public class DynamicSourceGenerator extends ThreadSafeGenerator<Entity> {
 
   private final Script script;
