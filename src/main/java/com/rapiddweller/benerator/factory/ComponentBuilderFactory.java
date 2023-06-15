@@ -60,6 +60,8 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.IdDescriptor;
+import com.rapiddweller.model.data.ItemElementDescriptor;
+import com.rapiddweller.model.data.ItemListDescriptor;
 import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;

@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.xml.AttributeParser;
 import com.rapiddweller.benerator.parser.xml.IdParser;
+import com.rapiddweller.benerator.parser.xml.ItemListParser;
 import com.rapiddweller.benerator.parser.xml.PartParser;
 import com.rapiddweller.benerator.parser.xml.ReferenceParser;
 import com.rapiddweller.benerator.parser.xml.SimpleTypeArrayElementParser;

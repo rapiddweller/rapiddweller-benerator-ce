@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_LIST;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_PART;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
 

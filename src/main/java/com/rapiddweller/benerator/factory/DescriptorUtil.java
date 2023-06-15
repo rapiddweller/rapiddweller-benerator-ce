@@ -82,6 +82,7 @@ import java.util.Set;
 
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.COMPONENT_TYPES;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_LIST;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VALUE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VARIABLE;
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.MAX_LENGTH;
