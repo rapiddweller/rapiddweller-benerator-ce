@@ -64,7 +64,7 @@ public class PartParser extends AbstractComponentParser {
       }
     }
     mapInstanceDetails(element, true, result);
-    if (result.getLocalType().getSource() == null) {
+    if (result.getLocalType().getSource() == null && (((ComplexTypeDescriptor) result.getLocalType()).getDynamicSource() == null)) {
       applyDefaultCounts(result);
     }
     if (owner != null) {

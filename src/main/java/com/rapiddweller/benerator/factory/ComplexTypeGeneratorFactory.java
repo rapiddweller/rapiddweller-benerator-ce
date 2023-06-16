@@ -100,9 +100,8 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   protected Generator<?> createDynamicSourceGenerator(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
-    String dynamicSourceText = descriptor.getDynamicSource();
-    if (dynamicSourceText != null) {
-      var dynamicSourceGenerator = FactoryUtil.createDynamicSourceGenerator(dynamicSourceText, uniqueness, context, descriptor, this);
+    if (descriptor.getDynamicSource() != null) {
+      var dynamicSourceGenerator = FactoryUtil.createDynamicSourceGenerator(uniqueness, context, descriptor, this);
       return WrapperFactory.applyConverter(dynamicSourceGenerator, new ComponentTypeConverter(descriptor));
     }
     return null;
