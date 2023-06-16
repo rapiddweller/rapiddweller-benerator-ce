@@ -39,7 +39,6 @@ import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.TypedEntitySourceAdapter;
-import com.rapiddweller.benerator.primitive.DynamicSourceGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.EntityPartSource;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
@@ -50,7 +49,6 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthRowTypeDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthUtil;
-import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.DataFileUtil;
 import com.rapiddweller.model.data.*;
@@ -59,7 +57,6 @@ import com.rapiddweller.benerator.FileFormats;
 import com.rapiddweller.platform.csv.CSVEntitySourceProvider;
 import com.rapiddweller.platform.dbunit.DbUnitEntitySource;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
-import com.rapiddweller.platform.xls.PlatformDescriptor;
 import com.rapiddweller.platform.xls.XLSEntitySourceProvider;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -99,9 +96,8 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   protected Generator<?> createDynamicSourceGenerator(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
-    String dynamicSourceText = descriptor.getDynamicSource();
-    if (dynamicSourceText != null) {
-      var dynamicSourceGenerator = FactoryUtil.createDynamicSourceGenerator(dynamicSourceText, uniqueness, context, descriptor, this);
+    if (descriptor.getDynamicSource() != null) {
+      var dynamicSourceGenerator = FactoryUtil.createDynamicSourceGenerator(uniqueness, context, descriptor, this);
       return WrapperFactory.applyConverter(dynamicSourceGenerator, new ComponentTypeConverter(descriptor));
     }
     return null;
