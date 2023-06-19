@@ -5,35 +5,16 @@
         defaultDataset="US" defaultLocale="en_US" defaultSeparator=";">
 
     <import domains="address" />
-<!--    <generate type="numbers" count="100" consumer="ConsoleExporter">-->
-<!--        <id name="id" type="int" generator="IncrementGenerator"/>-->
-<!--        <attribute name="western_europe" generator="AddressGenerator" dataset="western_europe"/>-->
-<!--        <attribute name="oceania" generator="AddressGenerator" dataset="oceania"/>-->
-<!--        <attribute name="central_europe" generator="AddressGenerator" dataset="central_europe"/>-->
-<!--        <attribute name="southern_europe" generator="AddressGenerator" dataset="southern_europe"/>-->
-<!--        <attribute name="north_america" generator="AddressGenerator" dataset="north_america"/>-->
-<!--        <attribute name="VE" generator="AddressGenerator" dataset="VE"/>-->
-<!--        <attribute name="VN" generator="AddressGenerator" dataset="VN"/>-->
-<!--        <attribute name="TH" generator="AddressGenerator" dataset="TH"/>-->
-<!--    </generate>-->
-
     <generate type="numbers" count="100" consumer="ConsoleExporter">
         <id name="id" type="int" generator="IncrementGenerator"/>
-        <variable name="address" generator="AddressGenerator" dataset="CY"/>
-        <attribute name="country" script="address.country" />
-        <attribute name="city" script="address.city" />
-        <attribute name="state" script="address.state" />
-        <attribute name="street" script="address.street" />
+        <attribute name="western_europe" generator="AddressGenerator" dataset="western_europe"/>
+        <attribute name="oceania" generator="AddressGenerator" dataset="oceania"/>
+        <attribute name="central_europe" generator="AddressGenerator" dataset="central_europe"/>
+        <attribute name="southern_europe" generator="AddressGenerator" dataset="southern_europe"/>
+        <attribute name="north_america" generator="AddressGenerator" dataset="north_america"/>
+        <attribute name="VE" generator="AddressGenerator" dataset="VE"/>
+        <attribute name="VN" generator="AddressGenerator" dataset="VN"/>
+        <attribute name="TH" generator="AddressGenerator" dataset="TH"/>
     </generate>
-
-<!--    generate city names for the specified regions-->
-<!--    <echo message="north american cities:"/>-->
-
-<!--    <generate type="city" consumer="ConsoleExporter" count="10">-->
-<!--        <id name="id" type="int" generator="IncrementGenerator"/>-->
-<!--        <attribute name="name" distribution="random" unique="true"-->
-<!--                   source="/com/rapiddweller/benerator/csv/city_{0}.csv" encoding="UTF-8"-->
-<!--                   dataset="america" nesting="com/rapiddweller/benerator/csv/area"/>-->
-<!--    </generate>-->
 
 </setup>
