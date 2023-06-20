@@ -123,7 +123,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <build_number>${buildNumber}</build_number>
-        <_rd_common_version>2.0.0-jdk-11</_rd_common_version>
+        <_rd_common_version>2.0.1-jdk-11-SNAPSHOT</_rd_common_version>
         <_rd_format_version>1.1.6-jdk-11-SNAPSHOT</_rd_format_version>
         <_rd_jdbacl_version>1.1.15-jdk-11-SNAPSHOT</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11</_rd_script_version>
