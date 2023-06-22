@@ -19,7 +19,7 @@
 
     <generate type="numbers" count="100" consumer="ConsoleExporter">
         <id name="id" type="int" generator="IncrementGenerator"/>
-        <variable name="address" generator="AddressGenerator" dataset="RO"/>
+        <variable name="address" generator="AddressGenerator" dataset="BG"/>
         <attribute name="country" script="address.country" />
         <attribute name="city" script="address.city" />
         <attribute name="state" script="address.state" />

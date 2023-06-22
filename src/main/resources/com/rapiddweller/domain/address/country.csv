@@ -198,7 +198,7 @@ SG,,65,[89],Singapore,500000
 SH,,,,Saint Helena,0
 SI,sl_SI,386,,Slovenia,2000000
 SJ,,,,Svalbard and Jan Mayen,0
-SK,,,,Slovakia,5000000
+SK,sk_SK,421,(^090[1-9]$|^09[1-5][0-9]$),Slovakia,5000000
 SL,,,,Sierra Leone,5000000
 SM,it_SM,378,66,San Marino,0
 SN,,,,Senegal,12000000
