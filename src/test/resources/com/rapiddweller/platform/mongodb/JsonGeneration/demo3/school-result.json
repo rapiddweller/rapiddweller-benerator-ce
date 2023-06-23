@@ -1,0 +1,451 @@
+[
+  {
+    "school": {
+      "name": "ABC University",
+      "location": {
+        "address": "Peschweg 50\n39638 Zichtau\nDeutschland",
+        "city": "Zichtau",
+        "state": "Sachsen-Anhalt",
+        "zipCode": "39638",
+        "country": "Germany"
+      },
+      "departments": [
+        {
+          "name": "Computer Science",
+          "courses": [
+            {
+              "code": "5948902c-003f-414c-96c6-1f5b6949a65f",
+              "name": "GES10",
+              "instructor": [
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "C27",
+                    "room": 175
+                  }
+                },
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "C27",
+                    "room": 202
+                  }
+                }
+              ],
+              "student": [
+                {
+                  "id": "BA21",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "F"
+                },
+                {
+                  "id": "BA32",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "B"
+                },
+                {
+                  "id": "BA43",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "D"
+                },
+                {
+                  "id": "BA54",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                },
+                {
+                  "id": "BA65",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "B"
+                }
+              ]
+            },
+            {
+              "code": "2297f7a0-2827-42bf-9a71-37eb1cfbf410",
+              "name": "GES21",
+              "instructor": [
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "A44",
+                    "room": 153
+                  }
+                },
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "A34",
+                    "room": 140
+                  }
+                }
+              ],
+              "student": [
+                {
+                  "id": "BA76",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "C"
+                },
+                {
+                  "id": "BA87",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "D"
+                },
+                {
+                  "id": "BA98",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "B"
+                },
+                {
+                  "id": "BA19",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "C"
+                },
+                {
+                  "id": "BA22",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Computer Science",
+          "courses": [
+            {
+              "code": "a2792b4e-fa8f-45cc-804c-d78d506d8747",
+              "name": "GES32",
+              "instructor": [
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "C24",
+                    "room": 150
+                  }
+                },
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "C98",
+                    "room": 172
+                  }
+                }
+              ],
+              "student": [
+                {
+                  "id": "BA33",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "C"
+                },
+                {
+                  "id": "BA44",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "F"
+                },
+                {
+                  "id": "BA55",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "F"
+                },
+                {
+                  "id": "BA66",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "A"
+                },
+                {
+                  "id": "BA77",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "B"
+                }
+              ]
+            },
+            {
+              "code": "6c02dbdb-722d-4e62-af8f-4a94db8fbf86",
+              "name": "GES43",
+              "instructor": [
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "B45",
+                    "room": 126
+                  }
+                },
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "A85",
+                    "room": 145
+                  }
+                }
+              ],
+              "student": [
+                {
+                  "id": "BA88",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                },
+                {
+                  "id": "BA99",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "F"
+                },
+                {
+                  "id": "BA11",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "F"
+                },
+                {
+                  "id": "BA23",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "F"
+                },
+                {
+                  "id": "BA34",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "C"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Computer Science",
+          "courses": [
+            {
+              "code": "03a74d78-cfda-451b-ab54-2a05553bbc60",
+              "name": "GES54",
+              "instructor": [
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "C84",
+                    "room": 221
+                  }
+                },
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "A29",
+                    "room": 112
+                  }
+                }
+              ],
+              "student": [
+                {
+                  "id": "BA45",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                },
+                {
+                  "id": "BA56",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                },
+                {
+                  "id": "BA67",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "D"
+                },
+                {
+                  "id": "BA78",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                },
+                {
+                  "id": "BA89",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "D"
+                }
+              ]
+            },
+            {
+              "code": "1a93407b-9d7f-4048-a65d-f7d169f77814",
+              "name": "GES65",
+              "instructor": [
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "A54",
+                    "room": 112
+                  }
+                },
+                {
+                  "name": {
+                    "first": "Bernd",
+                    "last": "Fiedler"
+                  },
+                  "email": "berndfiedler@autocast.be",
+                  "office": {
+                    "building": "C22",
+                    "room": 117
+                  }
+                }
+              ],
+              "student": [
+                {
+                  "id": "BA91",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "C"
+                },
+                {
+                  "id": "BA12",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "D"
+                },
+                {
+                  "id": "BA24",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                },
+                {
+                  "id": "BA35",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "C"
+                },
+                {
+                  "id": "BA46",
+                  "name": {
+                    "first": "Uwe",
+                    "last": "Hilbert"
+                  },
+                  "grade": "E"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd">
+
+    <import domains="person,organization,address" platforms="db"/>
+    <import class="java.util.Date"/>
+
+    <mongodb id="mongo" environment="environment" system="mongodb"/>
+    <memstore id="mem"/>
+    <pre-parse-generate target="mongo"/>
+
+    <setting name="counts" value="100"/>
+
+    <comment>Generate People</comment>
+    <!--    Use consumer="new JsonFileExporter(<Path>Ex:"src/test/resources/com/rapiddweller/platform/mongodb/JsonGeneration/demo1/people-json.ben.xml")" to export to JSON-->
+    <generate type="people" count="{counts}" consumer="ConsoleExporter,mongo">
+        <variable name="person"
+                  generator="new PersonGenerator{dataset='GB',locale='gb',minAgeYears='18', maxAgeYears='75',femaleQuota='0.5'}"/>
+        <variable name="addressGen"
+                  generator="new AddressGenerator{dataset='GB'}"/>
+        <variable name="randomDate"
+                  generator="new DateGenerator{max='2022-01-01',min='2000-01-01', distribution='random' }"/>
+        <variable name="startDateFromRandom"
+                  script="{new Date(randomDate.getTime()+1000*3600*24*365)}"/>
+        <id name="_idMongo" type="object" generator="MongoDBObjectIdGenerator"/>
+        <part name="name">
+            <attribute name="first" type="string"
+                       script="person.givenName"/>
+            <attribute name="last" type="string"
+                       script="person.familyName"/>
+        </part>
+        <attribute name="age" type="int"
+                   script="person.age"/>
+        <attribute name="gender" type="string"
+                   source="gender.wgt.csv" converter="new CaseConverter(false)"/>
+        <part name="contact" minCount="1" maxCount="1">
+            <attribute name="email" type="string"
+                       script="person.email"/>
+            <attribute name="phone" type="string"
+                       script="{addressGen.officePhone.areaCode + '-' + addressGen.officePhone.localNumber}"/>
+        </part>
+        <part name="address" maxCount="2">
+            <attribute name="street" type="string"
+                       script="addressGen.street"/>
+            <attribute name="city" type="string"
+                       script="addressGen.city.name"/>
+            <attribute name="state" type="string"
+                       script="addressGen.state.name"/>
+            <attribute name="zipCode" type="string"
+                       script="addressGen.postalCode"/>
+            <attribute name="country" type="string"
+                       script="addressGen.country.displayName"/>
+        </part>
+        <part name="education" container="list" maxCount="3" minCount="1">
+            <part name="institution" source="institution.ent.csv"/>
+            <part name="degree" source="degree.ent.csv"/>
+            <attribute name="major" type="string"
+                       constant="Computer Science"/>
+            <attribute name="graduationYear" type="int"
+                       script="{randomDate.year+1900}"/>
+        </part>
+        <part name="skills" container="list" maxCount="5" minCount="2">
+            <attribute name="name" type="string" source="skill.wgt.csv"/>
+            <attribute name="level" type="string" source="level.wgt.csv"/>
+        </part>
+        <part name="employmentHistory" container="list" maxCount="5" minCount="1">
+            <part name="company">
+                <attribute name="floatData" type="float" constant="123456789.987654321"/>
+                <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+                <attribute name="longData" type="long" constant="123456789.987654321"/>
+                <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+                <attribute name="objectData1" type="object" constant="123456789"/>
+                <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+                <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+                <attribute name="booleanData" type="boolean" constant="true"/>
+                <attribute name="dateData" type="date" generator="DateGenerator"/>
+                <attribute name="name" type="string"
+                           generator="CompanyNameGenerator" dataset="GB" locale="gb_GB"/>
+                <attribute name="location" type="string"
+                           script="{addressGen.houseNumber+'-'+addressGen.street}"/>
+                <attribute name="industry" type="string"
+                           constant="Technology"/>
+                <part name="objectNested">
+                    <attribute name="floatData" type="float" constant="123456789.987654321"/>
+                    <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+                    <attribute name="location" type="string" script="{addressGen.houseNumber+'-'+addressGen.street}"/>
+                    <attribute name="longData" type="long" constant="123456789.987654321"/>
+                    <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+                    <attribute name="objectData1" type="object" constant="123456789"/>
+                    <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+                    <attribute name="booleanData" type="boolean" constant="true"/>
+                    <attribute name="dateData" type="date" generator="DateGenerator"/>
+                    <attribute name="industry" type="string" constant="Technology"/>
+                </part>
+            </part>
+            <attribute name="position" type="string"
+                       source="position.wgt.csv"/>
+            <attribute name="startDate" type="string"
+                       script="startDateFromRandom" converter="ToStringConverter"/>
+            <attribute name="endDate" type="string"
+                       script="{new Date(startDateFromRandom.getTime()+1000*3600*24*5)}"
+                       converter="ToStringConverter"/>
+        </part>
+    </generate>
+
+</setup>

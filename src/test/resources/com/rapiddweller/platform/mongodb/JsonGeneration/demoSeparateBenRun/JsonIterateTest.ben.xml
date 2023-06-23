@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd">
+
+    <import platforms="db,csv"/>
+
+    <mongodb id="mongo" environment="environment" system="mongodb"/>
+
+    <setting name="counts" value="100"/>
+
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="store" source="mongo" consumer="mongo.inserter('insertedtable')">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="store.counter != counts">
+        <echo lang="ftl">Wrong amount of data: ${store.counter} elements</echo>
+    </if>
+    <if test="store.counter == counts">
+        <echo lang="ftl">Success generated ${store.counter} data</echo>
+    </if>
+
+</setup>
