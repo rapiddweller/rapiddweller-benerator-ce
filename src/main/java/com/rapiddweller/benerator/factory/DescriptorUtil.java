@@ -80,7 +80,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 
+
 import static com.rapiddweller.benerator.engine.DescriptorConstants.COMPONENT_TYPES;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_LIST;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VALUE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VARIABLE;
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.MAX_LENGTH;
@@ -479,6 +481,8 @@ public class DescriptorUtil {
         modelParser.getPartParser().parseComponentGeneration(child, (ComplexTypeDescriptor) type);
       } else if (EL_VALUE.equals(childType)) {
         modelParser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, valueCount++);
+      } else if (EL_LIST.equals(childType)) {
+        modelParser.getItemListParser().parse(child, (ComplexTypeDescriptor) type);
       }
     }
   }
