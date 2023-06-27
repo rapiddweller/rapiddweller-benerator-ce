@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+<memstore id="mem"/>
+
+<import domains="family"/>
+
+    <setting name="count" value="100"/>
+
+    <generate type="familyPerson_data" count="{count}" consumer="mem" >
+        <variable name="familyPerson" generator="FamilyPersonGenerator" />
+        <attribute name="firstName" script="{familyPerson.person.givenName}" />
+        <attribute name="familyName" script="{familyPerson.person.familyName}" />
+        <attribute name="birthday" script="{familyPerson.person.birthDate}" />
+        <attribute name="gender" script="{familyPerson.person.gender}" />
+        <attribute name="personID" script="{familyPerson.personID}" />
+        <attribute name="familyID" script="{familyPerson.familyID}" />
+        <attribute name="familyRole" script="{familyPerson.role}" />
+        <attribute name="Email" script="{familyPerson.person.email}" />
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="familyPerson_data" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="familyPerson_data.counter != 100">
+        <error>Wrong count!</error>
+    </if>
+</setup>

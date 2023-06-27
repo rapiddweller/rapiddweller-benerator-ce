@@ -24,67 +24,61 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.util;
+package com.rapiddweller.domain.family;
 
-import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.RandomProvider;
+import com.rapiddweller.domain.person.Person;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 /**
- * Provides utility functions for generating numbers in an interval.<br/><br/>
- * Created: 03.09.2006 13:23:02
- * @author Volker Bergmann
+ * Represents a natural happy family.<br/><br/>
+ *
  * @since 0.1
  */
-public class RandomUtil {
+public class FamilyPerson {
+  private Person person;
+  private long personID;
+  private long familyID;
+  private String role;
 
-  private static final RandomProvider random = BeneratorFactory.getInstance().getRandomProvider();
-
-  private RandomUtil() {
-    // private constructor to prevent instantiation
+  public FamilyPerson() {
   }
 
-  public static long randomLong(long min, long max) {
-    return random.randomLong(min, max);
+  public Person getPerson() {
+    return person;
   }
 
-  public static int randomInt(int min, int max) {
-    return random.randomInt(min, max);
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
-  @SafeVarargs
-  public static <T> T randomElement(T... values) {
-    return random.randomElement(values);
+  public long getPersonID() {
+    return personID;
   }
 
-  public static <T> T randomElement(List<T> values) {
-    return random.randomElement(values);
+  public void setPersonID(long personID) {
+    this.personID = personID;
   }
 
-  public static int randomIndex(Collection<?> values) {
-    return random.randomIndex(values);
+  public long getFamilyID() {
+    return familyID;
   }
 
-  public static float randomProbability() {
-    return random.randomProbability();
+  public void setFamilyID(long familyID) {
+    this.familyID = familyID;
   }
 
-  public static char randomDigit(int min) {
-    return random.randomDigit(min);
+  public String getRole() {
+    return role;
   }
 
-  public static Date randomDate(Date min, Date max) {
-    return random.randomDate(min, max);
+  public void setRole(String role) {
+    this.role = role;
   }
 
-  public static Object randomFromWeightLiteral(String literal) {
-    return random.randomFromWeightLiteral(literal);
-  }
-  public static boolean randomBoolean() {
-    return random.randomBoolean();
+  @Override
+  public synchronized String toString() {
+    return "S";
   }
 
 }
