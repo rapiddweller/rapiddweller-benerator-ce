@@ -6,6 +6,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.Converter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 
@@ -24,11 +25,17 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
 
   private final String partName;
   private final GenerationStepSupport<Entity> steps;
+  private final Converter converter;
 
   public PartModifier(String partName, List<GenerationStep<Entity>> generationSteps, String scope) {
+    this(partName, generationSteps, scope, null);
+  }
+  
+  public PartModifier(String partName, List<GenerationStep<Entity>> generationSteps, String scope, Converter converter) {
     super(scope);
     this.partName = partName;
     this.steps = new GenerationStepSupport<>(partName, generationSteps);
+    this.converter = converter;
   }
 
   // properties ------------------------------------------------------------------------------------------------------
@@ -65,6 +72,10 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
         ((Entity)context.getCurrentProduct().unwrap()).setComponent(partName, part);
       }
       applyToPart(part, context);
+      // Convert part (this.converter consist context itself)
+      if (converter != null) {
+        converter.convert(part);
+      }
     }
     return true;
   }
