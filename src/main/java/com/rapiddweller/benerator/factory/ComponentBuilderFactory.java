@@ -182,7 +182,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
     List<GenerationStep<Entity>> components =
         GenerationStepFactory.createMutatingGenerationSteps(typeDescriptor, true, Uniqueness.NONE, context);
-    return new PartModifier(part.getName(), components, typeDescriptor.getScope());
+    Converter<?, ?> converter = DescriptorUtil.getConverter(typeDescriptor.getConverter(), context);
+    return new PartModifier(part.getName(), components, typeDescriptor.getScope(), converter);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
