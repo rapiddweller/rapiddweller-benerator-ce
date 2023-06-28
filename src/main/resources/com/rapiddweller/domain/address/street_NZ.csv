@@ -7,7 +7,6 @@
 "Stansfield St",1
 "Andromeda Cres",1
 "Akersten St",1
-"Ranui Station Rd",1
 "Kawiu Rd",1
 "Dulcie St",1
 "Sayegh St",1
@@ -48,7 +47,6 @@
 "Cave Tce",1
 "Harrier Rd",1
 "Arthur Tce",1
-"Portofina Crt",1
 "Dudley Rd",2
 "Cadness St",1
 "Lobelia Tce",1
@@ -187,7 +185,6 @@
 "Cockburn St",5
 "Diaz Pl",1
 "Paramount Dr",1
-"Portadown Ave",1
 "Cliff Ave",1
 "Wikiriwhi Cres",1
 "Trigg Rd",1
@@ -209,7 +206,6 @@
 "Cambria Pl",1
 "Ace Pl",1
 "Glen Oaks",1
-"Caverhill Cl",1
 "Malay Crt",1
 "Redcastle Dr",1
 "Compton Pl",1
@@ -307,7 +303,6 @@
 "Villino Pl",1
 "Kusabs Rd",1
 "Chardonnay St",1
-"Gardenhill Lane",1
 "Concord Pl",2
 "Avonside Dr",2
 "May Rd",3
@@ -349,7 +344,6 @@
 "Velma Rd",1
 "Eccles St",1
 "Nautique Pl",1
-"Greenhill Rd",1
 "Carvell St",1
 "Jopard Pl",1
 "Athena Dr",1
@@ -377,7 +371,6 @@
 "Jura Pl",1
 "Colman Ave",1
 "Bluff Hwy",2
-"Bridgewater Tce",1
 "Jopp St",1
 "Harris St",15
 "Aintree Ave",1
@@ -392,7 +385,6 @@
 "Bingley Ave",1
 "Ashbrook Lane",1
 "Cove Rd",1
-"Porters Ave",1
 "Fleetwood Grv",1
 "Annesbrook Dr",1
 "Thompson Cres",1
@@ -461,7 +453,6 @@
 "Braeburn Pl",2
 "Cryer St",1
 "Westech Pl",1
-"Bushyhill St",1
 "Ohoka Rd",1
 "Matthew Pl",2
 "Chine Pl",1
@@ -519,8 +510,6 @@
 "Depot Rd",1
 "Central Rd",1
 "Prospect Ave",1
-"Gloucester Park Rd",1
-"Newport St",4
 "Premier Ave",1
 "Mitre St",1
 "Grassfield Pl",1
@@ -545,9 +534,7 @@
 "Mili Way",1
 "Cavendish St",1
 "Wai Iti Pl",1
-"Hilltop St",1
 "Roseness St",1
-"Park St",18
 "Berghan Rd",1
 "McFetridge Lane",1
 "Scott St",19
@@ -596,7 +583,6 @@
 "Commissariat Rd",1
 "London Rd",1
 "Constable Cres",1
-"Thompson Park Rd",1
 "Kelliher Dr",1
 "Stortford St",2
 "Freeman Cl",1
@@ -669,7 +655,6 @@
 "Talisker Pl",1
 "Te Awanui Way",1
 "Frame St",2
-"Fair Mall",1
 "Bowlers Wharf Lane",1
 "Aranga Rd",1
 "Bishoprick Cres",1
@@ -695,9 +680,7 @@
 "Industry Rd",1
 "Otupoa Way",1
 "Highbury Cres",1
-"Railway Ave",2
 "Millie Crt",1
-"Blake St",7
 "Chingford Cl",1
 "Rosewood Grv",1
 "Beechwood Way",1
@@ -705,7 +688,6 @@
 "Pearson Lane",2
 "Westmeath St",1
 "Chatsworth Pl",1
-"Portofino Pt",1
 "Syrah Pl",1
 "Major Aitken Dr",1
 "Paritutu Rd",1
@@ -722,9 +704,7 @@
 "Bethells Rd",1
 "Tussock Pl",1
 "Cohen Pl",3
-"Cahill Pl",1
 "Sycamore Lane",1
-"Park Hill Rd",1
 "Fitzroy Ave",1
 "Cyril French Dr",1
 "Francis Lane",1
@@ -901,7 +881,6 @@
 "Turquoise Pl",1
 "Maydell St",1
 "Hamon Ave",1
-"Lakemba Mews",1
 "Glen Isla Pl",1
 "Dickens Pl",1
 "Mahy Pl",1
@@ -911,7 +890,6 @@
 "Lodestar Lane",1
 "Caribou Pl",1
 "Romana Pl",1
-"Oteki Park Dr",1
 "Wharfdale Cres",1
 "Monk St",1
 "Lowe St",7
@@ -959,7 +937,6 @@
 "Meadowood Dr",1
 "Tollemache St",1
 "Barrymore Rd",1
-"Totara Park Ave",1
 "Foster Tce",2
 "Ashworth Pl",1
 "Lomax Pl",1
@@ -974,7 +951,6 @@
 "St Benedicts St",1
 "Kenya St",1
 "Glamis St",1
-"Pudding Hill Rd",1
 "Tully St",1
 "Blackmore Cres",1
 "Fiona Pl",2
@@ -1001,13 +977,11 @@
 "Northbrook Cl",1
 "Sombrero Vw",1
 "Washer Rd",1
-"Churchill Ave",10
 "Lucas Rd",1
 "Sunset Tce",2
 "Kinmont Rise",1
 "Quarrymans Lane",1
 "Arama Ave",1
-"Bridgens Ave",1
 "Marston St",1
 "Huarere St",1
 "Adams Ave",1
@@ -1042,7 +1016,6 @@
 "Margot St",1
 "Summertime Ave",1
 "Thurlestone Pl",1
-"Hilling St",1
 "Daelyn Dr",1
 "Benefield St",1
 "Ellen Ave",1
@@ -1050,7 +1023,6 @@
 "Ariki Dr",1
 "Kingdom Dr",1
 "Squire Dr",1
-"Pembridge Lane",1
 "Wilton Cres",1
 "Frankmoore Ave",1
 "Hawkey St",1
@@ -1074,12 +1046,10 @@
 "Clifton St",2
 "Downes Rd",1
 "Company Rd",1
-"Parkdale Dr",1
 "Titchener St",1
 "Gilbert Ave",1
 "Murimutu Rd",1
 "Baxter Cres",1
-"Soldiers-Big River Rd",1
 "Melling Rd",1
 "Carrie St",1
 "Waitakere Rd",2
@@ -1144,7 +1114,6 @@
 "Crawford Pl",1
 "Raumanga Heights Dr",1
 "McIntyre Ave",2
-"Bayview Park Lane",1
 "Birch Tce",1
 "Huxley Grv",1
 "Arum Rd",1
@@ -1224,7 +1193,6 @@
 "Lebanon St",1
 "Fairley Rd",1
 "Pitoitoi St",1
-"Stamford Park Rd",1
 "Inglewood Rd",2
 "Martha St",2
 "Church Lane",4
@@ -1235,7 +1203,6 @@
 "Hewlings Pl",1
 "Cheetwood St",1
 "Monique Pl",2
-"Old Station Ave",1
 "Sargeson St",1
 "Keith Morris Lane",1
 "Longworth St",1
@@ -1261,7 +1228,6 @@
 "Hadlow Tce",1
 "Warblington St",1
 "Jackson St",19
-"Walton Park Ave",1
 "Eastbourne Rd",1
 "Eclipse Rise",1
 "Southwark Ave",1
@@ -1270,7 +1236,6 @@
 "Harlech Gln",1
 "Rochfort Dr",1
 "Hart Ave",1
-"Twin Lakes Rd",1
 "Cruickshank Rd",1
 "Cottrell Cres",1
 "Melville Dr",1
@@ -1383,7 +1348,6 @@
 "Granite Pl",1
 "Taotahi Wlk",1
 "Cheryl Pl",1
-"Grover's Hill Rd",1
 "Quail Cl",1
 "Ledbury Rd",1
 "Burnham St",2
@@ -1406,7 +1370,6 @@
 "St Leonards Rd",5
 "Tilbrook Pl",1
 "Leacroft St",1
-"Porterfield St",1
 "Kircher Pl",1
 "Eton St",4
 "Otipua Rd",1
@@ -1496,8 +1459,6 @@
 "Flaxmere Ave",1
 "Wain St",1
 "Churton Dr",1
-"Portland Pl",2
-"Orepuki Riverton Hwy",1
 "Challenger Lane",1
 "Gill Cres",2
 "Seine Rd",1
@@ -1506,7 +1467,6 @@
 "Mamari St",1
 "Pukaki Rd",1
 "Dorizac Pl",1
-"Fernhill Pl",1
 "Halwyn Dr",1
 "Vantage Pl",2
 "Ventura Ave",1
@@ -1516,7 +1476,6 @@
 "Junction Crt",1
 "Henui St",1
 "Spruce Lane",1
-"Streamdale Pl",1
 "Sunrise Blvd",2
 "Molesworth Pl",2
 "Penwood St",1
@@ -1638,7 +1597,6 @@
 "Runciman Pl",1
 "Fairbanks Pl",1
 "Hughes Ave",1
-"Palace Crt",1
 "Brisbane St",3
 "Deem Pl",1
 "Sileni Pl",1
@@ -1647,7 +1605,6 @@
 "Braebank Lane",1
 "Aubrey St",4
 "Smart Tce",1
-"Hillcrest Lane",1
 "Lesley Grv",1
 "Cridland Pl",1
 "Perthshire Cres",1
@@ -1689,7 +1646,6 @@
 "Parity Pl",1
 "Piriti Dr",1
 "Derby Way",1
-"Lake Ora Rd",1
 "Valkyrie Cl",1
 "Breckons Ave",1
 "Reef Pl",1
@@ -1793,7 +1749,6 @@
 "Hudson St",6
 "Coachmans Way",1
 "Robert St",9
-"Hillcrest Grv",1
 "Jane Deans Cl",1
 "Kellys Rd",2
 "Morewood Lane",1
@@ -1815,7 +1770,6 @@
 "Goodwood Cl",1
 "Heriot Dr",1
 "Udy St",2
-"Lake View Rd",2
 "Bilkey Ave",1
 "Udall Pl",1
 "Glasgow St",16
@@ -1826,7 +1780,6 @@
 "Glendale Grv",1
 "Walshs Rd",1
 "Maple Dr",1
-"Hilltop Ave",1
 "Savannah Pl",2
 "Kaitune Dr",1
 "The Quadrant",1
@@ -1860,7 +1813,6 @@
 "McElrea Pl",1
 "Arnold Valley Rd",1
 "Gould Cres",1
-"Greenpark St",1
 "Tawaki St",1
 "Terranova Pl",1
 "Sealy Cres",1
@@ -1924,10 +1876,8 @@
 "Austin St",5
 "Whisby Rd",1
 "Cyclamen Rd",1
-"Fire Station Rd",1
 "Cruden Ave",1
 "Chenery Ave",1
-"Riverhead Lane",1
 "Montilla Pl",1
 "The Close",1
 "Wilk Lane",1
@@ -1958,7 +1908,6 @@
 "Del Mar Crt",1
 "Hanson Grv",1
 "Sanders Ave",4
-"Mountainview Tce",1
 "Capulet Pl",1
 "Arapiki Rd",1
 "French St",7
@@ -1970,13 +1919,11 @@
 "Konene St",1
 "Huron St",3
 "Hohiria Rd",1
-"Railway Esp",2
 "Ardrossan St",2
 "Bignell St",1
 "Blanc Ave",1
 "Hewitts Rd",2
 "Te Papa Pl",1
-"Port St",2
 "Woods St",1
 "Mooltan St",1
 "Haven Grv",2
@@ -1997,7 +1944,6 @@
 "Baxter Pl",3
 "Tinakori Rd",1
 "Carey St",6
-"Kingsbridge West",1
 "Patrice Pl",1
 "Hercules St",1
 "San Bernadino Dr",1
@@ -2079,7 +2025,6 @@
 "Berowald Pl",1
 "Reeves Pl",1
 "Graven Crt",1
-"Foothills Lane",1
 "Lupton Ave",1
 "Dungannon St",1
 "Southleigh",1
@@ -2098,7 +2043,6 @@
 "Reilly St",1
 "Mokoia Rd",1
 "Makarini St",1
-"Riverside Rd",3
 "Tania Pl",3
 "Dannys Lane",1
 "Taunton Grn",1
@@ -2115,11 +2059,9 @@
 "Colin Guppy Cres",1
 "Lowestoft Pl",1
 "Halligan Pl",1
-"Hampton Hill Rd",1
 "Pemberton Dr",1
 "Pearson Pl",1
 "Farrelly Ave",1
-"Blue Park Lane",1
 "Buffalo Heights Row",1
 "Bengal Dr",1
 "Tudor Rd",2
@@ -2182,7 +2124,6 @@
 "Glenroy St",1
 "Spence St",1
 "Bledisloe Rd",1
-"Milford Park Pl",1
 "Nathan Pl",2
 "Peter Snell St",1
 "Merino Ave",1
@@ -2216,14 +2157,12 @@
 "Willowbrook Pl",2
 "Viking Ave",1
 "Robieson St",1
-"Parkdale Cl",2
 "Linkwater Way",1
 "Thames Rd",1
 "Barnett Ave",1
 "Cleary Tce",1
 "Queensgate Rd",1
 "Garnet St",1
-"Airport Dr",2
 "Wanganella Pl",1
 "Maire Rd",1
 "Rose Lane",1
@@ -2270,7 +2209,6 @@
 "Thoreau St",1
 "John Wilson Ocean Dr",1
 "Hana Udy Pl",1
-"Parkerfield Pl",1
 "Rempstone Dr",1
 "Pakefield St",1
 "Bruce Roderick Dr",1
@@ -2342,7 +2280,6 @@
 "St Johns Hts",1
 "Oakfield Ave",1
 "Taaku Lane",1
-"Redbridge Lane",1
 "Manuka St",17
 "Virtue Pl",2
 "Rongomai Rd",1
@@ -2352,7 +2289,6 @@
 "Boardman Lane",1
 "Glen Iris Grv",1
 "Matterhorn Cres",1
-"Riverbend Rd",1
 "Rue Jolie",1
 "Spencer Rd",3
 "Genia Dr",1
@@ -2417,7 +2353,6 @@
 "Nihoriki St",1
 "Foundry Rd",1
 "Gibson Rd",2
-"Portland Park Rd",1
 "Gilligan Cl",1
 "The Marina",1
 "Baring Tce",1
@@ -2438,7 +2373,6 @@
 "Christina Ave",1
 "Panorama Grv",1
 "Dayman Way",1
-"Hillary Crt",1
 "Gledstane Rd",1
 "Flower St",4
 "Sykes Ave",1
@@ -2461,7 +2395,6 @@
 "Taylor Cres",1
 "Pascoe St",2
 "Bloomfield Rd",1
-"Bushpark Pl",1
 "Kahu Rd",4
 "Kari St",1
 "Kohuhu St",1
@@ -2473,10 +2406,8 @@
 "Stephens Pl",1
 "Highlight Lane",1
 "Moehau Rd",1
-"Stream Grv",1
 "Kudu Dr",1
 "Don St",6
-"Green Park Lane",1
 "Reid Memorial Ave",1
 "Ardsley Lane",1
 "Kingsland Tce",1
@@ -2485,7 +2416,6 @@
 "Esmae Pl",1
 "Mona St",1
 "Landow Pl",1
-"Portobello Way",1
 "Rossmore Tce",2
 "Currell Way",1
 "Borrowdace Ave",1
@@ -2518,7 +2448,6 @@
 "Rogers Way",1
 "Opapa St",1
 "Westgate",1
-"Royalpark Pl",1
 "Manukaka Hts",1
 "Heath St",7
 "Thornwood Pl",1
@@ -2605,7 +2534,6 @@
 "St Asaph St",1
 "Allen Rd",4
 "Northgrove Ave",1
-"Parkhurst Rd",1
 "Cashmore Pl",1
 "Bain St",2
 "Pasadena Cres",1
@@ -2702,7 +2630,6 @@
 "Yarmouth Rd",1
 "Presidential Dr",1
 "Omana Beach Rd",1
-"Bay Park Pl",1
 "Emyvalie Pl",1
 "Old Tai Tapu Rd",1
 "Frederick St",18
@@ -2722,7 +2649,6 @@
 "Tangahoe St",1
 "Orewa Sq",1
 "Pine Tce",2
-"Mountaineer St",1
 "Te Puke St",1
 "Turriff Cres",2
 "Colman St",1
@@ -2748,12 +2674,10 @@
 "Dampier Ave",1
 "Wikepa Pl",1
 "Cullen Pl",2
-"Stourbridge St",1
 "Lupin Tce",1
 "Carina Way",1
 "Hinemoa Ave",1
 "Smyth St",2
-"Riverside Dr",6
 "Miraka Rd",1
 "Percival Rd",2
 "Guild St",1
@@ -2794,7 +2718,6 @@
 "Holly Grv",2
 "Estuary Dr",1
 "Martin Tce",1
-"Hillary St",6
 "Seadown Rd",1
 "Ambury Rd",1
 "Mayo Grv",1
@@ -2972,11 +2895,9 @@
 "Tutuki St",1
 "Hunters Hl",1
 "Houkotuku St",1
-"River Rd",15
 "Mana View Rd",1
 "Rainbow Dr",2
 "Maple Cl",2
-"Arms Park Way",1
 "Malloch St",1
 "Bicknell Rd",1
 "Sarabande Ave",1
@@ -2994,7 +2915,6 @@
 "Gowrie St",1
 "Sheppard Ave",1
 "Flock Grv",1
-"Hilltop Lane",1
 "Reid Cres",2
 "Mannson Lane",1
 "Ball Pl",1
@@ -3141,7 +3061,6 @@
 "Mayne St",1
 "Morgans Vly",1
 "Willis Pl",2
-"Grange Park Ave",1
 "Cotswold Pl",1
 "Orlando St",1
 "Te Mai Rd",1
@@ -3160,17 +3079,14 @@
 "Harakeke Way",1
 "Kerry Pl",1
 "Garforth Grn",1
-"Thornhill St",1
 "Waihora Cres",1
 "Shands Rd",1
 "Rosina Pl",1
-"Cellbridge Pl",1
 "Woodman Dr",1
 "Lear St",2
 "Lillington Rd",1
 "Woodford Tce",1
 "Marylands Pl",1
-"Bridge St",36
 "Kirkcaldy Cres",1
 "Gulf View Rd",1
 "Somers Pl",1
@@ -3199,7 +3115,6 @@
 "Botany Lane",1
 "Sinclair Tce",1
 "Leda Pl",1
-"Lake Terrace Rd",2
 "Wayne Pl",4
 "England St",2
 "Nobleman Pl",1
@@ -3231,7 +3146,6 @@
 "Liftan Pl",1
 "Avonglen Crt",1
 "Alderson Ave",1
-"Riverstone Rd",1
 "Waiu St",1
 "Rudleigh Ave",1
 "Maui Grv",1
@@ -3282,11 +3196,9 @@
 "Boardwalk Lane",1
 "Cressy Ave",1
 "Kenilworth St",3
-"Highland Park Dr",1
 "Tyndall Rd",1
 "Brasell St",1
 "Emano St",1
-"Riverdale Rd",1
 "Downsview Rd",1
 "Sloan Ave",1
 "Wingrove Rd",1
@@ -3294,7 +3206,6 @@
 "Horomatangi St",1
 "Wairakei St",1
 "Cedar Pl",6
-"Clouston Park Rd",1
 "Kambalda St",1
 "Grantham Cl",1
 "Craiburn St",1
@@ -3322,7 +3233,6 @@
 "Stanners St",1
 "Snow Pl",1
 "Frickleton Grv",1
-"Edgehill Pl",1
 "Wiseley Rd",1
 "Andybrae Lane",1
 "Cowes St",2
@@ -3407,7 +3317,6 @@
 "Morrie Laing Ave",1
 "Jellicoe Rd",6
 "Caldervan St",1
-"Riverstone Grv",1
 "Heatley Ave",1
 "Papamoa Beach Rd",1
 "Bankot Cres",1
@@ -3445,7 +3354,6 @@
 "Macara St",2
 "Bennett Rd",2
 "Blacklock Ave",1
-"Riverview St",2
 "Fuchsia Ave",1
 "Kingtide Pl",1
 "Mizen Crt",1
@@ -3464,7 +3372,6 @@
 "Wedgewood Grv",1
 "Redruth St",1
 "Shepherds Rd",1
-"Parkway",2
 "Musick Point Rd",1
 "Anderson Way",1
 "Cherrywood Dr",1
@@ -3475,7 +3382,6 @@
 "Halloran Pl",1
 "Hori St",1
 "Kelso Cres",1
-"Cole Porter Ave",1
 "Rosewood Crt",1
 "Pampas Grv",1
 "Featherstone Dr",1
@@ -3485,7 +3391,6 @@
 "Greywacke Rd",1
 "Hanover Pl",2
 "Angus Lane",2
-"Blake Rd",2
 "Kauri Loop Rd",1
 "Ragley St",1
 "Grivelle St",1
@@ -3535,7 +3440,6 @@
 "Aurora Tce",3
 "Robertson Pl",1
 "Elbourne St",1
-"Parkstone Pl",1
 "Larch Cres",1
 "Kotuku St",8
 "Bedford Ave",1
@@ -3547,12 +3451,10 @@
 "Kilgour Tce",1
 "Glassons Lane",1
 "Bremner Ave",1
-"Rousehill St",1
 "Carlton Ave",4
 "Pannell Ave",1
 "Columbia Pl",1
 "Glenmary Cl",1
-"Welsh Hills Rd",1
 "Paice Ave",2
 "Hume Dr",1
 "Te Waiiti Pl",1
@@ -3613,7 +3515,6 @@
 "Stratford Way",1
 "Bidwell Pl",1
 "Craddock St",1
-"Stembridge Ave",1
 "Melfort Pl",1
 "Ngahere Tce",1
 "Brent St",2
@@ -3652,7 +3553,6 @@
 "Hinkley Tce",1
 "Woburn St",3
 "Grangewood Dr",1
-"Kowi Lakes Dr",1
 "Tieko St",1
 "Chanel Pl",1
 "Brooklyn Dr",1
@@ -3690,7 +3590,6 @@
 "Kalingo St",1
 "Warren Way",1
 "Nicolson St",1
-"Willowpark Rd",1
 "Neptune Pl",1
 "Durey Rd",1
 "Neve Pl",1
@@ -3724,14 +3623,12 @@
 "Bucklands Beach Rd",1
 "Buxton Pl",2
 "Ilford Cres",1
-"Fillbridge Way",1
 "McColl Rd",1
 "Fenchurch Grv",1
 "Caledonian Rd",2
 "Amohia St",2
 "Elsted Pl",1
 "Laurence St",3
-"Moewai Park Rd",1
 "Viola Pl",1
 "Duckworth Cres",1
 "Leitholm Pl",1
@@ -3759,7 +3656,6 @@
 "Brake St",1
 "Golden Hts",1
 "Woodchester Ave",1
-"Hillside Rd",4
 "Gee Pl",1
 "Dorothy Rd",1
 "Swinton Cl",1
@@ -3822,7 +3718,6 @@
 "Walsall St",2
 "Korokoro Cres",1
 "Dover Pl",3
-"River Elm",1
 "Taruheru Cres",1
 "Saltwood St",1
 "Walkers Rd",1
@@ -3858,7 +3753,6 @@
 "Antrim Pl",5
 "Monivea Pl",1
 "Jandell Cres",1
-"Norton Park Grv",1
 "Askew Pl",1
 "Concord St",1
 "Wenlock Pl",1
@@ -3868,7 +3762,6 @@
 "Elliffe Pl",1
 "Cumbrian Pl",1
 "Lloyd Pl",1
-"Hokitika Airport",1
 "Selkirk Rd",1
 "Fernbrook Cl",2
 "Aldinga Ave",1
@@ -3898,8 +3791,6 @@
 "Woburn Crt",1
 "Alderney Cl",1
 "Claremont St",2
-"Burbridge Rd",1
-"St Hill Rise",1
 "Somerville Rd",1
 "Jenness Grv",1
 "Marion Ave",1
@@ -3916,7 +3807,6 @@
 "Towan Pl",1
 "Cloverlea Pl",1
 "Pine Dr",1
-"Bracebridge St",1
 "Classic Grv",1
 "Allenby Pl",1
 "Essex Tce",1
@@ -3945,7 +3835,6 @@
 "Jasper Pl",2
 "Access Hts",1
 "Gorst Ave",1
-"Picquet Hill Rd",1
 "State Highway 1",12
 "Bannockburn Pl",1
 "Claydon Pl",2
@@ -3969,7 +3858,6 @@
 "Waro Dr",1
 "Judges Bay Rd",1
 "Caernarvon Dr",1
-"Spark Lane",1
 "Batchelor Ford Rd",1
 "Yorkshire Rd",1
 "Marei Rd",1
@@ -4143,10 +4031,8 @@
 "McCrae St",1
 "Takawai Pl",1
 "Kentucky Cres",1
-"Parkridge Way",1
 "Piako St",1
 "Geraldo Pl",1
-"Longford Park Dr",1
 "Wilfrid St",2
 "Travis Pl",1
 "Fisherton St",1
@@ -4178,7 +4064,6 @@
 "Poharama Pl",1
 "College Dr",1
 "Kate Way",1
-"Railway Lane",3
 "McKeefry Grv",1
 "Broughs Rd",1
 "Palm Ave",4
@@ -4231,7 +4116,6 @@
 "Seton Pl",1
 "Taylors Mistake Rd",1
 "Pio Pio Pl",1
-"Richill St",1
 "Syndic St",1
 "Masonic Dr",1
 "Randell Pl",1
@@ -4245,14 +4129,12 @@
 "Pah Rd",5
 "Annandale St",1
 "Grays Rd",3
-"Lincoln Park Ave",1
 "Irene Ave",1
 "Hollows Cres",1
 "Russell Pl",2
 "Landvale Crt",1
 "Antree Crt",1
 "Muka Cl",1
-"Cape Hill Rd",1
 "Masters St",1
 "Scantlebury St",1
 "Chenin Pl",1
@@ -4264,9 +4146,7 @@
 "Tower Ave",1
 "Guinane St",1
 "Duxfield Dr",1
-"Forest Lake Rd",1
 "Nadine Pl",1
-"Coghill St",1
 "Avon Pl",3
 "Weatherly Rd",1
 "Reihana St",1
@@ -4327,7 +4207,6 @@
 "Fairlie-Tekapo Rd",1
 "Cashmere View St",1
 "Waterview Rd",4
-"Riverview Lane",2
 "Harwich St",1
 "Vincent St",4
 "Montreal Rd",1
@@ -4349,7 +4228,6 @@
 "Thomas Lane",1
 "Laura Ave",2
 "Forest Pl",1
-"Bellshill Cl",1
 "Langstone Lane",1
 "Peterhouse St",1
 "Melrose Cres",1
@@ -4380,7 +4258,6 @@
 "Grande Vue Rd",1
 "Bonselaar Dr",1
 "Moule St",2
-"Parker Rd",1
 "Kohe Pl",1
 "Lowell Pl",2
 "Nugget Grv",1
@@ -4429,7 +4306,6 @@
 "Dingadee St",1
 "The Peninsula",1
 "Lyne St",2
-"Little Park Lane",1
 "Carrs Pl",1
 "St Olpherts Ave",1
 "Le Quesne Pl",1
@@ -4463,7 +4339,6 @@
 "Jasmine Grv",1
 "Surfside Lane",1
 "Roberts Way",1
-"Achilles Rise",1
 "Pompano Key",1
 "Babbacombe Ave",1
 "Riley Pl",2
@@ -4481,7 +4356,6 @@
 "Skinner St",1
 "Orkney Rd",1
 "Thornton Grn",1
-"Old Bridge Rd",2
 "Waimarei Ave",1
 "Montgomerie St",1
 "Howlett St",1
@@ -4519,7 +4393,6 @@
 "Hitaua Pl",1
 "Sewell Pl",1
 "Levesque St",1
-"Hillside Dr",1
 "Thornlea Dr",1
 "Pegasus Pl",2
 "Spooner Lane",1
@@ -4550,7 +4423,6 @@
 "Cleveland Tce",1
 "Emily St",1
 "Carter Cres",2
-"Sparky Rd",1
 "Lindaver Grv",1
 "Nantwich St",1
 "Arran Crts",1
@@ -4581,7 +4453,6 @@
 "Worthy St",1
 "Veronica St",3
 "Farrier Crt",1
-"Riverlea Dr",1
 "Tanekaha Pl",1
 "Te Awa Ave",1
 "Rahui Vw",1
@@ -4641,7 +4512,6 @@
 "Marshall Rd",1
 "Kegworth Pl",1
 "Houhere Pl",2
-"Hillary Pl",1
 "Thompson Ave",1
 "Croziers Rd",1
 "Pari St",1
@@ -4681,7 +4551,6 @@
 "Butts Rd",2
 "Western St",1
 "Wagon Rd",1
-"Riverbank Tce",1
 "McLellan St",1
 "Alex Taylor St",1
 "Colin Grv",1
@@ -4708,7 +4577,6 @@
 "Villiers St",1
 "Folkestone St",1
 "Pember Reeves St",1
-"Hillsborough Tce",2
 "Gooch Pl",1
 "Ron Miller Cl",1
 "Tolich Pl",1
@@ -4732,7 +4600,6 @@
 "Pearl St",1
 "Carlisle Pl",1
 "McNaughton St",1
-"Hillmorton St",1
 "Diorella Dr",1
 "Polaris Pl",1
 "Whiorau Grv",1
@@ -4759,7 +4626,6 @@
 "Panmure Ave",1
 "Sealey St",1
 "Havelock Rd",4
-"Alport Pl",1
 "Serenity Pl",1
 "Monteath Pl",1
 "Marwan Cres",1
@@ -4807,7 +4673,6 @@
 "Patuone Pl",1
 "Shaftesbury St",1
 "Amamoor St",1
-"Achilles Cl",1
 "Hedley Pl",2
 "St Thomas Pl",1
 "Subritzky Ave",1
@@ -4816,7 +4681,6 @@
 "Babsie Rd",1
 "MacKenzie Pl",2
 "Gwyn St",1
-"Westmere Park Ave",1
 "Fleming Dr",1
 "Powles Rd",1
 "Blackwater St",1
@@ -4832,7 +4696,6 @@
 "Beckham Cl",1
 "Acacia Ave",5
 "Leewood Pl",1
-"Ferrymead Park Dr",1
 "Hokitika-Kaniere Tmwy",1
 "Beechwood Ave",1
 "Marsden Ave",2
@@ -4880,7 +4743,6 @@
 "Korau Rd",2
 "Woollcombe St",1
 "Bay Lair Grv",1
-"Portsea Pl",1
 "Corokia Cl",1
 "Calico Line",1
 "Ihakara Crt",1
@@ -4924,14 +4786,11 @@
 "Panama St",2
 "Wiltshire St",1
 "Zara Crt",2
-"Mountain Beech Rise",1
 "Selkirk St",2
 "Aparangi Dr",1
-"Cambridge Ave",1
 "Sherwill St",1
 "Starling Pl",1
 "Larchwood Grv",1
-"Foresthill Pl",1
 "Purbeck Pl",1
 "Huber St",1
 "Almorah Pl",1
@@ -4989,7 +4848,6 @@
 "Tom Pearce Dr",1
 "Harapaki Rd",1
 "Borlases Rd",1
-"Cambridge Rd",8
 "Leicester Cres",1
 "Arlington Crt",1
 "Banks St",7
@@ -5018,7 +4876,6 @@
 "Bransley Grv",1
 "Peri St",1
 "Settler Lane",1
-"Springhill Rd",1
 "Melton Rd",1
 "Harata St",1
 "Ava Pl",1
@@ -5026,13 +4883,11 @@
 "Geddes Tce",1
 "Hobbs Pl",1
 "Mersey St",7
-"Cuthill Cl",1
 "David St",12
 "Wilding Ave",3
 "Rowling Pl",1
 "Wardour Mews",1
 "Brent Pl",2
-"Hillcrest Pl",1
 "Michaels Ave",1
 "Elgin Grv",1
 "Fuller St",2
@@ -5100,11 +4955,9 @@
 "Swift Pl",1
 "Patikei Rd",1
 "Watt Crt",1
-"Weybridge Cres",1
 "Barley Mow",1
 "Mission View Dr",1
 "Westfield Ave",1
-"Parkes Ave",1
 "Doon St",5
 "Glencairn St",1
 "Woburn Pl",2
@@ -5115,10 +4968,8 @@
 "Flora Way",1
 "Giani Crt",1
 "Haining St",1
-"Carlaw Park Ave",1
 "McLeod Pl",1
 "Karaka Pl",2
-"Heybridge St",1
 "Doncaster Tce",1
 "Acheron Pl",1
 "Pinewood Way",1
@@ -5256,7 +5107,6 @@
 "Dressage Lane",1
 "Tawhiri Rd",1
 "Coates Pl",1
-"Old Station Rd",1
 "Darwin Lane",1
 "Vernall St",1
 "Gilby Grv",1
@@ -5352,11 +5202,9 @@
 "Monaco Vw",1
 "Antalya Pl",1
 "Pukekohatu St",1
-"Silverstream Pl",1
 "Nicolson Rd",1
 "Friendship Dr",1
 "Kaanapali Pl",1
-"The Square",2
 "Lee Pl",1
 "Fearon St",2
 "Edwards Pl",2
@@ -5366,7 +5214,6 @@
 "Marchant Pl",1
 "Lingham Cres",1
 "Advene Rd",1
-"Westhill Rd",1
 "Te Pari Pari Rd",1
 "Duchess St",1
 "Yeats Cres",1
@@ -5399,7 +5246,6 @@
 "Kildare St",2
 "Knighton Rd",1
 "Oakwood Pl",2
-"Manor Park Rd",1
 "Broadhurst Rd",1
 "Hodgson Ave",1
 "Goods Rd",1
@@ -5450,12 +5296,10 @@
 "Staverton Cres",1
 "St Joseph St",1
 "Old Farm Rd",1
-"Hill Rise",1
 "Sikkim Cres",1
 "Howell Pl",1
 "Betwin Ave",1
 "Lion Pl",1
-"Harbour Park Tce",1
 "Beaver Rd",1
 "Lawndale Pl",1
 "Crown Cres",2
@@ -5474,7 +5318,6 @@
 "Kiddle Dr",1
 "Bournemouth Tce",1
 "Rata Crt",1
-"Glenmall Pl",1
 "Gradara Ave",1
 "Kibblewhite Rd",1
 "Renoir Ave",1
@@ -5482,7 +5325,6 @@
 "Okarito Ave",1
 "Homer Pl",1
 "Sharkey St",1
-"Mahoneys Hill Rd",1
 "Netherton St",1
 "Handley St",1
 "Warwick Cres",1
@@ -5503,7 +5345,6 @@
 "Craighead St",1
 "Lowther Pl",1
 "Oman St",1
-"Foxbridge Lane",1
 "Pigeon Valley Rd",1
 "Harlock Pl",1
 "Seibel Rd",1
@@ -5576,14 +5417,12 @@
 "Greenfield Pl",2
 "Norgrove Ave",1
 "McSaveneys Rd",1
-"Pacific Park Way",1
 "Barretts Way",1
 "Root St",1
 "West Town Belt",2
 "Waitomo Ave",1
 "Bathurst Lane",1
 "Peter Snell Rd",1
-"Riverlea Ave",1
 "Pery St",1
 "Delph St",1
 "Mill Bay Rd",1
@@ -5591,7 +5430,6 @@
 "Wharepapa Grv",1
 "Biscay Pl",1
 "Walker Grv",1
-"Achilles Cres",2
 "Stoddard Rd",1
 "Glenleigh Pl",1
 "Prosser St",2
@@ -5685,13 +5523,11 @@
 "Tregoweth Lane",1
 "Milesbrook Cl",1
 "Ava Ave",1
-"Parkhill Ave",2
 "Oban St",6
 "Mapledale Pl",1
 "Ohariu Valley Rd",1
 "Humphrey St",3
 "Malvern St",2
-"Mohill Pl",1
 "Devon Cres",2
 "Burwood Cres",1
 "Merriman Pl",1
@@ -5703,7 +5539,6 @@
 "Ben Lomond Cres",1
 "Campbell Ave",1
 "Turoa Dr",1
-"Blakes Rd",2
 "Barometer Way",1
 "Talboys Dr",1
 "Carmel Ave",1
@@ -5778,7 +5613,6 @@
 "Aberdeen Dr",1
 "Spence Lane",1
 "Perreau Ave",1
-"Portsmouth Pl",1
 "Hiawatha Lane",1
 "Perth St",12
 "Loch St",1
@@ -5796,7 +5630,6 @@
 "Harrod St",1
 "Myers Pl",2
 "Nivarna Way",1
-"Portofina Pl",1
 "Schooner Ave",1
 "Logan Tce",1
 "Swinbourne St",1
@@ -5849,7 +5682,6 @@
 "Glynnbrooke St",1
 "Goulds Rd",2
 "Chad St",1
-"Maypark Cres",1
 "Cadogan Lane",1
 "Kidson Lane",2
 "Cashmere Ave",1
@@ -5891,11 +5723,9 @@
 "Plunket Tce",1
 "Kapiti Lane",1
 "Nicholas Pl",1
-"Hill View Dr",1
 "Airey Pl",1
 "Cole Grv",1
 "Sandy Bay Rd",1
-"Rosehill Pl",1
 "Asics Dr",1
 "Manuwai Dr",1
 "Gillespies Rd",2
@@ -5950,7 +5780,6 @@
 "Cooper Ave",1
 "Pauline Pl",1
 "Brenda Pl",1
-"Railway Cres",2
 "Te Oro Pl",1
 "Ronald Crt",1
 "Kiwitea St",1
@@ -6018,7 +5847,6 @@
 "Hadleigh Pl",1
 "Hamilton Pl",4
 "Faulkner St",1
-"Leabridge Mews",1
 "Thorrington Lane",1
 "Solent St",3
 "Roscommon Rd",2
@@ -6054,7 +5882,6 @@
 "Crum Ave",1
 "Zingaro Pl",1
 "Belvedere Ave",1
-"Post Office Sq",1
 "Logie Pl",1
 "Tane Lane",1
 "Allan Pl",1
@@ -6066,7 +5893,6 @@
 "Kilmarnock St",3
 "Tomika Cres",1
 "Belmont Rd",2
-"Portland Tce",1
 "Flinders Rd",1
 "Cologne St",1
 "John Laughton Pl",1
@@ -6156,7 +5982,6 @@
 "McKinley Lane",1
 "Putini Rd",1
 "Chipping Dle",1
-"Deer Park Rd",1
 "Waimokihi Pl",1
 "Langstone St",1
 "Spruce Grv",1
@@ -6166,7 +5991,6 @@
 "Ohau Crt",1
 "Morgan Mews",1
 "Hayr Rd",1
-"Parkes Line Rd",1
 "Karetu Rd",1
 "Dupre Pl",1
 "Willis Lane",1
@@ -6212,7 +6036,6 @@
 "Wimbledon Cl",1
 "Tinokore St",1
 "Lester Lane",1
-"Crown Hill Cl",1
 "Nita Pl",1
 "Harrison Cres",1
 "Parr Pl",1
@@ -6253,7 +6076,6 @@
 "Le Roy Tce",1
 "Waterfall Rd",1
 "Matamau St",1
-"Hillwell Dr",1
 "Ventnor Cres",1
 "Hodge Pl",1
 "Checketts Ave",1
@@ -6397,7 +6219,6 @@
 "Andrews St",2
 "Manley Tce",1
 "Beauchamp Dr",1
-"Park View Ave",1
 "Upper Major Hornbrook Rd",1
 "Golding Ave",1
 "Carmen Tce",1
@@ -6410,7 +6231,6 @@
 "Goodrich Cl",1
 "Tilbury Pl",2
 "Moorehouse St",1
-"Pony Park Pl",1
 "Sylvania Dr",1
 "Willoughby Ave",1
 "Taverner St",1
@@ -6474,7 +6294,6 @@
 "St Heliers Bay Rd",1
 "Berkshire Ave",1
 "Osborne Ave",1
-"Achilles Ave",4
 "Bulwer Rd",1
 "Swindells Rd",1
 "Justin St",1
@@ -6521,14 +6340,12 @@
 "Slaney St",1
 "Tararu Creek Rd",1
 "Francis St",5
-"Living Stream Rd",1
 "Meadowcourt Dr",1
 "Montague Pl",1
 "Scotia St",3
 "Bellbrook Cres",1
 "Tory Lane",1
 "Maidstone St",1
-"Waterford Park Dr",1
 "Eglinton St",2
 "Hanene St",1
 "Bob Wilson Pl",1
@@ -6573,7 +6390,6 @@
 "Shakespeare Tce",1
 "Hartland Pl",1
 "Chancery Lane",1
-"Park Avenue Mews",1
 "Hinemoa St",10
 "MacArthur St",2
 "Trias Rd",1
@@ -6617,7 +6433,6 @@
 "Cricket Ave",1
 "Hailes Rd",2
 "Prosford St",1
-"Willow Park Pl",1
 "Frank Wilson Tce",1
 "Tapley Padk",1
 "Lovelock Ave",2
@@ -6642,7 +6457,6 @@
 "Fenhall St",1
 "Beachcroft",1
 "Paisley St",6
-"Rakaia Barrhill Methven Rd",1
 "Kuiwai Dr",1
 "Taiaho Pl",1
 "Cotswold Ave",1
@@ -6697,7 +6511,6 @@
 "Bidwill St",2
 "Carnarvon Ave",1
 "Birkdale Rd",1
-"Westpark Dr",2
 "Tay Pl",1
 "The Grove",4
 "Mersey Pl",1
@@ -6708,7 +6521,6 @@
 "Cindy Pl",1
 "Edmundson St",1
 "Hollyhock Pl",1
-"Mortlake St",1
 "Pope Tce",1
 "Woodford Hts",1
 "Seamount Dr",1
@@ -6794,16 +6606,13 @@
 "Kingsgate Ave",1
 "Kedleston Dr",1
 "Jensen St",2
-"Tunnel Rd",1
 "Well St",1
-"Riverside Way",1
 "Fantail Crt",1
 "Cornell Crt",1
 "Pawa Pl",1
 "Beresford Sq",1
 "Heaphy Tce",1
 "Walter Pk",1
-"Parkinson St",1
 "Hornsea Rd",1
 "Jans Tce",1
 "Taranui Pl",4
@@ -6842,7 +6651,6 @@
 "Alderton Pl",1
 "Cook Tce",1
 "Moiri Pl",1
-"Fernhill St",1
 "Weir Pl",1
 "Fern Pl",1
 "Cayman Pl",1
@@ -6977,7 +6785,6 @@
 "Montagu St",1
 "Valencia Lane",1
 "Polglase St",1
-"River Tce",7
 "Lilac Pl",1
 "Lancewood Grv",1
 "Lucy Foster Lane",1
@@ -6990,7 +6797,6 @@
 "Cathro Rd",1
 "Belgate Pl",1
 "Limber Hl",1
-"Riverside Lane",2
 "Jensen Pl",1
 "Camside Rd",1
 "Jones Rd",1
@@ -7058,7 +6864,6 @@
 "Jays Rd",1
 "Entrance St",1
 "Barrington Way",1
-"Sunhill Rd",1
 "Lower Tyers Rd",1
 "Thebes Grv",1
 "Wye Pl",1
@@ -7078,7 +6883,6 @@
 "Fresil Lane",1
 "Hathor St",1
 "Soljak Pl",1
-"Parkland Cres",2
 "Upper Ure St",1
 "Maryland Pl",1
 "Rebecca Ave",1
@@ -7112,10 +6916,8 @@
 "Castlerea St",1
 "Walton Rd",1
 "Ellis Rd",1
-"Blakewell Lane",1
 "Wendover St",1
 "Champagne Ave",1
-"Knightsbridge Pl",3
 "Walker Pl",3
 "Sevenoaks Dr",1
 "Watchorn Pl",1
@@ -7216,7 +7018,6 @@
 "Sylvan St",3
 "Wallath Rd",2
 "Nancy St",1
-"Hills St",1
 "Tamaki St",2
 "Filgate St",1
 "Jeffares Pl",1
@@ -7246,7 +7047,6 @@
 "Wainuiomata Rd",1
 "Green Pl",1
 "North Beach Rd",1
-"Riverhead Rd",1
 "Te Wharau Dr",1
 "Lanark Cres",1
 "Elmira Pl",1
@@ -7278,9 +7078,7 @@
 "Burden Ave",1
 "Waiiti Pl",1
 "Sandpiper Crt",1
-"Holmwood Park Dr",1
 "Bevan Pl",3
-"Nottinghill Dr",1
 "Barnsley Pl",1
 "Moana Grv",1
 "Reg Savory Pl",1
@@ -7295,7 +7093,6 @@
 "Esplanade Rise",1
 "Barbados Dr",1
 "Warrender St",1
-"Parkside St",1
 "Louise Pl",3
 "Masters Cres",1
 "Springdale Lane",1
@@ -7337,7 +7134,6 @@
 "Limerick Pl",1
 "Jillteresa Cres",1
 "Paton St",1
-"St Hill Lane",1
 "Te Pihopa Way",1
 "Lobelia Rise",1
 "Footscray Ave",1
@@ -7350,7 +7146,6 @@
 "Dunvegan Pl",2
 "Chester Pl",1
 "Ethel Benjamin Pl",1
-"Lakewood Dr",2
 "Premwood Rd",1
 "Weston Ave",2
 "Elenora Cl",1
@@ -7364,7 +7159,6 @@
 "Roto Pl",1
 "Stronsa St",1
 "Corfe St",1
-"Drivers Rd",1
 "Colway Pl",1
 "Taumaru Ave",1
 "Lincoln Lane",1
@@ -7414,7 +7208,6 @@
 "Broom St",1
 "Karamu Cres",2
 "Rameses Pl",1
-"Cottle Park Dr",1
 "Vino Cina Hts",1
 "Brandon Mews",1
 "Ellison Rd",1
@@ -7447,7 +7240,6 @@
 "Puriri Ave",3
 "Sarjant Pl",1
 "Goodson Pl",1
-"Caerphilly Pl",1
 "Kamla Way",1
 "Makepiece Pl",1
 "Centreway Rd",1
@@ -7469,7 +7261,6 @@
 "Cumberland Cres",1
 "Stewart Pl",2
 "Exeter Rd",1
-"Lake View Crt",1
 "Sabulite Rd",1
 "Lamason St",1
 "Major Hornbrook Rd",1
@@ -7495,7 +7286,6 @@
 "Halswell Rd",1
 "Heritage Rise",1
 "Jubilee Way",1
-"Pine Hill Rd",1
 "Amber Dr",1
 "Carter Rd",2
 "Crewe Cl",1
@@ -7539,7 +7329,6 @@
 "Lisava Ave",1
 "Hamon Pl",1
 "Hyperion Crt",1
-"Railway Tce",5
 "Greensboro St",1
 "Treneglos St",1
 "Wakeman St",1
@@ -7563,7 +7352,6 @@
 "Lingrins Tce",1
 "Retreat Rd",2
 "Foxford Cl",1
-"Parkland Dr",1
 "City View Tce",1
 "Northern Rata Pl",1
 "Thule St",1
@@ -7592,7 +7380,6 @@
 "Tauranga Rd",1
 "Minerva Tce",1
 "Holmes St",3
-"Tumbridge Pl",1
 "Mayfield Rd",1
 "Cabernet Cres",1
 "Johnson Lane",1
@@ -7618,22 +7405,18 @@
 "Waiteata Rd",1
 "Dreifuss Pl",1
 "Springvale Rd",1
-"Rosehill Way",1
 "Rimu Rd",6
 "Percy Dyett Dr",1
 "Rapanui Lane",1
 "Claremont Grv",1
 "Lapwood Rd",1
-"Stembridge Rd",1
 "Ormonde Rd",1
 "Clover Dr",1
 "Ihakara St",1
 "Rimu Crt",2
 "Lillian Pl",1
-"Centre Cres",1
 "Steward St",1
 "Sledmere St",1
-"Hilliard St",1
 "Ballantrae Pl",5
 "Leamington Mews",1
 "Danby St",1
@@ -7649,8 +7432,6 @@
 "Faber Pl",1
 "Wallace Rd",3
 "Dundonald St",3
-"Cambridge Pk",1
-"Pethybridge St",1
 "Hull Pl",2
 "Robertshawe Cres",1
 "Reeds Rd",1
@@ -7666,7 +7447,6 @@
 "Surprise Pl",1
 "Lomond Pl",3
 "Dalmeny Cl",1
-"Parkview Rise",1
 "Aragon Ave",1
 "Gore St",5
 "Topeka Grv",1
@@ -7705,7 +7485,6 @@
 "Frank Nobilo Dr",1
 "Heyford Cl",1
 "Viscount Grv",1
-"Blakey St",1
 "Renlee Pl",1
 "Amy Pl",1
 "Rothery Rd",1
@@ -7723,7 +7502,6 @@
 "Ngaire St",1
 "Tom Plato Dr",1
 "Miriona Grv",1
-"Achilles St",3
 "Eaglesome Ave",1
 "Cheltenham Cl",1
 "Fairmont Tce",1
@@ -7749,7 +7527,6 @@
 "Tedder St",1
 "Ruatara Dr",1
 "Stonedon Dr",1
-"Underhill Rd",1
 "Hapenui Rd",1
 "Cypress Lane",1
 "Kanuka Cl",1
@@ -7770,7 +7547,6 @@
 "June Pl",2
 "Nautical Dr",1
 "Clive St",4
-"Normans Hill Rd",1
 "Warwickson Lane",1
 "Tupara Cres",1
 "Pelargonium Tce",1
@@ -7830,7 +7606,6 @@
 "Leckhampton Crt",1
 "Drummond Dr",1
 "Somerset Tce",1
-"Coldstream Rd",2
 "Oracle Dr",1
 "Galveston Grv",1
 "Carron St",1
@@ -7851,7 +7626,6 @@
 "Limeburners St",1
 "Ewbank Pl",1
 "Hazel Ave",2
-"Hillcrest Ave",6
 "Lowes Rd",1
 "Haswell St",1
 "Hopgood Pl",1
@@ -7865,7 +7639,6 @@
 "Thorn Cres",1
 "Mount Ave",1
 "Stuart Cres",1
-"Bushlands Park Dr",1
 "Dalry Pl",1
 "Monro St",4
 "Westchester Dr",1
@@ -7917,7 +7690,6 @@
 "Aorangi St",1
 "Taihua St",1
 "St Florian Pl",1
-"Westpark Cl",1
 "Bowling Green Rd",1
 "Punga Grove Ave",1
 "Thetford Ch",1
@@ -8040,7 +7812,6 @@
 "Paranui Cres",1
 "Herewini St",3
 "Collier Pl",1
-"Riverbank Rd",5
 "Hague Pl",1
 "Plowman Cres",1
 "Polandson Pl",1
@@ -8049,7 +7820,6 @@
 "Westmere Cres",1
 "Lysander St",1
 "Dewsbury Grv",1
-"Mill Stream Lane",1
 "Wharry Rd",1
 "Coney Lane",1
 "Bushy Beach Rd",1
@@ -8103,7 +7873,6 @@
 "Huntly Rd",2
 "Robinson Cres",2
 "Davington Way",1
-"Signal Hill Rd",2
 "Chard St",1
 "Lydia Ave",1
 "Leith Cres",1
@@ -8119,7 +7888,6 @@
 "Buxton Tce",1
 "Bering St",1
 "Montgomery Tce",2
-"Bremner Park Rd",1
 "Lipsey St",1
 "De La Mare Pl",1
 "Brookfield Dr",1
@@ -8145,18 +7913,15 @@
 "Camwell Cl",1
 "Penman Pl",1
 "Central St",3
-"Rosehill Dr",1
 "Raukawa Grv",1
 "Naseby St",1
 "Windley Ave",1
 "Mynah Pl",1
-"Blue Mountains Rd",1
 "Awatea Ave",1
 "Willowview Dr",1
 "Gardiners Rd",1
 "Jennifer St",1
 "Elworthy Way",1
-"Hillcrest Rd",6
 "Ebor St",1
 "Slako Cres",1
 "Lexington Dr",1
@@ -8231,7 +7996,6 @@
 "Meridian Way",1
 "Vaughan Rd",1
 "Mapplebeck St",1
-"Greenhills Dr",1
 "Olive Grv",2
 "Tirangi St",1
 "Mount View Rd",3
@@ -8271,13 +8035,11 @@
 "Baltimore Grn",1
 "Lyell Crt",1
 "Alderwick Pl",1
-"Park Vw",1
 "Hattie St",1
 "Pounama Pl",1
 "Patutu Grv",1
 "Tole St",1
 "Woodside Rd",4
-"Newport Key",1
 "Hoani St",2
 "Barrie Cres",1
 "O'Connell Crt",1
@@ -8310,7 +8072,6 @@
 "Slade St",2
 "Kennington Dr",1
 "Verley Rise",1
-"Riverlea Way",1
 "Lurline Ave",1
 "Hamill Rd",1
 "Freelance Tce",1
@@ -8331,7 +8092,6 @@
 "Rushton Ave",1
 "Amber Cl",1
 "Lansdown St",1
-"Central Park Dr",2
 "Lombardy St",1
 "Badminton Crt",1
 "Irirangi Rd",1
@@ -8409,7 +8169,6 @@
 "Condell Ave",1
 "Tyne St",12
 "Donna St",1
-"Post Office Ave",1
 "Oak Bark Dr",1
 "Wedding Pl",1
 "Ailsa Pl",1
@@ -8435,23 +8194,19 @@
 "Atawhai Dr",1
 "Lower North Tce",1
 "Sunset Lane",1
-"Parkview Lane",1
 "Worth St",1
-"Phillip May Pl",1
 "Matilda Pl",2
 "Tait Cres",1
 "Solo Pl",1
 "Rossiter Ave",2
 "Aspen Crt",1
 "Okona Cres",1
-"Greenpark Rd",1
 "Camira Pl",1
 "Landseer Pl",1
 "Fenton St",5
 "Wildman Ave",1
 "Daytona Rd",1
 "Swordfish Pl",1
-"Stonebridge Way",1
 "Dunstan Grv",1
 "Semple St",2
 "Currie Cres",1
@@ -8472,7 +8227,6 @@
 "Springwater Ave",1
 "Paerimu St",1
 "Haswell Pl",1
-"Riverhills Ave",1
 "Balneavis Pl",1
 "Coles Cv",1
 "Hobson Dr",1
@@ -8484,7 +8238,6 @@
 "Glenalmond Cres",1
 "Tainui Cres",1
 "Winchester Pl",2
-"Trig Hill Tce",1
 "Dodson Valley Rd",1
 "Greenough Pl",1
 "Puriri Pl",5
@@ -8503,9 +8256,7 @@
 "Eglinton Rd",2
 "Kirton Pl",1
 "Sammaree Pl",1
-"Churchill Rd",3
 "Mosman Pl",1
-"Hillgrove Pl",1
 "Kings Dr",2
 "Everard St",1
 "Old Mill St",1
@@ -8588,7 +8339,6 @@
 "Catherin Servant Cl",1
 "Delmont Cl",1
 "Shearwater St",1
-"Portobello Pl",1
 "Glenarm Ave",1
 "Reid Dr",1
 "Jarnac Blvd",1
@@ -8628,7 +8378,6 @@
 "Currie Ave",1
 "Calypso Rise",1
 "Wyman Pl",1
-"Hillside Lane",2
 "Matawalu Pl",1
 "Te Taou Cres",1
 "Seyton St",1
@@ -8681,7 +8430,6 @@
 "Verviers St",1
 "Hall Pl",1
 "Flavell St",1
-"Hillhead Rd",1
 "Lakshmi Pl",1
 "Kelburn Lane",1
 "Cheviot Rd",1
@@ -8825,7 +8573,6 @@
 "Andaman Grv",1
 "Hobday Pl",1
 "Walters St",1
-"McCahill Vws",1
 "Brough St",1
 "Tennyson Rd",1
 "Phelps Pl",1
@@ -8843,7 +8590,6 @@
 "Timandra St",1
 "Renoir Lane",1
 "Otore St",1
-"Station St",7
 "Rushland Rise",1
 "Culverdon St",1
 "Leach Pl",1
@@ -8851,7 +8597,6 @@
 "Lydia St",3
 "Emerald Pl",2
 "The Terrace",9
-"Vinegar Hill Rd",1
 "Cooks Lane",1
 "Mermaid Pl",3
 "Edgerley Ave",1
@@ -8874,8 +8619,6 @@
 "Rawinia St",1
 "Stockdale St",1
 "Vivian Pl",1
-"Portage Rd",3
-"Edenpark Dr",1
 "Kelvin Pl",4
 "Hawkley Cl",1
 "Cheeseman Rd",1
@@ -8886,21 +8629,17 @@
 "Braithwaite Ave",1
 "Tauranga Pl",2
 "Truro Pl",1
-"Lakeridge Cl",2
 "Carnarvon Pl",1
 "Garden Pl",7
 "Laurel Grv",1
 "Harkess Lane",1
 "Kawatiri Grv",1
 "Jack Russell Dr",1
-"Parker St",5
 "Otago Pl",1
 "Kensington Pl",3
-"Glenpark Ave",2
 "Koura St",2
 "Northpoint Way",1
 "Hanby Pk",1
-"Riverton Tce",1
 "Flagstaff Pl",1
 "Chelsea Way",1
 "Corlett St",3
@@ -8963,12 +8702,10 @@
 "Wicken Pl",1
 "Foote St",1
 "St Regis Way",1
-"Barnhill Cres",1
 "Rosetti Rise",1
 "Bridle St",1
 "Leigh Tce",1
 "Vercoe Rd",1
-"Port Lane",1
 "Owaka Cl",1
 "Palliser Rd",1
 "Epworth Ave",1
@@ -9030,7 +8767,6 @@
 "Lauriston St",2
 "Moana Hts",1
 "Buscomb Ave",1
-"Greenhill Cres",1
 "Plymouth Lane",1
 "Katie Lane",1
 "Lilburn Cres",1
@@ -9054,7 +8790,6 @@
 "Gerwyn Pl",1
 "Lawry Pl",1
 "Tod St",1
-"Knightsbridge Lane",1
 "Mona Sq",1
 "Hughes Cres",2
 "Waimarie Pk",1
@@ -9094,13 +8829,11 @@
 "Glentui Pl",1
 "Colin Brook Pl",1
 "Iorns St",1
-"Fairhill Pl",1
 "Lauria Way",1
 "Wanganui Ave",1
 "Muritai Cres",1
 "Ti Rakau Dr",3
 "Half Mile Rd",1
-"Glenpark Pl",2
 "Clare Pl",5
 "Stonewall Grv",1
 "Maunder St",1
@@ -9187,7 +8920,6 @@
 "Clemow Rd",1
 "Te Reinga St",1
 "The Ritz",1
-"Newbridge Pl",1
 "Retter St",1
 "Lourie Way",1
 "Kirrie Ave",1
@@ -9202,10 +8934,8 @@
 "Bexley Pl",1
 "Warre St",1
 "Wayland St",1
-"Portchester St",1
 "Ossian St",2
 "Connolly Ave",1
-"Griffen Park Rd",1
 "Westall Lane",1
 "Epping Way",1
 "Bosnyak Dr",1
@@ -9221,7 +8951,6 @@
 "Langana Ave",1
 "Kinmont Cres",2
 "Viewlands Pl",1
-"Railway Rd",13
 "Waimahia Ave",1
 "Sheldon St",1
 "Jontue Pl",1
@@ -9242,7 +8971,6 @@
 "Bathurst Rd",1
 "Shetland St",3
 "Meldrum St",4
-"Brooklands Park Dr",1
 "Taiko St",1
 "Bollard Ave",1
 "Corin Ave",1
@@ -9266,7 +8994,6 @@
 "Sandhurst Rise",1
 "Braemar Ave",1
 "Kinloch Cres",1
-"Tonbridge St",1
 "Holdaway Grv",1
 "Exler Pl",1
 "Ngaruawahia Rd",1
@@ -9336,9 +9063,7 @@
 "The Anchorage",4
 "Maria Pl",3
 "Cathay Lane",1
-"Willowstream Grv",1
 "Goodbehere St",1
-"Emerald Hill Dr",1
 "Richard Pearse Rd",1
 "St John St",4
 "Caplen St",1
@@ -9396,7 +9121,6 @@
 "Valentine St",2
 "Jubaea Pl",1
 "Wi Neera Dr",1
-"Hill View Cres",1
 "Brook Rd",1
 "Miro Rd",4
 "Ranui Ave",3
@@ -9411,7 +9135,6 @@
 "Regent St",15
 "Fitzherbert Cl",1
 "Appaloosa Ave",1
-"Gosport Pl",1
 "Lookout Dr",2
 "Thomas Pl",3
 "Hanmer Pl",1
@@ -9435,7 +9158,6 @@
 "Egmont St",10
 "Tiber Rd",1
 "Whall St",1
-"Lakewood Crt",1
 "Smithfield Rd",3
 "Martyn St",1
 "Kate Sheppard Pl",1
@@ -9485,7 +9207,6 @@
 "Derby Downs Pl",1
 "Foxglove Dr",1
 "Ramsgate St",2
-"Waimauku Station Rd",1
 "Amesbury St",1
 "Frank Frethey Pl",1
 "Ropiha St",1
@@ -9564,7 +9285,6 @@
 "Ryan Cres",1
 "Ghuznee St",1
 "Newbegin Pl",1
-"Surrey Park Rd",1
 "Broadfell Ave",1
 "Dent Pl",1
 "Fantail Lane",1
@@ -9573,7 +9293,6 @@
 "Austin Pl",2
 "Aldersgate Rd",1
 "Cresta Crt",1
-"Lakewood Grv",1
 "Watts St",2
 "Duppa St",1
 "Naples Way",1
@@ -9582,7 +9301,6 @@
 "Potaka St",1
 "Nott St",1
 "St Oswalds Rd",1
-"Blakeborough Dr",1
 "Chadwick Pl",2
 "Discovery Pl",1
 "Walnut Lane",2
@@ -9609,7 +9327,6 @@
 "Carbisdale Rd",1
 "Havenview",1
 "Dalwood Grv",1
-"Richards Park Lane",1
 "Fookes St",1
 "Saunders Cres",1
 "Pleasant View Rd",1
@@ -9722,7 +9439,6 @@
 "Eldonwood Dr",1
 "Dickeson St",1
 "Lawlor St",1
-"Glenroy Park Dr",1
 "Coppinger Tce",1
 "Albany Rd",2
 "Farnworth Ave",1
@@ -9810,7 +9526,6 @@
 "Pretoria St",2
 "Fairdale Ave",1
 "Te Ore Ore Rd",1
-"Hillcroft Rd",1
 "Tangaroa St",2
 "Wha St",2
 "Pit St",1
@@ -9876,7 +9591,6 @@
 "Ching Gdns",1
 "Mavora Rd",1
 "Nederland Ave",1
-"Riverholm Dr",1
 "Best St",1
 "Yankee Lane",1
 "Garrison Rd",1
@@ -9886,7 +9600,6 @@
 "Pleasant Wood Pl",1
 "Rowan Pl",5
 "Hilton Grv",1
-"Forest Park Dr",1
 "Hunua Rd",1
 "Waiwhetu Rd",2
 "Criterion Lane",1
@@ -9904,7 +9617,6 @@
 "Hayes Rd",1
 "Teasdale St",1
 "Famille Cl",1
-"Parkdale Cres",1
 "Mayne Pl",1
 "Kama Pl",1
 "Killybegs Dr",1
@@ -9962,7 +9674,6 @@
 "Hauraki Cres",1
 "Arataki Grv",1
 "Sugar Loaf Pl",1
-"Royal Park Dr",1
 "Lilac Grv",1
 "Villarosa Lane",1
 "McMillan Crt",1
@@ -10044,7 +9755,6 @@
 "Buttercup Pl",1
 "Cowling Rd",1
 "Silva Cres",1
-"Postbridge Lane",1
 "St Francis Cres",1
 "Cram Crt",1
 "Chaffey Cres",1
@@ -10072,7 +9782,6 @@
 "Volga St",1
 "Larkin Pl",1
 "Rimu Lane",2
-"Coney Hill Rd",1
 "Winstone Pl",1
 "Belfry Pl",1
 "Battlen Pl",1
@@ -10089,7 +9798,6 @@
 "Ruapehu St",5
 "Arran Rd",2
 "Woodbank Dr",1
-"Lakeview Qy",1
 "Stella Cl",1
 "John Rymer Pl",1
 "Hartley Rd",1
@@ -10268,7 +9976,6 @@
 "Glenburn Pl",3
 "Sundell Pl",1
 "Sugarloaf Rd",1
-"Penrith Park Dr",1
 "Waterhouse Dr",1
 "Westminster Pl",1
 "Left Bank",1
@@ -10291,7 +9998,6 @@
 "Siddal Pl",1
 "Hautana St",1
 "Arncliff St",1
-"Parkwood Grv",1
 "Filmer Pl",1
 "Dartmoor Ave",1
 "Loveridge Pl",1
@@ -10318,7 +10024,6 @@
 "Tainui St",15
 "Hale Pl",1
 "Leicester Ave",1
-"Fernhill Rd",1
 "Raumati Tce",1
 "Nevis St",1
 "Herapeka St",1
@@ -10368,12 +10073,9 @@
 "Marshland Rd",2
 "Rainton Rd",1
 "Warren Cres",1
-"Churchill Dr",2
 "Sidey Ave",1
 "Arbor Cl",1
-"River Pde",1
 "De Lacey Lane",1
-"Achilles Dr",1
 "Lothian Brae",1
 "Aorangi Rd",4
 "Poulters Rd",1
@@ -10390,7 +10092,6 @@
 "Michigan Cres",1
 "Mornington Del",1
 "Grundy Pl",1
-"East Parkdale St",1
 "Jed Lane",1
 "Abbotsford Rd",2
 "Greig Pl",1
@@ -10441,7 +10142,6 @@
 "Te Arawa St",1
 "Ryburn Rd",1
 "Tor St",1
-"Parkham Dr",1
 "Chiswick Ave",1
 "Colombo Crt",1
 "Waltham Rd",1
@@ -10455,7 +10155,6 @@
 "Taurarua Tce",1
 "Birch Rd",1
 "Helston Rd",1
-"Marsden New River Rd",1
 "Canning Pl",1
 "Kau Kau Way",1
 "Redcrest Ave",1
@@ -10514,7 +10213,6 @@
 "Ardagh Pl",1
 "Birman Pl",1
 "Huntly Ave",1
-"Lake Dr",1
 "Hunter Dr",1
 "Kurahaupo St",1
 "Thyra St",1
@@ -10559,7 +10257,6 @@
 "Ashmore St",1
 "Progressive Way",1
 "Ellerslie-Panmure Hwy",1
-"Sunnyhill Cres",1
 "Regia Cl",1
 "Albion Pl",2
 "Ochre Pl",1
@@ -10593,7 +10290,6 @@
 "Omarere Rd",1
 "Ruskin Tce",1
 "Blouden Lane",1
-"Portal Cres",1
 "Ti Kouka Pl",1
 "San Domingo Rise",1
 "Belfast St",2
@@ -10609,11 +10305,9 @@
 "Sylvester Ave",1
 "Burbury Rdge",1
 "Coughtrey St",1
-"Mountain View Mews",1
 "Jayne Pl",1
 "Ash Grv",3
 "Heremai St",1
-"Newport Tce",1
 "Stratford Ave",1
 "Shirley St",2
 "Cobham Way",1
@@ -10664,12 +10358,10 @@
 "Luke St",3
 "Gresham Pl",2
 "Armour Ave",1
-"Awaroa River Rd",1
 "Lark Pl",1
 "Ann Michele St",1
 "Faraday St",4
 "Vogel Crt",1
-"Mountain View Terrace End",1
 "McCauley Grv",1
 "Butia Ave",1
 "Te Awanui Dr",1
@@ -10711,7 +10403,6 @@
 "Ardal Grv",1
 "Archibald Rd",1
 "Funnell Pl",1
-"Middlepark Rd",1
 "Queenwood Rd",1
 "Kalmia St",1
 "Trossach Pl",1
@@ -10763,7 +10454,6 @@
 "Brodie St",2
 "Smales Rd",1
 "Weldene Ave",1
-"Bridge Park Lane",1
 "Duval Grv",1
 "Awahou Pl",1
 "Strathean Ave",1
@@ -10834,7 +10524,6 @@
 "Viola Ave",1
 "Pinewood Pl",1
 "Newburn Grv",1
-"Millstream Dr",3
 "Purnell Pl",1
 "Citrus Grv",1
 "Western View Hts",1
@@ -10858,7 +10547,6 @@
 "Melville Pl",1
 "Elgar St",1
 "Fortification Rd",1
-"Parkvale Grv",1
 "Lavandula Cres",1
 "Botha Rd",1
 "Gort Pl",1
@@ -10871,7 +10559,6 @@
 "Kiwi Esp",1
 "Taranaki Pl",1
 "Crispian Pl",1
-"Railway St",7
 "Tuam Grv",1
 "Moodie St",1
 "Dunstall Pl",1
@@ -10879,7 +10566,6 @@
 "Bayside Ave",1
 "Allman Dr",1
 "Atkinson Ave",2
-"Tothill Pl",1
 "Brunel St",1
 "Carrick Robertson Pl",1
 "Paradise Point Pl",1
@@ -10893,8 +10579,6 @@
 "Abbie Lane",1
 "Tree Tops Rise",1
 "Wolsley St",1
-"Lakeview Tce",3
-"Ryehill Cl",1
 "Snowden Cres",1
 "Hardinge Rd",1
 "Noble Johnston Dr",1
@@ -10916,7 +10600,6 @@
 "Bowden Pl",1
 "Test St",1
 "Dene Court Lane",1
-"Summerhill Dr",1
 "Hibiscus Grv",2
 "Katterns St",1
 "Runa Pl",1
@@ -10925,10 +10608,7 @@
 "Wakeling Ave",1
 "Amon Ave",1
 "Hatrick St",1
-"Portside Way",1
-"Bainbridge Ave",1
 "Des Swann Dr",1
-"Totara Park Rd",1
 "Dumbarton Pl",1
 "Stirling Pl",4
 "Moreau St",1
@@ -10940,7 +10620,6 @@
 "Norman Tce",1
 "Bittern Pl",1
 "Seymour St",8
-"Lake Ave",1
 "Logan Crt",1
 "Salmond Pl",2
 "Livingstone Rd",1
@@ -10967,7 +10646,6 @@
 "Cowan Rd",1
 "Gaynor St",1
 "Sample Rd",1
-"Mountain View Dr",1
 "Ballance Pl",1
 "Waipa St",1
 "Boulez Mews",1
@@ -11022,7 +10700,6 @@
 "Raffles St",1
 "Rosalie Tce",1
 "Maddison Lane",1
-"Glenpark Cres",1
 "Meeanee Qy",1
 "Fitchburg Pl",1
 "Emerald Shores Dr",1
@@ -11058,7 +10735,6 @@
 "Ngarua Rd",1
 "Thompson Rd",3
 "Charnwood Grv",1
-"Pall Mall Arc",1
 "Iona St",5
 "Kilmarnoch St",1
 "Janet St",3
@@ -11066,7 +10742,6 @@
 "Cape Horn Rd",1
 "Rowland Ave",1
 "Percy Rd",1
-"Park Pl",2
 "Clyma St",1
 "Newton Pl",4
 "Rochdale Ave",1
@@ -11212,7 +10887,6 @@
 "Mahupuku St",1
 "Bagley St",1
 "Pluto Pl",2
-"Allport Cl",1
 "Rigter Pl",1
 "Kotinga Ave",1
 "Halifax Ave",2
@@ -11271,7 +10945,6 @@
 "Kaplan Ave",1
 "Ellen St",2
 "Kenwick Pl",1
-"Office Rd",1
 "Harbison St",1
 "Hilbre Ave",1
 "Burwood Pl",1
@@ -11312,7 +10985,6 @@
 "Villers St",1
 "Hercules Dr",1
 "Jury Pl",1
-"Abbeyhill Rd",1
 "Carnie St",1
 "Fuller Tce",1
 "Anzac Crt",1
@@ -11378,13 +11050,11 @@
 "Binnie St",2
 "Earl Dr",1
 "Lychgate Cl",1
-"Fernhill Way",1
 "Vienna St",1
 "Chislehurst Pl",1
 "Oaktree Ave",1
 "Francis Ave",1
 "Jomac Pl",1
-"River Terrace Rd",1
 "Marlin Dr",1
 "Fearn St",1
 "Euan St",1
@@ -11395,7 +11065,6 @@
 "Taha Pl",1
 "Stevenson Ave",1
 "Temple Mews",1
-"Parkhouse Rd",1
 "Ina Ville Dr",1
 "Tanekaha Rd",1
 "Galsworthy Pl",1
@@ -11456,7 +11125,6 @@
 "Havana Pl",1
 "Lardner Rd",1
 "Rochfort St",2
-"Kirkhill Cl",1
 "Carter Tce",1
 "Apollo Dr",1
 "Milky Way",1
@@ -11467,7 +11135,6 @@
 "Fourth Ave",4
 "Maraekakaho Rd",1
 "Rosella Grv",1
-"Transport Lane",1
 "Potts Ave",1
 "Friar Cl",1
 "Northcrest",1
@@ -11475,8 +11142,6 @@
 "Clements Cres",1
 "Tanner Rd",1
 "Scorpio Pl",1
-"Regents Park Pl",1
-"Riverglade Pkwy",1
 "Islay St",1
 "Chaytor St",3
 "Abbotleigh Ave",1
@@ -11494,7 +11159,6 @@
 "Frasers Rd",1
 "Williamson Ave",2
 "Dee Pl",3
-"Riverstone Lane",1
 "Newland St",1
 "Te Araki Pl",1
 "Kintara Dr",1
@@ -11578,7 +11242,6 @@
 "Seafield Pl",1
 "Kaiwharawhara Rd",1
 "Seascape Lane",1
-"Porter Dr",1
 "Scarba St",1
 "Lagoon Ave",1
 "Wentworth St",4
@@ -11599,7 +11262,6 @@
 "Tarapunga Pl",1
 "Halewood Grv",1
 "Oxford Rd",5
-"Bridge Rd",2
 "Sylvester Rd",1
 "Tremaine Ave",4
 "Tamaki Bay Dr",1
@@ -11728,7 +11390,6 @@
 "Garin Grv",1
 "Awatere St",1
 "Larch Crt",1
-"Higham Ferrers Pl",1
 "Kells Ave",1
 "Redwood Pl",4
 "Loftus St",1
@@ -11774,7 +11435,6 @@
 "Andelko Pl",1
 "Wanaka-Mount Aspiring Rd",1
 "Culver Tce",1
-"Lynley Park Dr",1
 "Grenada Dr",1
 "Meuse Lane",1
 "G F Moore Dr",1
@@ -11799,7 +11459,6 @@
 "Manhire St",1
 "Norman Rd",3
 "Bushview Pl",1
-"Onehunga Mall",1
 "Runnymede Dr",1
 "Ware Pl",1
 "Rangitane St",2
@@ -11807,7 +11466,6 @@
 "Rubens Pl",1
 "Allasha Way",1
 "Doncaster Pl",1
-"Hillingdon St",1
 "Paretai Grv",1
 "Frasertown Rd",1
 "Takatu Pl",1
@@ -11892,7 +11550,6 @@
 "Bayley Pl",1
 "Strathfield Ave",1
 "Amadeus Pl",1
-"Karaka Park Pl",1
 "Hester Pl",1
 "Ashburn Rd",1
 "Hacker St",1
@@ -11901,8 +11558,6 @@
 "Zealandia St",1
 "Boyd St",4
 "Hardington St",1
-"Riverview Tce",1
-"Tothill St",1
 "Mangere Town Sq",1
 "Mohi Pl",1
 "Woodburn Ave",1
@@ -11967,7 +11622,6 @@
 "Matuku St",3
 "Farrelly Grv",1
 "Jacaranda Pl",3
-"Ryehill St",1
 "Samuel Way",1
 "Lili Chen Way",1
 "Gwendoline St",1
@@ -11987,7 +11641,6 @@
 "Randall Pl",1
 "Wangaloa Rd",1
 "Orcades St",1
-"Airpark Dr",1
 "Stillwater Ave",1
 "Byron Rd",1
 "Rowandale Ave",1
@@ -12010,7 +11663,6 @@
 "Iri Irikapua Pde",1
 "Hartley Tce",1
 "Pony Grv",1
-"Hidden Lakes Ave",1
 "Glenhope St",1
 "Nephin Pl",1
 "Newberry Pl",1
@@ -12162,14 +11814,12 @@
 "Three Kings Grv",1
 "Paisley Tce",1
 "Orange Lane",1
-"Bridgewater Way",1
 "Alice St",5
 "Loke Cres",1
 "Peter Buck St",1
 "Protea Dr",1
 "McGuires Rd",1
 "Lombard Pl",1
-"Blakeley Pl",1
 "Brenda St",1
 "Miriana St",1
 "Empire Ave",1
@@ -12193,7 +11843,6 @@
 "Stottholm Rd",1
 "One Tree Point Rd",1
 "Hazeldean Rd",2
-"Riverglen Dr",1
 "Ernie Pinches St",1
 "Ngapipi Rd",1
 "Kirkway",1
@@ -12215,7 +11864,6 @@
 "Dawson Rd",2
 "Springswood Grv",1
 "Soljan Dr",1
-"Dune Lake Pl",1
 "Lemon St",4
 "Darlington Rd",1
 "Hyde Pl",1
@@ -12229,14 +11877,11 @@
 "Pekerau Cres",1
 "Huria St",1
 "George Pl",2
-"Wellpark Ave",1
 "Manahi Pl",1
 "Bunratty Grv",1
-"Oakford Park Cres",1
 "Sispara Pl",1
 "Kivell Cl",1
 "Yarrum Lane",1
-"Hospital Rd",10
 "Fitzherbert Ave",3
 "Malam St",1
 "Lindsey Cres",1
@@ -12257,7 +11902,6 @@
 "Jarvis Crt",1
 "Cowley St",1
 "Secoia Cres",1
-"Parklands Dr",2
 "Tuna Tce",1
 "Bourke St",5
 "Harley Cl",1
@@ -12288,17 +11932,14 @@
 "Oliphant Rd",1
 "Flagstaff Tce",1
 "Hunter St",10
-"Hillview Ave",1
 "Holly Crt",2
 "Tsar Crt",1
 "Strowan Ave",1
 "York St",27
 "Charisma Pl",1
-"Portsmouth Dr",2
 "Wembley St",1
 "Tippett St",1
 "Sangam Pl",1
-"Hoylake St",1
 "Avro Cres",1
 "Penrith St",1
 "Statham St",2
@@ -12321,7 +11962,6 @@
 "Andersons Bay Rd",1
 "Hazard Grv",1
 "Whakarewa St",1
-"Blakey Ave",1
 "Puka Pl",2
 "Cheyne Rd",1
 "Britannia Pl",1
@@ -12352,14 +11992,12 @@
 "Mongorry Pl",1
 "Barcaldine Rd",1
 "Ceres Cres",1
-"Portland Rd",2
 "Persico Way",1
 "Travis Country Dr",1
 "Hollyford Ave",1
 "Faulke Ave",1
 "Belfast Pl",2
 "Oregon Pl",2
-"Park View Lane",1
 "Marsden Point Rd",1
 "Sherwood St",3
 "Sloane Pl",1
@@ -12369,7 +12007,6 @@
 "Bowenvale Ave",1
 "Waimea Pl",1
 "Ascot St",5
-"Moorpark Pl",1
 "Mission Pl",2
 "Jonathan Pl",2
 "Anglers Way",1
@@ -12412,7 +12049,6 @@
 "Helvetia Rd",1
 "Homestead Rise",1
 "Tiaka Pl",1
-"Port Hills Rd",1
 "Puketutu Dr",1
 "Teddy St",1
 "Karoola Pl",1
@@ -12441,7 +12077,6 @@
 "Helensburgh Rd",1
 "Marlborough Cres",2
 "Cayman Cl",1
-"Woodlands Park Rd",1
 "Houpara St",1
 "Randolph Tce",1
 "Sheddings Lane",1
@@ -12508,7 +12143,6 @@
 "Shadbolt Dr",1
 "Belsomet Pl",1
 "Okahu Rd",1
-"Orari Station Rd",1
 "Orwell Cres",1
 "Welsford St",1
 "Smallbone Dr",1
@@ -12521,7 +12155,6 @@
 "Flaxon Pl",1
 "Cunard St",1
 "Xena Way",1
-"Park Rise",2
 "Tyree Dr",1
 "Glover St",3
 "Norrie Smith Ave",1
@@ -12580,7 +12213,6 @@
 "Hurahura Rd",1
 "Hartfield Rise",1
 "Haszard St",1
-"Sunnyhills Ave",1
 "Valley View Way",2
 "Hauraki St",1
 "Lough Derg Pl",1
@@ -12599,7 +12231,6 @@
 "Thomas Ave",2
 "Fetu Pupula Pl",1
 "Wesley Ave",2
-"Hillsborough Rd",2
 "Finlayson Ave",1
 "Yemen Pl",1
 "Alicia Rd",1
@@ -12740,7 +12371,6 @@
 "Wheatley Ave",1
 "Fuschia Pl",1
 "Gavan St",1
-"Parkhaven Dr",1
 "Clark Rd",4
 "Northwood Vlls",1
 "Redan Tce",1
@@ -12817,7 +12447,6 @@
 "Parsons Gln",1
 "Beauzami Pl",1
 "Marina Vw",1
-"Parklane Pl",1
 "Edmund Lomas Grv",1
 "Jarvis Way",1
 "Mervyn Kemp Dr",1
@@ -12983,7 +12612,6 @@
 "Robin Mann Pl",1
 "Buckleys Tce",1
 "Jim Rhind Pl",1
-"Larch Hill Pl",1
 "Ti Nana Cres",1
 "Dryden Ave",1
 "Vincent Pl",3
@@ -13044,14 +12672,12 @@
 "Honan St",1
 "Hakiaha St",1
 "Mafeking St",1
-"Riversdale Dr",1
 "Peach Rd",1
 "Medvale Ave",1
 "Killen St",1
 "Mansion Crt",1
 "Santa Fe Key",1
 "Maxfield Pl",1
-"Old Park Pl",1
 "Cartwright Rd",2
 "Autumn Ave",1
 "Cornwall Pl",2
@@ -13066,7 +12692,6 @@
 "Enfield Rd",1
 "Keenagh Rise",1
 "Waimarie Rd",1
-"Cambridge Cres",1
 "Easton Way",1
 "Stuart Rd",2
 "Sorrento Pl",1
@@ -13089,7 +12714,6 @@
 "Oakham St",1
 "Bowmore Cl",1
 "Willis St",11
-"Pinehill Cres",2
 "Gaede Tce",1
 "Dunallen Ave",1
 "Wye Oak Dr",1
@@ -13105,9 +12729,7 @@
 "Deere Ave",1
 "Inverell Way",1
 "Fonteyn St",1
-"Cambridge St",16
 "Millennial Way",1
-"Postgate Dr",1
 "Avalon Dr",1
 "Bayview Tce",1
 "Brightwell St",1
@@ -13121,7 +12743,6 @@
 "Abros Pl",1
 "Hartley St",2
 "Goldfinch Rise",1
-"Tumai Station Rd",1
 "Nicholson Pl",1
 "Coupland Crt",1
 "Kitchener Sq",1
@@ -13129,9 +12750,7 @@
 "Stowe Hl",1
 "Aylesbury Tce",1
 "Ascot Ave",8
-"Lakewood Lane",1
 "Archers Rd",2
-"Lake Cres",2
 "Alex Evans St",1
 "Second Ave",6
 "McKay Cres",1
@@ -13183,13 +12802,11 @@
 "St Marys Rd",3
 "Mediterranean Way",1
 "Upper Main Dr",1
-"Hospital Tce",1
 "Breve St",1
 "Windermere Rd",1
 "Eaton Cres",2
 "Frenchay Dr",1
 "Centenary Pl",1
-"Phillip Bernard Lane",1
 "Lamia Grv",1
 "Sierra St",1
 "Mayburn Rd",1
@@ -13197,10 +12814,8 @@
 "Albionvale Rd",1
 "Mira Pl",1
 "Fox Lane",2
-"Parkfield Tce",1
 "Booth Cres",1
 "Ngapakihi Rd",1
-"Rosepark Cres",1
 "Blair Pl",1
 "Pine Ridge Tce",2
 "Sirrah St",1
@@ -13218,7 +12833,6 @@
 "Barry Curtis Pl",1
 "Woollams Rd",1
 "Wattle Farm Rd",1
-"Bottle Lake Dr",1
 "Gore Pl",1
 "Canaveral Dr",1
 "Pharlap Dr",1
@@ -13245,7 +12859,6 @@
 "Sunny Grv",1
 "Kenley Pl",1
 "Upland Rd",7
-"River View Rd",1
 "Chestnut Cl",1
 "Beswick Pl",1
 "Baildon Rd",1
@@ -13271,7 +12884,6 @@
 "Kaihuia Tce",1
 "Longford Crt",1
 "Lincoln Rd",8
-"Rossport St",1
 "Orchard Way",1
 "Mossburn Lane",1
 "Kristin Lane",1
@@ -13284,8 +12896,6 @@
 "Nicholls St",1
 "Cottesmore Pl",1
 "Deborah Hatton Lane",1
-"Bridger Pl",1
-"Burgundy Park Ave",1
 "Allen Mills Rd",1
 "Browning Cres",2
 "Ulster Rd",1
@@ -13305,7 +12915,6 @@
 "Tuarangi Rd",2
 "Amber Lane",1
 "Ashton Mews",1
-"Fordingbridge Lane",1
 "Marion St",4
 "Nixon St",6
 "Delemere Pl",1
@@ -13327,11 +12936,9 @@
 "Oxley Cres",1
 "Volcanic St",1
 "Alaunia Pl",1
-"St Hill St",2
 "Cosy Pl",1
 "Matipo Rd",2
 "Palliser Dr",1
-"Park Grv",1
 "Kew Rd",2
 "Reeve Dr",1
 "Rangitoto View Rd",1
@@ -13347,7 +12954,6 @@
 "Lotus Lane",1
 "Abbot St",2
 "Navarre Rd",1
-"Crescent Hills Crt",1
 "Tawa Rd",2
 "Allen Johnston Pl",1
 "Lynmore Ave",1
@@ -13393,7 +12999,6 @@
 "Zenith Pl",2
 "Motions Rd",1
 "Marbella Cres",1
-"Hidden Hills Dr",1
 "Smarts Rd",1
 "Owens Rd",2
 "Tisbury Lane",1
@@ -13429,7 +13034,6 @@
 "Chadwick St",1
 "Lunns Rd",1
 "Takahe Cres",1
-"Silverstream Rd",2
 "Stamford Cres",1
 "Sutherland Crt",1
 "Dewe Tce",1
@@ -13456,7 +13060,6 @@
 "Nancarrow St",1
 "Tornado Pl",1
 "Raroa Tce",2
-"Maryport St",1
 "St Peters Pl",1
 "Conon St",1
 "Wilde Ave",1
@@ -13467,7 +13070,6 @@
 "Nicholas St",3
 "Dunback Rd",1
 "Takitimu Dr",1
-"Mountain View Rd",7
 "Pomare St",2
 "Great King St",1
 "Steele St",2
@@ -13535,7 +13137,6 @@
 "Le Roy Rd",1
 "Mulroy Pl",2
 "Nirvana Way",1
-"Parker Ave",2
 "Bryant St",3
 "Flora St",2
 "Lookaway Lane",1
@@ -13548,7 +13149,6 @@
 "Village Way",2
 "Checketts Pl",1
 "Charlotte Way",1
-"Summerhill Pl",1
 "Stevenson Pl",1
 "Beechey St",1
 "Stredwick Dr",1
@@ -13591,7 +13191,6 @@
 "Wild St",1
 "Produce Pl",1
 "Salle Rd",1
-"Kirikiri Stream Lane",1
 "Magma Cres",1
 "Collie Dr",1
 "Rossiter Cres",1
@@ -13644,7 +13243,6 @@
 "Acton St",2
 "Oakfield Cres",1
 "Coombe Hay Tce",1
-"Lakeside Vlls",1
 "Cheltenham St",2
 "Ngata Grv",1
 "Lindum Tce",1
@@ -13676,7 +13274,6 @@
 "Coastlands Pde",1
 "Brigham Dr",1
 "Omahi St",1
-"Birch Hill Pl",1
 "Clapton Pl",1
 "Upper Albert St",1
 "Herewaka St",1
@@ -13718,7 +13315,6 @@
 "Wernham Pl",1
 "Roseborough Pl",1
 "Leinster Ave",2
-"Brewery Bridge Rd",1
 "Reg Stillwell Pl",1
 "Shulma St",1
 "Beauvais Pl",1
@@ -13773,7 +13369,6 @@
 "Strathcarron Pl",1
 "Alanbrooke Pl",2
 "Holt Ave",1
-"Willow Lake Rd",1
 "Redoubt St",2
 "Eastern Beach Rd",1
 "Musselburgh Rise",2
@@ -13840,7 +13435,6 @@
 "Oaklands Rd",1
 "Freehold Lane",1
 "Ramore Pl",1
-"Kihilla Rd",1
 "Mill Lane",2
 "Pembrey St",1
 "Bridgman St",1
@@ -13874,13 +13468,11 @@
 "Wicklow Grv",1
 "Rocking Horse Rd",1
 "Rankeilor St",1
-"Cambridge Tce",9
 "Markham St",1
 "Wroxton Tce",1
 "Jean Batten Pl",2
 "Briasco St",1
 "Inverness Lane",2
-"Haywards Hill Rd",1
 "Farmhouse Lane",1
 "Venn St",1
 "Cloverfields Dr",1
@@ -13950,14 +13542,12 @@
 "Vautier St",1
 "Kasey Josh Pl",1
 "Birchfield Rd",1
-"Old Ferry Rd",1
 "Innisfree Pl",1
 "Clovelly Pl",1
 "Reiman St",1
 "Highland Rd",1
 "Cassino Tce",1
 "Bendbrook Way",1
-"The Centre",1
 "Marvel Way",1
 "Kakariki Grv",1
 "Henry Wigram Dr",1
@@ -13981,7 +13571,6 @@
 "Kings Rd",3
 "Turanga Rd",1
 "Omahau Cres",1
-"Hillside Cres",2
 "Longley Pl",1
 "Seaview Rd",18
 "Setters Line",1
@@ -14026,9 +13615,7 @@
 "Braemar Lane",1
 "Linicro Pl",1
 "Market Sq",1
-"Bridgemere Lane",1
 "Holden Ave",3
-"Hill Rd",7
 "McDowall Pl",1
 "Fernihurst St",1
 "Puru Cres",1
@@ -14112,7 +13699,6 @@
 "Makora St",1
 "Suffolk Rd",1
 "McIlwaine Pl",1
-"Mountain View Pl",1
 "Luff Pl",3
 "Carmana Gdns",1
 "Moycullien Lane",1
@@ -14123,11 +13709,9 @@
 "Matarangi Rd",1
 "Skipton St",2
 "Stanfield Crt",1
-"Maryhill Ave",1
 "Lastel Pl",1
 "Gates Lane",1
 "Hira St",1
-"Riverpark Cres",1
 "Beaven St",1
 "Dallas St",2
 "Northcroft St",3
@@ -14149,7 +13733,6 @@
 "Parewaitai Crt",1
 "Arapeta Pl",1
 "Hayman St",2
-"Gosport St",1
 "Captains Rtr",1
 "Guise St",1
 "Tennyson St",14
@@ -14175,7 +13758,6 @@
 "Crowther Cres",1
 "Willow Ave",3
 "Karamea Grv",1
-"Old Lake Rd",1
 "Nikau Hts",1
 "Ngauranga Gorge Rd",1
 "Island Rd",3
@@ -14196,7 +13778,6 @@
 "Symonds St",3
 "Sentinel Pl",1
 "Boyce St",3
-"Queenspark Dr",1
 "De Lange St",1
 "Goa St",1
 "Paritai Pl",1
@@ -14206,7 +13787,6 @@
 "Inwoods Cl",1
 "Cargill St",10
 "Tavern Lane",1
-"Lethbridge St",1
 "Butler Pl",3
 "Hyndhope Rd",1
 "Beaufort Mews",1
@@ -14226,7 +13806,6 @@
 "Simpson St",3
 "Mika Crt",1
 "Glenside Rd",1
-"Hill Top Rd",1
 "Gaye Cres",1
 "Pekama Dr",1
 "Newcastle Rd",2
@@ -14244,7 +13823,6 @@
 "Mount Eden Rd",2
 "Sharland Ave",1
 "Claywest Pl",1
-"Hillary Hts",1
 "Carisbrook Cres",1
 "Maplesden Dr",1
 "Archer Crt",1
@@ -14332,7 +13910,6 @@
 "Sunshine Pl",2
 "Niger St",3
 "Taylorville Rd",2
-"Larkhill Pl",1
 "Hamilton Crt",1
 "Chews Lane",1
 "Chardale St",1
@@ -14358,11 +13935,9 @@
 "Roberts Line",1
 "Wanstead Pl",1
 "Greenmeadow Gdns",1
-"Ferry Pde",1
 "Crown St",3
 "Hywell Pl",1
 "Laburnum Gln",1
-"Riverleigh Dr",1
 "Te Aroha Rd",1
 "Houlahan St",1
 "Clark St",9
@@ -14390,7 +13965,6 @@
 "Astor Pl",4
 "Pearl Lane",1
 "Byron Grv",1
-"Cornwall Park Ave",1
 "Gamblins Rd",1
 "Edwardes St",1
 "Red Setter Grv",1
@@ -14443,7 +14017,6 @@
 "Inman Ave",1
 "Egnot Hts",1
 "Olympus Grv",1
-"Parkvue Dr",1
 "Great West Rd",1
 "Ritchie Pl",1
 "Mottram St",1
@@ -14455,7 +14028,6 @@
 "Sudeng St",1
 "Runbrake St",1
 "Willoughby Lane",1
-"Churchill Pl",1
 "North Ridge Dr",1
 "Roebuck Rise",1
 "Boys Pl",2
@@ -14505,7 +14077,6 @@
 "Carrowmore",1
 "Elm Row",1
 "Ben Bracken Pl",1
-"Parkland Pl",1
 "O'Neill Pl",1
 "Pyes Pa Rd",1
 "Tirohunga Dr",1
@@ -14522,7 +14093,6 @@
 "Millar St",5
 "Maryburn Pl",1
 "Waiapu Rd",1
-"Guys Hill Rd",1
 "Falkirk Ave",1
 "James Henry Ave",1
 "Thorncombe Rd",1
@@ -14549,7 +14119,6 @@
 "Chevron Dr",1
 "Azure Grv",1
 "Romanes Dr",1
-"Parkhouse Dr",1
 "Coles St",1
 "Agathis Ave",1
 "Harlston Rd",1
@@ -14563,7 +14132,6 @@
 "Ashwood Dr",1
 "Cotswolds Cl",1
 "Pacific Vw",1
-"Parkers Rd",1
 "Staines Ave",1
 "Petrel Cl",1
 "McNeil St",1
@@ -14590,7 +14158,6 @@
 "Rainbow Ave",1
 "Chichester St",3
 "Balmoral Rd",4
-"Hillplough Hts",1
 "Sea Vista Dr",1
 "Oleander Grv",1
 "Redwood Cres",1
@@ -14655,7 +14222,6 @@
 "Westview Dr",1
 "Kellas St",1
 "Gardner Pl",1
-"Towbridge Pl",1
 "Althorp Ave",1
 "Tabago Pl",1
 "Randall St",1
@@ -14829,7 +14395,6 @@
 "Esther St",1
 "Corbett Ave",1
 "Ngarue Pl",1
-"Park Estate Rd",1
 "Hurdley St",1
 "Otitori Bay Rd",1
 "Zelanian Dr",1
@@ -14891,7 +14456,6 @@
 "Glenmore Ave",1
 "Torsby Rd",1
 "Prospect Rd",1
-"Hillary Sq",1
 "Carysfort St",1
 "Alba St",1
 "Crozier St",1
@@ -14925,7 +14489,6 @@
 "Aitcheson St",1
 "Chilcombe St",1
 "Darwin St",1
-"Springhill St",1
 "James Preston Ave",1
 "Haylock Grv",1
 "Keatoa Tce",1
@@ -14935,7 +14498,6 @@
 "Lismore Lane",1
 "Seddon St",32
 "Chipping Lane",1
-"Burnt Hill Rd",1
 "Simon Ellice Dr",1
 "Forth Tce",1
 "Avondale St",1
@@ -14950,7 +14512,6 @@
 "Welcome Bay Rd",1
 "Mortimer Pl",1
 "Stiles Ave",1
-"Church Hill Rd",1
 "Westra Vw",1
 "Wray St",1
 "Jefferson Hts",1
@@ -15037,7 +14598,6 @@
 "Mackie Pl",1
 "Mays Lane",1
 "Puhara Ave",1
-"Nihill Cres",1
 "Granfield Pl",1
 "Ethne St",1
 "Spencer Tce",1
@@ -15061,7 +14621,6 @@
 "Astral Pl",1
 "St Georges Bay Rd",1
 "Fountainhead Lane",1
-"Jarrah Park Dr",1
 "Barnes Rd",1
 "Alberta Rd",1
 "Ngaoho Pl",1
@@ -15120,7 +14679,6 @@
 "Te Whai St",1
 "Lahore St",1
 "Merrington Cres",1
-"Hospital St",1
 "Thomas Hanmer Dr",1
 "Colonel Nixon St",1
 "Basalt Pl",1
@@ -15137,7 +14695,6 @@
 "Claremont Ave",3
 "Otonga Hts",1
 "Dolma St",1
-"Logan Park Dr",1
 "Radnor Rd",1
 "Ivanhoe Tce",1
 "Fraser Crt",2
@@ -15221,7 +14778,6 @@
 "Plimmer Tce",1
 "Ohariu Rd",1
 "Edgeware Rd",4
-"Stonebridge Park Dr",1
 "Newry Rd",1
 "Michael Rd",1
 "Moki St",1
@@ -15251,7 +14807,6 @@
 "Orchard Rd",5
 "Bisson Pl",1
 "Atlanta Crt",1
-"Albert Park Dr",1
 "La Cumbre Cl",1
 "Maui St",4
 "Botha St",1
@@ -15345,10 +14900,8 @@
 "Northall Rd",1
 "Broadmeadows Dr",1
 "Harford St",1
-"Mallett Pl",1
 "Ridge Valley Dr",1
 "Metric Pl",1
-"Mangaroa Hill Rd",1
 "Ranui Tce",1
 "Yuille St",1
 "Sala St",1
@@ -15359,7 +14912,6 @@
 "Brookvale Rd",1
 "Alloa Pl",1
 "Andes Pl",1
-"Abbotts Hill Rd",1
 "Bruce Rd",2
 "Cornford St",1
 "Orlando Cres",1
@@ -15440,11 +14992,9 @@
 "Holland St",7
 "Eton Dr",2
 "Burlington Rd",1
-"Victoria Park Rd",1
 "Elmsdale Cl",1
 "Crisp Ave",1
 "Sabot Pl",1
-"Hillview Cres",1
 "Beverley Cres",1
 "Waterdale Way",1
 "Robbie St",1
@@ -15476,7 +15026,6 @@
 "Malabar Cres",1
 "Eaves Bush Pde",1
 "Zodiac St",1
-"Broomhill Rd",1
 "Three Mile Bush Rd",1
 "Aspiring Pl",1
 "Holly Rd",1
@@ -15543,9 +15092,7 @@
 "Te Mata Peak Rd",1
 "Galbraith Pl",1
 "Iona Crt",1
-"Cambridge Pl",3
 "Astrid Crt",1
-"Park View Rise",1
 "Cherwell St",1
 "Ballinger Pl",1
 "Chancery St",1
@@ -15600,7 +15147,6 @@
 "Fairview Pl",4
 "Howitt Pl",1
 "Paterson Grv",1
-"Portside Dr",1
 "Plantation Ave",1
 "Comet Cres",1
 "Lodge Pl",2
@@ -15788,7 +15334,6 @@
 "Tasman Cres",1
 "Cutfield St",1
 "Elana Crt",1
-"Rivers St",1
 "Hampshire Ave",1
 "Karaka Grv",2
 "Christian St",2
@@ -15803,7 +15348,6 @@
 "Oroua St",2
 "Fifetuscan Way",1
 "Percy Bear Tce",1
-"Hillview St",1
 "Ridgewood Cres",1
 "Croall Cres",2
 "Francis Pl",1
@@ -15836,7 +15380,6 @@
 "Conlon St",1
 "Pescara Pt",1
 "Marua Rd",2
-"Blake Blvd",1
 "Mica Pl",1
 "Bannings Way",1
 "Lane Pl",1
@@ -15947,7 +15490,6 @@
 "Ruarangi Rd",1
 "Chambers Lane",1
 "Bell Common Cl",1
-"Poturi Streams Ave",1
 "Tannadice St",1
 "Waimanu Bay Dr",1
 "Broadfield St",1
@@ -15958,7 +15500,6 @@
 "Scotstoun Pl",1
 "Israel Ave",1
 "Homestead Pl",2
-"Lakes Blvd",1
 "Kinglear Dr",1
 "Kebal Pl",1
 "Vanguard Dr",1
@@ -15995,7 +15536,6 @@
 "Hyperion Dr",1
 "Longview Rise",1
 "Marco Polo Ave",1
-"Millhill Lane",1
 "Bradley St",3
 "Wrack St",1
 "Croydon Rd",2
@@ -16020,7 +15560,6 @@
 "Leong Ave",1
 "Larkins St",1
 "Corsair Cres",1
-"Park Rd",19
 "Elms St",1
 "Sir William Hale Cres",1
 "Tynan St",2
@@ -16037,7 +15576,6 @@
 "Ballyward Cl",1
 "Patiki Pl",1
 "Stanley Dr",1
-"Regent's Park Dr",1
 "Hargood St",1
 "Priests Ave",1
 "Greenacres St",1
@@ -16139,7 +15677,6 @@
 "Delhi Pl",1
 "Ulm Pl",1
 "Nandana Dr",1
-"Parkdale Pl",1
 "Sheen St",1
 "Harvest Dr",1
 "Mataura Tce",1
@@ -16175,7 +15712,6 @@
 "Barque Cres",1
 "Avenal St",1
 "Roseburn Pl",2
-"Ilam Park Pl",1
 "Domain View Lane",1
 "Clinkard Ave",1
 "Pound St",2
@@ -16190,14 +15726,12 @@
 "Almont Gdns",1
 "Sapphire Grv",1
 "Parsons Ave",1
-"Greenwood Park Lane",1
 "Wootton Rd",1
 "Jasper Ave",1
 "Northmeadow Dr",1
 "Solent Pl",1
 "Cecil Rd",6
 "Bratlie Pl",1
-"Greenhill Dr",1
 "Harley Grv",1
 "Clinton Lane",1
 "Peachstone Lane",1
@@ -16206,7 +15740,6 @@
 "Grove Rd",10
 "Northgate Way",1
 "Archer Rayner Pl",1
-"Heybridge Lane",1
 "Larnach Rd",1
 "Prairie Pl",1
 "Tudor Grv",2
@@ -16290,13 +15823,11 @@
 "Rue Grehan",1
 "Dennis Taylor Crt",1
 "Sydney Pl",1
-"Porter St",2
 "Benton Pl",1
 "Laidlaw Way",2
 "Prestige Pl",3
 "Lochiel Pl",1
 "Scully Cres",1
-"Bridger Gld",1
 "Anne Rd",2
 "Hamana St",1
 "Cris Lodge Crts",1
@@ -16348,7 +15879,6 @@
 "Sarteano Dr",1
 "Marcel Pl",1
 "Stuckey St",1
-"Station Dr",1
 "Serlby Pl",1
 "Zena Pl",1
 "Tikati Vw",1
@@ -16360,7 +15890,6 @@
 "Magnolia St",1
 "Civil Pl",2
 "Peckham Lane",1
-"Hilltop Cres",1
 "Meadow Crt",1
 "Springdale Grv",1
 "Clements St",1
@@ -16376,7 +15905,6 @@
 "Marr Pl",1
 "Carinya Lane",1
 "Hilton Way",1
-"Memorial Park Ave",1
 "Marine Pde",21
 "Emlen Pl",1
 "Thornaby Cl",1
@@ -16417,7 +15945,6 @@
 "Kochia Ave",1
 "Rushgreen Ave",1
 "Splitt Ave",1
-"Utopia Park Hts",1
 "Royal Crt",1
 "Orpheus Dr",1
 "Bellagio Way",1
@@ -16503,7 +16030,6 @@
 "Handyside St",1
 "Northolt Rd",1
 "Bull St",2
-"Castlehill Crt",1
 "Leven Lane",1
 "Manui Pl",1
 "Ashview Pl",1
@@ -16557,7 +16083,6 @@
 "Northfield Rd",2
 "Strand Cres",1
 "Brook St",12
-"Rockport Pl",1
 "Reynella Dr",1
 "Pa Rd",2
 "Arthur Cres",3
@@ -16611,7 +16136,6 @@
 "Valnera Cl",1
 "Turoa Rd",1
 "Clapps St",1
-"Hill Cres",2
 "Hauroa Rd",1
 "Albatross Pl",1
 "Icarus Pl",2
@@ -16674,8 +16198,6 @@
 "Sumner Tce",1
 "Panapa Dr",1
 "St Andrew St",4
-"Pitchill St",1
-"Woodbridge Lane",1
 "Gala Pl",1
 "Doran St",1
 "McCahon Dr",1
@@ -16703,7 +16225,6 @@
 "Russell Sq",1
 "Britannia Hts",1
 "Wainui Rd",5
-"Bridgefield Cres",1
 "Kuku Pl",1
 "Lumino Lane",1
 "Rotoiti St",3
@@ -16712,7 +16233,6 @@
 "Camellia Lane",1
 "Taramea St",1
 "Buxton Sq",1
-"Parkcrest Dr",1
 "Tipene Pl",1
 "Whirinaki Cres",1
 "The Stonestack",1
@@ -16762,10 +16282,8 @@
 "Hodgkins St",1
 "Fairweather Cres",1
 "Mostyn St",1
-"Forrest Hill Rd",1
 "Toomer Pl",1
 "Keiha St",1
-"Hospital Lane",1
 "Meadowstone St",1
 "Koromiko St",8
 "Farringdon St",1
@@ -16793,7 +16311,6 @@
 "Pioneer St",1
 "Danica Esp",1
 "Mere Rd",1
-"Warner Park Ave",1
 "Ascot Tce",1
 "Butlers Lane",1
 "Ibis Way",1
@@ -16813,7 +16330,6 @@
 "Raekura Pl",1
 "Styak St",1
 "Chelmsford Ave",1
-"Hillview Rd",2
 "Binda Pl",1
 "Jane Grv",1
 "Mangarino Rd",1
@@ -16834,18 +16350,14 @@
 "Masters Ave",1
 "Thelma Pl",1
 "Morrison Cres",1
-"Busbridge Pl",1
 "Grange Rd",3
-"River Oaks Pl",1
 "Begg St",1
 "Johnswood Grv",1
 "Merlot Pl",3
 "Askeaton Dr",1
 "Sandy Ave",1
 "Waitaha Rd",1
-"North Park Dr",1
 "Pioneer Hwy",1
-"Portage Pl",1
 "Vanguard Lane",1
 "Alma Rd",2
 "Waddell Ave",1
@@ -16862,7 +16374,6 @@
 "Dufferin St",2
 "Kildare Vw",1
 "Rowan St",2
-"Westlake St",1
 "Benygloe Pl",1
 "Hurley Pl",3
 "Janine Pl",1
@@ -16900,7 +16411,6 @@
 "Lewis Way",1
 "Transom Cl",1
 "Bunyan St",1
-"Hillcrest St",3
 "Cedric Pl",1
 "Fitfiel St",1
 "Bremner Rd",1
@@ -16922,7 +16432,6 @@
 "Fencotie Pl",1
 "Gordonton Rd",1
 "Totara Cl",1
-"Railway Farm Rd",1
 "Maida Vale",1
 "Gordon Cres",1
 "Tawa Tce",2
@@ -16983,7 +16492,6 @@
 "Chevalier Way",1
 "Bodi Pl",1
 "Henare St",3
-"Subway Rd",1
 "Orchard Pl",4
 "Stanley Cres",1
 "Robinson Tce",1
@@ -17001,7 +16509,6 @@
 "Coppins Rd",1
 "Patterson Grv",1
 "James Condon Pl",1
-"Export Ave",1
 "Korokoro Rd",1
 "Wood Lane",1
 "Bristol St",8
@@ -17018,7 +16525,6 @@
 "Durmast Crt",1
 "Tahi Rd",2
 "Hannah Crt",1
-"Forest Hill Rd",1
 "Harrington Ave",1
 "Kurnell Dr",1
 "Marina Vale",1
@@ -17035,7 +16541,6 @@
 "Pirangi St",1
 "Kirk Cres",2
 "Clearmont Cres",1
-"Leeston And Lake Rd",1
 "Tiritoa Tce",1
 "Stephanie Cl",1
 "Selwyn Crt",1
@@ -17130,7 +16635,6 @@
 "Kendall Pl",1
 "Truro Rd",2
 "MacBeth St",1
-"Dominion Park St",1
 "Acacia St",1
 "Gloucester St",16
 "Lindale Grv",1
@@ -17190,10 +16694,8 @@
 "Bahari Dr",1
 "Sunnydale Pl",1
 "Dinsdale Rd",1
-"Leslie Hills Dr",1
 "Mission Cv",1
 "Crossland Pl",1
-"Pine Hill Cres",1
 "Megan Ave",1
 "Hoon Hay Valley Rd",1
 "Lydbrook Pl",1
@@ -17261,7 +16763,6 @@
 "Arcus St",2
 "Scarff Pl",1
 "Morrison St",4
-"Canterbury Park Lane",1
 "Te Ngaio Rd",1
 "La Mar Lane",1
 "Talga Crt",1
@@ -17272,7 +16773,6 @@
 "Kerwood Pl",1
 "Calabar Rd",1
 "Falsgrave St",1
-"Hillcrest Dr",1
 "Trickers Rd",1
 "Annies Lane",1
 "Towra Pl",1
@@ -17280,7 +16780,6 @@
 "McManaway Grv",1
 "Waiari Rd",1
 "Loft Pl",1
-"Phillipa Pl",1
 "Haimona St",1
 "Ada St",4
 "Read Pl",1
@@ -17347,7 +16846,6 @@
 "Moss Cres",1
 "Francevic Ave",1
 "Victoria Cl",1
-"Rock Hill Dr",1
 "Shire Lane",1
 "McKelvie Hts",1
 "Meadowbrook Pl",1
@@ -17383,23 +16881,19 @@
 "Kamo Rd",1
 "Elginshire St",1
 "Halcombe Pl",1
-"The Mall",3
 "Holborn Dr",1
 "Salisbury Pl",2
 "Wookey Lane",1
 "The Oval",2
-"Crownhill St",1
 "Cotterill St",1
 "Landfill Rd",1
 "Leon Pl",1
 "Clifton Dr",1
-"Hillary Cres",4
 "Fettes Cres",1
 "Chilton Rd",1
 "Ashford Ave",1
 "Carrick Pl",2
 "Melford Cl",1
-"Blakehall Pl",1
 "Whitehead Rd",2
 "Kirkwood Ave",1
 "Vonnell Pl",1
@@ -17423,7 +16917,6 @@
 "Glenross Dr",1
 "Stanwell St",1
 "Larsen Crt",1
-"Edmund Hillary Ave",1
 "Hoffman Crt",1
 "Randwick Pl",2
 "Athlone Pl",1
@@ -17466,7 +16959,6 @@
 "Marken Pl",1
 "Smedley St",1
 "Spackman Cres",1
-"Riverview Pl",1
 "Gill Ave",1
 "Ruthven Rd",1
 "Bradford Pl",1
@@ -17528,7 +17020,6 @@
 "Oreti Pl",1
 "Carlinka Pl",1
 "Clarence Rd",1
-"Bexhill Tce",1
 "Kips Way",1
 "Ruthken Cres",1
 "Lucas Pl",3
@@ -17569,7 +17060,6 @@
 "Gregson Dr",1
 "Pyke Crt",1
 "Sunbrae Dr",1
-"Malvern Hills Rd",1
 "William Fraser Cres",1
 "McNair Rd",2
 "Landell Pl",1
@@ -17677,12 +17167,10 @@
 "Severn Pl",1
 "Newmark St",1
 "Caldecote Pl",1
-"Glenveagh Park Dr",1
 "Silver Egg Rd",1
 "Karina Tce",1
 "Carlton Gore Rd",2
 "Parma Pl",1
-"Westpark Pl",1
 "White Hart Lane",1
 "Drumquin Rise",1
 "Suter St",1
@@ -17714,7 +17202,6 @@
 "Waikare St",2
 "Reay Pl",1
 "Hawes St",1
-"Park Gdns",1
 "Robertson Crt",1
 "Tongariro Rd",1
 "Kaitawa Cres",1
@@ -17730,7 +17217,6 @@
 "Beulah Ave",1
 "Taikata Rd",1
 "Acheron Rd",1
-"Barkers Hill Rd",1
 "Anzia Way",1
 "Clinker Grv",1
 "Gretton Crt",1
@@ -17802,7 +17288,6 @@
 "Pandora St",1
 "Marmion St",1
 "Sturm Ave",1
-"Riverton Rd",1
 "Shaw Pl",1
 "Bloomsbury Grv",1
 "The Fairway",1
@@ -17931,12 +17416,10 @@
 "Kumara Tce",1
 "Kaitangata Hwy",1
 "Ormonde Pl",1
-"Riverside Pl",1
 "St Elizabeth Hts",1
 "Karamu Lane",1
 "Consols St",1
 "Atawhai Cres",1
-"Puriri Park Rd",1
 "Bendrose Pl",1
 "Union St",19
 "Van Asch St",1
@@ -17971,9 +17454,6 @@
 "Cecil Pl",2
 "Tokay Pl",1
 "Sandgate Ave",1
-"Hills Rd",4
-"Portree Pl",1
-"Riverton Dr",1
 "Furness Lane",1
 "Pladda St",2
 "Gala St",2
@@ -17990,7 +17470,6 @@
 "Farm Lane",1
 "Waiake St",1
 "Moncur Dr",1
-"Portsmouth Rd",2
 "Channing Cl",1
 "Strathmore Cres",1
 "Waldegrave St",1
@@ -18022,7 +17501,6 @@
 "Harrisville Rd",1
 "McGregor St",5
 "Innismara Ave",1
-"Parkhead Pl",1
 "Laingrange Pl",1
 "Wrey Jury Lane",1
 "Trentham Rd",2
@@ -18105,7 +17583,6 @@
 "Wilmshurst Pl",1
 "Daniels Rd",1
 "Amber Pl",2
-"Donegal Park Dr",1
 "Constance Pl",3
 "Etherege Pl",1
 "Cretian Cres",1
@@ -18126,7 +17603,6 @@
 "Marble Pl",1
 "Fuji Crt",1
 "Beanland Ave",1
-"Churchill St",16
 "Buxtons Rd",1
 "Fenwick Ave",1
 "Gunson St",1
@@ -18172,7 +17648,6 @@
 "Te Wiata Pl",1
 "Camp St",5
 "Pullum St",1
-"Bowhill Rd",1
 "Sproston Ave",1
 "Kingston St",5
 "Wallis Lane",1
@@ -18190,7 +17665,6 @@
 "Kokopu Lane",1
 "Lochee Rd",1
 "Garrick Pl",2
-"Lakeside Dr",2
 "Herons Way",1
 "Aquavue Way",1
 "Tiwai Rd",1
@@ -18198,17 +17672,14 @@
 "Sorensens Pl",1
 "Larne Ave",1
 "Harper Mews",1
-"Stonebridge Cl",1
 "Spruce St",1
 "Chatham St",4
-"Strawbridge Sq",1
 "Bradley Lane",1
 "Edelweiss Grv",1
 "Daphne Harden Lane",1
 "Forth St",8
 "Morpeth St",2
 "Motueka Qy",1
-"Millstream Lane",1
 "Glasnevin Dr",1
 "Norrie St",8
 "Puaha St",1
@@ -18266,7 +17737,6 @@
 "Elsdon Best St",1
 "Marchant St",1
 "Flavia Cl",1
-"Lakeland Ave",1
 "Barbadoes St",2
 "Lowe Ave",1
 "Audrey Pl",1
@@ -18334,7 +17804,6 @@
 "Comber Pl",1
 "Thornley St",1
 "Macky St",1
-"Parkridge Pl",1
 "Harley St",2
 "Gladstone St",8
 "Malvern Rd",3
@@ -18390,9 +17859,7 @@
 "Fowlers Ave",1
 "Resolution Rd",2
 "Norrie Grv",1
-"Riverlaw Tce",1
 "Lomond Cres",1
-"Cullahill St",1
 "Fitchett St",1
 "Dunkeld Lane",1
 "Robert Skelton Pl",1
@@ -18524,7 +17991,6 @@
 "Nui Mana Pl",1
 "Charters St",2
 "Kawaka St",4
-"Northpark Dr",1
 "Cascade Cres",1
 "Barlow St",1
 "Parimahana Dr",1
@@ -18557,10 +18023,8 @@
 "The Circle",1
 "Madras St",5
 "Mountbatten Ave",1
-"Stationmasters Way",1
 "Regina Lane",1
 "Coronation Rd",4
-"Bridge View Rd",1
 "Reyburn House Lane",1
 "Te Otinga Pl",1
 "Tram Valley Rd",1
@@ -18688,7 +18152,6 @@
 "Paine St",1
 "Glenford Lane",1
 "Grundy St",1
-"Portland Dr",1
 "Bullmore Pl",1
 "Little George Pl",1
 "Jervois Rd",3
@@ -18744,7 +18207,6 @@
 "Nautical Hts",1
 "Terawhiti Tce",1
 "Old Taupiri Rd",1
-"Hillstone Ave",1
 "Fife St",3
 "Hingaia St",1
 "Countess Cl",1
@@ -18808,12 +18270,10 @@
 "Kamulla Crt",1
 "Kim Cres",1
 "Harlow Pl",1
-"Hilltop Rd",2
 "Balmain Rd",1
 "Heathvale Pl",1
 "Village Cl",1
 "Rue De La Mare",1
-"Riverina Ave",1
 "Alder Pl",1
 "Lovelock Pl",1
 "Awatea St",7
@@ -18862,12 +18322,10 @@
 "Barnard St",3
 "Maracas Cres",1
 "Emerald Lane",1
-"Portland Cres",1
 "Hungerford Cres",1
 "Kintyre Pl",2
 "Birrell St",1
 "The Strand",9
-"Wiri Station Rd",1
 "Tuna Pl",1
 "Croad Pl",1
 "Burns St",17
@@ -18923,12 +18381,10 @@
 "Chamade Pl",1
 "Dido Pl",1
 "Winsomere Cres",1
-"Pine Park Rd",1
 "Woodgreen Way",1
 "Thomas Hook St",1
 "Winton St",2
 "Quinton Pl",1
-"Airport Rd",3
 "Admirals Way",1
 "Sowry Rd",1
 "Uenuku Pl",1
@@ -18950,7 +18406,6 @@
 "Tavera St",1
 "Beaconsfield Rd",1
 "Garvan Gln",1
-"Riverside Grv",1
 "Bonithon Ave",1
 "MacKenzie Ave",1
 "Ngatai St",3
@@ -18963,7 +18418,6 @@
 "Coolaghy Dr",1
 "Govett Ave",1
 "Krammer St",1
-"River St",4
 "Morris Lane",1
 "Roslyn St",1
 "Vesty Ave",1
@@ -18983,7 +18437,6 @@
 "Mary Pl",1
 "Edmonds St",1
 "Cucksey Cres",1
-"Thornhill Pl",2
 "Girvan Tce",1
 "Pine St",6
 "Vermont Crt",1
@@ -18998,7 +18451,6 @@
 "Poland Rd",1
 "Arena Ave",1
 "Lander St",1
-"Bridport St",1
 "Pennycook Pl",1
 "Pastoral Lane",1
 "Newinn Cres",1
@@ -19044,7 +18496,6 @@
 "Paremata Cres",1
 "Wainoni Ave",1
 "Burnside St",1
-"Silverstream Dr",1
 "Achray St",1
 "The Cliffs",1
 "Meadowvale Rise",1
@@ -19062,7 +18513,6 @@
 "Tekapo Dr",1
 "Accadia Lane",1
 "Bairds Rd",2
-"Phillip St",5
 "Woodbury Rise",1
 "Swift Ave",1
 "Gantry Pl",1
@@ -19101,7 +18551,6 @@
 "Frieston Rd",1
 "Jane Gifford Pl",1
 "Tisdall Tce",1
-"Doctors Hill Rd",1
 "Taunton Crt",1
 "Hemington St",1
 "Homestead Rd",1
@@ -19127,7 +18576,6 @@
 "Normanton St",1
 "Garrett Pl",2
 "Ajax Ave",1
-"Horseshoe Lake Rd",1
 "Fenside St",1
 "Hoey St",1
 "Cypress Cres",1
@@ -19201,12 +18649,10 @@
 "Mahuta Grv",1
 "Hannah Rd",2
 "Pamela Tce",1
-"Ferry Rd",14
 "Aaronville Way",1
 "Sonterra Cl",1
 "Weona Crt",1
 "Chesterfield St",1
-"Phillip Pde",1
 "Arawata Tce",1
 "Surrey St",15
 "Tramway Lane",1
@@ -19289,7 +18735,6 @@
 "Archboyd Ave",1
 "Carlyle St",9
 "Ernie Mays St",1
-"Lake Panorama Dr",2
 "Alexander Cres",2
 "St Ronans Ave",1
 "Longitude Pl",1
@@ -19319,7 +18764,6 @@
 "Kenmure Rd",1
 "Waimairi Rd",1
 "Carnac Pl",1
-"Huntleigh Park Way",1
 "Ruffell Pl",1
 "Southampton St",4
 "Waimarama Cl",1
@@ -19478,7 +18922,6 @@
 "Poulson St",1
 "Nola Pl",1
 "Tregony Pl",1
-"Hillside Tce",2
 "Aubrey Cres",1
 "Aliford Ave",1
 "Glenbrook Dr",1
@@ -19540,7 +18983,6 @@
 "Nina Lane",1
 "Heaphy Crt",2
 "Purvis St",1
-"Bridger St",1
 "Augustus Earle Pl",1
 "Cayman Crt",1
 "Bronzewing Tce",1
@@ -19557,7 +18999,6 @@
 "Barrington Dr",1
 "Downes Ave",1
 "Tealmere Grv",1
-"Phillips St",4
 "Korowai St",1
 "Fernbird Pl",1
 "Waiheke St",1
@@ -19704,7 +19145,6 @@
 "Ruawai Wharf Rd",1
 "Purdy St",2
 "Clay St",1
-"Henry Hill St",1
 "Sycamore Cres",1
 "Aeolus Pl",1
 "Kelvin Cres",2
@@ -19734,7 +19174,6 @@
 "Leander St",2
 "Apsley Dr",1
 "Tilden Ave",1
-"Portnall Pl",1
 "Tereice St",1
 "Barnes Crt",1
 "Samwell Dr",1
@@ -19842,8 +19281,6 @@
 "Kuranui St",1
 "Applecross Lane",1
 "Rautawhiri Rd",1
-"Sunpark Pl",1
-"Hilldale Pl",1
 "Clapham Grv",1
 "MacMaster St",1
 "Charlise Pl",1
@@ -19881,7 +19318,6 @@
 "Tunas St",1
 "Vernon Tce",1
 "Tiraumea Rd",1
-"Hillside Ave",1
 "Annex St",1
 "Sids Rd",1
 "Gaudin St",1
@@ -19903,7 +19339,6 @@
 "Donald Lane",2
 "Miria Te Kakara St",1
 "Ahuru St",1
-"Caverhill Rd",1
 "Village Pl",1
 "Simpson Pl",1
 "John Goulter Dr",1
@@ -19919,7 +19354,6 @@
 "Kauri St",24
 "Alpine Way",1
 "Dalrymple St",2
-"Park Tce",6
 "Fovant St",1
 "Ruihi St",1
 "Batchelor St",1
@@ -20006,7 +19440,6 @@
 "Stainton Tce",1
 "Mavis Pl",1
 "Te Kuiti Rd",1
-"Devonport Lane",1
 "Kiwi Tamaki Rd",1
 "Picketboat Lane",1
 "Pentland Tce",1
@@ -20035,7 +19468,6 @@
 "West Hoe Rd",1
 "Weber Pl",2
 "Fagan Pl",1
-"Hillsbrook Pl",1
 "Smallfield Ave",1
 "Falkirk St",2
 "Tiri Tiri Rd",1
@@ -20080,7 +19512,6 @@
 "Heather Lea",1
 "Tiverton Cres",1
 "Ben Nevis Dr",1
-"Easton Park Pde",1
 "Mosston Rd",1
 "Kingston Heights Rd",1
 "Matanaka Rd",1
@@ -20127,7 +19558,6 @@
 "Rodney Grv",1
 "Basilton Cl",1
 "Date Cres",1
-"Hunters Park Dr",1
 "Larissa Ave",1
 "Leighton Pl",1
 "Heritage Cl",2
@@ -20139,7 +19569,6 @@
 "Titoki Rd",2
 "Tutanekai St",4
 "Leyton Pl",1
-"Tom Parker Ave",1
 "Ridgeway Tce",1
 "Duncan St",14
 "Morrin St",2
@@ -20153,7 +19582,6 @@
 "Inglis Pl",1
 "Gillies Pl",1
 "Quick Ave",1
-"Bridgehead Cv",1
 "Weatherly Dr",1
 "Fell Pl",1
 "Westglen Pl",1
@@ -20168,7 +19596,6 @@
 "Cheeseman Pl",1
 "Hunt Grv",1
 "Marae Lane",1
-"Knightsbridge Dr",1
 "Sarah Ave",1
 "Johnston Grv",1
 "Kuratawhiti St",1
@@ -20205,7 +19632,6 @@
 "Daniels Way",1
 "Eton Pl",3
 "Keys St",3
-"Kingsbridge Pl",1
 "Montreal Grv",1
 "Wiltshire Retirement Vlg",1
 "McAinch Pl",1
@@ -20239,7 +19665,6 @@
 "Epping Pl",2
 "Malvern Ave",1
 "Cotter Lane",1
-"Woodbridge Rd",1
 "Willow Del",1
 "Scoresby St",1
 "Coxhead Rd",2
@@ -20273,7 +19698,6 @@
 "McShane St",1
 "Alana Pl",2
 "Plymouth Cres",1
-"Sir Peter Blake Pde",1
 "Pinewood Ave",1
 "Calistemon Grv",1
 "Lett Rd",1
@@ -20288,7 +19712,6 @@
 "Argyll St",2
 "Vickerys Rd",1
 "Huaroa St",1
-"Parkway Dr",1
 "Stonebrook Dr",2
 "Aspenwood Pl",1
 "Manly Esp",1
@@ -20386,7 +19809,6 @@
 "London Pl",2
 "Rutherford St",9
 "Ponderosa Grv",1
-"Parklands Ave",4
 "Finer Pl",1
 "Tuscan Pl",1
 "Amberwood Dr",1
@@ -20397,7 +19819,6 @@
 "Karanema Dr",1
 "Saunders Rd",1
 "Odette St",1
-"Park Dr",2
 "Julius Pl",1
 "Colchester Pl",1
 "Eucalyptus Way",1
@@ -20410,7 +19831,6 @@
 "Britomart St",1
 "Cumberland Pl",3
 "Inverness Cres",1
-"Riverwood Blvd",1
 "Holyrood Ave",1
 "Jack Browne Pl",1
 "Constellation Ave",1
@@ -20450,9 +19870,7 @@
 "Pasadena Pl",1
 "Fish St",1
 "Ngamotu Rd",3
-"Lake Domain Dr",1
 "Tarata Pl",1
-"Newport Way",1
 "Lusty Pl",1
 "Karangahape Rd",1
 "Dell Rd",1
@@ -20476,7 +19894,6 @@
 "Penrich St",1
 "Charlotte Lane",2
 "Johnstone St",3
-"Portia St",1
 "Cassidy Pl",2
 "Queen Natalie Pl",1
 "Sunshine Lane",1
@@ -20507,7 +19924,6 @@
 "Anderson St",9
 "Harriet St",1
 "Setsan Way",1
-"Portland Qy",1
 "Tensing St",1
 "Memorial Ave",4
 "Laramie Pl",1
@@ -20524,11 +19940,9 @@
 "Anderson Grv",1
 "Laburnum Grv",2
 "Carnoustie Pl",1
-"Riversdale Rd",2
 "Heartwood Lane",1
 "Milne Pl",2
 "Verona Way",1
-"Devonport Rd",2
 "Rustic Ave",1
 "Pukaki Grv",1
 "Chiltern Cres",1
@@ -20557,11 +19971,9 @@
 "Earnslaw Tce",1
 "Hongoeka Bay Rd",1
 "Margan Pl",1
-"Richard Hill Cl",1
 "Cameron Tce",2
 "Margaret Alice Cl",1
 "Ironwood Lane",1
-"Riverlinks Lane",1
 "Meads Pl",2
 "Turnbull Pl",1
 "Sheraton Pl",1
@@ -20580,7 +19992,6 @@
 "Paraone Rd",1
 "Atherton Rd",1
 "Don Croot St",2
-"Hillsview Cres",1
 "Kirk Rd",1
 "Tutere St",1
 "Bluestone Rise",1
@@ -20621,7 +20032,6 @@
 "Tudor Pl",4
 "Hanson Pl",1
 "Cherrywood St",1
-"Forest Park Lane",1
 "Belair Cl",1
 "Slater St",1
 "Sheath St",1
@@ -20657,7 +20067,6 @@
 "Karo St",3
 "Grenville Rd",1
 "Himalaya Cres",2
-"Lake Rd",6
 "Citrus Ave",1
 "Clare Rd",1
 "Leila Pl",1
@@ -20701,7 +20110,6 @@
 "Sandwich Rd",2
 "Romney Cl",1
 "Lichfield Grv",1
-"Sparks Rd",2
 "Paora Hapi St",1
 "Melville Ave",1
 "Kerr-Taylor Ave",1
@@ -20740,11 +20148,9 @@
 "Woodside Cl",1
 "Manuera Pl",1
 "Coptic Pl",1
-"Portrush Lane",1
 "Vogler Dr",1
 "Eccleston Hl",1
 "Sunburst St",1
-"Hillman Pl",1
 "Newgate St",1
 "Leith Valley Rd",1
 "Brady Rd",1
@@ -20824,7 +20230,6 @@
 "McKenna Lane",1
 "Corunna Rd",1
 "Platform Way",1
-"Portland St",2
 "Wesley Tce",1
 "Chelmer St",1
 "Chateau Cres",1
@@ -20848,7 +20253,6 @@
 "Lomeer Way",1
 "Pihanga St",1
 "Trecastell St",1
-"Hunter Hills Dr",1
 "Kakariki Lane",1
 "Bannister St",1
 "Donnell Ave",1
@@ -20942,7 +20346,6 @@
 "Traynor Lane",1
 "Linden Ave",1
 "Hankey St",1
-"Coatesville-Riverhead Hwy",1
 "James Cross Pl",1
 "Samuel Parnell Rd",1
 "Melmore Pl",1
@@ -21028,7 +20431,6 @@
 "Tauiwi Cres",1
 "Courtneys",1
 "Marton Pl",1
-"Station Cres",1
 "Nicola Pl",1
 "Tingey Ave",1
 "Meliora Pl",1
@@ -21040,7 +20442,6 @@
 "Couldry St",1
 "Cumbrae Pl",1
 "Kylemore Pl",1
-"Uxbridge Rd",1
 "Taurus St",1
 "New Renwick Rd",1
 "Hiskens Pl",1
@@ -21055,7 +20456,6 @@
 "Albert Pryor Ave",1
 "Beach Haven Pl",1
 "Hadley St",1
-"Parkview Ave",1
 "Christobel Cir",1
 "Blossom Lane",1
 "Hatherley Pl",1
@@ -21077,7 +20477,6 @@
 "Paul Ave",1
 "Pascal Pl",1
 "Mossburn Grv",1
-"St Andrews Hill Rd",1
 "Brydon Pl",1
 "Merrilees Pl",1
 "Hislop Ave",1
@@ -21086,7 +20485,6 @@
 "Naumai St",4
 "Finlay Pl",2
 "Beckett Lane",1
-"Broadpark Rd",1
 "Pax Ave",1
 "Cranston St",2
 "Tonar St",1
@@ -21250,7 +20648,6 @@
 "Jull St",1
 "Kettle Ave",1
 "Irene Cres",1
-"Ferryhill Rd",1
 "Allanah Pl",1
 "Hotspur Pl",1
 "Ronald Woolf Pl",1
@@ -21280,7 +20677,6 @@
 "Quail Dr",1
 "Rustic Lane",1
 "Livingstone Brothers Lane",1
-"Ourbridge St",1
 "Herbs Pl",1
 "Glenrowan Ave",1
 "Kingsley St",6
@@ -21308,10 +20704,8 @@
 "Bury St",1
 "Anslow Pl",1
 "Furneaux Grv",1
-"Ferrymead Tce",1
 "Skara Brae",1
 "Haddon Cres",1
-"Scroggs Hill Rd",1
 "Eden Pl",4
 "Jacaranda Crt",1
 "Fremont Grv",1
@@ -21322,7 +20716,6 @@
 "Nevis Cres",2
 "Kitchener Pl",2
 "Stolford Cres",1
-"Phillip Ave",1
 "Montrose Grv",1
 "Meadowvale Dr",1
 "Ngahere Dr",1
@@ -21349,7 +20742,6 @@
 "Strabo Pl",1
 "Temple Cres",1
 "Seagrass Pl",1
-"Brighton Mall",1
 "Bushland Grv",1
 "Matenga St",1
 "Waiau Pl",1
@@ -21417,7 +20809,6 @@
 "Landy St",1
 "Vanden Pl",1
 "Glue Pl",1
-"Lakeview Pl",2
 "Otauru Rd",1
 "Avonhead Rd",1
 "Godwit St",1
@@ -21540,8 +20931,6 @@
 "Te Karuwha Pde",1
 "Chalgrove Rd",1
 "Sapphire Dr",1
-"Bexhill Cres",1
-"Transport Pl",1
 "Whiteley St",1
 "Highgrove",1
 "Hampson St",1
@@ -21557,7 +20946,6 @@
 "Walford Rd",1
 "Aberdeen Ave",1
 "Mure St",1
-"River Oaks Dr",1
 "Crown Tce",1
 "Whitford Pl",1
 "Dunn St",4
@@ -21594,7 +20982,6 @@
 "Orchard Dr",1
 "Gabriel Grv",1
 "Waring Taylor St",1
-"Driver Cres",1
 "Maltby St",2
 "Elmley Pl",1
 "Glenda Dr",1
@@ -21634,7 +21021,6 @@
 "Terrance Grv",1
 "St Keverne Cl",1
 "Farnley Pl",1
-"Parkinson Cl",1
 "Scandia Crt",1
 "Millie Pl",1
 "Watlington Pl",1
@@ -21792,7 +21178,6 @@
 "Hedley St",1
 "Pound Rd",1
 "De Haven St",1
-"Riverside Ave",1
 "Quail Crt",1
 "Claude Brookes Dr",1
 "Cresswell St",1
@@ -21824,7 +21209,6 @@
 "Hukaroa Rd",1
 "Monde Pl",1
 "Rosebery St",3
-"Riverton Pl",1
 "Boswell St",2
 "Mills St",6
 "Hempton St",1
@@ -21957,7 +21341,6 @@
 "Mauku St",1
 "Rockwood Pl",2
 "Avery Grv",1
-"Achilles Pde",1
 "Aldridge Tce",1
 "Wharfe St",1
 "Bellvue Rd",1
@@ -21996,7 +21379,6 @@
 "Killala St",1
 "Korcula Pl",1
 "Barker Rd",1
-"Hilliard Pl",1
 "Cheapside St",1
 "Trellech Pl",1
 "Twentieth Ave",1
@@ -22036,14 +21418,12 @@
 "Rutgers Pl",1
 "Upper Kent St",1
 "The Way",1
-"Riverview Rd",5
 "Korimako Lane",1
 "Baffin Grv",1
 "Black Rock Rd",1
 "Raleigh Ave",1
 "Ross View Tce",1
 "Kapuka Rd",1
-"Lakefront Dr",1
 "Mallard Dr",1
 "Clarke Ave",3
 "Conacher Cl",1
@@ -22221,7 +21601,6 @@
 "Kereru St",8
 "Michies Rd",1
 "Grosvenor Pl",2
-"Gaddums Hill Rd",1
 "The Green",3
 "Kanpur Rd",1
 "Kaumatua Cres",1
@@ -22244,7 +21623,6 @@
 "Ballymena Dr",1
 "Henley Rd",1
 "Nga Mahi Rd",1
-"River Gld",1
 "Ravenscourt Pl",1
 "Elm Cres",1
 "Gardiner St",2
@@ -22255,7 +21633,6 @@
 "Rishworth Pl",1
 "Daniell St",4
 "Kingfisher Crt",1
-"Sylvia Park Rd",1
 "Olwyn Tce",1
 "Beaufort St",2
 "Kamahi Pl",5
@@ -22312,7 +21689,6 @@
 "Pimlico Pl",2
 "Oriental Pde",2
 "Skerrett Cres",1
-"Resthill Cres",1
 "Pavola Grv",1
 "Glenstrae Rd",1
 "McGarvey Rd",1
@@ -22460,7 +21836,6 @@
 "Glenview Rd",1
 "Sweetman Ave",1
 "Glengowan Pl",1
-"Huntington Park Dr",1
 "Driftwood Pl",1
 "Kenmore Pl",1
 "Cheyne St",1
@@ -22526,14 +21901,12 @@
 "Scotts Field Dr",1
 "Dunbarton Dr",1
 "Somerville Cres",1
-"Oak Park Ave",1
 "Tamihana Ave",2
 "Jacks Pass Rd",1
 "Tomahawk Rd",2
 "Ashgrove Pl",1
 "Bonito Pl",1
 "Steep St",1
-"Meadow Park Cres",1
 "Monarch Ave",1
 "Scarlock Ave",1
 "Elliot St",8
@@ -22600,8 +21973,6 @@
 "Garnet Rd",1
 "Whitby Cres",2
 "Estuary View Rd",1
-"Portsmouth St",2
-"Tunnel Grv",1
 "Katopu St",1
 "Dormer St",1
 "Gretna Grn",1
@@ -22670,7 +22041,6 @@
 "Grass St",1
 "Hine St",1
 "Jollie St",5
-"Southill Way",1
 "Aston St",1
 "Governor Fitzroy Pl",1
 "Fernhaven Grv",1
@@ -22688,14 +22058,12 @@
 "Theyers St",1
 "Glandovey Rd",1
 "Tilbury Ave",1
-"Southpark Pl",1
 "Omana Heights Dr",1
 "Rosecamp Rd",1
 "Glendene Ave",1
 "Hall-Jones St",1
 "Hensley Cres",1
 "Temple St",2
-"Kingsbridge Dr",1
 "McBride St",2
 "Mataiawhea St",1
 "Bulli St",1
@@ -22704,7 +22072,6 @@
 "Beverley Hl",1
 "Maru St",2
 "Hoggard Pl",1
-"Parkside Cres",1
 "Karamea St",2
 "Kawai Rise",1
 "Dittmer Dr",2
@@ -22727,7 +22094,6 @@
 "Murvale Dr",1
 "Robinson St",10
 "Rosendale Ave",1
-"Holyport Cl",1
 "Moores Valley Rd",1
 "Canongate",1
 "Ti Kouka Eco Lane",1
@@ -22813,7 +22179,6 @@
 "Grange Pl",1
 "Laurelia Pl",1
 "Hunia St",1
-"Waterbridge Way",1
 "Snelling Pl",1
 "Standing Pl",1
 "Arthur Hobson Ave",1
@@ -22829,7 +22194,6 @@
 "Hubert Pl",1
 "Newman Dr",1
 "Opanuku Rd",1
-"Fernhill Tce",1
 "Sultan St",1
 "Mount Sea Rd",1
 "Burgess Rd",2
@@ -22879,7 +22243,6 @@
 "Ridgeview Lane",2
 "Kororako Grv",1
 "Home St",3
-"Bridge Ave",1
 "Cygnet St",1
 "Gibson Qy",1
 "Aurora Grv",1
@@ -22916,7 +22279,6 @@
 "Caesar Roose Pl",1
 "Piako Rd",1
 "Ormrod Grv",1
-"Railway Pl",1
 "Whitfield St",1
 "Wairua Rd",2
 "Mount Albert Rd",4
@@ -22926,7 +22288,6 @@
 "Exeter St",10
 "Ngaumu St",1
 "Seager Lane",1
-"Kowhai Park Rd",1
 "O'Connor Way",1
 "Sladden St",1
 "Lucia Gld",1
@@ -22934,7 +22295,6 @@
 "Montgomery Ave",7
 "Glengarry Pl",2
 "Berwick Grv",1
-"Uxbridge St",4
 "Liardet St",3
 "Fairmile Dr",1
 "Newnham St",1
@@ -22968,7 +22328,6 @@
 "Hayward Crt",1
 "Traill St",1
 "Baretta St",1
-"Substation Lane",1
 "Onoke Lane",1
 "Selwyn St",14
 "Houghton St",1
@@ -23006,7 +22365,6 @@
 "Commerce Cres",1
 "Te Ra Rd",1
 "Ingleby Pl",1
-"Cornhill St",1
 "Tawai Del",1
 "Ogilvy Tce",1
 "Tremaine Pl",1
@@ -23030,7 +22388,6 @@
 "Celtic Way",1
 "Merlin Crt",1
 "Shetland Pl",2
-"Lake Tce",1
 "Hermes Pl",1
 "Ian Graves Cl",1
 "Porutu St",1
@@ -23105,7 +22462,6 @@
 "Haekaro Lane",1
 "Sunnyridge Pl",1
 "Contessa Dr",1
-"Railway Row",1
 "Cong Ave",1
 "Eynsham Crt",1
 "Paloma Crt",1
@@ -23117,7 +22473,6 @@
 "Picasso Pl",1
 "Orton St",1
 "Nichol Pl",1
-"Bridget Lane",1
 "Frankley Rd",1
 "Evenwood Pl",1
 "Rhode St",1
@@ -23144,7 +22499,6 @@
 "St Leonards Dr",1
 "Griffiths Pl",2
 "Browning Pl",1
-"Phillips Pl",1
 "Wimbledon Way",1
 "Kaka Cres",1
 "Fernbrook Rd",1
@@ -23160,7 +22514,6 @@
 "Cartier Cres",1
 "Nirmal Pl",1
 "Carex Way",1
-"Portman Rd",1
 "Kiln Pl",1
 "George Ave",1
 "Shortland Pl",1
@@ -23183,7 +22536,6 @@
 "Wiltshire Pl",6
 "Grafton St",1
 "Melvill Grv",1
-"Manor Park Dr",1
 "Fitzgerald Ave",3
 "Gumtree Rise",1
 "Walter Haddrell Cres",1
@@ -23256,8 +22608,6 @@
 "Elgin Pl",3
 "Vanbrugh Pl",1
 "Manahi Ave",1
-"New River Rd",1
-"Portman St",1
 "Melanie Pl",1
 "Merlin St",1
 "Nahum St",1
@@ -23270,7 +22620,6 @@
 "Joval Pl",1
 "Punawai Pl",1
 "Westminster Gdns",1
-"Allport Pl",1
 "Cobana Pl",1
 "Britannia St",2
 "Buller Grv",1
@@ -23339,7 +22688,6 @@
 "Limmer Pl",1
 "Chante Cres",1
 "Peebles Dr",1
-"Woodhill Cl",1
 "Old South Rd",1
 "Cambria Gdns",1
 "Clinker St",1
@@ -23463,7 +22811,6 @@
 "Jude Pl",1
 "Robin Brooke Dr",1
 "Grey St",46
-"Parkhill Rd",2
 "Chokebore Pl",1
 "Te Huia Dr",1
 "Weir Tce",1
@@ -23499,7 +22846,6 @@
 "Aotea Tce",1
 "Spinella Dr",1
 "Crows Rd",1
-"Port Rd",2
 "Cebel Pl",1
 "Jamaica Pl",1
 "Second St",2
@@ -23531,7 +22877,6 @@
 "Strathmore Pl",2
 "Percy Cameron St",1
 "Ash Pl",4
-"Kaiata Park Dr",1
 "Florida Crt",1
 "Penhelig Pl",1
 "Grosvenor Gdns",1
@@ -23543,12 +22888,10 @@
 "Buckleys Trk",1
 "Castleton Dr",1
 "Tatai St",1
-"Riverbank Dr",1
 "Elam St",1
 "Weston Pl",1
 "Wingfield Pl",1
 "Townley Pl",1
-"Portchester Cl",1
 "St Leonard St",1
 "Target Rd",2
 "Waterford Way",1
@@ -23605,7 +22948,6 @@
 "Gresham St",2
 "Pennant Pl",1
 "Teihana Rd",1
-"Porter Cres",1
 "Montego Pl",1
 "Gingko Pl",1
 "George Melrose Dr",1
@@ -23638,10 +22980,8 @@
 "Terry Pl",1
 "Jubilee Cres",1
 "Arapaepae Rd",1
-"Tironui Station Rd",2
 "Othello Dr",2
 "Armour Pl",2
-"Mortlake Hts",1
 "Murray Way",1
 "Hammond Ave",1
 "Story Pl",1
@@ -23705,7 +23045,6 @@
 "Mulu Pl",1
 "Lynch St",2
 "Tahuri Rd",1
-"Greenhill Ave",1
 "Rue Viard",1
 "Swanston St",1
 "Hatton St",3
@@ -23717,7 +23056,6 @@
 "Dunkerron Ave",1
 "Mollymawk Pl",1
 "Keith Sands Grv",1
-"Mountain Rd",7
 "Serrano Pl",1
 "Morris Spence Ave",1
 "Leeds St",4
@@ -23755,7 +23093,6 @@
 "Ngapuhi St",1
 "Queen Victoria St",1
 "Te Puketea Lane",1
-"Portal St",1
 "Bluett Rd",1
 "Laingfield Tce",1
 "Habgood Pl",1
@@ -23817,7 +23154,6 @@
 "Flagstaff St",1
 "Lipton Pl",1
 "Daldy St",1
-"Porteous St",1
 "Torquay St",3
 "Rod Pl",1
 "Rothesay St",2
@@ -23825,7 +23161,6 @@
 "Wynand Pl",1
 "Aintree Cres",1
 "Bond Pl",2
-"Parker Lane",1
 "Mexted Pl",1
 "Belmont Tce",3
 "Kaitawa Rd",1
@@ -23880,7 +23215,6 @@
 "Malta St",2
 "Bowling Ave",1
 "Hutton St",1
-"West Parkdale St",1
 "Cumnor Tce",1
 "Gazelle Lane",1
 "Dobson St",5
@@ -23915,7 +23249,6 @@
 "Spinifex St",1
 "Dresdan Crt",1
 "Penrhyn Rd",1
-"Achilles Pl",1
 "Collard Pl",1
 "Guy Ave",2
 "Sunny Ave",1
@@ -23924,7 +23257,6 @@
 "Somerville Lane",1
 "Chartwell Cl",1
 "Sumich Pl",1
-"Beacon Hill Rd",1
 "Gregan Cres",1
 "Spalding St",1
 "Cole Pl",1
@@ -23953,8 +23285,6 @@
 "Lantana Rd",1
 "Muripara Ave",1
 "Wildman Rd",1
-"Ferry Pl",1
-"Hillary Heights Ave",1
 "Bellmont Ave",1
 "Macville Rd",1
 "Wickham St",2
@@ -24020,9 +23350,7 @@
 "Rosvall Pl",1
 "Hindess St",1
 "Frame Pl",1
-"Achilles Crt",1
 "Jerram St",1
-"Parkland Rise",1
 "Mascot Ave",1
 "Lever St",1
 "Liane Pl",1
@@ -24055,7 +23383,6 @@
 "Service Lane",2
 "Ayrton St",1
 "Errol Lane",1
-"Portobello Rd",3
 "Keri Vista Rise",1
 "Wairoa Rd",1
 "Wrights Spur",1
@@ -24179,12 +23506,9 @@
 "Lucknow Pl",2
 "Huffam St",1
 "Coronation St",7
-"Tannahill St",1
 "Ballial Pl",1
 "Vardon Rd",2
-"Ron Driver Pl",1
 "Hadfield St",4
-"Drivers Rest",1
 "Valley St",1
 "Hautapu St",1
 "Kruse Pl",1
@@ -24193,7 +23517,6 @@
 "Kaweka Cl",1
 "Monorgan Rd",1
 "Huka Falls Rd",1
-"Cairnhill St",1
 "Onepoto Rd",2
 "Wheeler Way",1
 "Grimsby Grv",1
@@ -24215,7 +23538,6 @@
 "Birdie Way",1
 "Rototai Rd",1
 "Fernwood Pl",2
-"Port View Cres",1
 "Wet Jacket Pl",1
 "Inca Pl",3
 "Afghan St",1
@@ -24225,7 +23547,6 @@
 "Maratahu St",1
 "Palamino Pl",1
 "Perry Pl",1
-"Riverlea Estate Dr",1
 "Forge Way",1
 "Taranui Rd",1
 "Mendip St",1
@@ -24273,7 +23594,6 @@
 "Gemini Ave",1
 "Jalna Ave",1
 "Ridge View Cres",1
-"Wrights Hill Rd",1
 "Gosset St",1
 "Skeates Ave",1
 "Botany Rd",2
@@ -24282,7 +23602,6 @@
 "Pine Tree Lane",1
 "Sievwright Lane",1
 "Gorge Rd",4
-"Phillips Ave",1
 "Ara Tai",1
 "Albert Sheppard Cl",1
 "McWhirters Farm Lane",1
@@ -24290,7 +23609,6 @@
 "Ferntree Dr",1
 "Riccarton Pl",1
 "Phoenix Ave",1
-"Hillsdale Rd",1
 "Reka St",2
 "Gennaker Lane",1
 "Pompallier Pl",1
@@ -24344,7 +23662,6 @@
 "Hooks Rd",1
 "Victory Cres",1
 "Miromiro Dr",1
-"Parkwood Pl",4
 "Taupo Qy",2
 "Ascot Cl",1
 "Keoghs Lane",1
@@ -24379,7 +23696,6 @@
 "Queree Dr",1
 "Colegrave Pl",1
 "Lamb St",1
-"Ellerslie Park Rd",1
 "Milton Grv",1
 "The Boardwalk",1
 "Birdwood Cres",1
@@ -24422,7 +23738,6 @@
 "Waddon Pl",1
 "Onslow Ave",2
 "Carn Pl",1
-"Elmbridge Pl",1
 "Kennedy Rd",5
 "Langbein St",1
 "Butefield Lane",1
@@ -24456,7 +23771,6 @@
 "Forrester Ave",1
 "Alfred Rd",1
 "Waiwera Pl",1
-"Stonebridge Hts",1
 "Ingram St",3
 "Montreal St",4
 "Troon Cres",1
@@ -24535,7 +23849,6 @@
 "Okoheriki St",1
 "Bishop Lenihan Pl",1
 "Coburg St",1
-"Tuthill St",1
 "Godfrey Pl",2
 "Fullerton Grv",1
 "Cape Vista Cres",1
@@ -24606,7 +23919,6 @@
 "Eastview Pl",1
 "St Michaels Cres",1
 "Staunton Ave",1
-"Bridgewater Lane",1
 "Cardiff Ave",1
 "Menear Lane",1
 "Leeds Pl",2
@@ -24659,7 +23971,6 @@
 "Putter Pl",1
 "Reremoana Cl",1
 "Moore St",16
-"Cannon Hill Cres",1
 "Wybo Veldman Pl",1
 "Patterson Tce",1
 "Reynolds Pl",2
@@ -24680,7 +23991,6 @@
 "Argentine Ave",1
 "Kathryn Ave",1
 "Dittmer St",1
-"Parkside Rd",2
 "Dusky Pl",1
 "Bouvardia Ave",1
 "Hebe Lane",1
@@ -24708,7 +24018,6 @@
 "Tutchen St",1
 "Jarrah Pl",1
 "Keys Tce",1
-"Streamside Crt",1
 "Brentwood St",2
 "Denmark St",3
 "San Ignacio Crt",1
@@ -24748,7 +24057,6 @@
 "Haig Rd",1
 "Innes Pl",3
 "Columbia Way",1
-"Piako Park Lane",1
 "Villi Pl",1
 "Azores Way",1
 "Woodham Pl",1
@@ -24843,7 +24151,6 @@
 "Thames Way",1
 "Fairplay St",1
 "Gainsborough Crt",1
-"Parkinson Pl",3
 "Ussher Pl",1
 "Fifth St",1
 "Akina St",1
@@ -24853,7 +24160,6 @@
 "Sovereign Crt",1
 "Glengarry Cres",1
 "Parton Rd",1
-"Hill Crt",1
 "Kaimera Crt",1
 "Tamworth Cl",1
 "Allison Cres",1
@@ -24954,9 +24260,7 @@
 "Ranfurly Tce",3
 "Crowther Tce",1
 "Manhattan Rise",1
-"Fernhill Dr",1
 "Marigold Lane",1
-"Parkvale Pl",1
 "Sue Ave",1
 "Alleyne Crt",1
 "Koromiko Pl",1
@@ -25110,7 +24414,6 @@
 "Harrod Ave",1
 "Liley Pl",1
 "Woodland Pl",1
-"Parkinson Ave",1
 "Suiter St",1
 "Redruth Ave",1
 "Wesley St",4
@@ -25118,7 +24421,6 @@
 "Radcliffe St",2
 "Vancouver Ave",1
 "Huia Ave",2
-"Kaipara Portage Rd",1
 "Ovenden St",1
 "Skyedale Dr",1
 "Tekoah Pl",1
@@ -25126,7 +24428,6 @@
 "Paparoa Cres",1
 "Rame Rd",1
 "Tane Rd",1
-"Greenpark Way",1
 "Moana St",8
 "Warwick Rd",2
 "Marilyn Cl",1
@@ -25143,7 +24444,6 @@
 "Blandford Way",1
 "Alexandra St",13
 "Sandiacre Way",1
-"Westlake Dr",1
 "Hellabys Rd",1
 "Nandina Pl",1
 "Barberry St",1
@@ -25154,7 +24454,6 @@
 "Ruakiwi Rd",1
 "Keitha Pl",1
 "Milford Rd",2
-"Parker Cres",1
 "Meander Dr",1
 "Tarndale Grv",1
 "Kerry Del",1
@@ -25164,7 +24463,6 @@
 "Rurima Rise",1
 "Farley St",2
 "Lynden Crt",1
-"Riverstone Dr",2
 "Broadwater Cl",1
 "Southwark St",1
 "Maida Vale Rd",1
@@ -25173,7 +24471,6 @@
 "Cashmere Cl",1
 "Hewlings St",3
 "Glamis Ave",3
-"Oakpark Pl",1
 "Te Akau Cres",1
 "Hatuma Rd",1
 "Elmwood Ave",1
@@ -25199,7 +24496,6 @@
 "Waiteata St",1
 "Kepler Way",1
 "Norwich Pl",2
-"Riverlea Rd",2
 "Urunga Ave",1
 "Mclintock St",1
 "Redere Pl",1
@@ -25213,7 +24509,6 @@
 "Keywella Dr",1
 "Bournemouth Ave",1
 "Pauline Way",1
-"Edenvale Park Rd",1
 "Bintulu Pl",1
 "Joanna Pl",1
 "Owhiro Bay Pde",1
@@ -25222,7 +24517,6 @@
 "Patiti Rd",1
 "Normand Pl",1
 "Anna Watson Rd",1
-"East Stream Lane",1
 "Magic Way",1
 "Blagdon Rd",1
 "Bain Pl",1
@@ -25237,7 +24531,6 @@
 "Nikau Cres",1
 "Morningside Rd",1
 "Mazuran Pl",1
-"Bridgewater Rd",1
 "Kellaway Tce",1
 "Higgs Rd",2
 "Pascal St",1
@@ -25247,14 +24540,12 @@
 "Ingram Rd",1
 "Clyde Rd",6
 "Dumbarton St",1
-"Stambridge Pl",1
 "St Andrews Way",1
 "Titirangi Rd",2
 "Kent Lodge Ave",1
 "Gresford St",1
 "Balta St",1
 "Cains Tce",1
-"Trig Hill Rd",1
 "Hartles Pl",1
 "Yare Lane",1
 "Lorraine Pl",1
@@ -25280,7 +24571,6 @@
 "Foley Dr",1
 "Gaisford Tce",1
 "Ogilvie Rd",1
-"Hoylake Pl",1
 "Stebbings Rd",1
 "Cranley St",4
 "Smith Rd",1
@@ -25416,7 +24706,6 @@
 "Scotland Tce",1
 "Simmonds Grv",1
 "Beale Pl",1
-"Lake Kaniere Rd",1
 "Tiriwa Dr",1
 "Taylor St",13
 "Nell Pl",1
@@ -25429,7 +24718,6 @@
 "Shalimar Cres",1
 "Miller Rd",2
 "Taipa Heights Dr",1
-"Lake St",4
 "Estuary Vws",1
 "Mannington Rd",1
 "Wiltshire Mews",1
@@ -25456,12 +24744,9 @@
 "Fairgray Row",1
 "Domain Ave",4
 "Tara Rd",1
-"Hill St",13
 "Princess Rd",1
 "Ettrick Grv",1
-"Quarry Hill Tce",1
 "Jessies Cres",1
-"Park View Tce",1
 "Jadon Cl",1
 "Grainger Rd",1
 "Godwin Cres",1
@@ -25488,7 +24773,6 @@
 "Chorley Ave",1
 "Glenroy Cres",1
 "Seaspray Lane",1
-"Three Mile Hill Rd",1
 "Allans Way",1
 "Chamberlain Ave",1
 "John Street Lane",1
@@ -25604,7 +24888,6 @@
 "Scaife Dr",1
 "Lansdowne Rd",1
 "Shortt Ave",1
-"Parkstone Ave",1
 "Madeleine Tce",1
 "Ballini Rise",1
 "Noname Rd",1
@@ -25618,9 +24901,7 @@
 "Landward Cl",1
 "Mooney St",1
 "Neplusultra St",1
-"Glenhill Dr",1
 "Lloyd George Rd",1
-"Hillsden Pl",1
 "Silicon Way",1
 "Te Puni Grv",1
 "Palawan Pl",1
@@ -25662,7 +24943,6 @@
 "Kurth Cres",1
 "Pope St",3
 "Wings Line",1
-"Red Hill Rd",1
 "Copley St",1
 "Kingston Rd",1
 "Whitehaven St",2
@@ -25751,11 +25031,9 @@
 "Thistledown Pl",1
 "Devon Rd",4
 "Frater Ave",1
-"Ferrier Pl",1
 "Rushbury Pl",1
 "Te Ngae Rd",1
 "Oakridge Way",1
-"Blakewell Pl",1
 "Spiers St",1
 "Dunsinane Pl",1
 "Te Atatu Rd",1
@@ -25781,7 +25059,6 @@
 "Roskill Way",1
 "Westland St",1
 "Darlington Tce",1
-"Churchill Cres",5
 "Corokia Pl",1
 "Aru St",1
 "Plateau Dr",1
@@ -25838,7 +25115,6 @@
 "Raglan St",7
 "Wayside",1
 "Le Ruez Pl",1
-"Blackbridge Rd",1
 "Ralphine Way",1
 "Allen Tce",1
 "Khandallah Pl",1
@@ -25867,7 +25143,6 @@
 "Iroquois Pl",1
 "Clematis Pl",1
 "Katherine Pl",2
-"Bill Phillip Pl",1
 "Oudenarde St",1
 "Jesmond Tce",1
 "Wilbur Pl",1
@@ -26026,7 +25301,6 @@
 "Pownall St",1
 "Caroline Rd",1
 "Fairs Rd",1
-"Parkdale Rd",1
 "Mataura Pl",1
 "Kanuka Crt",1
 "Jervois St",6
@@ -26046,7 +25320,6 @@
 "Garnet Dr",1
 "Court Rd",1
 "Albatross Cl",1
-"Porter Pl",2
 "Dame Cath Pl",1
 "Weka Grv",1
 "Appleby Rd",1
@@ -26096,7 +25369,6 @@
 "Rangiuru St",1
 "Godley Rd",1
 "Tamamutu St",1
-"Sylvan Park Ave",1
 "Roanoke Way",1
 "Lanham Lane",1
 "Torless Tce",1
@@ -26115,7 +25387,6 @@
 "Purakau Ave",1
 "Leon St",1
 "Bohola Rise",1
-"Driver Rd",1
 "Semeloff Tce",1
 "Starveall St",1
 "Hendry Ave",1
@@ -26159,14 +25430,12 @@
 "Hewett Way",1
 "Whakaue St",1
 "Torr St",1
-"Lake Esp",1
 "Aditi Cl",1
 "Castlewood Grv",1
 "Batham Dr",1
 "Curletts Rd",1
 "Chatham Rd",1
 "Warner Pl",1
-"Phillida Pl",1
 "Shackleton Rd",1
 "Afton Tce",1
 "Battiscombe Tce",1
@@ -26183,7 +25452,6 @@
 "St Annes Sq",1
 "Hawea Pl",3
 "Wakefield Rd",1
-"Parkside Dr",2
 "Rochester Tce",1
 "Pitcairn Pl",1
 "Padfield Pl",2
@@ -26215,7 +25483,6 @@
 "Flygers Line",1
 "Danielle Pl",1
 "Pahau Pl",1
-"Station Rd",30
 "Lazar St",1
 "Holiday Rd",1
 "Frome Pl",1
@@ -26338,7 +25605,6 @@
 "Iorangi Pl",1
 "Glengyle St",1
 "Carole Cres",1
-"Devonport St",1
 "Holsten Pl",1
 "Belvedere St",2
 "Taumutu Rd",1
@@ -26381,7 +25647,6 @@
 "Marae St",2
 "Riplington Rd",1
 "Red Barn Lane",1
-"Rosehill Lane",1
 "Inverary St",1
 "Bordesley St",1
 "Meri Grv",1
@@ -26441,7 +25706,6 @@
 "Ewhurst Pl",1
 "Bywell St",1
 "McKerrow Pl",2
-"Hillview Pl",4
 "Brook Haven Rise",1
 "Motutere Pl",1
 "Blueridge Cl",1
@@ -26452,7 +25716,6 @@
 "Albano Way",1
 "Mohi Cres",1
 "Carpentras Way",1
-"Park Lane",10
 "Askerne Dr",1
 "Cardrona Cl",1
 "Brooksway",1
@@ -26461,13 +25724,11 @@
 "Belloc St",1
 "Matai Dr",1
 "Tuapapa St",1
-"Lakewood Ave",1
 "Carters Rd",4
 "Kilkenny Pl",2
 "Albacore Way",1
 "Chester Ave",3
 "Buffalo Rd",1
-"Millpark Pl",1
 "Collinge Rd",1
 "Marguerite Pl",1
 "Leburn Cres",1
@@ -26485,7 +25746,6 @@
 "Borneo Dr",1
 "Sixty Fifth St",1
 "Broadlands Dr",1
-"Brick Hill Rd",1
 "Ansford Pl",1
 "Wychbury St",1
 "Kindergarten Dr",1
@@ -26494,7 +25754,6 @@
 "Coates Grv",1
 "Katerini Grv",1
 "Bibiana St",1
-"Rivers Edge",1
 "Sentosa Pl",1
 "Tawhiao St",1
 "Maryburn Rd",1
@@ -26522,7 +25781,6 @@
 "Chatsfield Pl",1
 "Lancewood Crt",3
 "Te Kaponga St",1
-"Hill Grv",1
 "Arahiwi Grv",1
 "Nikau Palm Rd",1
 "Beasley Ave",1
@@ -26535,7 +25793,6 @@
 "Inverlochy Pl",1
 "Weaver Pl",1
 "Palando Pl",1
-"Newport Pl",2
 "Sapling Dr",1
 "Tobys Way",1
 "Beech Rd",1
@@ -26554,7 +25811,6 @@
 "Ruth Taylor Ave",1
 "Power Rd",1
 "Brian Ave",2
-"Norton Park Ave",1
 "Hopper St",1
 "Brookfield Ave",1
 "Kiwi Rd",6
@@ -26653,9 +25909,7 @@
 "Wing Cres",1
 "No 2 Line",1
 "Raven Ave",1
-"Hutt Park Rd",1
 "Spinley St",1
-"Bembridge St",1
 "Lybster St",1
 "Caples Pl",1
 "West Tce",2
@@ -26667,7 +25921,6 @@
 "Broderick St",1
 "Freesia Pl",1
 "Don Buck Rd",1
-"Riverbank St",1
 "Riperata St",1
 "Abby Cl",1
 "Northesk St",1
@@ -26711,7 +25964,6 @@
 "Deptford Lane",1
 "McMeakin Rd",1
 "Cotswold Lane",2
-"Parkview Pl",4
 "New York St",1
 "Stanley Pl",2
 "Clutha Pl",2
@@ -26767,7 +26019,6 @@
 "Beaumont Pl",1
 "Britton Ave",1
 "Great Collins St",1
-"Pigeon Mountain Rd",1
 "Linton Pl",1
 "Bari Lane",1
 "Willowside Pl",1
@@ -26776,7 +26027,6 @@
 "Back Rd",2
 "Ritchie St",4
 "Rosella Dr",1
-"Fire Station Lane",1
 "Mewburn Rise",1
 "Carex Cl",1
 "Mihipeka Grv",1
@@ -26786,7 +26036,6 @@
 "Ginaty Lane",1
 "Balmacewen Pl",1
 "Wycolla Ave",1
-"Richmond Hill Rd",1
 "Somerton Dr",1
 "March St",1
 "Wadham Grv",1
@@ -26911,7 +26160,6 @@
 "Titter Pl",1
 "Mappin Pl",1
 "Byron St",11
-"Red Hills Rd",1
 "Te Haumi Dr",1
 "Nalanda Cres",1
 "Maxwell Crt",1
@@ -26919,14 +26167,12 @@
 "Winery Way",1
 "Keel Pl",1
 "Coleridge Tce",1
-"Portal Pl",1
 "Broadhaven Ave",1
 "Hurstbourn Priors",1
 "Calvandra Grv",1
 "Watson Ave",1
 "Chibnall Pl",1
 "Elizabeth Cres",1
-"Sunnypark Ave",1
 "Matisse Dr",1
 "Pewter Pl",1
 "Flat Bush Rd",1
@@ -26944,11 +26190,9 @@
 "Belgrave Cl",1
 "Cardrona Pl",1
 "Taupo Tce",2
-"Whanganui River Rd",1
 "Bantry St",1
 "Hona Rd",1
 "Kauae Pl",1
-"Meadowpark Dr",1
 "Jamell Pl",1
 "Falconwood Grv",1
 "Clearview Dr",1
@@ -26979,7 +26223,6 @@
 "Citril Pl",1
 "Arabian Dr",1
 "Quennell Ave",1
-"Lakeside Rd",1
 "Bellwood Ave",1
 "Struthers St",1
 "Seabreeze Pl",2
@@ -27006,7 +26249,6 @@
 "Passmore Cres",1
 "Rongonui St",1
 "Mauger Dr",1
-"Finlayson Park Ave",1
 "Miranda Pl",2
 "Constable Lane",1
 "Hayhurst St",1
@@ -27125,7 +26367,6 @@
 "Holyoake St",1
 "Ahmad Cl",1
 "Cyril Way",1
-"Hillier Pl",2
 "Claude Hendry Lane",1
 "Raxworthy St",1
 "Te Mata Rd",1
@@ -27157,7 +26398,6 @@
 "Pukatea Cl",1
 "Bellbird Rise",2
 "Bruton Pl",1
-"Porter Ave",1
 "Nier Pl",1
 "Cunningham Lane",1
 "Prouse Grv",1
@@ -27180,7 +26420,6 @@
 "Michael Bosher Way",1
 "Rickit Rd",1
 "Carey Pl",1
-"Park Ave",21
 "Princeton Pde",1
 "Tosca Lane",1
 "Colorado Grv",1
@@ -27230,7 +26469,6 @@
 "Royal Arc",1
 "Hassall St",1
 "Tuhangi St",1
-"Henry Hill Rd",1
 "Barber St",1
 "Hobbs Rd",1
 "Whanga Cres",1
@@ -27244,7 +26482,6 @@
 "Harbour View Tce",2
 "Luke Pl",3
 "Herekiekie St",1
-"Coldstream Crt",1
 "Tumai St",1
 "Adair St",1
 "Osborne Tce",2
@@ -27257,7 +26494,6 @@
 "Fitzroy Stps",1
 "Willowcreek Lane",1
 "Geelong St",1
-"Hillcrest",1
 "Colin Shaw Lane",1
 "Amberley Beach Rd",1
 "Koki Rd",1
@@ -27309,7 +26545,6 @@
 "Gouk St",1
 "Wharenui Rd",2
 "Ngarahana Ave",1
-"Riverslea Rd",1
 "Akatea Rd",2
 "Lorelei Pl",1
 "Ennis St",1
@@ -27327,7 +26562,6 @@
 "Gane Lane",1
 "Surrey Grv",1
 "Village Crt",1
-"Neilpark Dr",1
 "Imlay Cres",1
 "Wendon Mews",1
 "Risk Rd",1
@@ -27341,7 +26575,6 @@
 "Corunna Bay",1
 "Palmside St",1
 "Papawai Grv",1
-"Primrose Hill Lane",1
 "Carnegie Cres",1
 "The Outlook",1
 "St David St",2
@@ -27455,7 +26688,6 @@
 "Wilkinson Ave",1
 "Mira St",1
 "McKelvey Pl",1
-"Rutherglen-New River Rd",1
 "Aylmers Valley Rd",1
 "The Enclave",2
 "Andrews Dr",1
@@ -27478,7 +26710,6 @@
 "Hayle St",1
 "Ngapawa St",1
 "Rowallan Lane",1
-"Forest Park Pl",1
 "Sampson St",1
 "Charmaine Rd",1
 "High Oaks Way",1
@@ -27539,8 +26770,6 @@
 "Chartwell Ave",1
 "Otaka St",1
 "Thatcher Cres",1
-"Conical Hill Rd",1
-"Northpark Ave",1
 "Rosa St",1
 "Bellingham Pl",1
 "Eighty Eight Valley Rd",1
@@ -27642,7 +26871,6 @@
 "Kelvyn Grv",1
 "Poutama St",1
 "Lamond St",1
-"Maryhill Tce",1
 "Walmsley Cres",1
 "Chepstow Ave",1
 "Trengove Pl",1
@@ -27687,14 +26915,12 @@
 "Renata St",1
 "Wairere Ave",2
 "Casa Blanca Lane",1
-"Hillview Tce",2
 "Eastdale Rd",1
 "Wakefield Dr",1
 "Hobson Heights Rd",1
 "Myres St",1
 "Kiwi Ave",3
 "McDiarmid Cres",1
-"Parkvale Rd",2
 "Olivia St",1
 "Cuthberts Rd",1
 "Kansas Grv",1
@@ -27708,7 +26934,6 @@
 "Veale Rd",1
 "Crayford St",1
 "Collean St",1
-"Styx River Pl",1
 "Cantina Ave",1
 "Leander Rd",1
 "Porangahau Rd",1
@@ -27726,7 +26951,6 @@
 "Turuturu Rd",1
 "Georgina St",1
 "Janome Pl",1
-"Ferry St",3
 "Pulford Pl",1
 "Lipman St",1
 "George Bolt Memorial Dr",1
@@ -27789,7 +27013,6 @@
 "Brigantine Dr",1
 "Pinehaven Rd",1
 "Muritai Tce",1
-"Danehill Cl",1
 "Cossens St",1
 "Appleyard Cres",1
 "Sixpenny Lane",1
@@ -27800,7 +27023,6 @@
 "Rapuke St",1
 "St James St",3
 "Jellicoe St",13
-"Village Park Dr",1
 "Muturangi Grv",1
 "Epsom Rd",3
 "Emily Lane",1
@@ -27808,7 +27030,6 @@
 "Hewson Cres",1
 "Rosevale Pl",1
 "Pukerangi Cres",1
-"Riverside",1
 "Capstan Cl",1
 "Vestey Dr",1
 "Simeon Qy",1

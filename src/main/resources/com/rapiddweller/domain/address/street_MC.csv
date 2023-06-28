@@ -55,7 +55,6 @@
 "Rue de l'Abbaye",1
 "Place de la Mairie",2
 "Rue des Spélugues",2
-"Parking des Pêcheurs",2
 "Rue Joseph Bressan",3
 "Allée Lazare Sauvaigo",2
 "Escalier Sainte-Dévote",2
@@ -67,10 +66,8 @@
 "Quai des Sanbarbani",2
 "Rue de l'Eglise",1
 "Avenue de l'Annonciade",1
-"Place Saint-Nicolas",2
 "Rue de l' Industrie",1
 "Avenue de Grande-Bretagne",2
-"Place d' Armes",1
 "Avenue Saint-Martin",2
 "Plage du Larvotto",2
 "Quai des États-Unis",2
@@ -107,21 +104,18 @@
 "Escalier Malbousquet",2
 "Rue du Ténao",2
 "Rue Louis Aureglia",2
-"Place du Canton",2
 "Rue des Roses",2
 "Rue de la Turbie",2
 "Escalier des Pissarelles",2
 "Rue de la Princesse Caroline",3
 "Impasse du Castelleretto",2
 "Avenue des Pins",2
-"Place du Palais",2
 "Rue du Bel Respiro",2
 "Escalier de l'Inzernia",2
 "Avenue du Président Kennedy",3
 "Avenue de Fontvieille",2
 "Avenue d' Ostende",1
 "Rue des Iris",2
-"Tunnel de Serravalle",2
 "Quai Albert 1er",2
 "Escalier des Fleurs",2
 "Rue Augustin Vento",3
@@ -131,7 +125,6 @@
 "Chemin de la Rousse",2
 "Rue Terrazzani",2
 "Rue de la Source",2
-"Place Sainte-Dévote",2
 "Rue Saige",2
 "Quai Jean-Charles Rey",2
 "Square Beaumarchais",2
@@ -157,7 +150,7 @@
 "Avenue Saint-Laurent",2
 "Boulevard d' Italie",1
 "Rue Notre-Dame de Lorette",2
-"Place des Carmes",2
+"Rue des Carmes",2
 "Boulevard des Moulins",2
 "Boulevard de Suisse",2
 "Avenue du Berceau",2
@@ -168,7 +161,6 @@
 "Avenue des Guelfes",2
 "Avenue Princesse Grace",3
 "Palais de la Scala",2
-"Centre Hospitalier Princesse Grâce",1
 "Avenue Prince Pierre de Monaco",3
 "Pont Sainte-Dévote",2
 "Carrefour du Portier",2
@@ -177,7 +169,6 @@
 "Avenue d'Ostende",1
 "Chemin de la Turbie",2
 "Rue des Giroflées",2
-"Place d'Armes",1
 "Rue des Fours",2
 "Impasse des Salines",2
 "Place des Moulins",2

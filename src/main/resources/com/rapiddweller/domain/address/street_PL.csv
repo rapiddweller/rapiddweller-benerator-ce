@@ -828,8 +828,6 @@
 "Białej Mewy",1
 "Białej Przemszy",1
 "Białej Wody",1
-"Białe Wzgórze",2
-"Białkowska Góra",1
 "Białkowskiego Karola",1
 "Białobłocka",2
 "Białoboki",1
@@ -903,7 +901,6 @@
 "Bielszowicka",3
 "Bieńczaka Władysława",1
 "Bieńczycka",1
-"Bieńczycki Plac Targowy Pl.",1
 "Bieni",1
 "Bienia Adama",1
 "Bieniarzówny Janiny (Profesor Janiny Bieniarzówny)",1
@@ -996,7 +993,6 @@
 "Błędowska",5
 "Błękitna",33
 "Błękitnej Armii",1
-"Błękitne Wzgórze",1
 "B. Lewińskiego (Księdza B. Lewińskiego)",1
 "Blich",1
 "Blichowskiego Józefa",1
@@ -1158,7 +1154,6 @@
 "Bohusza-Szyszko Zygmunta (Generała Zygmunta Bohusza-Szyszko)",1
 "Bohuszewiczówny Marii",2
 "Boisko",1
-"Boisko Kolejowe",1
 "Boiskowa",1
 "Bojanka Mikołaja (Księdza Mikołaja Bojanka)",1
 "Bojanówka",1
@@ -1311,8 +1306,6 @@
 "Boya Żeleńskiego Tadeusza",3
 "Boya-Żeleńskiego Tadeusza",17
 "Boya-Żeleńskiego Tadeusza Al.",1
-"Boża Góra Lewa",1
-"Boża Góra Prawa",1
 "Bożego Ciała",2
 "Bożego Jana (Świętego Jana Bożego)",1
 "Bożego Miłosierdzia",1
@@ -1349,7 +1342,6 @@
 "Braille'a Ludwika",2
 "Braka Józefa",1
 "Brama Brzostowska",1
-"Brama Portowa Pl.",1
 "Brama Wałowa",1
 "Bramińskiego Tadeusza (Komandora Tadeusza Bramińskiego)",1
 "Bramka",1
@@ -1489,7 +1481,6 @@
 "Brzeźna",1
 "Brzeźnicka",2
 "Brzeźnieńska",1
-"Brzeźnieński Imienia Haffnera Jana Jerzego Park",1
 "Brzóski Stanisława",2
 "Brzóski Stanisława (Księdza Stanisława Brzóski)",9
 "Brzoskwiniowa",24
@@ -1524,7 +1515,6 @@
 "Budowlana",16
 "Budowlanych",16
 "Budowniczych",1
-"Budowniczych Portu Północnego",1
 "Budryka",1
 "Budryka Wiktora",1
 "Budryka Witolda",4
@@ -1868,7 +1858,9 @@
 "Chrószcza Franciszka",1
 "Chroszczewska",1
 "Chruściela Antoniego",1
+"Cybulskiego Zbigniewa",3
 "Chruściela Montera Antoniego (Generała Antoniego Chruściela 'Montera')",1
+"Cygana Józefa",1
 "Chruściela Pseudonim Monter Antoniego (Generała Antoniego Chruściela Pseudonim Monter)",1
 "Chryzantem",2
 "Chryzantem Al.",1
@@ -1910,7 +1902,6 @@
 "Cichawy Franciszka",1
 "Cicheckiego",1
 "Cichej Wody",1
-"Ciche Wzgórze",1
 "Cichociemnych",1
 "Cichociemnych Ak",1
 "Cichopka Wincentego",1
@@ -2024,16 +2015,13 @@
 "Cybulskiego Hipolita",1
 "Cybulskiego Napoleona",1
 "Cybulskiego Wojciecha",2
-"Cybulskiego Zbigniewa",3
 "Cybulskiego Zbyszka",1
 "Cyda",1
 "Cyfrowa",2
-"Cygana Józefa",1
 "Cyganeczki",1
 "Cyganerii",1
 "Cyganka",1
 "Cygańska",5
-"Cygańska Góra",1
 "Cygański Las",1
 "Cyklamenów",2
 "Cyklamenowa",1
@@ -2251,7 +2239,6 @@
 "Czynszowa",1
 "Czynu Chłopskiego",1
 "Czynu Społecznego",1
-"Czynu Zbrojnego Kolejarzy",1
 "Czyrniańskiego Emiliana",1
 "Czysta",18
 "Czysty Pl.",1
@@ -2572,7 +2559,6 @@
 "Dolańskiego Włodzimierza",1
 "Do Lasu",1
 "Dolatowskiego Augustyna (Komandora Augustyna Dolatowskiego)",1
-"Dołęgi-Mostowicza Tadeusza",1
 "Doleńców",1
 "Doleńska",1
 "Dolina",3
@@ -2640,7 +2626,6 @@
 "Dominiki",1
 "Dominowska",1
 "Domki",2
-"Dom Kolejowy",1
 "Do Modrzewia",1
 "Domowa",6
 "Dom Polonii Zamek",1
@@ -2836,7 +2821,6 @@
 "Dusznicka",5
 "Duszy (Księdza Duszy)",1
 "Duża",1
-"Duża Góra",1
 "Dwatory",1
 "Dwernickiego Józefa",6
 "Dwernickiego Józefa (Generała Józefa Dwernickiego)",6
@@ -3510,7 +3494,6 @@
 "Gdańca Pawła",1
 "Gdańska",40
 "Gdański Bulw.",1
-"Gdańskiego Kolejarza",1
 "Gdańskie Wybrz.",1
 "Gdecka",1
 "Gdowska",1
@@ -3760,16 +3743,8 @@
 "Goplana",1
 "Goplańska",6
 "Goplany",5
-"Góra",1
-"Góra Anny",1
-"Góra Bohaterów",1
-"Góra Hugona",1
 "Gorajska",2
-"Górali Os.",1
-"Góralska",13
-"Góra Przemysła",1
 "Goraszewska",1
-"Góra Zamkowa",1
 "Gorbatowa Aleksandra",1
 "Gorce",2
 "Gorczańska",2
@@ -3940,7 +3915,6 @@
 "Grobla Ii",1
 "Grobla Iii",1
 "Grobla Iv",1
-"Grobla Kolejowa",1
 "Groblana",1
 "Grobli",1
 "Groblowa",2
@@ -4425,7 +4399,6 @@
 "Huta Rozalii",1
 "Hutnicza",34
 "Hutnicze Os.",2
-"Hutniczy Park",1
 "Hutnika",1
 "Hutnika Michaiła",1
 "Hutników",2
@@ -4491,9 +4464,7 @@
 "Imielnicka",1
 "Imienia 700-Lecia Żor Os.",1
 "Im. Jana Pawła Ii Rynek",1
-"Im. Łyczywka Romana Park",1
 "Improwizacji",1
-"Im. Sienkiewicza Henryka Park",1
 "Im. Sikorskiego Władysława",1
 "Indukcji",1
 "Indycza",3
@@ -4684,7 +4655,6 @@
 "Janikowska",2
 "Janinówka",1
 "Janiny",1
-"Janiowe Wzgórze",1
 "Janiszewska",1
 "Janiszewskiego Józefa",1
 "Janiszewskiego Ludwika (Profesora Ludwika Janiszewskiego)",1
@@ -4942,7 +4912,6 @@
 "Jeziorki",1
 "Jeziorko",2
 "Jeziorna",15
-"Jeziorowa",3
 "Jeziorska",1
 "Jeżów",1
 "Jeżowa",1
@@ -5355,7 +5324,6 @@
 "Kaspijska",1
 "Kasprowicza Jana",52
 "Kasprowicza Jana Al.",1
-"Kasprowicza Jana Park",1
 "Kasprowicza Jana Pl.",1
 "Kasprzaka Karola",1
 "Kasprzaka Marcina",23
@@ -5780,13 +5748,6 @@
 "Kolegiacki Pl.",2
 "Kolegialna",1
 "Kolei Warszawsko-Wiedeńskiej Pl.",1
-"Kolejarska",3
-"Kolejarzy",6
-"Kolejki Konnej",1
-"Kolejowa",78
-"Kolejowa Al.",1
-"Kolejowa Osada",1
-"Kolejowe Os.",2
 "Kolektorska",2
 "Kolektywna",1
 "Kolendo Marii",1
@@ -6438,7 +6399,6 @@
 "Królewskiego Jana (Profesora Jana Królewskiego)",1
 "Królewskiej Tamy",1
 "Królewskie Lipy",1
-"Królewskie Wzgórze",1
 "Królicza",1
 "Królikarnia",1
 "Królika Teofila",1
@@ -6452,7 +6412,6 @@
 "Królowej Korony Polskiej",1
 "Królowej Luizy",1
 "Królowej Marysieńki",6
-"Królowej Marysieńki Prom.",1
 "Królowej Rodzin",1
 "Królowej Śniegu",1
 "Królówka",1
@@ -6581,7 +6540,6 @@
 "Krzyżanowskiej Marii",1
 "Krzyżańskiego Mirosława",1
 "Krzyżowa",10
-"Krzyżowa Góra",1
 "Krzyżówka",1
 "Krzyżówki",2
 "Krzyżowska",1
@@ -6685,6 +6643,7 @@
 "Kubika Jana",1
 "Kubiny Pawła",1
 "Kubiny Teodora (Biskupa Teodora Kubiny)",2
+"Kuźnicy Kołłątajowskiej",2
 "Kubiny Teodora (Księdza Biskupa Teodora Kubiny)",1
 "Kubisty Stanisława (Księdza Błogosławionego Stanisława Kubisty)",1
 "Kublińskiego Marka",1
@@ -6834,7 +6793,6 @@
 "Kuźnica",1
 "Kuźnica Błędowska",1
 "Kuźnicka",8
-"Kuźnicy Kołłątajowskiej",2
 "Kuźnicza",3
 "Kuźniczka Nowa",1
 "Kuźników",2
@@ -7127,7 +7085,6 @@
 "Leśmiana Bolesława",27
 "Leśna",102
 "Leśna Al.",1
-"Leśna Góra",1
 "Leśna Polana",4
 "Leśne Echa",1
 "Leśnego Potoku",1
@@ -7135,7 +7092,6 @@
 "Leśnej Osady",1
 "Leśnej Polanki",1
 "Leśne Os.",2
-"Leśne Wzgórze",1
 "Leśnicka",1
 "Leśnicza",1
 "Leśniczówka",2
@@ -7288,7 +7244,6 @@
 "Liściasta",13
 "Liścienia",1
 "Lisia",21
-"Lisia Góra",1
 "Lisia Grobla",1
 "Lisicka",1
 "Lisieckiego",1
@@ -7396,7 +7351,6 @@
 "Lotników Morskich",1
 "Lotników Pl.",2
 "Lotników Polskich",1
-"Lotnisko",2
 "Lotosowa",2
 "Lotosu",2
 "Lourdyjska",1
@@ -7613,7 +7567,6 @@
 "Maćka Z Bogdańca",4
 "Mackiewicza Antoniego",2
 "Mackiewicza Józefa",3
-"Maćkowa Góra",1
 "Maćkowicza Izydora",1
 "Mączeńskiego Zdzisława",1
 "Maczka Stanisława",4
@@ -7710,7 +7663,6 @@
 "Malachitowa",10
 "Małachowskiego Stanisława",18
 "Małachowskiego Stanisława Pl.",1
-"Mała Góra",1
 "Mała Kolonia",1
 "Mała Odrzańska",1
 "Malarska",3
@@ -7740,7 +7692,6 @@
 "Małego Księcia",4
 "Małego Rycerza",2
 "Małej Brzozy",1
-"Małej Kolejki",1
 "Małej Łąki",3
 "Małej Straconki",1
 "Małej Syrenki",1
@@ -7972,7 +7923,6 @@
 "Matei Oswalda (Profesora Oswalda Matei)",1
 "Matejki Jana",64
 "Matejki Jana Al.",1
-"Matejki Jana Park",1
 "Matejki Jana Pl.",5
 "Matejki Pl.",2
 "Matek Polskich Al.",1
@@ -8081,7 +8031,6 @@
 "Meteorologów",1
 "Meteorytowa",2
 "Metlera Bonawentury (Księdza Bonawentury Metlera)",1
-"Metropolity Szeptyckiego Andrzeja",1
 "Metryczna",1
 "Metrykantów",1
 "Mewia",3
@@ -8169,7 +8118,6 @@
 "Międzymorze",1
 "Międzynarodowa",1
 "Miedzyńska",1
-"Międzyparkowa",2
 "Międzyrzecka",4
 "Międzyrzecze",2
 "Międzyzdrojska",2
@@ -8376,7 +8324,6 @@
 "Młynów Pl.",1
 "Młyńska",51
 "Młyńska Boczna",1
-"Młyńskie Wzgórze",1
 "Młyn Szombierski",1
 "Młyny Serafińskie",1
 "Mniszka",1
@@ -8466,7 +8413,6 @@
 "Morelowa",34
 "Morelowskiego Mariana",1
 "Morenowa",5
-"Morenowe Wzgórze",1
 "Morgi",1
 "Morgowa",6
 "Morgowska",1
@@ -8505,10 +8451,6 @@
 "Moskule",1
 "Moskuliki",1
 "Mossora Sergiusza",2
-"Mostek",1
-"Mostnika Michała (Księdza Michała Mostnika)",1
-"Mostowa",38
-"Mostowskiego Tadeusza",1
 "Moszczenicka",1
 "Moszyńskiego Kazimierza",1
 "Motarskiego Tadeusza",1
@@ -8624,7 +8566,6 @@
 "Myśliwka Bernarda",1
 "Myśliwska",34
 "Myśliwska Osada",1
-"Myśliwskie Wzgórze",1
 "Mysłowicka",10
 "Mystkowskiego Ignacego",1
 "Myszki Miki",1
@@ -8647,7 +8588,6 @@
 "Naczelnikowska",1
 "Na Dąbrowskiego Jana Henryka Wzg.",1
 "Nadarzyńska",3
-"Nad Balatonem Park",1
 "Nadbałtycka",1
 "Nad Baranówką",1
 "Nad Bierawką",1
@@ -8673,7 +8613,6 @@
 "Nad Jeziorem",2
 "Nad Kanałem",3
 "Nad Karolewką",1
-"Nad Koleją",1
 "Nad Krzesinką",1
 "Nadłączna",1
 "Nad Łąkami",2
@@ -8790,7 +8729,6 @@
 "Na Miedzy",1
 "Namiotowa",1
 "Namioty",1
-"Na Mostkach",1
 "Na Murawie Os.",1
 "Namysłowska",4
 "Namysłowskiego Bolesława",1
@@ -8839,7 +8777,6 @@
 "Naruszewicza Adama Stanisława",1
 "Narutowicza",1
 "Narutowicza Gabriela",37
-"Narutowicza Gabriela Park (Prezydenta Rp Gabriela Narutowicza)",1
 "Narutowicza Gabriela Pl.",3
 "Narutowicza Gabriela (Prezydenta Gabriela Narutowicza)",1
 "Narutowicza Rynek",1
@@ -9001,7 +8938,6 @@
 "Niemczyka Józefa Pl.",1
 "Niemczyka Rudolfa",1
 "Niemena Czesława",5
-"Niemena Czesława Prom.",1
 "Niemeńska",3
 "Niemiecka",1
 "Niemierzyńska",1
@@ -9161,7 +9097,6 @@
 "Nowojędrzychowska",1
 "Nowokarsiborska",1
 "Nowoka Teodora",1
-"Nowokolejowa",1
 "Nowokościelna",1
 "Nowokramska",1
 "Nowołęczna",1
@@ -9210,7 +9145,6 @@
 "Nowy Kleparz Pl.",1
 "Nowy Lubominek",1
 "Nowy Pl.",1
-"Nowy Plac Targowy",1
 "Nowy Przejazd",1
 "Nowy Rynek",2
 "Nowy Rynek Pl.",1
@@ -9510,7 +9444,6 @@
 "Oliwkowa",15
 "Oliwna",1
 "Oliwska",4
-"Oliwski Im. Mickiewicza Adama Park",1
 "Olkuska",11
 "Ołowiana",8
 "Ołowianka",1
@@ -9694,7 +9627,6 @@
 "Osiedle Bernadowo",1
 "Osiedle Górnicze",2
 "Osiedle Kaszubskie",1
-"Osiedle Kolejowe",1
 "Osiedle Milenijne",1
 "Osiedleńców",1
 "Osiedleńcza",2
@@ -9735,7 +9667,6 @@
 "Osobliwa",1
 "Osobowicka",1
 "Osolska",1
-"Osowa Góra Las",1
 "Osowiecka",1
 "Osowska",4
 "Osowski Zakątek",1
@@ -9879,11 +9810,8 @@
 "Pakosławska",1
 "Pąkowa",1
 "Pakuły Alberta",1
-"Palacha Jana",2
 "Pałacowa",9
-"Palacza Macieja",1
 "Pałąk",1
-"Pala Telekiego",1
 "Palenica",1
 "Palenickiego Bogusława (Księdza Bogusława Palenickiego)",1
 "Palestera Romana",1
@@ -9974,12 +9902,6 @@
 "Parcelowa",1
 "Parczewska",1
 "Parczewskiego Bogusława",1
-"Parkingowa",3
-"Parkowa",80
-"Parkowa Al.",3
-"Park Park",1
-"Park Śródmiejski",1
-"Park Zdrojowy Park",1
 "Parnas",1
 "Parnickiego Teodora",3
 "Parola Antoniego",1
@@ -10211,7 +10133,6 @@
 "Piechy Józefa",1
 "Piechy Ludwika",1
 "Pięciolinii",1
-"Pięciu Pomostów",1
 "Pięciu Stawów",3
 "Piecki",1
 "Piecucha Konrada",1
@@ -10380,15 +10301,6 @@
 "Piwowarów",1
 "Piwowarska",5
 "Pks Fabryczna Dworzec",1
-"Plac 1000-Lecia",1
-"Plac Bohaterów",1
-"Plac Kolejarza",1
-"Placowa",3
-"Placówki",1
-"Plac Pocztowy",1
-"Plac Powstańców Wielkopolskich",1
-"Plac Słowiański",1
-"Plac Teatralny",1
 "Plagego I Laśkiewicza",1
 "Plakatowa",1
 "Plamitzera Antoniego (Profesora Antoniego Plamitzera)",1
@@ -10572,7 +10484,6 @@
 "Pod Kasztanem",1
 "Podkładowa",1
 "Podklasztorna",1
-"Podkolejowa",1
 "Podkomorska",2
 "Podkomorzego",3
 "Pod Kopcem",1
@@ -10618,7 +10529,6 @@
 "Podolska",9
 "Podolskich Romana I Jana",1
 "Pod Pomnikiem",1
-"Podpromie",1
 "Pod Reglami",1
 "Podróżnicza",2
 "Podrzecze",1
@@ -10665,7 +10575,6 @@
 "Podwórkowa",1
 "Podwórzowa",1
 "Pod Wróblem",1
-"Pod Wzgórzem",1
 "Podzamcze",6
 "Podzamcze Sek. A Os.",1
 "Podzamcze Sek. B Os.",1
@@ -10677,7 +10586,6 @@
 "Poezji",3
 "Po Farze Pl.",1
 "Pogodna",63
-"Pogodne Wzgórze",1
 "Pogonowskiego Stefana",1
 "Pogonowskiego Stefana (Kapitana Stefana Pogonowskiego)",1
 "Pogoria",1
@@ -10827,7 +10735,6 @@
 "Poniatowskiego Józefa Al. (Księcia Józefa Poniatowskiego)",1
 "Poniatowskiego Józefa (Józefa Księcia Poniatowskiego)",1
 "Poniatowskiego Józefa (Księcia Józefa Poniatowskiego)",20
-"Poniatowskiego Józefa Park (Księcia Józefa Poniatowskiego)",1
 "Poniatowskiego Stanisława",2
 "Poniatowskiego Stanisława Augusta",1
 "Poniecka",2
@@ -10840,7 +10747,6 @@
 "Popas",1
 "Popiela",8
 "Popiela Karola",1
-"Popiela Park",1
 "Popielarnia",1
 "Popielata",1
 "Popielidów",1
@@ -10899,12 +10805,6 @@
 "Poronińska",6
 "Porostowa",1
 "Porożyńskiego Benedykta",1
-"Portofino",1
-"Portowa",23
-"Portowa Zaułek",1
-"Portowców",1
-"Port Solny",1
-"Portugalska",2
 "Porucznika Emira",1
 "Porucznika Halszki",1
 "Pory",1
@@ -11092,18 +10992,6 @@
 "Prokuratorska",1
 "Proletariacka",4
 "Proletariatczyków",1
-"Promenada",4
-"Prometeusza",3
-"Promień",1
-"Promienista",5
-"Promienistych",1
-"Promienistych Al.",1
-"Promienna",18
-"Promowa",9
-"Promyk",2
-"Promyka",3
-"Promyka Kazimierza",4
-"Promykowa",4
 "Pronaszków Zbigniewa I Andrzeja",1
 "Pronia Stanisława",1
 "Pronobisa Piotra",1
@@ -11336,7 +11224,6 @@
 "Przyniczyńskiego Franciszka (Księdza Franciszka Przyniczyńskiego)",1
 "Przy Ogrodach",1
 "Przyokopowa",2
-"Przy Parku",2
 "Przy Poczcie Pl.",1
 "Przy Prochowni",1
 "Przyrodnicza",6
@@ -11432,7 +11319,6 @@
 "Pułku Ak 'Baszta'",1
 "Pułku Ak 'Broda'",1
 "Pułku Ak 'Kampinos'",1
-"Pułku Ak 'Waligóra'",1
 "Pułku Myśliwskiego",1
 "Pułku Praskiego",1
 "Pułtuska",6
@@ -12286,7 +12172,6 @@
 "Samorządowa",7
 "Samosiejki",1
 "Samosierry",1
-"Samostrzelnika Stanisława",1
 "Samotna",10
 "Samotworska",1
 "Samowarowa",1
@@ -12617,7 +12502,6 @@
 "Skalley",1
 "Skalmowskiego Włodzimierza",1
 "Skalna",16
-"Skalna Góra",1
 "Skalnicowa",1
 "Skalskiego Józefa",3
 "Skalskiego Stanisława",1
@@ -12836,7 +12720,6 @@
 "Słonecznej Polany",1
 "Słoneczne Os.",1
 "Słoneczne Wzgórza",1
-"Słoneczne Wzgórze",2
 "Słoneczników",4
 "Słonecznikowa",20
 "Słoneczny Bulw.",1
@@ -12993,7 +12876,6 @@
 "Sobieskiego Jana Iii Os.",1
 "Sobieskiego Jana Iii Pl.",1
 "Sobieskiego Jana (Króla Jana Sobieskiego)",2
-"Sobieskiego Park",1
 "Sobieskiej Marysieńki",1
 "Sobiesława",1
 "Sobieszewska",2
@@ -13111,7 +12993,6 @@
 "Sorychty",1
 "Sosabowskiego Stanisława",1
 "Sosabowskiego Stanisława (Generała Stanisława Sosabowskiego)",4
-"Sośnia Góra",1
 "Sośnicka",2
 "Sośnickiego Kazimierza",1
 "Sosnkowskiego Kazimierza (Generała Kazimierza Sosnkowskiego)",9
@@ -13179,11 +13060,6 @@
 "Spółdzielczości Pracy Al.",1
 "Społeczna",4
 "Sporna",10
-"Sportowa",73
-"Sportowa Al.",1
-"Sportowców",3
-"Sportowców Al.",1
-"Sportowe Os.",1
 "Sporyszowa",1
 "Sprawiedliwa",1
 "Sprawiedliwości",1
@@ -13299,7 +13175,6 @@
 "Stara Szklarnia",1
 "Stara Twierdza",1
 "Stara Wola Gołębiowska",1
-"Stara Żelazna",1
 "Starca Tadeusza",1
 "Starczewska",1
 "Stare Domki",1
@@ -13348,7 +13223,6 @@
 "Staromiejski Pl.",1
 "Staromłyńska",4
 "Staromorzysławska",1
-"Staromostowa",2
 "Staroniwska",1
 "Staroopatowska",1
 "Staropocztowa",1
@@ -13395,7 +13269,6 @@
 "Staszewskiego Wojciecha",1
 "Staszica Stanisława",64
 "Staszica Stanisława (Księdza Stanisława Staszica)",5
-"Staszica Stanisława Park (Księdza Stanisława Staszica)",1
 "Staszica Stanisława Pl.",1
 "Staszica Stanisława Pl. (Księdza Stanisława Staszica)",1
 "Staszki Adama",1
@@ -14178,7 +14051,6 @@
 "Szlachtowskiego Feliksa",1
 "Szlak",2
 "Szlak Chrobrego",1
-"Szlak Kolejowy",1
 "Szlak Królewski",1
 "Szlakowa",1
 "Szlaku Solnego",1
@@ -14227,9 +14099,6 @@
 "Szpilkowa",3
 "Szpinakowa",2
 "Szpinalskiego Stanisława",1
-"Szpitala Ujazdowskiego Al.",1
-"Szpitalna",50
-"Szpitalny Pl.",1
 "Szpora Stanisława (Profesora Stanisława Szpora)",1
 "Szpotańskiego Janusza",1
 "Szpotańskiego Kazimierza",1
@@ -14609,8 +14478,6 @@
 "Tramwajowa",3
 "Tranowa",2
 "Transmisyjna",1
-"Transportowa",9
-"Transportowców",5
 "Tranzytowa",1
 "Trapez",1
 "Trapowa",1
@@ -14736,8 +14603,6 @@
 "Tumidajskiego Kazimierza",1
 "Tumska",2
 "Tuńczykowa",1
-"Tunel",1
-"Tunelowa",6
 "Tunkla Ludwika (Księdza Ludwika Tunkla)",1
 "Turbinowa",3
 "Turczynowicza Jana",1
@@ -15299,8 +15164,6 @@
 "Wicherkiewicz Marii",1
 "Wichrowa",9
 "Wichrowe Wzgórza",2
-"Wichrowe Wzgórze",1
-"Wichrowe Wzgórze Os.",1
 "Wici",1
 "Wiczlińska",1
 "Widawska",4
@@ -15396,6 +15259,7 @@
 "Wieniawskich (Braci Wieniawskich)",1
 "Wieniawskiego Henryka",35
 "Wieniawskiego Józefa",1
+"Wisłocka",2
 "Wieniawy-Długoszowskiego Bolesława (Generała Bolesława Wieniawy-Długoszowskiego)",1
 "Wieniecka",2
 "Wieprawska",1
@@ -15554,7 +15418,6 @@
 "Wiślicka",5
 "Wiślisko",1
 "Wiślna",3
-"Wisłocka",2
 "Wiśniewskiego Jana",1
 "Wiśniewskiego Janka",1
 "Wiśniewskiego Jerzego (Profesora Jerzego Wiśniewskiego)",1
@@ -15595,7 +15458,6 @@
 "Witomińska",1
 "Witosa Wincentego",40
 "Witosa Wincentego Al.",4
-"Witosa Wincentego Park",1
 "Witosa Wincentego Pl.",2
 "Witosława",1
 "Witosławy",2
@@ -16019,13 +15881,6 @@
 "Wyzwolenia Pl.",3
 "Wyżynna",6
 "Wyżyny",1
-"Wzgórze",5
-"Wzgórze Arkońskie",1
-"Wzgórze Bernadowo",1
-"Wzgórze Grota-Roweckiego",1
-"Wzgórze Kościuszki",1
-"Wzgórze Partyzantów",1
-"Wzgórze Wandy",1
 "Wzlotowa",1
 "Wzorcowa",1
 "Wzorka Leona",1
@@ -16177,7 +16032,6 @@
 "Zaklucze",1
 "Zakochanych Al.",1
 "Zakole",17
-"Zakolejowa",2
 "Zakoniczyńska",1
 "Zakonnic",1
 "Zakopane",1
@@ -16246,7 +16100,6 @@
 "Zamieście",1
 "Zamknięta",16
 "Zamkowa",48
-"Zamkowa Góra",1
 "Zamkowy Pl.",7
 "Zamłynie",3
 "Zamojska",10
@@ -16279,7 +16132,6 @@
 "Zapałczana",1
 "Zapały Tomasza",1
 "Zapały Władysława",1
-"Zaparkowa",1
 "Zapaśnicza",3
 "Zapiecek",4
 "Zaplecze",1
@@ -16502,7 +16354,6 @@
 "Żegockiego Krzysztofa",1
 "Żegoty",2
 "Zegrzyńska",2
-"Żelazna",30
 "Żelaznej Bramy Pl.",1
 "Żelaźnicze Przejście",1
 "Żelaznogórska",1
@@ -16602,7 +16453,6 @@
 "Zielone Jabłuszko",1
 "Zielonej Gęsi",1
 "Zielone Os.",1
-"Zielone Wzgórze",9
 "Zielone Zacisze",1
 "Zielonka",1
 "Zielonki Stefana (Księdza Stefana Zielonki)",1
@@ -16638,7 +16488,6 @@
 "Zientary Michała",1
 "Ziętalów (Rodziny Ziętalów)",1
 "Ziętka Jerzego (Generała Jerzego Ziętka)",3
-"Ziętka Jerzego Prom. (Promenada Generała Jerzego Ziętka)",1
 "Ziętka Jerzego Rondo (Generała Jerzego Ziętka)",1
 "Ziętka Jerzego Stanisława",1
 "Ziętka Józefa (Generała Józefa Ziętka)",1
@@ -16679,7 +16528,6 @@
 "Złocista",3
 "Złoczowska",2
 "Złota",43
-"Złota Góra",1
 "Złota Karczma",1
 "Złota Podkowa",1
 "Złota Podkowa Os.",1
@@ -16762,7 +16610,6 @@
 "Żołnierzy Narwiku",1
 "Żołnierzy Września",4
 "Żołnierzy Wyklętych",1
-"Żołnierzy 'Żywiciela' Park",1
 "Żołny",1
 "Zołotowa Pawła",1
 "Żółta",8
@@ -16784,8 +16631,6 @@
 "Zrębowa",3
 "Zręby",1
 "Źródlana",37
-"Źródliska Ii Park",1
-"Źródliska I (Palmiarnia) Park",1
 "Źródło Marii",1
 "Źródłowa",5
 "Żubardzka",1

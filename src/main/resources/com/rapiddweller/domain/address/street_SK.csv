@@ -584,8 +584,6 @@
 "Búdkova cesta",1
 "Budkovce",1
 "Budmerice",1
-"Budovateľov",2
-"Budovateľská",12
 "Budulov",1
 "Budyšínska",4
 "Bujakovo",2
@@ -764,7 +762,6 @@
 "Cesta k vodojemu",1
 "Cesta mládeže",4
 "Cesta na amfiteáter",1
-"Cesta na Červený most",3
 "Cesta na Jahodnú",1
 "Cesta na Kamzík",2
 "Cesta na Klanec",2
@@ -1149,7 +1146,6 @@
 "Donovalova",1
 "Donovaly",1
 "Donská",3
-"Do parku",1
 "Dopravná",4
 "Dopravná ul.",1
 "Dora",1
@@ -1204,7 +1200,6 @@
 "dr.Prowazekova",1
 "Dr. Štohla",1
 "Druhá",3
-"Druhá za parkom",1
 "Druidská",2
 "Družby",3
 "Družicová",3
@@ -2504,7 +2499,6 @@
 "Kaštieľska",2
 "Kataríny Brúderovej",2
 "Kataríny Franklovej",1
-"Katedrálne Námestie",1
 "Kátlina",1
 "Kátlovce",1
 "Katová",1
@@ -2899,7 +2893,6 @@
 "Krížna",13
 "Kríž nad Váhom",1
 "Krížna ul.",1
-"Krížny Vrch",2
 "Krížová",2
 "Krížovany",1
 "Križovany n/Dudváhom",1
@@ -3700,7 +3693,6 @@
 "Medziháj",1
 "Medzihradné",1
 "Medzilaborecká",2
-"Medzi mostami",1
 "Medzinárodného dňa detí",1
 "Medzinárodného dňa žien",1
 "Medzi plotmi",1
@@ -3803,7 +3795,6 @@
 "Mládežnícka",10
 "Mládežnícka ul.",1
 "Mladoboleslavská",1
-"Mladých budovateľov",2
 "Mladý háj",1
 "Mliečany",1
 "Mliečna",1
@@ -3881,13 +3872,8 @@
 "Moskovská",6
 "Moskovská trieda",1
 "Mošovského",1
-"Mostárenská",1
 "Moštenica",2
 "Mošteníkova",1
-"Mostište",1
-"Mostná",3
-"Mostová",6
-"Most pri Bratislave",1
 "Mošurov",1
 "Motešice",1
 "Môťovská",1
@@ -3981,7 +3967,6 @@
 "Nábrežna",1
 "Nábrežná",11
 "Na Bystričku",1
-"Na Čerešňovom vrchu",1
 "Na chotári",1
 "Na Čiertolí",2
 "Nacina Ves",1
@@ -4025,7 +4010,6 @@
 "Na hájiku",1
 "Na hlinách",1
 "Na Hlinách",1
-"Na Holom vrchu",2
 "Na hore",1
 "Na Horevaží",1
 "Na Hôrke",4
@@ -4067,63 +4051,6 @@
 "Nám. blahosl.b.V.Hop",1
 "Na medzi",2
 "Nám. E. M. Šoltésovej",1
-"Námestie 1. mája",2
-"Námestie 6. apríla",2
-"Námestie A. Dubčeka",1
-"Námestie A. Hlinku",1
-"Námestie Alexandra Dubčeka",1
-"Námestie Andreja Hlinku",3
-"Námestie artézskych prameňov",1
-"Námestie Biely kríž",2
-"Námestie Cyrila a Metóda",1
-"Námestie Eugena Suchoňa",1
-"Námestie Franza Liszta",1
-"Námestie generála Klapku",1
-"Námestie Hraničiarov",2
-"Námestie hrdinov",1
-"Námestie Jána Kostru",2
-"Námestie Jána Mathého",1
-"Námestie Jána Pavla II.",5
-"Námestie J. Borodáča",1
-"Námestie Jozefa Herdu",1
-"Námestie Košických mučeníkov",1
-"Námestie kozmonautov",1
-"Námestie Kráľovnej pokoja",2
-"Námestie Krista Kráľa",1
-"Námestie Kubínyiho",1
-"Námestie legionárov",1
-"Námestie L. Novomeského",1
-"Námestie Ľ. Štúra",1
-"Námestie Ľudovíta Fullu",1
-"Námestie Ľudovíta Štúra",1
-"Námestie Ludvika Svobodu",2
-"Námestie Maratónu mieru",1
-"Námestie Martina Benku",2
-"Námestie mieru",2
-"Námestie mládeže",1
-"Námestie Mládeže",1
-"Námestie mladosti",1
-"Námestie národného povstania",1
-"Námestie obetí komunizmu",1
-"Námestie osloboditeľov",3
-"Námestie požiarnikov",1
-"Námestie P. P. Gojdiča",1
-"Námestie práce",2
-"Námestie republiky",1
-"Námestie Rodiny",2
-"Námestie Sándora Máraiho",1
-"Námestie slobody",8
-"Námestie Š. N. Hýroša",1
-"Námestie SNP",8
-"Námestie svätej Trojice",1
-"Námestie sv. Cyrila a Metoda",5
-"Námestie sv. Františka",2
-"Námestie sv. Jána Bosca",1
-"Námestie sv.Mikuláša",1
-"Námestie sv. Petra a Pavla",2
-"Námestie Titusa Zemana",2
-"Námestie Tuhárske",1
-"Námestie Žilinskej synody",1
 "Nám. Gen. Klapku",1
 "Nám. gen. M. R. Štefánika",1
 "Nám. Gen.M.R.Štefánika",1
@@ -4161,7 +4088,6 @@
 "Na piesku",2
 "Na plaváreň",2
 "Na Podstráni",1
-"Na Predmostí",1
 "Na Priehon",1
 "Na Priekope",1
 "Na Pruty",1
@@ -4670,9 +4596,6 @@
 "Parenicová",2
 "Páričkova",2
 "Parihuzovce",1
-"Park",1
-"Parková",6
-"Parkové nábrežie",1
 "Parná ul.",1
 "Párnica",1
 "Parný mlyn",1
@@ -4988,7 +4911,6 @@
 "Pod majerom",1
 "Podmanín",1
 "Pod mlákou",1
-"Podmostie",1
 "Pod násypom",2
 "Podnikateľská",1
 "Podniková",2
@@ -5028,7 +4950,6 @@
 "Pod Stráňou",2
 "Pod Strážami",2
 "Pod strelnicou",1
-"Pod Suchým vrchom",2
 "Pod Táborom",1
 "Podtatranského",3
 "Pod Tepličkou",1
@@ -5184,7 +5105,6 @@
 "Predmestie",1
 "Predmestská",1
 "Predmier",1
-"Predmostie",1
 "Predná Huta",2
 "Predné Halny",1
 "Predné Staré Levice",1
@@ -5282,7 +5202,6 @@
 "Primovce",1
 "Pri nemocnici",1
 "Pri Panoráme",1
-"Pri parku",1
 "Pri pasienku",2
 "Pri pastierni",2
 "Pri Perinovej studni",1
@@ -5308,7 +5227,6 @@
 "Pri Starom háji",2
 "Pri starom letisku",2
 "Pri Starom Mýte",2
-"Prístavná",2
 "Pri strelnici",3
 "Pri Struhe",2
 "Pri studničke",1
@@ -5357,7 +5275,6 @@
 "Prúty",1
 "Pružina",1
 "Prvá",4
-"Prvá za parkom",1
 "Prvosienková",3
 "Pšeničná",3
 "Pstruhová",1
@@ -6556,7 +6473,6 @@
 "Teplička nad Váhom",1
 "Tepličky",1
 "Tepličská cesta",1
-"Teplý Vrch",1
 "Terasy",1
 "Terchová",1
 "Terchovská",4
@@ -6842,7 +6758,6 @@
 "Ul. Biskupa Királya",1
 "Ul. B. Smetanu",1
 "Ul. B. S. Timravy",1
-"Ul. Budovateľská",1
 "Ul. Červenej armády",1
 "Ul. Čsl. armády",1
 "Ul. E. B. Lukáča",1
@@ -6876,7 +6791,6 @@
 "Ulica Bradlanská",1
 "Ulica B.S. Timravy",1
 "Ulica Bučianska",1
-"Ulica budovateľov",1
 "Ulica Čajkovského",1
 "Ulica Chovateľská",1
 "Ulica Daxnerova",1
@@ -7337,7 +7251,6 @@
 "Vidiná",1
 "Vidlicová",2
 "Vidová",1
-"Vidov Vrch",1
 "Viedenská",1
 "Viedenská cesta",4
 "Vieska",3
@@ -7403,7 +7316,6 @@
 "Vlčany",1
 "Vlčia",1
 "Vlčie hrdlo",2
-"Vlčí Vrch",1
 "Vlčkova",3
 "Vlčkovce",1
 "Vlčkovo",3
@@ -7428,7 +7340,6 @@
 "Vodná nádrž",3
 "Vodná ul.",1
 "Vodné elektrárne",2
-"Vodný vrch",1
 "Vojany",1
 "Vojčice",1
 "Vojenská",1
@@ -7481,11 +7392,6 @@
 "Vrbovce nad Rimavou",1
 "Vrbové",1
 "Vŕbovec",1
-"Vrchná",3
-"Vrchpredmier",1
-"Vrchrieka",1
-"Vrchslatina",1
-"Vrchteplá",1
 "Vresová",2
 "Vretenová",2
 "Vrícko",1
@@ -7700,8 +7606,6 @@
 "Zámočnícka",5
 "Zámok",1
 "Zámoryho ul.",1
-"Zámostie",2
-"Za mostom",1
 "Zámutov",1
 "Západ",1
 "Západná",6
@@ -7742,7 +7646,6 @@
 "Zátureckého",2
 "Za ulicou",1
 "Závada",2
-"Závada p/Čier.vrchom",3
 "Zavadilova",2
 "Závadka",3
 "Závadka nad Hronom",1

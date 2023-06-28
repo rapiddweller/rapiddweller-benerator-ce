@@ -158,9 +158,6 @@
 "Acidort",1
 "Acielma",1
 "Acielmalik",1
-"Acigöl",3
-"Acigöl-Nevşehir",1
-"Acigöl Yolu",1
 "Acigöz",1
 "Açikağil",1
 "Açikalan",2
@@ -219,12 +216,6 @@
 "Adaören",2
 "Adapinar",1
 "Adasal",1
-"Adatepe",8
-"Adatepebaşi",1
-"Adatepebaşi Çamtepe",1
-"Adatepebaşi Değirmendere",1
-"Adatepebaşi Mekarcan",1
-"Adatepebaşi Palamutluk",1
 "Adatoprakpinar",1
 "Adaysiz",1
 "Ademelik",1
@@ -350,6 +341,7 @@
 "Ağidere",1
 "Ağil",5
 "Ağilbaş",1
+"Rez",1
 "Ağilbaşi",2
 "Ağilcik",5
 "Ağilkaya",1
@@ -472,7 +464,6 @@
 "Ahmetbeyler",2
 "Ahmetbeyli",2
 "Ahmet Beyoğlu",1
-"Ahmet Bozdağ",1
 "Ahmetçali",1
 "Ahmetçavuş-Hayitli",1
 "Ahmet Çavuşlar",2
@@ -660,8 +651,6 @@
 "Akcataş",1
 "Akçataş",4
 "Akçatekir",1
-"Akcatepe",1
-"Akçatepe",1
 "Akçati",2
 "Akçatoprak",2
 "Akçay",10
@@ -684,7 +673,6 @@
 "Akçörten",1
 "Akçukur",2
 "Akcurun",1
-"Akdağ",4
 "Akdam",8
 "Akdamar",3
 "Akdamlar",1
@@ -711,7 +699,6 @@
 "Akfirat",1
 "Akgedik",5
 "Akgelin",1
-"Akgöl",2
 "Akgöze",1
 "Akgüloğlu",1
 "Akgümüş",1
@@ -764,7 +751,6 @@
 "Akkogil",1
 "Akkol",1
 "Akkonak",2
-"Akköprü",5
 "Akköse",1
 "Akkovanlik",1
 "Akköy",12
@@ -775,13 +761,11 @@
 "Akkuyu",5
 "Akkuzulu",3
 "Aklar",1
-"Akliman",1
 "Akmağara",3
 "Akmanlar-1",1
 "Akmanli",1
 "Akmanoğlu",1
 "Akmaşad",1
-"Akmazgöl",1
 "Akmehmetoğlu",1
 "Akmescit",9
 "Akmeşe",2
@@ -793,7 +777,6 @@
 "Akmezar Mezrasi",1
 "Akmezra",1
 "Akmezra Sahil Önü",1
-"Aknehir",1
 "Aknezor",1
 "Akocak",1
 "Akoluk",6
@@ -858,7 +841,6 @@
 "Aktefek",1
 "Aktekin",1
 "Aktekke",2
-"Aktepe",19
 "Aktoprak",6
 "Aktoprak Sb",1
 "Aktulga",1
@@ -904,7 +886,6 @@
 "Alacabayir",1
 "Alacabük",1
 "Alacaçayir",1
-"Alacadağ",1
 "Alacahan",1
 "Alacahirka",1
 "Alacainek",1
@@ -931,8 +912,6 @@
 "Alaçik",1
 "Alacinek",1
 "Alaco",1
-"Aladağ",5
-"Aladağ Yaylasi",1
 "Aladino",1
 "Aladüz",1
 "Alaeddin",1
@@ -1017,7 +996,6 @@
 "Alata",1
 "Alatarla",2
 "Alataş",4
-"Alatepe",2
 "Alatlar",1
 "Alatli",2
 "Alavardi",1
@@ -1062,8 +1040,6 @@
 "Alduş",1
 "Alefli",1
 "Alembey",2
-"Alemdağ",1
-"Alemdaği",1
 "Alemdar",6
 "Alemler",1
 "Alemşahli",1
@@ -1319,7 +1295,6 @@
 "Altinçanak",2
 "Altinçay",1
 "Altincilar",1
-"Altindağ",4
 "Altindamla",1
 "Altindere",4
 "Altindiş",1
@@ -1353,7 +1328,6 @@
 "Altintaş",14
 "Altintaşlar",1
 "Altintaşlar Mh.",1
-"Altintepe",8
 "Altintepsi",1
 "Altintop",2
 "Altintoprak",1
@@ -1411,7 +1385,6 @@
 "Ambarli Mezra",1
 "Ambarmevkii",1
 "Ambarpinar",1
-"Ambartepe",2
 "Ambaryalaği Findicak",1
 "Amcalar",1
 "Amenesket",1
@@ -1454,7 +1427,6 @@
 "Anil",1
 "Anit",2
 "Anitli",3
-"Anittepe",2
 "Ankara",1
 "Ankara Yolu",1
 "Ankular",1
@@ -1548,8 +1520,6 @@
 "Ardiçlitaş",1
 "Ardiçliyayla",1
 "Ardiçpinari",1
-"Ardiçtepe",1
-"Ardiçtepeosb",1
 "Ardiç Yaylasi",1
 "Ardige",1
 "Ardiğe",1
@@ -1591,7 +1561,6 @@
 "Arikbaşi",3
 "Arikçayiri Merkez",1
 "Arikdere",1
-"Arikgöl",1
 "Ariki",1
 "Ariklar",4
 "Arikli",4
@@ -1614,7 +1583,6 @@
 "Arisu",3
 "Aritaş",4
 "Aritaşi",1
-"Aritepe",1
 "Aritir",1
 "Aritoprak",2
 "Ariz",2
@@ -1664,7 +1632,6 @@
 "Armutlucuma",1
 "Armutlu Mezrasi",1
 "Armutova",1
-"Armuttepe",1
 "Armutveren Köy Yaylasi",1
 "Arnault",1
 "Arnavut",2
@@ -1700,7 +1667,6 @@
 "Arpaözü",2
 "Arpaseki",1
 "Arpatarlasi",2
-"Arpatepe",1
 "Arsaköy",1
 "Arşinci",1
 "Arslanbey",2
@@ -1758,7 +1724,6 @@
 "Aşağiaktaş",1
 "Aşaği Aktaş",1
 "Aşaği Alaca",1
-"Aşaği Aladağ Yaylasi",1
 "Aşaği Alan",2
 "Aşagi Alan Kolu",1
 "Aşaği Aliçli",1
@@ -1861,8 +1826,6 @@
 "Aşaği Çukur",1
 "Aşaği Çukursökü",1
 "Aşağicuma",1
-"Aşağidağ",1
-"Aşağidağdere",1
 "Aşağidanişment",1
 "Aşağidariçay",1
 "Aşağideğirmenbaşi",1
@@ -1922,8 +1885,6 @@
 "Aşağigöcek",1
 "Aşağigökçe",1
 "Aşaği Göklü",1
-"Aşağigölalan",1
-"Aşağigölyazi",1
 "Aşağigöndelen",1
 "Aşağigörle",1
 "Aşağigöze",1
@@ -1992,7 +1953,6 @@
 "Aşağikarincali",1
 "Aşaği Karkutlu",1
 "Aşaği Karlik",1
-"Aşaği Karlitepe",1
 "Aşaği Karşi",2
 "Aşağikartal",1
 "Aşağikavacik",2
@@ -2010,7 +1970,6 @@
 "Aşaği Kazanli",1
 "Aşaği Kazlar",1
 "Aşaği Keçeler",1
-"Aşağikekliktepe",1
 "Aşağikepen",1
 "Aşaği Kepirce",1
 "Aşağikesmekaya",1
@@ -2039,8 +1998,6 @@
 "Aşaği Kom",1
 "Aşağikonak",2
 "Aşaği Konarli Mezrasi",1
-"Aşaği Köprübaşi",1
-"Aşağiköprücek",1
 "Aşağiköselerli",1
 "Aşaği Köseli",1
 "Aşaği Köseoğlu",1
@@ -2065,7 +2022,6 @@
 "Aşaği Küreçayi",1
 "Aşaği Kürkçü Mezrasi",1
 "Aşaği Kürsü",1
-"Aşaği Kurugöl",1
 "Aşağikürünlü",1
 "Aşağikuyucak",1
 "Aşaği Kuyucak",1
@@ -2176,8 +2132,6 @@
 "Aşaği Tekke",1
 "Aşaği Tekkeönü",1
 "Aşağitelli",1
-"Aşağitepe",2
-"Aşağitepecik",1
 "Aşağitinaz",1
 "Aşaği Tokaş",1
 "Aşağitokatlibağlari",1
@@ -2315,7 +2269,6 @@
 "Aslanyaka",1
 "Aşlica",1
 "Aslihan",1
-"Aslihantepeciği",1
 "Asma",3
 "Asmaca",2
 "Asmaçam",1
@@ -2364,7 +2317,6 @@
 "Atan(Cogara)",1
 "Atanoğlu",1
 "Ataosb",1
-"Atapark",1
 "Atariye",1
 "Atasanli",1
 "Ata Sb",1
@@ -2372,7 +2324,6 @@
 "Ataşehir Atatürk",1
 "Ataşehir Ferhatpaşa",1
 "Atasu",1
-"Atatepe",1
 "Atatürk",135
 "Atatürk (Osb)",1
 "Atatürk Osb",1
@@ -2388,7 +2339,6 @@
 "Atçeken",1
 "At Çiftliği",1
 "Atçilar",1
-"A.Tepecik (İğiki)",1
 "Ateşler",2
 "Atgüney",1
 "Aticigiran",1
@@ -2418,7 +2368,6 @@
 "Atmik",1
 "A.Torumlar",1
 "At Seki",1
-"Attepe",1
 "Attutan",2
 "Atürküten",1
 "Atyolu",1
@@ -2444,7 +2393,6 @@
 "Avciova",1
 "Avcipinari",1
 "Avcisuyu",1
-"Avcitepe",1
 "Avculu",1
 "Avdal",2
 "Avdali",1
@@ -2494,11 +2442,9 @@
 "Avunduk",2
 "Avunduruk",2
 "Avu Oltuğu",1
-"Avurtepe",1
 "Avut",4
 "Avutluk",1
 "Avutmuş",1
-"Avuttepe",1
 "Avzaraği",1
 "Ayakkif",1
 "Ayakli",4
@@ -2542,7 +2488,6 @@
 "Aybey",1
 "Aycili",1
 "Ayçukuru",1
-"Aydağlar",1
 "Aydemir",1
 "Aydemiroğlu",1
 "Ayderesi",2
@@ -2574,8 +2519,6 @@
 "Aydinoğlu",4
 "Aydinpinar",2
 "Aydinsu",1
-"Aydintepe",3
-"Aydintepe Yaylasi",1
 "Aydinyayla",1
 "Aydinyurdu",1
 "Aydoğan",7
@@ -2587,7 +2530,6 @@
 "Aygeçti",1
 "Aygeriş",1
 "Aygir",1
-"Aygirgölü",1
 "Aygiroğlu",1
 "Aygören",1
 "Aygörmez",1
@@ -2609,7 +2551,6 @@
 "Ayişik",1
 "Ayiyataği",1
 "Aykiri",1
-"Aykiri Filiztepe",1
 "Aykitli",1
 "Aykonak",1
 "Aykut",2
@@ -2646,7 +2587,6 @@
 "Ayranlik",1
 "Ayridam Yozgat Yolu Mevki",1
 "Ayrilik",1
-"Ayritepe",1
 "Ayşebaci",1
 "Ayşehoca",1
 "Ayşeler",1
@@ -2654,8 +2594,6 @@
 "Ayşepinar",1
 "Ayşepinari",1
 "Aytaş",1
-"Aytepe",1
-"Aytepesi-Gavur Hendeği",1
 "Ayutlu",1
 "Ayva",1
 "Ayvaalan",1
@@ -2708,7 +2646,6 @@
 "Azimler",1
 "Azimli",2
 "Azina",1
-"Azitepe",1
 "Aziz",1
 "Azizabat",1
 "Azizağa",1
@@ -2725,7 +2662,6 @@
 "Babacan",2
 "Babacanlar",1
 "Babacikli",1
-"Babadaği",1
 "Babadat",1
 "Babademirtaş",1
 "Babaderesi",1
@@ -2846,7 +2782,6 @@
 "Bağriyanik",2
 "Bağsaray",1
 "Bağşili",1
-"Bağtepe",4
 "Bağukuçhe",1
 "Bağyaka",3
 "Bağyolu",2
@@ -2945,7 +2880,6 @@
 "Bakirpinar",1
 "Bakirpinari",1
 "Bakirtaş",1
-"Bakirtepe  Yaylasi",1
 "Bakirtolu",1
 "Bakiş",1
 "Bakişik",1
@@ -2960,7 +2894,6 @@
 "Baklali",1
 "Baklançakirlar",1
 "Baklankuyucak",1
-"Baklatepe",1
 "Bakmaç",1
 "Bakraç",1
 "Bakraçli",1
@@ -3105,11 +3038,9 @@
 "Baltagirmez",1
 "Baltaköy",1
 "Baltali",2
-"Baltalimani",1
 "Baltali Yaylasi",1
 "Baltami",1
 "Baltaş",1
-"Baltepe",1
 "Balyemez",1
 "Bambacigil",1
 "Bamyasuyu",1
@@ -3127,7 +3058,6 @@
 "Barak",2
 "Baraka",1
 "Barakalar",1
-"Barakdaği",1
 "Barakfakih",1
 "Baraklar",2
 "Barakli",1
@@ -3154,7 +3084,6 @@
 "Bariş  (Çumat)",1
 "Barişli",1
 "Bariş Sb",1
-"Bariştepe",3
 "Baroğlu",1
 "Barsama",1
 "Barutçu",1
@@ -3177,7 +3106,6 @@
 "Başakli Mh.Mezrasi",1
 "Başakpinar Gaziler",1
 "Başakpinar Ufuk",1
-"Başakpinar Yildiztepe",1
 "Başakşehir",2
 "Başaksu",1
 "Başalan",8
@@ -3307,7 +3235,6 @@
 "Batiçanakçi",1
 "Bati Haciköy",1
 "Bati Hadimi",1
-"Bati İstasyon",1
 "Batikarakoç",1
 "Batikent",6
 "Batiköy",1
@@ -3381,7 +3308,6 @@
 "Bayraktarlar",5
 "Bayraktarli",1
 "Bayraktaroğlu",2
-"Bayraktepe",4
 "Bayralar",1
 "Bayram",5
 "Bayramalti",1
@@ -3403,7 +3329,6 @@
 "Bayramoğlu",9
 "Bayrampaşa",1
 "Bayramşah",4
-"Bayramtepe",1
 "Bayramuşaği",1
 "Bayramusta",1
 "Baysu",1
@@ -3493,7 +3418,6 @@
 "Bekirfakilar",1
 "Bekirfakilar Merkez",1
 "Bekirgil",1
-"Bekirgölü",1
 "Bekirhan",1
 "Bekirler",10
 "Bekirli",13
@@ -3545,7 +3469,6 @@
 "Belençayir",1
 "Belence",1
 "Belencik",3
-"Belengölcük",1
 "Belengur",1
 "Belenköy",5
 "Belenli",2
@@ -3580,7 +3503,6 @@
 "Belören",3
 "Belpinar",5
 "Belsu",1
-"Beltepe",1
 "Belvaryolu",1
 "Bemirgo",1
 "Benah",1
@@ -3662,7 +3584,6 @@
 "Beşik",2
 "Besikan",1
 "Beşikçi",1
-"Beşikdağ",1
 "Beşike Eserevler Sitesi",1
 "Beşikkaya",2
 "Beşikkaya Mücavir",1
@@ -3670,7 +3591,6 @@
 "Beşikli",4
 "Beşik(Merkez)",1
 "Beşiktaş",4
-"Beşiktepe",1
 "Besili",1
 "Beşir",2
 "Beşirağa",2
@@ -3687,7 +3607,6 @@
 "Beşkise",1
 "Beşkonak",1
 "Beşkonaklilar",1
-"Beşköprü",3
 "Beşköy",1
 "Beşkuyu",1
 "Beşler",1
@@ -3702,7 +3621,6 @@
 "Beştam",1
 "Beştaş",2
 "Beştelsiz",1
-"Beştepe",1
 "Bestile",1
 "Beşyol",2
 "Beterler",1
@@ -3747,7 +3665,6 @@
 "Beycik",2
 "Beyciler",3
 "Beycur",1
-"Beydaği",2
 "Beydali",1
 "Beydeğirmeni",2
 "Beydemir",1
@@ -3789,7 +3706,6 @@
 "Beylik Ağaci",1
 "Beylikbaği",1
 "Beylikdüzüosb",1
-"Beylikköprü",1
 "Beylikler",1
 "Beylikli",1
 "Beyliova",1
@@ -3809,7 +3725,6 @@
 "Beyseki",1
 "Beytami",1
 "Beytarla Yaylasi",1
-"Beytepe",5
 "Beyüzümü",1
 "Beyyataği",1
 "Beyyayla",2
@@ -3888,9 +3803,6 @@
 "Bilim",1
 "Billor",1
 "Bilmece",2
-"Binamlar",1
-"Binatli",2
-"Binayde Deresi",1
 "Binbaşioğlu",1
 "Binbaşi Reşatbey",1
 "Binbirdirek",1
@@ -3898,7 +3810,6 @@
 "Binboğa",1
 "Bindal",2
 "Bindalli",1
-"Binegöl",1
 "Binekli",4
 "Binektaşi",1
 "Binevler",1
@@ -3970,7 +3881,6 @@
 "Boğalar",1
 "Boğali",2
 "Boğali Yaylasi",1
-"Boğatepe",1
 "Boğaz",16
 "Boğaz Bağlik",1
 "Boğazçiftlik",1
@@ -3981,7 +3891,6 @@
 "Boğazkaya",2
 "Boğazkent",3
 "Boğazkesen",1
-"Boğazköprü",1
 "Boğazkoru",1
 "Boğazköy",5
 "Boğazköy İstiklal",1
@@ -4015,7 +3924,6 @@
 "Bölceağaç",1
 "Bölcek",1
 "Boldaç",1
-"Boldağ",1
 "Bölekli",1
 "Bolluca",1
 "Bölme",1
@@ -4093,7 +4001,6 @@
 "Bostanderesi",2
 "Bostanhüyük",1
 "Bostaniçi",1
-"Bostankaya İstasyonu",1
 "Bostankolu Deresi",1
 "Bostanlar",1
 "Bostanli",3
@@ -4114,7 +4021,6 @@
 "Boyacili",1
 "Boyaci Obasi",1
 "Boyacioğlu",2
-"Boya Deresi-Teper",1
 "Boyakli",1
 "Boyalani",1
 "Boyalca",1
@@ -4172,9 +4078,6 @@
 "Bozcayaka",1
 "Bozceylan",1
 "Bozcuoğlu",1
-"Bozdağ",3
-"Bozdaği",1
-"Bozdağ Kümesi",1
 "Bozdam",1
 "Bozdemir",1
 "Bozdere",1
@@ -4194,7 +4097,6 @@
 "Bozkir",2
 "Bozkira",1
 "Bozkoca",1
-"Bozkocatepe",1
 "Bozköy",8
 "Bozkurt",8
 "Bozkurtlar",1
@@ -4223,7 +4125,6 @@
 "Boztahta",2
 "Boztaş",1
 "Boztaş Mezrasi",1
-"Boztepe",21
 "Boztoprak",1
 "Boztoprakli",1
 "Bozuklar",2
@@ -4250,15 +4151,11 @@
 "Buca Koop",1
 "Bucakşeyhler",1
 "Bucaosb",1
-"Buçuktepe",1
-"Budağağzi",1
-"Budağan",1
 "Budak",8
 "Budakdere",1
 "Budaklar",4
 "Budakli",10
 "Budak Yaylasi",1
-"Budak Yaylasi Dağ Mevki",1
 "Budama",1
 "Budamiş",2
 "Budiyet",1
@@ -4272,7 +4169,6 @@
 "Buğdaylik Mücavir",1
 "Buğdayli (Şahin Çavuşlar)",1
 "Buğday Pazari",1
-"Buğdaytepe",1
 "Buğdüz",1
 "Büğdüz",2
 "Büget",2
@@ -4349,11 +4245,9 @@
 "Bulutlu",6
 "Bulutlu Yaylasi",1
 "Bulutoğlu",1
-"Buluttepe",1
 "Bulvar Yapi Kooparatifi",1
 "Bumsuz",1
 "Büngüldek",1
-"Bünüş Aladaği",1
 "Bünüş Mandirasi",1
 "Bünüş Merkez",1
 "Bünyanosmaniye",1
@@ -4364,7 +4258,6 @@
 "Burçakalan",1
 "Burçaklar",1
 "Burçakli",1
-"Burç Esentepe",1
 "Burçevi",1
 "Burç Karakuyu",1
 "Burçköy",2
@@ -4476,9 +4369,6 @@
 "Büyükçömlekçi",1
 "Büyük Çukir",1
 "Büyükçukur",1
-"Büyükdağ",1
-"Büyükdağdere",1
-"Büyükdağli",1
 "Büyükdalyan",1
 "Büyükdamlacik",1
 "Büyükdede",1
@@ -4497,7 +4387,6 @@
 "Büyükgeçe",1
 "Büyükgeçit",1
 "Büyükgeriş",1
-"Büyükgöl",1
 "Büyükgörümlü",1
 "Büyükgümüşgün",1
 "Büyük Güney",1
@@ -4509,8 +4398,6 @@
 "Büyükilit",1
 "Büyükilyasli",1
 "Büyük Işiklar",1
-"Büyükkabaktepe",1
-"Büyük Kadağan",1
 "Büyükkadi",1
 "Büyükkale",2
 "Büyükkapili",1
@@ -4553,7 +4440,6 @@
 "Büyükkünye",1
 "Büyükkütah",1
 "Büyükler",1
-"Büyükliman",1
 "Büyüklü",1
 "Büyükmangit",1
 "Büyükmirdesi",1
@@ -4594,7 +4480,6 @@
 "Büyüktaşhane",1
 "Büyüktaşlica",1
 "Büyüktatli",1
-"Büyüktepe",2
 "Büyüktokaç",1
 "Büyük Toraman",1
 "Büyüktürbe",1
@@ -4639,7 +4524,6 @@
 "Caberfakili",1
 "Caberkamara",1
 "Cabi",2
-"Cabina",1
 "Cabli",1
 "Cabri",1
 "Çabuk",1
@@ -4675,7 +4559,6 @@
 "Çağdazor",1
 "Çağil",3
 "Çağilardi",1
-"Çağil Göl",1
 "Çağilhan",1
 "Çağillar",1
 "Çağilli",1
@@ -4718,7 +4601,6 @@
 "Çakallik",2
 "Çakaloğlu",1
 "Çakalovasi",1
-"Çakaltepe",1
 "Çakaltuzaği",1
 "Çakartaş",1
 "Çakat",1
@@ -4748,7 +4630,6 @@
 "Çakirca",4
 "Çakircaali",2
 "Çakirçay",1
-"Çakirdağ",1
 "Çakirdere",2
 "Çakirdoğan",1
 "Çakirekin",1
@@ -4789,7 +4670,6 @@
 "Çakmakli Mezra",1
 "Çakmaklioğlu",1
 "Çakmaközü",2
-"Çakmaktepe",1
 "Çakmanlar",1
 "Çakmar",1
 "Çako",1
@@ -4820,7 +4700,6 @@
 "Çalci",1
 "Çalçi",2
 "Çalciören",1
-"Çaldağ",1
 "Çaldere",5
 "Çaldibi",2
 "Çaldiran",3
@@ -4855,7 +4734,6 @@
 "Çalişlar",1
 "Çalişli",2
 "Çali Sökü",1
-"Çalitepe",1
 "Çalivo",1
 "Çaliyazi",1
 "Çaliyurdu",1
@@ -4887,7 +4765,6 @@
 "Çalpinar",2
 "Çalseki",1
 "Çalta",1
-"Çaltepe",5
 "Çalti",11
 "Çalti Arasi",1
 "Çaltibozkir",1
@@ -4979,7 +4856,6 @@
 "Cami Kümesi",1
 "Camili",14
 "Camili Kümesi",1
-"Camilimanda",1
 "Camili Yaylasi",1
 "Cami Mevki",1
 "Cami Mh.",1
@@ -4990,7 +4866,6 @@
 "Cami Önü",2
 "Cami Şerif",1
 "Cami Sokak",1
-"Camitepe",1
 "Cami Üstü",2
 "Camivasat",1
 "Cami Ve Çevre",1
@@ -5037,13 +4912,10 @@
 "Çamliköy",2
 "Çamli Köy",1
 "Çamlik Sahil",1
-"Çamliktepe",1
 "Çamlikule",1
 "Çamliova",1
 "Çamlipinar",2
 "Çamlipinaralani",1
-"Çamlitepe",8
-"Çamli Tepe",1
 "Çamliyamaç",1
 "Çamliyayla",4
 "Çamliyazi",1
@@ -5064,7 +4936,6 @@
 "Çamsari",2
 "Çamseki",1
 "Çamtam",1
-"Çamtepe",6
 "Çamucu",1
 "Çamurboğazi",1
 "Çamurcuk",1
@@ -5110,7 +4981,6 @@
 "Canca",2
 "Cancağ",1
 "Cancak",1
-"Çandaği Yaylasi",1
 "Candarli",1
 "Çandarli",2
 "Candaroğullari",3
@@ -5187,14 +5057,12 @@
 "Çardak Özdemir Sabanci Osb",1
 "Çardaközü",1
 "Çardakpinari Yay",1
-"Çardaktepe",1
 "Çardakyani",2
 "Çardak Yaylasi",1
 "Caret",1
 "Çargan",1
 "Çargan Oba",1
 "Çarikballi",1
-"Çarikbozdağ",1
 "Çarikçi",1
 "Çarikkaralar",1
 "Çarikköy",2
@@ -5269,7 +5137,6 @@
 "Çatalhurma",1
 "Çatalhüyük",2
 "Çatalkaya",3
-"Çatalköprü",2
 "Çatalköy",1
 "Çatallar",3
 "Çatalli",2
@@ -5285,7 +5152,6 @@
 "Çatalsu",1
 "Çataltarla",1
 "Çataltaş",1
-"Çataltepe",10
 "Çataltömek",1
 "Çatalyaka",1
 "Çatalyurt",1
@@ -5317,7 +5183,6 @@
 "Çatokcular",1
 "Çatören",3
 "Çatova",1
-"Çattepe",1
 "Çavak",1
 "Cavcav",1
 "Çavdar",7
@@ -5338,7 +5203,6 @@
 "Çavuş Aligil",1
 "Çavuşbaşi",2
 "Çavuşbey",1
-"Çavuşçugöl",1
 "Çavuşdere",1
 "Çavuşgil",1
 "Çavuşgiller",1
@@ -5349,7 +5213,6 @@
 "Çavuşlu",25
 "Çavuşoğlu",12
 "Çavuş(Siver)",1
-"Çavuştepe",1
 "Çavuş Yaylasi",1
 "Çay",67
 "Çayağazi",1
@@ -5392,7 +5255,6 @@
 "Çayirca",1
 "Çayircik",4
 "Çayirçökek",1
-"Çayirdaği",1
 "Çayirdere",2
 "Çayirdüzü",2
 "Çayirekinliği",1
@@ -5420,7 +5282,6 @@
 "Çayirözü",4
 "Çayirpinar",1
 "Çayirtarla",1
-"Çayirtepe",2
 "Çaykara",5
 "Çaykaşi",1
 "Çay Kavuştu",1
@@ -5459,7 +5320,6 @@
 "Çayseki",1
 "Çaysimav",1
 "Çaytarla",1
-"Çaytepe",2
 "Çayüstü",2
 "Çayvar",1
 "Çayyaka",1
@@ -5477,7 +5337,6 @@
 "Cebeler",1
 "Cebeli",2
 "Ceberler",1
-"Cebesoy İstasyonu",1
 "Cebir",1
 "Cebirli",1
 "Çebiş Gediği",1
@@ -5552,7 +5411,6 @@
 "Çelikler Ve Sandikçilar",1
 "Çelikli",4
 "Çelik Mezrasi",1
-"Çeliktepe",1
 "Celil",1
 "Celiller",1
 "Çelimler",1
@@ -5614,7 +5472,6 @@
 "Cenderözü",1
 "Cendeve",1
 "Çene",2
-"Çenedağ",1
 "Çeneler",1
 "Çenesizler",1
 "Cenevizler",1
@@ -5716,12 +5573,10 @@
 "Çeşme Yani",2
 "Çeşneli",1
 "Çeşnigir",1
-"Çeştepe",3
 "Çet",1
 "Çetan",1
 "Çetenli",1
 "Çetibeli",1
-"Çetikören Aladağ Yaylasi",1
 "Çetikören Gökçe Alan Yaylasi",1
 "Çetikören Kirazli Yaylasi",1
 "Çetikören Mandiralari",1
@@ -5788,9 +5643,7 @@
 "Çevreli",8
 "Çevrelik",1
 "Çevrepinar",1
-"Çevretepe",1
 "Çevrik",2
-"Çevrik Köprü",1
 "Çevriksu",1
 "Çevrimkaya",1
 "Ceyhan",2
@@ -5814,7 +5667,6 @@
 "Çiçekalan",1
 "Çiçekalani",1
 "Çiçekbaşli",1
-"Çiçekdaği",1
 "Çicek Kayasi",1
 "Çiçekköy",1
 "Çiçekler",1
@@ -5829,8 +5681,6 @@
 "Çiçekören Mevki",1
 "Çiçeközü",2
 "Çiçekpinar",1
-"Çiçektepe",1
-"Çiçektepesi",1
 "Çiçek Yaylasi",1
 "Çiçekyazi",1
 "Çiceli",1
@@ -5856,7 +5706,6 @@
 "Çifte Havuzlar",1
 "Çiftekavak",2
 "Çiftekemer",1
-"Çifteköprü",1
 "Çiftekoz",1
 "Çiftekuyu",1
 "Çifteler Mezrasi",1
@@ -5872,7 +5721,6 @@
 "Çiftlikalti",1
 "Çiftlikalti1",1
 "Çiftlik Bucaği Çatören",1
-"Çiftlik Bucaği Gölören",1
 "Çiftlikdere",1
 "Çiftlik (Eskiköy)",1
 "Çiftlik İşletmesi",1
@@ -5890,13 +5738,11 @@
 "Çiğdemler",1
 "Çiğdemli",6
 "Çiğdemlik",1
-"Çiğdemtepe",2
 "Ciğerdede Mücavir",1
 "Çiğil",3
 "Çiğili",1
 "Çiğiller",1
 "Çiğilli",2
-"Çiğiltepe",1
 "Ciğir",1
 "Ciğirler",1
 "Çiğirli",1
@@ -5964,7 +5810,6 @@
 "Çillar",1
 "Çiller",5
 "Çilleroğlu",1
-"Çilligöl",1
 "Çilliket",1
 "Cillioğlu",1
 "Çillioğlu",1
@@ -5996,7 +5841,6 @@
 "Çimenlik",4
 "Çimenlikoruluk",1
 "Çimenözü",1
-"Çimentepe",3
 "Çimento Fabrikasi Yani",1
 "Cimikanli",1
 "Çimiköy",1
@@ -6042,7 +5886,6 @@
 "Çinaroba",2
 "Çinarönü",2
 "Çinarpinar",2
-"Çinartepe",2
 "Çinar Yolu",1
 "Cinbatli",1
 "Cinbiroğlu",1
@@ -6095,7 +5938,6 @@
 "Çiplak",1
 "Çiplaklar",2
 "Çiplakli",2
-"Çiplaktepe",1
 "Çirak",3
 "Çirakköy",1
 "Çiraklar",6
@@ -6105,7 +5947,6 @@
 "Çiraktami",1
 "Çirali",4
 "Çiralikalik",1
-"Çiraliköprü",1
 "Çiralti",1
 "Çiraz",1
 "Cirbeli",1
@@ -6131,7 +5972,6 @@
 "Çirişli",2
 "Çirişlikaş",1
 "Çirişoğlu",1
-"Çiriştepe",1
 "Ciritbelen",1
 "Ciritli",1
 "Cirit Meydani",1
@@ -6143,7 +5983,6 @@
 "Çirpi",1
 "Çirpi Cami",1
 "Çirpici",2
-"Çirpi Dağ",1
 "Cirtiman",1
 "Ciselet",1
 "Çisğiliev",1
@@ -6153,7 +5992,6 @@
 "Çitakli",1
 "Çitdibi",1
 "Çitili",1
-"Citköprü (Davulcuoğlu)",1
 "Çitköy",2
 "Çitlak",1
 "Çitlakkale",1
@@ -6231,7 +6069,6 @@
 "Çobanpinar",1
 "Çobanpinari",2
 "Çobansuyu",1
-"Çobantepe",2
 "Çobanuşaği",1
 "Çobanyatak",1
 "Cobu",1
@@ -6289,10 +6126,8 @@
 "Çölmek",1
 "Çölova",1
 "Çolpan",2
-"Çöltepe",1
 "Çoluklar",1
 "Çomak",2
-"Çomakdağkizilağaç",1
 "Çomakkonaği",1
 "Çomaklar",5
 "Çomakli",4
@@ -6403,7 +6238,6 @@
 "Çotuk",1
 "Çotuklar",2
 "Çötüroğlu",1
-"Çoturtepe",1
 "Cöve",1
 "Çövek",1
 "Çoyağzi",1
@@ -6414,7 +6248,6 @@
 "Çubukçu Deresi",1
 "Çubukçular",1
 "Çubukçuoğlu",1
-"Çubuk Daği",1
 "Çubukdiken",1
 "Çubukharmani",1
 "Çubukiçi Mücavir",1
@@ -6460,7 +6293,6 @@
 "Çukurbük",1
 "Cukurca",1
 "Çukurca",15
-"Çukurca Aladaği",1
 "Çukurcaalan Yaylasi",1
 "Çukurcak",2
 "Çukurcaköy",1
@@ -6574,7 +6406,6 @@
 "Çürüttüm",1
 "Cüş",1
 "Çuvar",1
-"D-100 Boludaği Karayolu",1
 "D-100 Karayolu",1
 "D400 Alti",1
 "D400 Üstü",1
@@ -6586,101 +6417,15 @@
 "Daccak",1
 "Daccaoğlu",1
 "Dada",2
-"Dadaği",1
-"Dadağli",2
 "Dadali",1
 "Dadaloğlu",2
 "Dadaş",1
 "Dadaşköy",1
-"Dağ",16
-"Dağakça",1
-"Dağal",1
-"Dağalan",1
 "Dagarasi",1
-"Dağarasi",1
-"Dağarcik",1
-"Dağardi",1
-"Dağarlar",1
-"Dağbağ",2
-"Dağ Bahçe",1
-"Dağbaşi",1
-"Dağbelen",1
-"Dağbeli",1
-"Dağ Çayir",1
-"Dağçayiri",1
-"Dağçeşme",1
-"Dağci",2
-"Dağcilar",2
-"Dağcioğlu",2
-"Dağdagül",1
-"Dağdancik",1
-"Dağdelen",3
-"Dağdemir",1
-"Dağ Demirciler",1
-"Dağdere",3
-"Dağ Deresi",1
-"Dağdeviren",1
-"Dağdibi",11
-"Dağ Dibi",1
-"Dağdirali",1
-"Dağdüzü",1
-"Dağesemen",1
-"Dağeteği",1
-"Dağeymiri",1
-"Dağeze",1
-"Dağgeçe",1
-"Dağgöl",1
-"Dağgüney",1
-"Dağ Güzleği",1
-"Dağhacilar Merkez",1
-"Dağhaciyusuf",1
-"Dağiçi",1
-"Dağiniksu",1
 "Dagir",1
 "Dagistan",1
-"Dağistan",2
-"Dağkadi",1
-"Dağkalafat",1
-"Dağ Kapi",1
-"Dağkaraağaç",1
-"Dağkent",1
-"Dağkizilca",1
-"Dağ Komando Togayi",1
-"Dağköy",3
-"Dağköyü",1
-"Dağküplü",1
-"Dağkuzören",1
-"Dağlar",3
-"Dağli",3
-"Dağliağaç",1
 "Daglica",1
-"Dağlica",2
-"Dağlica Mezra",1
-"Dağlioğlu",2
-"Dağmahale",1
-"Dağmarmara",1
-"Dağönü",3
-"Dağören",3
-"Dağpazari",1
-"Dağpinar",1
 "Dagrak",1
-"Dağseven",1
-"Dağşeyhler",1
-"Dağsu",1
-"Dağtarla",2
-"Dağtarla-Karaağaç-Kökbükü",1
-"Dağteke",1
-"Dağüstü",2
-"Dağyaka",1
-"Dağyani",1
-"Dağ Yayla",1
-"Dağyeni",1
-"Dağyenice",2
-"Dağyeniköy",1
-"Dağyolu",3
-"Dağyoncali",1
-"Dağyöre",1
-"Dağyurdu",2
 "Dahal",1
 "Dahallar",1
 "Dahalli",1
@@ -6715,11 +6460,9 @@
 "Dalli",1
 "Dalliağaç",1
 "Dallica",5
-"Dallidağ",1
 "Dallik",1
 "Dallikavak",1
 "Dallikiran",1
-"Dallimandira",1
 "Dalmancu",1
 "Dalmanli",1
 "Dalmaz",1
@@ -6775,7 +6518,6 @@
 "Danacili",1
 "Danacioğlu",1
 "Danaderesi",1
-"Danagölü",1
 "Danahisar",1
 "Danali",1
 "Danamandira",1
@@ -6793,7 +6535,6 @@
 "Danişmentgazi",1
 "Danişmentler",1
 "Dankazlar",1
-"Danlidağ",1
 "Danya",1
 "Danzotlu",1
 "Dara",1
@@ -6827,7 +6568,6 @@
 "Dariveren",1
 "Dariyeri",1
 "Darkale",1
-"Darköprü",1
 "Darlik",2
 "Darnuç",1
 "Darsofa",1
@@ -6849,7 +6589,6 @@
 "Davulcuoğlu",1
 "Davulgu",1
 "Davullar",1
-"Davultepe",1
 "Davut",2
 "Davutça",2
 "Davutçu",1
@@ -6866,7 +6605,6 @@
 "Dayanikli",1
 "Dayi",2
 "Dayicik",1
-"Dayidaği",1
 "Dayiemir",1
 "Dayilar",4
 "Dayili",1
@@ -6893,7 +6631,6 @@
 "Dedecik",1
 "Dedeçinar",2
 "Dedecük",1
-"Dededaği",1
 "Dedefakili Merkez",1
 "Dedegerişi",1
 "Dedehal",1
@@ -6985,7 +6722,6 @@
 "Değirmi",1
 "Değirmice",1
 "Değirmiçem",1
-"Değirmigöl",1
 "Değirmitaş",2
 "Değiş",1
 "Değişören",1
@@ -7095,7 +6831,6 @@
 "Demirciören",2
 "Demirciözü",1
 "Demirçit",1
-"Demirdağ",2
 "Demirdere",2
 "Demirdöven",2
 "Demirel",1
@@ -7114,7 +6849,6 @@
 "Demirkaya",1
 "Demirkiran",1
 "Demirkonak",2
-"Demirköprü",2
 "Demirköy",1
 "Demirkuyu",1
 "Demirler",6
@@ -7139,8 +6873,6 @@
 "Demirtaş Dumlupinarosb",1
 "Demirtaşpaşa",1
 "Demirtaş Sakarya",1
-"Demirtepe",1
-"Demirtepe Mücavir",1
 "Demiryurt",1
 "Demler",1
 "Demokan",1
@@ -7161,7 +6893,6 @@
 "Denizciler",3
 "Denizçukuru",1
 "Denizevleri",1
-"Denizgöl",1
 "Denizgören",2
 "Denizhan",1
 "Denizkent",1
@@ -7177,7 +6908,6 @@
 "Denizoluğu",1
 "Denizova",1
 "Denizovasi",1
-"Deniztepesi",1
 "Denizyaka",1
 "Denktaş",1
 "Depen  Kiz",1
@@ -7234,7 +6964,6 @@
 "Deredüzü",2
 "Deregezen",1
 "Deregözü",7
-"Dere Gültepe",1
 "Deregündüzlü",1
 "Derei",1
 "Dereiçi",12
@@ -7365,7 +7094,6 @@
 "Devecipinari",1
 "Deveciuşaği",1
 "Deveci Yol Alti",1
-"Devedaği",1
 "Devederesi",1
 "Devegörmez",1
 "Devehüyüğü",1
@@ -7438,7 +7166,6 @@
 "Diken Düzü-Ömer Tarla",1
 "Dikenli",7
 "Dikenli Yayla",1
-"Dikentepe",1
 "Dikili",8
 "Dikilikaya",1
 "Dikilitaş",15
@@ -7461,12 +7188,10 @@
 "Dikmencik",1
 "Dikmendibi",2
 "Dikmenler",1
-"Dikmen Tepegöz",1
 "Dikmen Yaylasi",1
 "Dikmetaş",5
 "Diközü",1
 "Diktaş",2
-"Diktepe",1
 "Dikyamaç",1
 "Dikyar",1
 "Dikyol",1
@@ -7519,7 +7244,6 @@
 "Diphan",1
 "Diphisar",1
 "Diprecci",1
-"Dipsizgöl",2
 "Dipyatak",1
 "Diraban",1
 "Diran",1
@@ -7548,7 +7272,6 @@
 "Diştaş",1
 "Divan",3
 "Divanbaşi",1
-"Divandağ",1
 "Divane",1
 "Divanhüseyin",1
 "Divanitürk",1
@@ -7603,7 +7326,6 @@
 "Doğancilar",9
 "Doğancili",2
 "Doğançukur",1
-"Doğandağ",1
 "Doğandere",1
 "Doğanevler",1
 "Doğangün",1
@@ -7629,7 +7351,6 @@
 "Doğanözü",1
 "Doğanpinar",3
 "Doğantaş",1
-"Doğantepe",4
 "Doğanyayla",1
 "Doğanyazi",1
 "Doğanyurdu",1
@@ -7657,7 +7378,6 @@
 "Doğucular",1
 "Doğu Haciköy",1
 "Doğuhadimi",1
-"Doğu İstasyon",1
 "Doğukent",4
 "Doğu Kent",2
 "Doğukesmekaya",1
@@ -7669,7 +7389,6 @@
 "Döğüşeren",1
 "Döğüş Gediği",1
 "Doğuşlar",2
-"Doğutepe",1
 "Doğuyaka",1
 "Dökmetaş",1
 "Dokoşaği",1
@@ -7699,7 +7418,6 @@
 "Dokuzyol",1
 "Dolaçayi",1
 "Dolamaç",1
-"Dolamantepe",1
 "Dolamay",1
 "Dolanli",2
 "Dolaplar Mevkii",1
@@ -7735,7 +7453,6 @@
 "Dolunay",5
 "Dolupinar",1
 "Dolutaş",1
-"Dolutepe",1
 "Domaçli",1
 "Dombaycioğlu",1
 "Dombaydere",1
@@ -7794,7 +7511,6 @@
 "Dörtler",1
 "Dörtparmak",1
 "Dörtpinar",1
-"Dörttepe",1
 "Dörtyol",9
 "Dörtyolağzi",1
 "Doruç",1
@@ -7850,8 +7566,6 @@
 "Duaf",1
 "Dualar",3
 "Duanci",1
-"Duatepe",5
-"Duatepe-Altintepe",1
 "Duayeri",2
 "Dube",1
 "Dudakli",1
@@ -7902,8 +7616,6 @@
 "Dumanlar Yayla",1
 "Dumanli",3
 "Dumanoğlu",2
-"Dumantepe",2
-"Duman Tepe Villalari",1
 "Dümbürdek",1
 "Dümenler",1
 "Dümenler Yayla",1
@@ -7947,7 +7659,6 @@
 "Durasil",1
 "Durasilar",1
 "Durasilli",3
-"Dürbinar",1
 "Durcan",1
 "Durcanlar",1
 "Dürdane",1
@@ -7975,7 +7686,6 @@
 "Duruca",4
 "Durucasu",1
 "Duruçay",2
-"Durugöl",1
 "Duruhan",1
 "Dürükkaş",1
 "Dürükler",1
@@ -7997,7 +7707,6 @@
 "Dut Ağaci",1
 "Dutdere",1
 "Dutdibi",1
-"Dutliman",1
 "Dutlu",5
 "Dutlubahçe",1
 "Dutluca",13
@@ -8013,7 +7722,6 @@
 "Düvenlik",1
 "Düver",2
 "Düverlik",1
-"Düvertepe",1
 "Duyduk",1
 "Duygulu",4
 "Düz",33
@@ -8062,7 +7770,6 @@
 "Düz Tarla",1
 "Düztarla Kiran Mevkii",1
 "Düztaş",2
-"Düztepe",2
 "Düztoprak",1
 "Düzyatak",1
 "Düzyayla",1
@@ -8172,7 +7879,6 @@
 "Eğlence",2
 "Eğlenhoca",1
 "Eğme",1
-"Eğmedağ",1
 "Eğmir",1
 "Eğner",1
 "Eğnez",1
@@ -8195,7 +7901,6 @@
 "Eğrice Alan",1
 "Eğridere",12
 "Eğriekin",1
-"Eğrigöl",1
 "Eğrigöz",1
 "Eğrikar",1
 "Eğrikavak",1
@@ -8210,7 +7915,6 @@
 "Eğritaş",1
 "Eğro",1
 "Eherli (Hağ)",1
-"Ehkartepe",1
 "Ehlibeyt",1
 "Ekberoğlu",1
 "Eke",1
@@ -8354,7 +8058,6 @@
 "Elmadibi",2
 "Elmadüzü",1
 "Elma Gediği",1
-"Elmagölü",1
 "Elmaköy",2
 "Elmakuzu",1
 "Elmalar",1
@@ -8377,8 +8080,6 @@
 "Elmasbahçeler",1
 "Elmaşehir",1
 "Elmaseki",1
-"Elma Tepe",1
-"Elma Tepesi",1
 "Elmayaka",1
 "Elmedüzü",1
 "Elmümin",1
@@ -8487,7 +8188,6 @@
 "Emmi",1
 "Emmioğlu",1
 "Emniyetevleri",1
-"Emniyettepe",1
 "Emrah",1
 "Emrahinağili",1
 "Emre",6
@@ -8540,7 +8240,6 @@
 "Erbap",1
 "Erbaş",1
 "Erbaşi",1
-"Erbaş İstasyonu",1
 "Erbey",1
 "Erbeyli",2
 "Erbildi",1
@@ -8552,7 +8251,6 @@
 "Erciyes",1
 "Erciyesevler",1
 "Erdali",1
-"Erdegöl",1
 "Erdel",1
 "Erdelli",2
 "Erdem",1
@@ -8585,7 +8283,6 @@
 "Erenler",29
 "Erenli",2
 "Erenli Mücavir",1
-"Erentepe",3
 "Erenyaka",1
 "Erenyolu",1
 "Erenyurt",1
@@ -8610,7 +8307,6 @@
 "Erhanlar",1
 "Ericek",14
 "Ericik",1
-"Eriç İstasyonu",1
 "Erikbelen",1
 "Erikbeli",1
 "Erikbükü",1
@@ -8627,8 +8323,6 @@
 "Eriklik",1
 "Eriklikömürcü",1
 "Eriklikuyu",1
-"Erikliman",1
-"Eriklimani",1
 "Erikobuzu",1
 "Erikpinari",1
 "Erikyani",1
@@ -8656,7 +8350,6 @@
 "Erkilet Mehmet Akif Ersoy",1
 "Erkilet Osman Gazi",1
 "Erkilet Taşhan",1
-"Erkilet Tepe",1
 "Erkilet Yukari",1
 "Erkilet Zade",1
 "Erkizan",1
@@ -8750,9 +8443,6 @@
 "Esenpinar",4
 "Esenşehir",1
 "Esentaş",1
-"Esentepe",122
-"Esen Tepe",3
-"Esentepe (Beşpinar)",1
 "Esenyali",2
 "Esenyamaç",2
 "Esenyayla",1
@@ -8763,7 +8453,6 @@
 "Eseoğlu",1
 "Eser",3
 "Eserler",2
-"Esertepe",2
 "Esgili",1
 "Eshabe",1
 "Esikli",1
@@ -8800,7 +8489,6 @@
 "Eskiçokdeğirmen",1
 "Eskiçöte",1
 "Eskicuma",1
-"Eskidağ Mevkii",1
 "Eskidanişment",1
 "Eskidir",1
 "Eskiekin Bağlari",1
@@ -8882,7 +8570,6 @@
 "Eskiyurt",1
 "Eskiyürük",2
 "Eskiziraatli",1
-"Es Köprücek",1
 "Esköy",4
 "Eskuat",1
 "Eskuvat",1
@@ -8954,8 +8641,6 @@
 "Evrenos",1
 "Evrenpaşa",2
 "Evrenseki",1
-"Evrentepe",1
-"Evrentepe Yolu",1
 "Evrenuşaği",1
 "Evri",1
 "Evril",1
@@ -9012,7 +8697,6 @@
 "Eyyüpnebi",1
 "Eyyüp Nebi",1
 "Eze",1
-"Ezeltepe",1
 "Ezgil",1
 "Eziler",1
 "Ezirkanci",1
@@ -9135,7 +8819,6 @@
 "Fethiyeosb",1
 "Feti",1
 "Fetih",3
-"Fetihtepe",1
 "Fettah",2
 "Fettahdere",1
 "Fettahli",1
@@ -9169,7 +8852,6 @@
 "Fidimse",1
 "Fidyekizik",1
 "Fiğla",1
-"Fikirtepe",1
 "Fikri Altay",1
 "Fikripaşa",1
 "Fildanlar",1
@@ -9189,7 +8871,6 @@
 "Findikoba",1
 "Findikpinari",1
 "Findiksuyu",1
-"Findiktepe",1
 "Firanlar 1",1
 "Firanlar Mücavir",1
 "Firarli",1
@@ -9215,7 +8896,6 @@
 "Fişekli",1
 "Fişkin",1
 "Fistikli",4
-"Fistiklidağ",1
 "Fistiközü",1
 "Fitillik",1
 "Fiye",1
@@ -9267,7 +8947,6 @@
 "Gancu",1
 "Gangahu",1
 "Ganiağalar",1
-"Ganidağiketiler",1
 "Ganioğlu",3
 "Ganişeyh",1
 "Gap",1
@@ -9300,7 +8979,6 @@
 "Gaylan",1
 "Gayret",3
 "Gayretli",1
-"Gayrettepe",1
 "Gayt",1
 "Gaz",1
 "Gaza",1
@@ -9333,10 +9011,7 @@
 "Gaziköy",3
 "Gazi Kümesi",1
 "Gaziler",21
-"Gaziler Tepesi Alt",1
-"Gaziler Tepesi Üst",1
 "Gaziler Yayla",1
-"Gazimürseltepesi",1
 "Gazi Mustafa Kemal",2
 "Gazi Mustafa Kemalpaşa",2
 "Gazi Mustafa Kemal Paşa Osb",1
@@ -9355,7 +9030,6 @@
 "Gazi Sinan",1
 "Gazisüleymanpaşa",1
 "Gazi Süleyman Paşa",4
-"Gazitepe",1
 "Gaziveli",1
 "Gaziyakupbey",1
 "Gebe",1
@@ -9393,7 +9067,6 @@
 "Gecitli",1
 "Geçitli",3
 "Geçitli Cumhuriyet",1
-"Geçittepe",2
 "Geçmen",1
 "Geçmiş",2
 "Geçmiş Alti",1
@@ -9501,7 +9174,6 @@
 "Gencolar-Esenlik",1
 "Gençosman",3
 "Genç Osman",1
-"Gençtepe",1
 "General Asim Gündüz",1
 "General Kazim Özalp",1
 "General Şükrü Kanadli",1
@@ -9566,7 +9238,6 @@
 "Gesteliç",1
 "Geven",1
 "Gevence",1
-"Geventepe",1
 "Geves",1
 "Gevezeli",1
 "Gevezit",1
@@ -9588,12 +9259,10 @@
 "Geyikbayiri",1
 "Geyikçeli",1
 "Geyikci Oba",1
-"Geyikgölü",1
 "Geyikler",1
 "Geyikli",6
 "Geyiközü",1
 "Geyikpinari",1
-"Geyiktepe",1
 "Geynik",1
 "Geyras",1
 "Geyre",1
@@ -9771,7 +9440,6 @@
 "Gökçebük",1
 "Gökçeçakmak",1
 "Gökçecamii",1
-"Gökçedağ",1
 "Gökçedere",5
 "Gökçegöz",1
 "Gökçegüney",1
@@ -9805,7 +9473,6 @@
 "Gökçesu",5
 "Gökcesüleymanli",1
 "Gökçetaş",3
-"Gökçetepe",2
 "Gökçetevek",1
 "Gökçeyaka",2
 "Gökçeyamaç",1
@@ -9815,13 +9482,11 @@
 "Gökçeyurt",5
 "Gökçimen",2
 "Gökçukur",2
-"Gökdağ",1
 "Gökdere",15
 "Gökdere 2",1
 "Gökevler",1
 "Gökeyüp",1
 "Gökgedik",3
-"Gökgöl",3
 "Gökgöz",2
 "Gökhasanli",1
 "Gökhüyük",2
@@ -9859,8 +9524,6 @@
 "Göktarla",1
 "Göktaş",9
 "Göktaşli",1
-"Göktepe",22
-"Göktepe Obasi",1
 "Göktöme",1
 "Göktürk",2
 "Göktürk Merkez",1
@@ -9871,114 +9534,10 @@
 "Gökyer",1
 "Gökyildiz",1
 "Gökyurt",1
-"Göl",19
-"Gölağazi",1
-"Gölağil",2
-"Gölağzi",1
-"Gölalan",1
-"Gölalti",1
 "Golan",1
-"Gölani",1
-"Gölardi",1
-"Gölardi(Merkez)",1
-"Gölardisitesi-1",1
-"Gölardisitesi-2",1
-"Göl Arkasi",2
 "Gola Use",1
-"Gölayaği",1
 "Golazeng",1
-"Gölbaşi",30
-"Gölbaşi Mezra",1
-"Gölbek",1
-"Gölbelen",1
-"Gölbent",2
-"Gölbucaği",1
-"Gölçayir",3
-"Gölce",1
-"Gölceğiz",3
-"Gölceğiz Yaylasi",1
-"Gölciğez",1
-"Gölcüğez",1
-"Gölcük",27
-"Gölcük Handüzü",1
-"Gölcükler",1
-"Gölcük Sazak",1
-"Göldaği",1
-"Göldere",3
-"Göldiren",1
-"Göldüzü",3
-"Gölebakan",1
-"Göleç",1
-"Gölecik",1
-"Göleçük",1
-"Gölehura",1
-"Gölek",1
-"Göleler",1
-"Gölemezli",1
-"Gölen",1
-"Gölet",1
-"Göletcik Yaylasi",1
-"Göletevleri",1
-"Gölet-Kertil",1
-"Gölevi",1
-"Göleviç",1
-"Gölgeci",1
-"Gölgele",1
-"Gölgeli-1",1
-"Gölgeli-2",1
-"Gölgelik",2
-"Gölgen",1
-"Gölharmani",1
-"Gölhisar",2
-"Göliçi",1
-"Gölkaşi",1
-"Gölkaya",1
-"Gölkenari",1
-"Gölkent",1
-"Gölkiriş",1
-"Gölkiyi",1
-"Gölköprü",1
-"Gölköy",7
-"Göller",10
-"Göllet",1
-"Göllü",10
-"Göllüalan",1
-"Göllü Bağ",1
-"Göllüce",5
-"Göllüce Mezrasi",1
-"Göllü Geriş",1
-"Göllüköy",1
-"Göllüler",1
-"Göllü Yayla",1
-"Göl Mezrasi",2
-"Göloba",1
 "Gologos",1
-"Gölönü",1
-"Göl Önü",2
-"Gölören",1
-"Gölova",2
-"Gölovasi",1
-"Gölözü",1
-"Göl Pazari",1
-"Gölpinar",6
-"Göltarla",1
-"Göltepe",2
-"Göltürkbükü",1
-"Gölü",1
-"Gölükhan",1
-"Göluşaği",1
-"Gölüzan",1
-"Gölyaka",5
-"Gölyani",4
-"Göl Yani",1
-"Gölyayla",1
-"Göl Yayla",1
-"Gölyaylasi",1
-"Gölyazi",4
-"Göl Yeni",1
-"Gölyeri",2
-"Gölyurt",1
-"Gölyüzü",3
 "Goman Mezra",1
 "Gömbe",1
 "Gömce",1
@@ -10039,7 +9598,6 @@
 "Görene",1
 "Görenler",1
 "Görentaş",2
-"Görentepe",2
 "Göreşken",1
 "Gorganet",1
 "Gorğon",1
@@ -10108,7 +9666,6 @@
 "Gözebaşi",3
 "Gözecik",3
 "Gözede",1
-"Gözegöl",1
 "Gözekaya",1
 "Gözel",1
 "Gözelek",1
@@ -10140,7 +9697,6 @@
 "Gözsökü",2
 "Gözsüz",1
 "Gözsüzce",1
-"Göztepe",17
 "Gözüböyüklü",1
 "Gözübüyük",3
 "Gözükara",1
@@ -10272,7 +9828,6 @@
 "Güllü Bahçe",1
 "Güllüce",14
 "Güllüçimen",2
-"Güllüdağ",1
 "Güllüdere",1
 "Güllühüyük",2
 "Güllük",10
@@ -10305,7 +9860,6 @@
 "Gülsünler",1
 "Gülsuyu",1
 "Gültekin",1
-"Gültepe",54
 "Gülübol",1
 "Gülübol Yaylasi",1
 "Gülügürt",1
@@ -10375,7 +9929,6 @@
 "Gümüşsuyu",5
 "Gümüştaş",3
 "Gümüştekin",1
-"Gümüştepe",2
 "Gümüşyaka",3
 "Gümüşyaka Merkez",1
 "Gümüşyaprak",1
@@ -10440,7 +9993,6 @@
 "Güneşli Cumhuriyet",1
 "Güneşli Kale",1
 "Güneşli Mezra",1
-"Güneştepe",7
 "Günevi Mücavir",1
 "Güney",79
 "Güneyalti",1
@@ -10459,7 +10011,6 @@
 "Güneycik",2
 "Güneycük",1
 "Güneyçukur",1
-"Güneydaği",2
 "Güneydamlari",1
 "Güneydere",1
 "Güneyharman",1
@@ -10569,7 +10120,6 @@
 "Gürgenağaç",1
 "Gürgenağil",1
 "Gürgencami",1
-"Gürgendağ",2
 "Gürgeni",1
 "Gürgenli",1
 "Gürgenlik",2
@@ -10653,12 +10203,10 @@
 "Güvenli",12
 "Güvenlik",2
 "Güventaşi",1
-"Güventepe",1
 "Güvenyurt",1
 "Güvercin",2
 "Güvercinli",1
 "Güvercinlik",8
-"Güvercintepe",1
 "Guverta Bağliği",1
 "Güveyler",1
 "Guyani",1
@@ -10697,7 +10245,6 @@
 "Güzelöz",2
 "Güzelpinar",2
 "Güzelsu",4
-"Güzeltepe",10
 "Güzelvadi",1
 "Güzelvatan",1
 "Güzelyaka",2
@@ -10755,7 +10302,6 @@
 "Haceret",1
 "Hacet",2
 "Hacetler",1
-"Hacettepe",2
 "Haci",13
 "Haci Abdi",2
 "Haciabdiler",1
@@ -10929,7 +10475,6 @@
 "Hacikoğlu",1
 "Hacikomu",1
 "Haci Kömü",1
-"Haciköprü",1
 "Haci Köse",1
 "Haciköseler",1
 "Haciköseli",2
@@ -11196,7 +10741,6 @@
 "Hamambaşi",1
 "Hamamboğazi",1
 "Hamamci",1
-"Hamamdaği",1
 "Hamamkarahisar",1
 "Hamamli",5
 "Hamamlikizik",1
@@ -11309,7 +10853,6 @@
 "Hans",1
 "Hantal",1
 "Hantaşi Mevkii",1
-"Hantepe",1
 "Hanto",1
 "Hanyani",6
 "Hanyatak",1
@@ -11344,11 +10887,9 @@
 "Harava",1
 "Haraz",2
 "Harbiye",4
-"Harcigölü",1
 "Harçli",1
 "Hardi",1
 "Hardiçay",1
-"Hardi Köprüsü Mücavir",1
 "Haremuşaği",1
 "Harfilli",1
 "Harhara Mh.",1
@@ -11387,8 +10928,6 @@
 "Harmanli",9
 "Harmanpinar",1
 "Harmantarla",1
-"Harmantepe",4
-"Harmantepe(Merkez)",1
 "Harmanyani",1
 "Harmanyazi",2
 "Harmanyeri",1
@@ -11447,7 +10986,6 @@
 "Hasancik",1
 "Hasanciklar",1
 "Hasancikli",1
-"Hasan Daği",1
 "Hasandede",2
 "Hasan Dede Karapinar",1
 "Hasandedemescit",1
@@ -11481,7 +11019,6 @@
 "Hasanşeyh",1
 "Hasanşih",1
 "Hasan Tami",1
-"Hasantepe",2
 "Hasan Varol",1
 "Hasan Yataği",1
 "Hasar",1
@@ -11525,7 +11062,6 @@
 "Hastaflanlar",1
 "Hastahane",1
 "Hastallar",1
-"Hastane",2
 "Hastaoğlu",1
 "Hastaş",1
 "Hastek",1
@@ -11654,7 +11190,6 @@
 "Hayvan Ürünleri Osb",1
 "Hazar",2
 "Hazara",1
-"Hazar Gölü",1
 "Hazari",1
 "Hazarşah",1
 "Hazavite",1
@@ -11689,7 +11224,6 @@
 "Hegepir",1
 "Hekim",1
 "Hekimbaşi",1
-"Hekimdağ",1
 "Hekimli",1
 "Hekimoğullari",1
 "Hekimzade",1
@@ -11734,7 +11268,6 @@
 "Hepcanlar",1
 "Hepkebirler",1
 "Hepler",1
-"Heredağ",1
 "Hereke",1
 "Herekli",3
 "Hereşabanlar",1
@@ -11796,7 +11329,6 @@
 "Hilal",5
 "Hilalkent",1
 "Hilalli",1
-"Hilaltepe",1
 "Hildishav",1
 "Hilim",1
 "Hilinsur",1
@@ -11833,7 +11365,6 @@
 "Hirka-İ Şerif",1
 "Hirkaköy",1
 "Hirkali",1
-"Hirkatepe",1
 "Hirli",1
 "Hirmanli",1
 "Hiroğlu",2
@@ -11866,7 +11397,6 @@
 "Hisarmerkez",1
 "Hisarönü",2
 "Hisarözü Merkez",1
-"Hisartepe",1
 "Hişimlar",2
 "Hişirlar",1
 "Hişnet",1
@@ -11886,7 +11416,6 @@
 "Hizir İlyas",2
 "Hizirkahya",1
 "Hizirşah",1
-"Hizirtepe",1
 "Hizmali",1
 "Hizolar",1
 "Hoballar",1
@@ -11917,7 +11446,6 @@
 "Hocalli",1
 "Hocanti",1
 "Hocaoğlu",6
-"Hocaoğlu Köprüsü",1
 "Hoca Paşa",1
 "Hoca Şerif",1
 "Hocasinan",1
@@ -12095,7 +11623,6 @@
 "Hüseyinbeyoğlu",1
 "Hüseyinçami",1
 "Hüseyinçelebi",1
-"Hüseyindağ",1
 "Hüseyinefendi",1
 "Hüseyingazi",1
 "Hüseyin Hüsnü Paşa",1
@@ -12112,8 +11639,6 @@
 "Hüseyin Paşa",1
 "Hüseyinpaşaoğlu",1
 "Hüseyinşeyh",1
-"Hüseyin Tepe",1
-"Hüseyin Tepesi",1
 "Hüseyin Usta",1
 "Hüseyni Baba",1
 "Husillar",1
@@ -12223,7 +11748,6 @@
 "İçören",2
 "İçpinar",1
 "İçyaka",1
-"İdealtepe",1
 "İdemköy",1
 "İdemli",1
 "İdiçoğlu",1
@@ -12287,8 +11811,6 @@
 "İkitaş",1
 "İkitce",1
 "İkitelli Osb",1
-"İkitepe",1
-"İkitepe(Merkez)",1
 "İkiz",2
 "İkizafer",1
 "İkizçali",1
@@ -12296,7 +11818,6 @@
 "İkizce Müslim",1
 "İkizce Osmaniye",1
 "İkizdere",3
-"İkizgöl",1
 "İkizkaya",2
 "İkizköy",1
 "İkizkuyu",3
@@ -12304,7 +11825,6 @@
 "İkizli",1
 "İkizoluk",2
 "İkizpinar",4
-"İkiztepe",4
 "İkizüyük",1
 "İkizyaka Kengercik",1
 "İkiz Yaylasi",1
@@ -12344,14 +11864,12 @@
 "Ilicaoba",1
 "Ilicapinar",1
 "Ilicasu",1
-"Ilidağ",1
 "Iligöze",1
 "Ilikaynak",2
 "İlikli",1
 "Ilikpinar",1
 "Iliksu",1
 "İlimbey",1
-"İlimtepe",1
 "Ilipinar",1
 "Ilişar",1
 "Ilisu",3
@@ -12493,7 +12011,6 @@
 "İncesu",18
 "İncesu Yali",1
 "İncetarla",1
-"İncetepe",1
 "İnceyer",1
 "İnceyol",2
 "İnci",5
@@ -12525,7 +12042,6 @@
 "İncirlikuyu",1
 "İncirli Pinar",1
 "İncirpinar",1
-"İncirtepe",2
 "İncivez",1
 "İncivezalti",1
 "İndibi",1
@@ -12551,7 +12067,6 @@
 "İnler",1
 "İnli",2
 "İnlice",3
-"İnlimani",1
 "İnli Murat",1
 "İnliören",1
 "İnnapli",1
@@ -12564,7 +12079,6 @@
 "İnsu",1
 "İnsuyu",2
 "İntaş",1
-"İntepe",1
 "İntgor",1
 "İntizam",1
 "İnüstü",1
@@ -12663,8 +12177,6 @@
 "Işikli Yaylasi",1
 "Işikören",2
 "Işikpinar",1
-"Işiktepe",3
-"Işiktepeosb",1
 "Işikuluk",1
 "Işikyaka",1
 "Işikyolu",1
@@ -12699,7 +12211,6 @@
 "İslam",7
 "İslamalan",1
 "İslambey",5
-"İslamdağ",1
 "İslamhaneleri",1
 "İslamköy",1
 "İslam Köy",1
@@ -12757,12 +12268,6 @@
 "İstanoz",1
 "İstaponoz",1
 "İstasiyon",1
-"İstasyon",56
-"İstasyon  A",1
-"İstasyonalti",1
-"İstasyon Alti",1
-"İstasyon  B",1
-"İstasyon Geçit",1
 "İstavrama",1
 "İstiklal",83
 "İstiklalbaği",1
@@ -12837,7 +12342,6 @@
 "Kabakçioğlu",2
 "Kabakçi Yaylasi",1
 "Kabak Çukuru",1
-"Kabakdaği",1
 "Kabakdere",2
 "Kabaklar",7
 "Kabaklar Yaylasi",1
@@ -12847,8 +12351,6 @@
 "Kabaköse",1
 "Kabakoz",4
 "Kabakoz Osb",1
-"Kabaktepe",4
-"Kabaktepesi",1
 "Kabakulak",3
 "Kabakulakalti",1
 "Kabakum",1
@@ -12890,7 +12392,6 @@
 "Kacarli",1
 "Kacer",1
 "Kaçit",1
-"Kadağlu",1
 "Kadali",1
 "Kadamut",1
 "Kadelli",1
@@ -12902,8 +12403,6 @@
 "Kadibaşlar",1
 "Kadiçayiri",2
 "Kadicelal",1
-"Kadidaği",1
-"Kadidaği Yapi Koop.",1
 "Kadi Değirmendüzü",1
 "Kadieli",1
 "Kadifekale",3
@@ -13052,8 +12551,6 @@
 "Kaleboynu",8
 "Kaleburcu",1
 "Kalecik",14
-"Kalecik Karadağ Mevkii",1
-"Kaledaği",1
 "Kaledere",1
 "Kalederesi",1
 "Kaledibi",12
@@ -13088,7 +12585,6 @@
 "Kaleönü",4
 "Kale Sabir",1
 "Kaleşah",1
-"Kaletepe",5
 "Kaleüçağiz",1
 "Kalev",1
 "Kaleyaka",1
@@ -13128,7 +12624,6 @@
 "Kalkancilar",1
 "Kalkandelen",1
 "Kalkanli",5
-"Kalkantepe(Merkez)",1
 "Kalkinma",1
 "Kalkumaç",1
 "Kallar",1
@@ -13240,7 +12735,6 @@
 "Kanliçayir",1
 "Kanlidere",2
 "Kanligeçit",2
-"Kanligöl",1
 "Kanligüney",1
 "Kanlikalik",1
 "Kanlikavak",1
@@ -13452,7 +12946,6 @@
 "Karacaardiç",1
 "Karacabey",2
 "Karacaburç",1
-"Karacadağ",3
 "Karacaderbent",1
 "Karacadere",1
 "Karaçağil",1
@@ -13551,9 +13044,6 @@
 "Karaculha",1
 "Karaçulha",1
 "Karacurun",4
-"Karadağ",7
-"Karadağli",1
-"Karadağlioğlu",1
 "Karadal",1
 "Karadana",1
 "Karadaş",1
@@ -13612,10 +13102,6 @@
 "Karageyikli",1
 "Karagöbek",1
 "Karagöçer",1
-"Karagöl",10
-"Karagölet",1
-"Karagöllü",1
-"Karagöl Yaylasi",1
 "Karagöz",15
 "Karagözgil",1
 "Karagöz Güney",1
@@ -13660,7 +13146,6 @@
 "Karahidir",3
 "Karahidirli",2
 "Karahisar",7
-"Karahisargölcük",1
 "Karahisarkozlu",1
 "Karahisarli",2
 "Karahmet",1
@@ -13733,8 +13218,6 @@
 "Karakoç Yaylasi",1
 "Karakol",2
 "Karakollar",1
-"Karaköprü",3
-"Karaköprü Mücavir",1
 "Karaköse",1
 "Karakova",3
 "Karaköy",32
@@ -13764,7 +13247,6 @@
 "Karalarçiftliği",1
 "Karalar Yaylasi",1
 "Karali",2
-"Karali Ve Güneştepe",1
 "Karalli",1
 "Karaloğlu",1
 "Karamadanoğlu",1
@@ -13865,7 +13347,6 @@
 "Karapürcek",1
 "Karapürçek",3
 "Kararecep",1
-"Karargahtepe",1
 "Karaş",3
 "Karasa",1
 "Karaşaban",1
@@ -13915,7 +13396,6 @@
 "Karateke",3
 "Karatekeli",1
 "Karatekin",3
-"Karatepe",17
 "Karaterzi",1
 "Karatirnak",1
 "Karatopakli",1
@@ -13990,9 +13470,6 @@
 "Kardeşlik",1
 "Kardigin",1
 "Kardoğan",1
-"Karel Mh.",1
-"Karesi",2
-"Karevli",1
 "Karga",3
 "Kargacak",3
 "Kargaçayiri",1
@@ -14043,9 +13520,7 @@
 "Karlibayir",1
 "Karlica",2
 "Karlik",6
-"Karliktepe",1
 "Karlisu",1
-"Karlitepe",1
 "Karliyamaç",1
 "Karliyayla",2
 "Karma Osb",1
@@ -14063,7 +13538,6 @@
 "Karpuzkaya",1
 "Karpuzlu",7
 "Karpuzsekisi",1
-"Karpuztepe",1
 "Karsak",1
 "Karsavran",2
 "Karsel",1
@@ -14112,7 +13586,6 @@
 "Kartalli",1
 "Kartalpinarosb",1
 "Kartaltaşi",1
-"Kartaltepe",8
 "Kartbahçe",1
 "Karteli",1
 "Kartin",1
@@ -14176,7 +13649,6 @@
 "Kasimoğlu",1
 "Kasimpaşa",4
 "Kasimuşaği",2
-"Kaşinhaniistasyon",1
 "Kaşinhani Yeni",1
 "Kasirgali",1
 "Kaşkaya",1
@@ -14204,7 +13676,6 @@
 "Katila",1
 "Katilya",1
 "Katip",2
-"Katipgölü",1
 "Katip Kasim",1
 "Katip Mustafa Çelebi",1
 "Katiralani",1
@@ -14238,7 +13709,6 @@
 "Kavakçali",1
 "Kavak Çayiri",1
 "Kavakçeşme",1
-"Kavakdağ",1
 "Kavakdere",1
 "Kavakderesi",1
 "Kavakdibi",2
@@ -14255,7 +13725,6 @@
 "Kavakliboğaz",1
 "Kavaklica",1
 "Kavakli Çeşme",1
-"Kavaklidağ Yayla",1
 "Kavaklidere",12
 "Kavaklik",4
 "Kavaklikaldirim",1
@@ -14270,7 +13739,6 @@
 "Kavakpinar",3
 "Kavakpinari",3
 "Kavakpinar(Merkez)",1
-"Kavaktepe",2
 "Kavak Üstü",1
 "Kavak Yazisi",1
 "Kavakyeri",1
@@ -14350,7 +13818,6 @@
 "Kayaciklar",2
 "Kayacilar",2
 "Kaya Çukuru",1
-"Kayadağ",1
 "Kayadamlari",1
 "Kayadere",4
 "Kayadibi",40
@@ -14408,7 +13875,6 @@
 "Kayasaray",1
 "Kayasirti",1
 "Kayasu",1
-"Kayatepe",2
 "Kayaüstü",1
 "Kayayani",1
 "Kayayolu",1
@@ -14439,12 +13905,10 @@
 "Kayirlar",1
 "Kayiş",1
 "Kayişçioğlu",1
-"Kayişdaği",1
 "Kayişlar",2
 "Kayişoğlu",2
 "Kaykioğlu",1
 "Kaylica",1
-"Kaymaçardaği",1
 "Kaymakam Hasan Tütün",1
 "Kaymakam Kemal Bey",2
 "Kaymakam Kürşat Ağca",1
@@ -14459,7 +13923,6 @@
 "Kaymaloğlu",1
 "Kaymaz",4
 "Kaymaz Erikli",1
-"Kaymaztepe Merkez",1
 "Kaymazyayla",1
 "Kayna",1
 "Kaynak",5
@@ -14473,7 +13936,6 @@
 "Kaynarpazari",1
 "Kaynarpinar",1
 "Kaynartaş",1
-"Kaynartepe",1
 "Kaypaklar",2
 "Kaypi",1
 "Kayraci",1
@@ -14508,7 +13970,6 @@
 "Kazancilar",2
 "Kazancili",2
 "Kazançli",1
-"Kazandaği",1
 "Kazandere",5
 "Kazanhüyüğü",1
 "Kazanli",4
@@ -14522,7 +13983,6 @@
 "Kazikli",8
 "Kazikliçayir",1
 "Kaziklikaya Mücavir",1
-"Kaziktepe",1
 "Kazimdirik",2
 "Kazim Dirik",2
 "Kazim Dirik-Turan",1
@@ -14537,7 +13997,6 @@
 "Kazkeli",1
 "Kazkondu",1
 "Kazliçeşme",1
-"Kazligöl",1
 "Kazmali",1
 "Kazoğlu",1
 "Kazova",2
@@ -14615,8 +14074,6 @@
 "Keklikpinari",1
 "Keklik Pinari",1
 "Keklikpinar Tescilsiz Mezrasi",1
-"Kekliktepe",1
-"Keklik Tepe",1
 "Keklooğlu",1
 "Kekre",1
 "Kel",2
@@ -14629,7 +14086,6 @@
 "Kelazor",1
 "Kelbatmaz",1
 "Kelceköy",1
-"Keldağ Abanozlu",1
 "Keldüzü",1
 "Kele",1
 "Kelebek",1
@@ -14715,8 +14171,6 @@
 "Kemerdamlari",1
 "Kemerdere",1
 "Kemerkaya",3
-"Kemerköprü",3
-"Kemer Köprü",1
 "Kemerköy",1
 "Kemerler",3
 "Kemerli",8
@@ -14757,7 +14211,6 @@
 "Kepez",14
 "Kepezbeleni",1
 "Kepezli",1
-"Kepeztepe",1
 "Kepiç",1
 "Kepir",1
 "Kepirce",2
@@ -14771,7 +14224,6 @@
 "Keramet",1
 "Kerat (Yapici)",1
 "Kerbanlar",1
-"Kerdağ",1
 "Kerem",1
 "Keremenler",1
 "Keremköy",1
@@ -14814,7 +14266,6 @@
 "Kervanpinar",1
 "Kervansaray",8
 "Kervansarayi",1
-"Kervan Tepe",1
 "Kervesevi",1
 "Kerzel",1
 "Keş",4
@@ -14828,7 +14279,6 @@
 "Kesecik 2",1
 "Keşefli",1
 "Kesek",1
-"Keseköprü",1
 "Keseköyyaylasi",1
 "Keseli",1
 "Kesenler",1
@@ -14843,9 +14293,6 @@
 "Kesikkapi",1
 "Kesikkavak",1
 "Kesikkaya",1
-"Kesikköprü",2
-"Kesikköprü Erdemli",1
-"Kesikköprü Kizilirmak",1
 "Kesiktaş",3
 "Kesili",1
 "Keşillik",1
@@ -14875,10 +14322,7 @@
 "Kesmeburun",1
 "Kesmecik",1
 "Kesmekaya",1
-"Kesmeköprü-2",1
-"Kesmeköprü-3",1
 "Kesmelik",1
-"Kesmeli Tepe",1
 "Kesmetaş",3
 "Kesmez",1
 "Kesmüklü",1
@@ -14974,7 +14418,6 @@
 "Kilavuzlar Yaylasi",1
 "Kilavuzlu",3
 "Kilavuzömer",1
-"Kilavuztepe",1
 "Kilbaş",1
 "Kilçak",1
 "Kilçak Mücavir",1
@@ -15034,7 +14477,6 @@
 "Kilise Sirti",1
 "Kilismevkii",1
 "Kilis Mezra",1
-"Kilittepe",1
 "Killar",1
 "Killer",1
 "Killik",13
@@ -15042,7 +14484,6 @@
 "Kiloğlu",1
 "Kilolar",1
 "Kilsek",1
-"Kiltepe",1
 "Kiltik Kiran",1
 "Kiluşaği",1
 "Kilyat",1
@@ -15059,7 +14500,6 @@
 "Kinaliada",1
 "Kinalioğlu",1
 "Kinalitaş",1
-"Kinalitepe",1
 "Kinca",1
 "Kincal",1
 "Kincallar",1
@@ -15094,7 +14534,6 @@
 "Kiraçlar",1
 "Kiraçli",2
 "Kiraçoba",1
-"Kiraçtepe",1
 "Kirağili",1
 "Kiraharmani",1
 "Kirahmetler",1
@@ -15162,10 +14601,8 @@
 "Kirazlik",13
 "Kirazlikçay",1
 "Kirazlikyeni",1
-"Kirazlimani",1
 "Kirazli Maşa",1
 "Kirazli Mh.",1
-"Kirazlitepe",1
 "Kirazliyali",1
 "Kirazliyayla",3
 "Kirazli Yayla",1
@@ -15175,7 +14612,6 @@
 "Kirazören",2
 "Kirazpinar",4
 "Kiraztarla",1
-"Kiraztepe",1
 "Kirazyani",1
 "Kirbaği",1
 "Kirbali",2
@@ -15194,7 +14630,6 @@
 "Kirci",1
 "Kirçiçeği",1
 "Kirçuval",1
-"Kirdağ",1
 "Kirdamlari",1
 "Kirdilli",1
 "Kirdim Deresi",1
@@ -15261,7 +14696,6 @@
 "Kirimsa",1
 "Kirincik",1
 "Kirindi",1
-"Kiringöl",1
 "Kirinti",2
 "Kirinti Yaylasi",1
 "Kiriş",2
@@ -15309,7 +14743,6 @@
 "Kirköy",3
 "Kirkpinar",11
 "Kirksakallar",1
-"Kirktepe",2
 "Kirlangiç",4
 "Kirlar",1
 "Kirlardere",1
@@ -15322,7 +14755,6 @@
 "Kirmanli",1
 "Kirmasirt",1
 "Kirmataş",2
-"Kirmatepe",1
 "Kirmit",1
 "Kirmitli",2
 "Kirmizi",1
@@ -15341,7 +14773,6 @@
 "Kirseyani",1
 "Kirşeyhler",1
 "Kirt",1
-"Kirtepe",3
 "Kirtik",1
 "Kirtil",1
 "Kirtiyit",1
@@ -15471,7 +14902,6 @@
 "Kizilcaalan",1
 "Kizilcaali",2
 "Kizilcabölük",2
-"Kizilcadağ",1
 "Kizilcadere",1
 "Kizilcaelma",2
 "Kizilcagedik",1
@@ -15510,7 +14940,6 @@
 "Kizilcikorman",1
 "Kizilçubuk",1
 "Kizilçukur",8
-"Kizildağ",1
 "Kizildam",2
 "Kizildamlar",1
 "Kizildere",6
@@ -15576,7 +15005,6 @@
 "Kiziltarla",1
 "Kiziltaş",5
 "Kiziltaş Yaylasi",1
-"Kiziltepe",5
 "Kiziltoprak",3
 "Kizilüzüm",3
 "Kizilyaka",2
@@ -15602,7 +15030,6 @@
 "Kizpinar",1
 "Kiztaşi",1
 "Kizzik",1
-"K.Keşkare",1
 "K-Kiran",1
 "Km 18",1
 "Kmah",1
@@ -15644,7 +15071,6 @@
 "Koca Cesme",1
 "Kocaçeşme",1
 "Koca Çukur",1
-"Kocadağ",2
 "Kocadayioğlu",1
 "Kocadere",1
 "Kocadüz",1
@@ -15652,7 +15078,6 @@
 "Kocaeli",1
 "Kocaeli-Gebze Kömürcüler Osb",1
 "Kocaget",1
-"Kocagöl",1
 "Kocagür",1
 "Kocahacili",2
 "Kocahaliller",1
@@ -15676,7 +15101,6 @@
 "Koçaklar",2
 "Koçaklar Mh.",1
 "Kocakonak",2
-"Kocaköprü Mücavir",1
 "Kocakoru",2
 "Koca Kovacik",1
 "Kocaköy",4
@@ -15726,7 +15150,6 @@
 "Koçat",1
 "Kocatarla",2
 "Kocataş",2
-"Kocatepe",14
 "Kocatöngel",1
 "Kocaveliler",2
 "Kocavezir",1
@@ -15750,7 +15173,6 @@
 "Koççukuru",2
 "Koccuvaz",1
 "Koçcuvaz",2
-"Koçdaği",1
 "Koçdere",1
 "Köçek",3
 "Köcekler",1
@@ -15766,7 +15188,6 @@
 "Koçkaya",2
 "Koçkayasi",1
 "Koçket",1
-"Koçköprü",1
 "Koçköy",2
 "Koçlar",4
 "Koçlar Mh.",1
@@ -15783,7 +15204,6 @@
 "Koçören",3
 "Koçören Osb",1
 "Koçovasi",2
-"Koçtepe",1
 "Koçu",2
 "Kocuklu",1
 "Kocukoğlu",1
@@ -15865,7 +15285,6 @@
 "Köle",5
 "Köleç",1
 "Kölehasan",1
-"Kolejtepe",1
 "Kölekaliği",1
 "Köleler",1
 "Köleli",1
@@ -15947,7 +15366,6 @@
 "Konakören",2
 "Konak Osb",1
 "Konakpinar",1
-"Konaktepe",1
 "Konakyani",3
 "Konakyeri",2
 "Konalga",1
@@ -15979,7 +15397,6 @@
 "Konurlar",1
 "Konurören",1
 "Konurtay",1
-"Konurtepe",1
 "Konutevler",1
 "Konutkent",1
 "Konutlar",1
@@ -15994,27 +15411,6 @@
 "Kopçullu",1
 "Kopmaz",1
 "Kopmuş",1
-"Köprü",4
-"Köprüağzi",1
-"Köprüalan",1
-"Köprübaşi",59
-"Köprü Başi",1
-"Köprübaşi Osb",1
-"Köprücek",3
-"Köprücük",2
-"Köprügözü",1
-"Köprühisar",1
-"Köprüköy",3
-"Köprüler",2
-"Köprülü",7
-"Köprülübey",1
-"Köprülük",1
-"Köprülü Mehmet Paşa",2
-"Köprülü Merkez",1
-"Köprülü-Veysipaşa",1
-"Köprüova",1
-"Köprüüstü",1
-"Köprüyani",3
 "Kopuzlar",1
 "Kopuzlu",1
 "Kor",1
@@ -16059,7 +15455,6 @@
 "Korkutreis",1
 "Körkuyu",4
 "Körler",3
-"Körliman",1
 "Körlü",1
 "Körlü Beyi",1
 "Körme",1
@@ -16086,7 +15481,6 @@
 "Körteke",1
 "Körtelaçin",1
 "Körtemt",1
-"Körtepe",1
 "Körtigin",1
 "Körtük",1
 "Koru",8
@@ -16100,7 +15494,6 @@
 "Korucuk",8
 "Korucuk Yayla",1
 "Korucular",1
-"Korudağ",1
 "Korudeğirmen",1
 "Koruhüyük",1
 "Koruk",2
@@ -16140,9 +15533,6 @@
 "Kösebucaği",1
 "Kösecik",2
 "Köseçobanli",1
-"Kösedağ",2
-"Kösedağ (Eskiyayla)",1
-"Kösedaği",1
 "Kösedere",1
 "Kösedik",1
 "Kösefakili",1
@@ -16173,7 +15563,6 @@
 "Kösereli",1
 "Köseretaşi",1
 "Köseşahin",1
-"Köse Tepesi",1
 "Köseveli",2
 "Köşevenk",1
 "Köseyahya",1
@@ -16213,7 +15602,6 @@
 "Koşuyolu",2
 "Koşuyolu(Kozanet)",1
 "Kotandüzü",1
-"Kotangölü",1
 "Kotek",1
 "Kötekler",1
 "Kötekli",1
@@ -16239,7 +15627,6 @@
 "Kovancak",2
 "Kovanci",3
 "Kovancili",1
-"Kovandaği",1
 "Kovanli",5
 "Kovanlik",4
 "Kovanoluk",1
@@ -16413,7 +15800,6 @@
 "Küçükbayat",1
 "Küçükbelen",1
 "Küçük Belen",1
-"Küçük Beltepe",1
 "Küçükberk",1
 "Küçükbeşdere",1
 "Küçükbeşkavak",1
@@ -16448,8 +15834,6 @@
 "Küçükçinar",1
 "Küçük Çokir",1
 "Küçükçukur",1
-"Küçükdağdere",1
-"Küçükdağli",1
 "Küçük Dalören",1
 "Küçükdalyan",1
 "Küçükdamlacik",1
@@ -16466,8 +15850,6 @@
 "Küçükfindik",1
 "Küçükgeçit",1
 "Küçük Göktaş",1
-"Küçükgöl",1
-"Küçükgölcük",1
 "Küçük Güney",1
 "Küçükhan",1
 "Küçükhasan",1
@@ -16479,7 +15861,6 @@
 "Küçükilica",1
 "Küçükilyasli",1
 "Küçükimali",1
-"Küçük Kabaktepe",1
 "Küçükkadi",1
 "Küçükkale",2
 "Küçükkaraağaç",1
@@ -16513,7 +15894,6 @@
 "Küçükkömler",1
 "Küçükkömürcü",1
 "Küçükkonak",2
-"Küçükköprü",1
 "Küçükköşk",1
 "Küçük Kovacik",1
 "Küçük Kovanağzi",1
@@ -16580,8 +15960,6 @@
 "Küçüksu",1
 "Küçüksümbüller",1
 "Küçüktaşhane",1
-"Küçüktepe",1
-"Küçüktepeköy",1
 "Küçüktopça",1
 "Küçüktülmen",1
 "Küçüktüy",1
@@ -16610,8 +15988,6 @@
 "Kulaberler",1
 "Kulaç",1
 "Kulaca",1
-"Kulacadağ",1
-"Kulaçtepe",1
 "Külafli",1
 "Kulak",5
 "Kulakkaya",1
@@ -16637,14 +16013,12 @@
 "Kuleşler",1
 "Küleşler",1
 "Kületek",1
-"Kuletepe",1
 "Kulfallar",1
 "Kulfalli",1
 "Külhan",1
 "Kulibik Tescilsiz Mezra",1
 "Kullan",1
 "Kullar",2
-"Kullar Tepecik",1
 "Kullar Yakacik",1
 "Küllice",1
 "Küllü",7
@@ -16692,7 +16066,6 @@
 "Kümbet",10
 "Kümbetakpinar",1
 "Kümbetli",1
-"Kümbettepe",1
 "Kümbetyeniköy",1
 "Kumburgaz",1
 "Kumcağiz",1
@@ -16710,11 +16083,9 @@
 "Kümes",1
 "Kümetaş",1
 "Kumgedik",1
-"Kumgölü",1
 "Kumkadi",1
 "Kumkent",1
 "Kumkisik",1
-"Kumköprü",2
 "Kumköy",5
 "Kumkuyu",1
 "Kumkuyucak",1
@@ -16742,7 +16113,6 @@
 "Kumrulu",3
 "Kumsurun",1
 "Kumtaş",1
-"Kumtepe",3
 "Kumyaka",2
 "Kumyali",2
 "Künar",1
@@ -16782,7 +16152,6 @@
 "Küpoğlu",1
 "Kuprat",1
 "Kupriyet",1
-"Küptepe",1
 "Küpyani",1
 "Kurada",1
 "Kuraklik",1
@@ -16901,8 +16270,6 @@
 "Kurtşeyh",2
 "Kurtsivrisi",1
 "Kurtsuyu",1
-"Kurttepe",2
-"Kurttepesi",1
 "Kurttutan",1
 "Kurtul",1
 "Kürtül",3
@@ -16957,7 +16324,6 @@
 "Kurugeçit",1
 "Kurugedik",1
 "Kurugökçe",1
-"Kurugöl",2
 "Kurugül",1
 "Kuruhaliller",1
 "Kuruhüseyin",1
@@ -16971,7 +16337,6 @@
 "Kurukoca",1
 "Kürükoğlu",1
 "Kurukol",1
-"Kuruköprü",2
 "Kuruköy",3
 "Kurular",2
 "Kürüllük",1
@@ -16989,7 +16354,6 @@
 "Kürüş",1
 "Kurusaray",1
 "Kuruseki",2
-"Kurutepe",1
 "Kuruttaş",1
 "Kuruyazi",2
 "Kuruyer",2
@@ -17023,7 +16387,6 @@
 "Kuşcuören",1
 "Kuşçu Palu Yolu",1
 "Kuşcusofulu",1
-"Kuşdaği",1
 "Kuşdere",1
 "Kuşdili Mevkii",1
 "Kuşdilli",1
@@ -17055,7 +16418,6 @@
 "Kuşlubahçe",1
 "Kuşluca",8
 "Kuşluğan",1
-"Kuşlugöl",1
 "Kuşluhan",1
 "Kuşluk",2
 "Kuşlukbaği",1
@@ -17070,7 +16432,6 @@
 "Kuşsaray Mücavir",1
 "Kustam",1
 "Kuştanlar",1
-"Kuştepe",3
 "Küştül",1
 "Küstülü",1
 "Kusumlar",1
@@ -17157,7 +16518,6 @@
 "Kuyumcutekke",1
 "Kuyupinar",1
 "Kuyupinar Merkez",1
-"Kuyu Tepesi",1
 "Kuz",25
 "Kuzahlat",1
 "Kuzalan",4
@@ -17170,8 +16530,6 @@
 "Kuzçukur",1
 "Kuzçukuru",1
 "Kuz Çukuru",1
-"Kuzdağ",1
-"Kuzdaği",1
 "Kuzdere",2
 "Kuzduran",1
 "Kuzel",1
@@ -17181,7 +16539,6 @@
 "Kuzey Bayir",1
 "Kuzeyir",1
 "Kuzeykent",1
-"Kuzeytepe",1
 "Kuzeyyaka",1
 "Kuzey Yarimca",1
 "Kuzey Yildizi",2
@@ -17206,7 +16563,6 @@
 "Kuz Mezrasi",1
 "Kuzoluk",2
 "Kuzören",7
-"Kuzörendağli Yaylasi",1
 "Kuzörenemirler Yaylasi",1
 "Kuzören Yaylasi",1
 "Kuzpinar",1
@@ -17222,7 +16578,6 @@
 "Kuzucuk",1
 "Kuzucular",1
 "Kuzuculu",1
-"Kuzugölü",2
 "Kuzukonak",1
 "Kuzuköy",2
 "Kuzukuyu",1
@@ -17300,17 +16655,9 @@
 "Libos",1
 "Liç",1
 "Licese",1
-"Liman",6
-"Limandere",1
-"Limanköy",1
-"Liman Mevki",1
-"Liman(Mücavir Alan)",1
-"Limanreis",1
-"Liman Sb",2
 "Limonlu",1
 "Limonluk",1
 "Limonsuyu",1
-"Limontepe",1
 "Lincik",1
 "Liseler",1
 "Litrev",1
@@ -17356,7 +16703,6 @@
 "Madenalti",1
 "Madenboyu",1
 "Maden Fabrikasi",1
-"Madenköprübaşi",1
 "Madenköy",2
 "Madenler",5
 "Madenli",4
@@ -17423,8 +16769,6 @@
 "Malören",1
 "Maloza",1
 "Malta",2
-"Maltepe",11
-"Maltepe Sb",1
 "Malya",1
 "Malya T.İ.M.",1
 "Mamahatun",1
@@ -17455,7 +16799,6 @@
 "Mancarlar",1
 "Mance",1
 "Mancilik",1
-"Mandagölü",1
 "Mandal Kümesi",1
 "Mandalli",2
 "Mandalli Önü",1
@@ -17546,7 +16889,6 @@
 "Matir",1
 "Matirlar Yaylasi",1
 "Mavidere",1
-"Mavigöl",1
 "Mavikent",2
 "Mavili",2
 "Mavişehir",2
@@ -17724,14 +17066,12 @@
 "Mercan",4
 "Mercanlar",2
 "Mercanli",2
-"Mercantepe",1
 "Mercidabik",1
 "Mercimecük",1
 "Mercimek",2
 "Mercimek Deresi",1
 "Mercimekli",2
 "Mercimeklik",1
-"Mercimektepe",1
 "Merdan",1
 "Merdivanoğlu",1
 "Merdivenköy",2
@@ -17763,10 +17103,8 @@
 "Merkez Aşaği",1
 "Merkez(Aşaği)",1
 "Merkez-Aşaği",1
-"Merkez Beydaği",1
 "Merkezboztahta",1
 "Merkez Bucaği Çatören",1
-"Merkez Bucaği Gölören",1
 "Merkez Bucaği Yeniköy",1
 "Merkez Bük",1
 "Merkez Çağli",1
@@ -17797,7 +17135,6 @@
 "Merkez Kümesi",2
 "Merkez-Lavaşa",1
 "Merkezmah",1
-"Merkez Mamure İstasyonu",1
 "Merkez Mevki",1
 "Merkez Mevkii",1
 "Merkez Mh.",1
@@ -17812,7 +17149,6 @@
 "Merkez Osb",1
 "Merkez Soğukcasu",1
 "Merkez Taşçi",1
-"Merkez Tepe",1
 "Merkez Üst",1
 "Merkez  Yarbaşi",1
 "Merkezyayla",1
@@ -17940,7 +17276,6 @@
 "Mezarlik Mevki",1
 "Mezarlik Yani",1
 "Mezbahaneyani",1
-"Mezdağ",1
 "Mezeci",1
 "Mezeköy",1
 "Mezelkan",1
@@ -18005,7 +17340,6 @@
 "Mimarsinankayapul",1
 "Mimarsinan Osb",1
 "Mimarsinan Silivri",1
-"Mimarsinanşirintepe",1
 "Mimli",1
 "Mimliket",1
 "Mimlikot",1
@@ -18266,7 +17600,6 @@
 "Murat Çeşme",1
 "Muratcik",1
 "Muratçik",1
-"Muratdaği",1
 "Muratdede",1
 "Muratefendi",1
 "Murateli",1
@@ -18450,7 +17783,6 @@
 "Nahal",1
 "Nahallar",1
 "Nahçivan",1
-"Nahirtepe",1
 "Nahsit",1
 "Naiboğlu",1
 "Nail Bey",1
@@ -18481,9 +17813,7 @@
 "Nallar",1
 "Nallaralti",1
 "Nallidere",1
-"Nalligölcük",1
 "Naltaş",1
-"Naltepe",1
 "Naman",1
 "Namazcioğlu",1
 "Namazgah",6
@@ -18517,7 +17847,6 @@
 "Narliören",1
 "Narliova",1
 "Narlisaray",1
-"Narlitepe",1
 "Narsait",1
 "Nasiflar",2
 "Nasifli",1
@@ -18578,7 +17907,6 @@
 "Nejan",1
 "Nemiroğlu",1
 "Nemli",1
-"Nene Gölü",1
 "Nenehatun",2
 "Nene Hatun",1
 "Neneli",1
@@ -18616,7 +17944,6 @@
 "Nişange",1
 "Nişantaş",1
 "Nişantaşi",1
-"Nişantepe",1
 "Nisbetiye",1
 "Nişrik",1
 "Niyart",1
@@ -18636,7 +17963,6 @@
 "Nohutalan",2
 "Nohutlu",2
 "Nohutova",1
-"Nohuttepe",1
 "Nokta",1
 "Noktalar",1
 "Nolut",1
@@ -18680,7 +18006,6 @@
 "Nuroğlu",1
 "Nuroğlu (Arsinosb)",1
 "Nurs",1
-"Nurtepe",3
 "Nuru",1
 "Nuruosmaniye",1
 "Nusratfaki",1
@@ -18760,7 +18085,6 @@
 "Oğlakkayasi",1
 "Oğlakli",3
 "Oğlakören",1
-"Oğlaktepe",1
 "Oğlananasi Atatürk",1
 "Oğlananasi Cumhuriyet",1
 "Öğlebeli",1
@@ -18801,7 +18125,6 @@
 "Okçabel",1
 "Okcu",2
 "Okçu",6
-"Okçugöl",1
 "Okcular",1
 "Okçular",19
 "Okçularyeri",1
@@ -18835,7 +18158,6 @@
 "Okumuşlar",1
 "Okura",1
 "Okurcalar",2
-"Okurdaği",1
 "Okurköy",1
 "Okuşlar",1
 "Okuyucular",1
@@ -18847,7 +18169,6 @@
 "Öküz Yataği",1
 "Olçak",1
 "Ölçekoğlu",1
-"Ölçektepe",1
 "Ölçülü",2
 "Olgun",2
 "Olgunlar",7
@@ -18891,7 +18212,6 @@
 "Ömercikler",2
 "Ömercin",1
 "Ömercioğlu",1
-"Ömerdaği",1
 "Omereva",1
 "Ömergil",1
 "Ömerhacili",1
@@ -18912,7 +18232,6 @@
 "Ömerşeyhler",1
 "Ömer Sipahi",1
 "Ömersofu",1
-"Ömertepe",2
 "Omik",1
 "Omjore",1
 "Omohale Ve Mezralar Mevki",1
@@ -18962,7 +18281,6 @@
 "Örcünlü",2
 "Ördek",1
 "Ördekdede",1
-"Ördekgölü",1
 "Ördekli",2
 "Ordubaşi",1
 "Orduköy",1
@@ -19002,7 +18320,6 @@
 "Örenşehir Bucak Merkezi",1
 "Örentaht",1
 "Örentaş",1
-"Örentepe",1
 "Örenyani",1
 "Örenyeri",1
 "Örey",2
@@ -19022,7 +18339,6 @@
 "Orhanlar",2
 "Orhanli",5
 "Orhanli Merkez",1
-"Orhantepe",1
 "Örhene",1
 "Örlemiş",1
 "Orman",2
@@ -19058,7 +18374,6 @@
 "Örnekköy",7
 "Örnek Mevkii",1
 "Örnek Mezra",1
-"Örnektepe",1
 "Ornu",1
 "Örs",1
 "Örselli",1
@@ -19156,8 +18471,6 @@
 "Ortasöğütlü",1
 "Orta-Süleyman Kadilar",1
 "Ortatelli",1
-"Ortatepe",5
-"Orta Tepe",1
 "Orta Varmet (Orta Çağlar)",1
 "Orta Varmet(Orta Çağlar)",1
 "Ortayabanli",1
@@ -19255,7 +18568,6 @@
 "Otbiçer",1
 "Otca",1
 "Öte",6
-"Ötedağ",1
 "Ötedoma",1
 "Ötegeçe",6
 "Öte Geçe",1
@@ -19279,8 +18591,6 @@
 "Otlu",1
 "Otlubel",1
 "Otluca",5
-"Otluca Dağ Komando Togayi",1
-"Otluca Dağ Komkando Tugayi",1
 "Otlucak",1
 "Otlucaosb",1
 "Otludere",1
@@ -19344,7 +18654,6 @@
 "Oymaağaç",6
 "Oymakli",5
 "Oymali",3
-"Oymalitepe",1
 "Oyman",1
 "Oymapinar",2
 "Oymataş",2
@@ -19431,7 +18740,6 @@
 "Özlüce Yayla",1
 "Özlükent",1
 "Özmüş",2
-"Öznurtepe",1
 "Özören",1
 "Özpinar",3
 "Özsoğuksu",1
@@ -19465,7 +18773,6 @@
 "Palancik",1
 "Palandöken",1
 "Palanga",2
-"Palantepe",1
 "Palas",1
 "Palazobasi",1
 "Palazoğlu",1
@@ -19483,7 +18790,6 @@
 "Pamukkale",1
 "Pamuklar",1
 "Pamuklu",2
-"Pamukludağ",1
 "Pamukluk",1
 "Pamukoğlu",2
 "Pamukören",1
@@ -19510,7 +18816,6 @@
 "Parapara",1
 "Paravarli",1
 "Parhat",1
-"Park",3
 "Parlak",2
 "Parlalik",1
 "Parlasan",1
@@ -19541,7 +18846,6 @@
 "Paşaçayiriosb",1
 "Paşaçiftliği",1
 "Paşaçiftlik",1
-"Paşadağ",1
 "Paşaelmali",1
 "Paşahüyük",1
 "Paşakadin",1
@@ -19558,7 +18862,6 @@
 "Paşalar",5
 "Paşali",9
 "Paşalik Yaylasi",1
-"Paşalimani",1
 "Paşali Oğlu",1
 "Paşamandira",1
 "Paşamescit",1
@@ -19701,7 +19004,6 @@
 "Pikaltay",1
 "Piknik",1
 "Pilavcilar",1
-"Pilavdaği",1
 "Piller",1
 "Pinar",12
 "Pinaralti",3
@@ -19734,7 +19036,6 @@
 "Pinarönü",5
 "Pinarözü",1
 "Pinar Pazari",1
-"Pinartepe",1
 "Pinaryaka",1
 "Pinaryazi",1
 "Pinaryolu",1
@@ -19848,7 +19149,6 @@
 "Post",1
 "Postacilar",1
 "Postal",1
-"Postane",1
 "Postkabasakal",1
 "Posyağbasan",1
 "Pothane  -Ceced",1
@@ -19867,7 +19167,6 @@
 "P.T.T",1
 "Pttevleri",1
 "Puç",1
-"Puğkaracadağ",1
 "Pul",1
 "Pulcular",1
 "Pulfali",1
@@ -19977,7 +19276,6 @@
 "Reyfez",1
 "Reyhan",2
 "Reyhanli",2
-"Rez",1
 "Riçvanlar",1
 "Ridvan",2
 "Ridvanli",1
@@ -20059,7 +19357,6 @@
 "Saçinka",1
 "Saçli",3
 "Saçlik",1
-"Sadaği",1
 "Sadaka",1
 "Sadakalar",1
 "Sadakli",1
@@ -20082,11 +19379,9 @@
 "Sadiroğlu",1
 "Safa",3
 "Şafak",10
-"Şafaktepe",1
 "Safalar",1
 "Safali",1
 "Safallar",1
-"Safdağ",1
 "Safibey",1
 "Safiye",1
 "Safiyeoğlu",1
@@ -20128,7 +19423,6 @@
 "Sağrakçi",1
 "Sağri",1
 "Sağriyetul",1
-"Sağtepe",1
 "Şah",2
 "Saha",2
 "Şahabettin",1
@@ -20180,9 +19474,6 @@
 "Şahin Özbilen",1
 "Şahin Paşa",1
 "Şahinpinari",1
-"Şahintepe",7
-"Şahintepesi",1
-"Şahin Tepesi",1
 "Şahinyurdu",1
 "Sahip",1
 "Sahip Ata",1
@@ -20227,7 +19518,6 @@
 "Şair Nabi",1
 "Şair Şevket",1
 "Şair Şeyhi Dumlupinar",1
-"Şairtepe",1
 "Saitabat",1
 "Saitbey",1
 "Saithalimpaşa",1
@@ -20242,7 +19532,6 @@
 "Sakallar",1
 "Sakalli",4
 "Şakalli",1
-"Sakallidağ",1
 "Sakallioğlu",1
 "Sakaltutan",1
 "Sakaltutan Mezrasi",1
@@ -20266,7 +19555,6 @@
 "Sakça",2
 "Sakçagözü",1
 "Sakiler",1
-"Sakintepe",1
 "Şakir",1
 "Şakirağa",1
 "Şakiran",1
@@ -20317,9 +19605,6 @@
 "Salat",1
 "Salavat",4
 "Salavatli",1
-"Salavurtepe",1
-"Salavurtepe1",1
-"Salbaş Esentepe",1
 "Salbaşlar",1
 "Salbat",1
 "Salbet",1
@@ -20357,7 +19642,6 @@
 "Salkim",2
 "Salkimli",6
 "Salkonak",1
-"Salköprü",1
 "Sallahli",1
 "Sallar",3
 "Sallica",1
@@ -20376,7 +19660,6 @@
 "Şalpazari",1
 "Saltalilar",1
 "Saltaş",1
-"Saltepe",2
 "Saltik",4
 "Saltuk",3
 "Saltukgazi",1
@@ -20403,7 +19686,6 @@
 "Samanlikkirani",1
 "Samanlikköy",1
 "Samanliklar",1
-"Samantepe",1
 "Samanyolu",2
 "Şamar",1
 "Samat",1
@@ -20448,7 +19730,6 @@
 "Sancakliuzunçinar",1
 "Sancaktar",3
 "Sancaktaroğlu",1
-"Sancaktepe",4
 "Sancar",6
 "Sancar Düzü",1
 "Sancarli",1
@@ -20542,13 +19823,10 @@
 "Sarayören",1
 "Saray Osmangazi",1
 "Saraypinar",1
-"Saraytepe",1
 "Sarayyani",1
 "Sarayyeri",1
 "Sarbeni",1
 "Sarcilar",1
-"Şardağ Düz",1
-"Şardağ Yukari",1
 "Saren (Güllüce)",1
 "Sargaç",1
 "Şarge",1
@@ -20640,7 +19918,6 @@
 "Sarigazel",1
 "Sarigazi",3
 "Sarigerme",1
-"Sarigöl",5
 "Sarigül",3
 "Sarigüllük",1
 "Sarigümüş",1
@@ -20733,7 +20010,6 @@
 "Sarit",1
 "Saritaş",8
 "Saritaş Bağlisi",1
-"Saritepe",1
 "Saritopalli",1
 "Saritoprak",1
 "Saritosun",1
@@ -20825,7 +20101,6 @@
 "Savaşan",1
 "Savaşçilar",1
 "Savaşköy",1
-"Savaştepe",2
 "Savat",2
 "Savatli",2
 "Savayillar",1
@@ -20898,7 +20173,6 @@
 "Sazanlik",1
 "Sazci",1
 "Sazcilar",1
-"Saz Daği",1
 "Sazgin",1
 "Şazi Bey",1
 "Sazkent",1
@@ -20928,7 +20202,6 @@
 "Seçme",1
 "Sedat",1
 "Seddülbahir Duasi",1
-"Sedeftepe",1
 "Sedelekli",1
 "Sedelekli Mücavir Alan",1
 "Şedelli",1
@@ -21003,7 +20276,6 @@
 "Şehitkerim",1
 "Şehit Kubilay",1
 "Şehitler",30
-"Şehitler Tepesi",1
 "Şehitli",2
 "Şehitlik",10
 "Şehitlik Tescilsiz Mezrasi",1
@@ -21034,7 +20306,6 @@
 "Şehit Saffet Akbaş",1
 "Şehit Sakip",1
 "Şehitserhat",1
-"Şehittepe",1
 "Şehit Tuncay Çoban",1
 "Şehit Türker",1
 "Şehit Vedat  Kocadalli",1
@@ -21171,8 +20442,6 @@
 "Selver",2
 "Selviler",2
 "Selvili",2
-"Selvilitepe",1
-"Selvilitepeosb",1
 "Selyazi",1
 "Selyeri",1
 "Şeman",1
@@ -21238,8 +20507,6 @@
 "Şenocak",5
 "Şenova",2
 "Şenpinar",3
-"Şentepe",10
-"Şentepe Mevki",1
 "Şenyayla",3
 "Şenyurt",15
 "Şenyuva",3
@@ -21302,7 +20569,6 @@
 "Sergenler",1
 "Sergenli",1
 "Sergili",1
-"Sergütepesi",1
 "Serhat",3
 "Şerifali",2
 "Şerif Damlari",1
@@ -21313,14 +20579,12 @@
 "Serince",5
 "Serindere",1
 "Serinevler",6
-"Seringölsitesi",1
 "Serinirmak",1
 "Serinköy",1
 "Serinkuyu Yaylasi",1
 "Serinlik",1
 "Serinpinar",1
 "Serinsu",1
-"Serintepe",4
 "Serinyaka",1
 "Serinyayla",2
 "Serinyol",1
@@ -21356,7 +20620,6 @@
 "Sevgi",3
 "Şevhmusa",1
 "Sevikan",1
-"Sevildağ",1
 "Seviller",2
 "Sevimli",5
 "Sevinç",3
@@ -21382,7 +20645,6 @@
 "Seyban",1
 "Seydagil",1
 "Seydan",1
-"Seydangölü",1
 "Seydi",1
 "Seydibey",2
 "Seydifakili",1
@@ -21489,9 +20751,6 @@
 "Seyrani",1
 "Seyranli",1
 "Seyranlik",1
-"Seyrantepe",22
-"Seyran Tepe",1
-"Seyrantepe Sanayi",1
 "Seyrek",1
 "Seyrekbasanoğlu",1
 "Seyrekli",1
@@ -21591,7 +20850,6 @@
 "Şimşir Dibi",1
 "Şimşirli",2
 "Şimşirlik",2
-"Şimşirlitepe",1
 "Şimte",1
 "Sinan",10
 "Sinanbaba",1
@@ -21640,7 +20898,6 @@
 "Sinirgören",1
 "Sinirli",1
 "Sinirteke",1
-"Sinirtepe",1
 "Sinitler",1
 "Sinitli",1
 "Sinlice",1
@@ -21710,7 +20967,6 @@
 "Şirinkuyu",1
 "Şirinler",1
 "Şirinsulhiye",1
-"Şirintepe",7
 "Şirinyali",2
 "Şirinyayla",1
 "Şirinyer",1
@@ -21737,7 +20993,6 @@
 "Sirtüstü",1
 "Sirt Yayla",1
 "Şirvan",1
-"Sisdaği Mevkii",1
 "Şişeler",1
 "Sisin",1
 "Sisli",1
@@ -21773,10 +21028,8 @@
 "Sivrikese",1
 "Sivriovaz",1
 "Sivritaş",1
-"Sivritepe",4
 "Siyahgül",1
 "Siyahser",1
-"Siyahtepe",1
 "Siyamlar",1
 "Siyamoğlu",2
 "Siyavuşpaşa",1
@@ -21819,7 +21072,6 @@
 "Sofulu",1
 "Sofumahmut",1
 "Sofuoğlu",11
-"Sofutepesi",1
 "Sofyan",2
 "Soğanbükü",1
 "Soğanci",1
@@ -21896,7 +21148,6 @@
 "Söğütözü",5
 "Söğütpinar",2
 "Söğütseki",1
-"Söğüttepe",1
 "Söğütyani",1
 "Sokak",2
 "Sokakağzi",1
@@ -21968,7 +21219,6 @@
 "Sorik",1
 "Sork",1
 "Sorkun",4
-"Sorkun Beyçayir Tavşan Tepe",1
 "Sorkunlu",1
 "Sorpiyan",1
 "Sörptarla",1
@@ -22160,7 +21410,6 @@
 "Sultansazi Osb",1
 "Sultan Selim",4
 "Sultan Süleyman",1
-"Sultantepe",3
 "Sulubağ",1
 "Sülübey",1
 "Suluca",2
@@ -22171,17 +21420,12 @@
 "Suludere",5
 "Sülük",1
 "Sulukaraağaç",1
-"Sülükgölü",3
-"Sülük Gölü",2
-"Sülükgölü Şihlar",1
 "Sülüklü",5
-"Sülüklügöl",1
 "Suluköy",2
 "Sulumağara",1
 "Sülümür",1
 "Sülünkaya",1
 "Sülünoba",1
-"Sülüntepe",1
 "Suluoğlu",1
 "Suluova",1
 "Sulupara",1
@@ -22197,7 +21441,6 @@
 "Sümbül Efendi",1
 "Sümbüllü",3
 "Sümbüllüyurt Mezrasi",1
-"Sümbültepe",1
 "Süme",1
 "Sümenli",1
 "Sümer",17
@@ -22252,7 +21495,6 @@
 "Sürmen",1
 "Surnat",1
 "Sürsürü",1
-"Surtepe",1
 "Sürüç",1
 "Sürücü Ahmet",1
 "Sürür",1
@@ -22269,7 +21511,6 @@
 "Susuz",14
 "Susuzagara",1
 "Susuz-Ahlatçik",1
-"Susuzdağ",1
 "Susuz -Geriş",1
 "Susuz -Ispalar",1
 "Susuzkinikosb",1
@@ -22370,7 +21611,6 @@
 "Tahtak",1
 "Tahtakale",3
 "Tahtakemer",1
-"Tahtaköprü",5
 "Tahtakuşlar",1
 "Tahtalar",1
 "Tahtali",6
@@ -22394,7 +21634,6 @@
 "Taktah Mezrasi",1
 "Talas",1
 "Talatpaşa",6
-"Talaytepe",1
 "Talgum",1
 "Talipoğullari",1
 "Talişman",1
@@ -22534,12 +21773,6 @@
 "Taşkisiği",1
 "Taşkonak",2
 "Taşkonak Mezrasi",1
-"Taşköprü",7
-"Taş Köprü",1
-"Taşköprü(Conet)",1
-"Taşköprü Merkez",1
-"Taşköprü Mevkii",1
-"Taşköprü Yeni",1
 "Taşköy",5
 "Tasköy Merkez",1
 "Taşkuyu",1
@@ -22563,13 +21796,11 @@
 "Taşlikköy",1
 "Taşliköy",1
 "Taşlikuyu",1
-"Taşliman",2
 "Taşlioğlu",3
 "Taşlipinar",1
 "Taşli Pinar",2
 "Taşlitarla",1
 "Taşli Tarla",1
-"Taşlitepe",1
 "Taşliyatak",1
 "Taşli Yayla",1
 "Taşliyazi",1
@@ -22600,7 +21831,6 @@
 "Taştamir",1
 "Taştek",1
 "Taştekne",1
-"Taştepe",6
 "Taştop",1
 "Taşucu",1
 "Tasu Mevki",1
@@ -22661,8 +21891,6 @@
 "Tavşanli",6
 "Tavşanli Çikmazi",1
 "Tavşanören",1
-"Tavşantepe",4
-"Tavşan Tepe",1
 "Tavukçu",2
 "Tavukçukuru",1
 "Tavukcuoğlu",1
@@ -22805,7 +22033,6 @@
 "Tellikaya",2
 "Telliler",1
 "Tellioğlu",3
-"Tellitepe",1
 "Tellolar",1
 "Telsiz",1
 "Telsizler",1
@@ -22842,76 +22069,6 @@
 "Tenkerli",1
 "Tenkoğlu",1
 "Teomanpaşa",1
-"Tepe",66
-"Tepeağzi",1
-"Tepealan",1
-"Tepealti",5
-"Tepe Alti",2
-"Tepearasi",4
-"Tepeardi",1
-"Tepearkasi",1
-"Tepe Arkasi",1
-"Tepebağ",3
-"Tepebaşi",24
-"Tepebaşi (Gücük)",1
-"Tepebaşisitesi",1
-"Tepebayat",1
-"Tepebölmesi",1
-"Tepe Boynu",1
-"Tepeboyu",1
-"Tepeboz",1
-"Tepeçaylak",1
-"Tepecik",46
-"Tepecik-Aşaği",1
-"Tepecik (Karaova)",1
-"Tepecikler",1
-"Tepecik Mezra",1
-"Tepecikören",1
-"Tepecik-Orta",1
-"Tepecik Yayla",1
-"Tepecik(Yesirgil)",1
-"Tepecik Yolu Mevki",1
-"Tepecik-Yukari",1
-"Tepeçubuk Mücavir Alan",1
-"Tepedam",1
-"Tepe Damlari",2
-"Tepedelik",1
-"Tepedibi",1
-"Tepedüzü",1
-"Tepegören",1
-"Tepehan",2
-"Tepeharman",1
-"Tepekent",1
-"Tepekoru",1
-"Tepeköy",35
-"Tepe Köy",1
-"Tepeköy1",1
-"Tepekule",1
-"Tepekum",1
-"Tepelce",2
-"Tepeler",2
-"Tepeli",7
-"Tepelice",1
-"Tepemanayir",1
-"Tepe Mevki",1
-"Tepe Mevkii",1
-"Tepe Mezrasi",1
-"Tepeoba",1
-"Tepeoren",1
-"Tepeören",2
-"Tepeoren İtosb",1
-"Teperik",1
-"Tepetarla",1
-"Tepetaşpinar",1
-"Tepeüstü",4
-"Tepe Üstü",1
-"Tepeyakasi",1
-"Tepeyani",1
-"Tepeyatak",1
-"Tepe Yatak",1
-"Tepe Yayla",1
-"Tepeynihan",1
-"Tepeyurt",2
 "Tepsicik",1
 "Terakki",1
 "Terazi",1
@@ -22957,7 +22114,6 @@
 "Tescilsiz",2
 "Tescilsiz Ahmet",1
 "Tescilsiz Aşaği Mezra",1
-"Tescilsiz Bingöl",1
 "Tescilsiz Doğdap",1
 "Tescilsiz Kiliç",1
 "Tescilsiz Midi",1
@@ -23024,7 +22180,6 @@
 "Tilkioğlu",1
 "Tilkip",1
 "Tilkisüleymaniye",1
-"Tilkitepe",1
 "Tillak",1
 "Tilmerc",1
 "Tilver",1
@@ -23042,7 +22197,6 @@
 "Tinaz",1
 "Tinazdere",1
 "Tinazli",2
-"Tinaztepe",3
 "Tingiller",1
 "Tingilli",1
 "Tingirli",1
@@ -23087,7 +22241,6 @@
 "Tiyekli",1
 "Tiygarlar",1
 "Tiyir",1
-"Tödürge Gölü",1
 "Tohma",1
 "Tohtamur",2
 "Tohumlar",3
@@ -23203,7 +22356,6 @@
 "Topçular",13
 "Topculu",1
 "Topçuoğlu",4
-"Topdaği",1
 "Topdoruk",2
 "Topduraği",1
 "Tophane",2
@@ -23233,13 +22385,11 @@
 "Toprakseven",1
 "Topraksirti",1
 "Topraktaş",1
-"Topraktepe",2
 "Topsakal",2
 "Topselvi",2
 "Topsöğüt",2
 "Toptaş",4
 "Toptaşi",1
-"Toptepe",7
 "Topucak",1
 "Topuk",1
 "Topuz",1
@@ -23306,7 +22456,6 @@
 "Toygarli",3
 "Toylar",1
 "Toyluk",1
-"Toytepe",1
 "Tozağan",1
 "Tozaklar",1
 "Tozan",1
@@ -23317,7 +22466,6 @@
 "Tozkovan",1
 "Tozlu",3
 "Tozluca",3
-"Tozlutepe",1
 "Tozluyurt",2
 "Trafik",1
 "Trafo",1
@@ -23344,7 +22492,6 @@
 "Tuğ",1
 "Tuğla",1
 "Tuğlacik",1
-"Tuğladaği",1
 "Tuğla Mevki",1
 "Tuğlaşah",1
 "Tuğlu",3
@@ -23363,7 +22510,6 @@
 "Tülmen",1
 "Tülo",1
 "Tüloğlu",1
-"Tültepe",1
 "Tülü",1
 "Tülücüler",1
 "Tuluk",1
@@ -23393,7 +22539,6 @@
 "Tunçbilek-Demirbilek",1
 "Tunçbilek-Hamitabat",1
 "Tunçbilek-Işik",1
-"Tunçbilek-Köprübaşi",1
 "Tunçbilek-Madenciler",1
 "Tunçbilek Merkez",1
 "Tünek",1
@@ -23490,7 +22635,6 @@
 "Türksevin",1
 "Türktaciri",1
 "Türktaş",2
-"Türktepe",1
 "Türkyilmaz",1
 "Türkyurdu",2
 "Turlu",1
@@ -23501,8 +22645,6 @@
 "Turnacik",2
 "Turnacilar",1
 "Turnadere",1
-"Turnagöl",2
-"Turna İstasyonu",1
 "Turnalar",2
 "Turnali",7
 "Turnasuyu",1
@@ -23536,7 +22678,6 @@
 "Tutluca",2
 "Tutluk",2
 "Tutlupinar",1
-"Tutlutepe",1
 "Tutmaç",2
 "Tutoğlu Mevki",1
 "Tutpinar",1
@@ -23621,7 +22762,6 @@
 "Üç Eylül",2
 "Üçgedik",2
 "Üçgen",2
-"Üçgöl",1
 "Üçgöz",1
 "Üçgöze",3
 "Üçgözen",1
@@ -23640,7 +22780,6 @@
 "Üçkol",1
 "Üçkonak",5
 "Üç Konak",1
-"Üçköprü",1
 "Üçköşe",1
 "Üçköy",1
 "Üçkubbe",1
@@ -23660,7 +22799,6 @@
 "Ücret",1
 "Üç Samanlik",1
 "Üçsaray",1
-"Üçtepe",11
 "Üçtutlar",1
 "Uçuk",1
 "Ucumengil",1
@@ -23676,7 +22814,6 @@
 "Ufacikli",1
 "Ufacikören",2
 "Ufuk",4
-"Ufuktepe",2
 "Uğaz Dibi",1
 "Uğrak",4
 "Uğrakli",1
@@ -23703,7 +22840,6 @@
 "Uğur Mumcu",6
 "Uğurova",1
 "Uğurtaş",1
-"Uğurtepe",1
 "Uğurveren",1
 "Uğur(Yukarimah)",1
 "Ulacik",2
@@ -23721,7 +22857,6 @@
 "Ulaş Mücavir",1
 "Ulaşoğlu",1
 "Ulaş Osb",1
-"Ulaştepe",1
 "Ülfetler",1
 "Ulgar",1
 "Ülgen",1
@@ -23760,7 +22895,6 @@
 "Uluçinar",2
 "Ulucuk",1
 "Uluçukur",1
-"Uludağ",2
 "Uluderbent",1
 "Uludere",3
 "Uludüz",2
@@ -23825,7 +22959,6 @@
 "Umutdere",1
 "Umutkent",1
 "Umutlu",5
-"Umuttepe",1
 "Unacakuzu",1
 "Ünal",1
 "Ünalan",2
@@ -23882,7 +23015,6 @@
 "Urvana",1
 "Üs",1
 "Uşakbükü",1
-"Uşakgöl",1
 "Uşakpinari",1
 "Usan",1
 "Üsikgil",1
@@ -23948,7 +23080,6 @@
 "Üzengili",2
 "Üzengilik",1
 "Üzerlik",3
-"Üzerliktepe",1
 "Uzgur",1
 "Üzüktaş",1
 "Üzümbaği",1
@@ -23998,7 +23129,6 @@
 "Uzunevler",1
 "Uzungazi",2
 "Uzungedik",1
-"Uzungöl",1
 "Uzungöze",1
 "Uzunhaci",1
 "Uzunharman",1
@@ -24056,14 +23186,12 @@
 "Vadişehir",1
 "Vahapoğlu",1
 "Vaiz",1
-"Vakağin Tepesi",1
 "Vake",2
 "Vaket",1
 "Vakif",6
 "Vakifgeçitveren Merkez",1
 "Vakif Geymene",1
 "Vakifiğdemir",1
-"Vakifköprü",1
 "Vakiflar",1
 "Vakiflar Osb",1
 "Vakifli",2
@@ -24097,7 +23225,6 @@
 "Varlikonak",1
 "Varoş",3
 "Varsak",1
-"Varsak Esentepe",1
 "Varsak Karşiyaka",1
 "Varsaklar",1
 "Varsak Menderes",1
@@ -24251,7 +23378,6 @@
 "Yağmurköy",1
 "Yağmurlar",2
 "Yağmurlu",16
-"Yağmurtepe",1
 "Yağpinari",1
 "Yağri",1
 "Yağşilar",1
@@ -24397,7 +23523,6 @@
 "Yamaçli Yaylasi",1
 "Yamaçoba",1
 "Yamaçova",1
-"Yamaçtepe",1
 "Yamac Yolu",1
 "Yamak",1
 "Yamaklar",1
@@ -24443,7 +23568,6 @@
 "Yanik Bağ",1
 "Yanikçay",1
 "Yanikçöğür",1
-"Yanikdağ",1
 "Yanikkaval",1
 "Yanikkişla",1
 "Yanikköy",1
@@ -24459,14 +23583,12 @@
 "Yanilmaz",1
 "Yanişli",2
 "Yankale",1
-"Yankitepe",1
 "Yanköy",1
 "Yanlizca",1
 "Yanlizçam",1
 "Yanpar",1
 "Yanşaba",1
 "Yanşaba Yaylasi",1
-"Yantepe",1
 "Yantiri",1
 "Yanyayla",1
 "Yapaği",1
@@ -24529,7 +23651,6 @@
 "Yarimkaya",1
 "Yarimoğlu",1
 "Yarimsu",1
-"Yarimtepe",3
 "Yariş",3
 "Yarişalani",1
 "Yarkaya",1
@@ -24563,19 +23684,14 @@
 "Yassibağ",3
 "Yassibahçe",1
 "Yassiçali",1
-"Yassicatepe",1
-"Yassidağ",1
 "Yassigeçit",1
 "Yassihüyük",3
 "Yassikaya",2
 "Yassiören",4
 "Yassipinar",1
 "Yassitaş",1
-"Yassitepe",1
-"Yassi Tepe",1
 "Yassiveren",1
 "Yastikaya",1
-"Yastiktepe",1
 "Yaşyer",2
 "Yatağan",5
 "Yatak",1
@@ -24583,7 +23699,6 @@
 "Yatiksirt",1
 "Yatir",1
 "Yatirtaş",1
-"Yatirtepe",1
 "Yatukcu",1
 "Yava",1
 "Yavansu",1
@@ -24664,7 +23779,6 @@
 "Yaylaci",1
 "Yaylacik",35
 "Yaylacik Yaylasi",1
-"Yayladağ",1
 "Yayladali",1
 "Yayladali Merkez",1
 "Yayladali Mücavir",1
@@ -24707,7 +23821,6 @@
 "Yaylasi",2
 "Yaylasöğüt",1
 "Yaylasuyu",1
-"Yaylatepe",3
 "Yaylaüstü",1
 "Yaylayaka",1
 "Yaylayani",2
@@ -24726,7 +23839,6 @@
 "Yaytaş",1
 "Yayvan",1
 "Yayvandoruk",1
-"Yayvantepe",2
 "Yazalani",1
 "Yazarbaşi",1
 "Yazçiçeği",1
@@ -24773,7 +23885,6 @@
 "Yazir",14
 "Yazirli",1
 "Yazisöğüt",1
-"Yazitepe",1
 "Yaziyaka",1
 "Yaziyalangoz",1
 "Yaziyurdu",1
@@ -24806,7 +23917,6 @@
 "Yedievler",2
 "Yedieylül",1
 "Yedi Eylül",3
-"Yedigöl",1
 "Yedigöz",1
 "Yedigöze",2
 "Yedikardeş",2
@@ -24820,7 +23930,6 @@
 "Yedisalkim",1
 "Yedişehitler",1
 "Yediselviler",1
-"Yeditepe",2
 "Yediyol",3
 "Yeğen",1
 "Yegenler",1
@@ -24847,7 +23956,6 @@
 "Yelliburun",1
 "Yellice",4
 "Yelliler",1
-"Yellitepe",1
 "Yelmez",1
 "Yelmük",1
 "Yelpiz",1
@@ -24930,7 +24038,6 @@
 "Yeniçöte",1
 "Yenicuma",2
 "Yeni Cumhuriyet",1
-"Yenidağardi",1
 "Yenidam",1
 "Yenidamlar",1
 "Yenidanişment",1
@@ -24952,7 +24059,6 @@
 "Yenievler",3
 "Yenigeçitveren Merkez",1
 "Yenigöçmen",1
-"Yenigöl",1
 "Yeni Gümüş",1
 "Yenigün",9
 "Yenigüney",1
@@ -24991,7 +24097,6 @@
 "Yenikonacik",1
 "Yenikonak",3
 "Yenikonutlar",1
-"Yeniköprü",1
 "Yeniköseler",1
 "Yeniköseli",1
 "Yeniköşk",1
@@ -25007,7 +24112,6 @@
 "Yeniköy (Yerkesik)",1
 "Yeni Kümesi",1
 "Yenikurudere",1
-"Yenikurugöl",1
 "Yenikuyu",2
 "Yeniler",1
 "Yenilmez",1
@@ -25141,7 +24245,6 @@
 "Yeşilçimen",1
 "Yeşilçit",1
 "Yeşilçomlu",1
-"Yeşildağ",2
 "Yeşildalli",1
 "Yeşildam",1
 "Yeşildemet",1
@@ -25174,7 +24277,6 @@
 "Yeşiller",6
 "Yeşilli",1
 "Yeşillik",2
-"Yeşilliman",1
 "Yeşilmezra",2
 "Yeşiloba",5
 "Yeşiloğlu",1
@@ -25192,7 +24294,6 @@
 "Yeşilsu",1
 "Yeşiltaş",3
 "Yeşiltekke",1
-"Yeşiltepe",49
 "Yeşilüzümlü",1
 "Yeşilvadi",7
 "Yeşil Vadi",1
@@ -25244,7 +24345,6 @@
 "Yiğitpinari",1
 "Yiğittaşi",1
 "Yiğityolu",2
-"Yiğmatepe",1
 "Yiğren Yaylasi",1
 "Yikilgan",1
 "Y. İkizören",1
@@ -25278,7 +24378,6 @@
 "Yildirim Haci Sarraf",1
 "Yildirimlar",5
 "Yildirimören",1
-"Yildirimtepe",2
 "Yildirimyağlica",1
 "Yildiz",31
 "Yildizalan",1
@@ -25293,8 +24392,6 @@
 "Yildizli",8
 "Yildizören",1
 "Yildiztabya",1
-"Yildiztepe",6
-"Yildiztepe-Güzeldere",1
 "Yillarca",1
 "Yillatma",1
 "Yilmayanlar",1
@@ -25393,7 +24490,6 @@
 "Yolkaya Yaylasi",1
 "Yolkenari",1
 "Yol Kenari Sanayi",1
-"Yolköprü",1
 "Yolkoru",1
 "Yollaç",1
 "Yollarbaşi",1
@@ -25424,7 +24520,6 @@
 "Yoncalik (Kot- Natelt)",1
 "Yoncali Mezra",1
 "Yoncali Osb",1
-"Yoncatepe",1
 "Yongaci",1
 "Yongalik",1
 "Yoni Kizilliği",1
@@ -25465,7 +24560,6 @@
 "Y.Pazarci",1
 "Y.Sindire",1
 "Y.Söğütlü",1
-"Y.Tepecik(İğiki)",1
 "Y.Torumlar",1
 "Yüce",1
 "Yüceardi",1
@@ -25475,7 +24569,6 @@
 "Yüceli",1
 "Yücelik",1
 "Yücepinar",1
-"Yücetepe",1
 "Yüceyurt",1
 "Yukar",1
 "Yukari",158
@@ -25495,9 +24588,7 @@
 "Yukariaksu",1
 "Yukari Aksüt",1
 "Yukari Aktaş",1
-"Yukariaktepe",1
 "Yukari Alaca",1
-"Yukari Aladağ Yaylasi",1
 "Yukari Alan",2
 "Yukari Alibey",1
 "Yukari Aliçli",1
@@ -25613,9 +24704,6 @@
 "Yukari Çukur",1
 "Yukari Çukursökü",1
 "Yukaricuma",1
-"Yukaridağ",1
-"Yukaridağdere",1
-"Yukaridağli",1
 "Yukaridalli",1
 "Yukaridamlali",1
 "Yukaridanişment",2
@@ -25677,8 +24765,6 @@
 "Yukarigöçek",1
 "Yukarigökçe",1
 "Yukarigöklü",1
-"Yukarigölalan",1
-"Yukarigölyazi",1
 "Yukarigöndelen",1
 "Yukari Göne",1
 "Yukari Güde",1
@@ -25745,7 +24831,6 @@
 "Yukari Karaven",1
 "Yukari Kardeşler",1
 "Yukari Karli",1
-"Yukari Karlitepe",1
 "Yukarikarpuzlu",1
 "Yukarikarşi",1
 "Yukari Karşi",1
@@ -25768,7 +24853,6 @@
 "Yukari Kazlar",1
 "Yukari Keçeler",1
 "Yukarikeçili",1
-"Yukarikekliktepe",1
 "Yukari Kemalan",1
 "Yukarikepen",1
 "Yukarikepirce",1
@@ -25797,7 +24881,6 @@
 "Yukari Konaklar",1
 "Yukari Konarli Mezrasi",1
 "Yukari Kop",1
-"Yukari Köprübaşi",1
 "Yukari Köse",1
 "Yukariköselerli",1
 "Yukari Köseli",1
@@ -25821,12 +24904,10 @@
 "Yukari Küpler",1
 "Yukari Küreçayi",1
 "Yukari Kürsü",1
-"Yukari Kurugöl",1
 "Yukari Kuşçu",1
 "Yukarikuyucak",1
 "Yukarikuyulu",1
 "Yukari Kuz",1
-"Yukari Kuzdaği",1
 "Yukarikuzfindik",1
 "Yukari Leknar",1
 "Yukari Mağnar",1
@@ -25941,9 +25022,6 @@
 "Yukari Tekke",1
 "Yukari Tekkeönü",1
 "Yukaritelli",1
-"Yukaritepe",3
-"Yukari Tepe",1
-"Yukaritepecik",1
 "Yukari Teştek",1
 "Yukari Tolgum",1
 "Yukaritorazya",1
@@ -26008,12 +25086,10 @@
 "Yüksekoluk",1
 "Yüksekören",2
 "Yüksekova",2
-"Yüksektepe",2
 "Yüksekyayla",1
 "Yüksel",1
 "Yükselen",3
 "Yükseliş",4
-"Yükseltepe",1
 "Yukurielyakut",1
 "Yulafli",1
 "Yulari",1
@@ -26029,7 +25105,6 @@
 "Yumruklu",1
 "Yumrulu",1
 "Yumrutaş",6
-"Yumrutepe",2
 "Yumruveren",1
 "Yumuklar",2
 "Yumurcak",1
@@ -26049,8 +25124,6 @@
 "Yünlüce(Merkez)",1
 "Yünlükuyu",1
 "Yünören",3
-"Yuntdağiköseler",1
-"Yuntdağyenice",1
 "Yunus",5
 "Yunusdere",1
 "Yunuseli",1
@@ -26080,13 +25153,11 @@
 "Yurtbeyi",1
 "Yurtbeyli",1
 "Yurtçiçeği",1
-"Yurtdaği",1
 "Yurtderi",1
 "Yurtiçi",1
 "Yurt İçi",1
 "Yurtözü",1
 "Yurtpinar",1
-"Yurttepe",1
 "Yurtyenice",1
 "Yurtyeri",1
 "Yürücekler",1
@@ -26182,7 +25253,6 @@
 "Zaferler",1
 "Zaferli",2
 "Zafer Sb",1
-"Zafertepe",3
 "Zağarli",1
 "Zağnoz",1
 "Zahit",1
@@ -26266,7 +25336,6 @@
 "Zeytinbeli",1
 "Zeytinburnu",1
 "Zeytinçukuru",2
-"Zeytindağ",1
 "Zeytindere",1
 "Zeytineli",1
 "Zeytinköy",5
@@ -26283,14 +25352,12 @@
 "Zibe",1
 "Zibiç",1
 "Zica",1
-"Zigana Daği Yaylasi",1
 "Ziğindere",1
 "Ziğra",1
 "Zihni",1
 "Zile",1
 "Zile Osb",1
 "Zilferoğlu",1
-"Zilgölü",1
 "Zimmak",1
 "Zinav",1
 "Zincidere",1
@@ -26330,7 +25397,6 @@
 "Ziyaret",18
 "Ziyaretli",3
 "Ziyaret Obasi",1
-"Ziyarettepe",1
 "Ziyratlik",1
 "Zobalaklar",1
 "Zögeli",1

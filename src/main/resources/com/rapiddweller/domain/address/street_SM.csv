@@ -6,19 +6,14 @@
 "Casa Esercizi Spirituali S. Giuseppe",1
 "Casa Maestre Pie",1
 "Cava dei Balestrieri",1
-"Centro Chiesanuova",1
-"Centro Falciano",1
-"Centro Gualdicciolo",1
 "Chiesa S.S. Pietro",1
 "Contrada dei Fossi",1
 "Contrada dei Magazzeni",1
 "Contrada del Collegio",1
 "Contrada della Pieve",1
 "Contrada delle Mura",1
-"Contrada dell'ospedale",1
 "Contrada del Pianello",1
 "Contrada di Borgoloto",1
-"Contrada di Portanova",1
 "Contrada Omagnano",1
 "Contrada Omerelli",1
 "Contrada San Francesco",1
@@ -41,60 +36,7 @@
 "Nucleo Ca'tabarrino",1
 "Nucleo Il Grasso",1
 "Orto del Collegio",1
-"Parco della Pasquella",1
-"Parco delle Fontane Azzurre",1
-"Parco Don Bosco",1
-"Parco Don Elviro Cardelli",1
-"Parco Marino Nicolini Primo Maestro",1
-"Parco Robert Baden-powell",1
 "Passo delle Streghe",1
-"Piazza Ammastri",1
-"Piazza Antonio di Paolo Fabbri",1
-"Piazza Antonio Righi",1
-"Piazza Belzoppi",1
-"Piazza Castello Montecerreto",1
-"Piazza dei Centomila",1
-"Piazza della Liberta'",1
-"Piazza della Pace",1
-"Piazza della Porta Vecchia",1
-"Piazza della Repubblica",1
-"Piazza delle Nazioni Unite",1
-"Piazza delle Rose",1
-"Piazza del Massaro",1
-"Piazza di Sopra",1
-"Piazza Dodici Ottobre",1
-"Piazza Enrico Enriquez",1
-"Piazza Filippo da Sterpeto",1
-"Piazza Giovanni Bertoldi",1
-"Piazza Grande",1
-"Piazzale Alvaro Casali",1
-"Piazzale Campo della Fiera",1
-"Piazzale Carlo V d'Asburgo",1
-"Piazzale Cava Antica",1
-"Piazzale Cava degli Umbri",1
-"Piazzale Cava della Fonte",1
-"Piazzale del Crocifisso",1
-"Piazzale della Stazione",1
-"Piazzale della Torre",1
-"Piazzale del Lavatoio",1
-"Piazzale Domus Plebis",1
-"Piazzale Enea Suzzi Valli",1
-"Piazzale Girolamo Genga",1
-"Piazzale Il Castagneto",1
-"Piazzale Lo Stradone",1
-"Piazzale Mahatma Gandhi",1
-"Piazzale Marino Calcigni",1
-"Piazzale Marino Giangi",1
-"Piazzale Papa Giovanni Paolo II",1
-"Piazzale Sorgente Madonna della Consolazione",1
-"Piazzale Vincenzo Terenzi",1
-"Piazza Marianna Paolini",1
-"Piazza Marino Capicchioni",1
-"Piazza Marino Tini",1
-"Piazza Mercatale",1
-"Piazza Salvatore Conti",1
-"Piazza Sant'agata",1
-"Piazza Teodoro Roosevelt",1
 "Piazzetta Arbe",1
 "Piazzetta Bramante Lazzari",1
 "Piazzetta della Guaita",1
@@ -105,8 +47,6 @@
 "Piazzetta Marino Madroni",1
 "Piazzetta Renata Tebaldi",1
 "P.le Taddeo di Montefeltro",1
-"Ponte dei Mulini",1
-"P.tta Maestra Alceste Preda Ferri",1
 "Salita Al Castello",1
 "Salita Alla Cesta",1
 "Salita Alla Rocca",1
@@ -117,7 +57,6 @@
 "Scala Albereto",1
 "Scala Alfonso Capecelatro",1
 "Scala Bonetti",1
-"Scala del Campo della Porta",1
 "Scala del Crociale",1
 "Scala della Cella Bella",1
 "Scala Dell' Arengo",1
@@ -162,7 +101,6 @@
 "Strada Cà Morri",1
 "Strada Campagnaccio",1
 "Strada Campitello",1
-"Strada Campo del Fiume",1
 "Strada Campo della Cella",1
 "Strada Cando",2
 "Strada Canelli",1
@@ -259,7 +197,6 @@
 "Strada del Pero Rosso",1
 "Strada del Pianogrande",1
 "Strada del Poggio",1
-"Strada del Ponte",2
 "Strada del Ponticello",1
 "Strada del Re",1
 "Strada del Sabattino",1
@@ -297,7 +234,6 @@
 "Strada Eulimella",1
 "Strada Falunia",1
 "Strada Filberzia",1
-"Strada Fiume della Valle",1
 "Strada Fiumicello",1
 "Strada Fondo Rio",1
 "Strada Fonte del Tauro",1
@@ -410,7 +346,6 @@
 "Strada Voltavine",1
 "Strada Vulneraria",1
 "Via A. Abbati Olivieri",1
-"Via A. Alberti da Ferrara",1
 "Via Abate Stefano",2
 "Via Abramo Lincoln",1
 "Via A. Cercignani",1
@@ -443,7 +378,6 @@
 "Via Annesio Nobili",1
 "Via Antonio Canova",1
 "Via Antonio di Leonardino",1
-"Via Antonio Malagonelli",1
 "Via Antonio Serra",1
 "Via Arca",1
 "Via Arniola",1
@@ -519,7 +453,6 @@
 "Via Carlo Botta",1
 "Via Carlo I di Romania",1
 "Via Carlo Levi",1
-"Via Carlo Malagola",1
 "Via Carlo Padiglione",1
 "Via Carlo Santucci",1
 "Via Carrare",1
@@ -626,7 +559,6 @@
 "Via della Quercia Ferita",1
 "Via della Rata",1
 "Via della Rupina",1
-"Via della Stazione",1
 "Via della Tana",1
 "Via della Terrarossa",1
 "Via della Torre",1
@@ -651,7 +583,6 @@
 "Via del Paron",1
 "Via del Passetto",1
 "Via del Pedriccione",1
-"Via del Piazzaro",1
 "Via del Poggiolo",1
 "Via del Progresso",1
 "Via del Pubblico Precettore",1
@@ -918,7 +849,6 @@
 "Via Ovella",1
 "Via Paese",6
 "Via Pagano",1
-"Via Palamede Ferri",1
 "Via Palazzina",1
 "Via Palma Il Giovane",2
 "Via Paolino di Simoncino",1
@@ -964,8 +894,6 @@
 "Via Poggio Peregrini",1
 "Via Polzo",1
 "Via Pompeo Batoni",1
-"Via Ponte Mellini",1
-"Via Porta D. Fratta",1
 "Via Pozzo Buono",1
 "Via Pradacci",1
 "Via Prato delle Avelle",1
@@ -1050,7 +978,6 @@
 "Via Tre Settembre",2
 "Via Trifora",1
 "Via Tritonalia",1
-"Via Tura Dal Fiume",1
 "Via Ubertino di Carrara",1
 "Via Ugo Bassi",1
 "Via Ugolino dei Baraconi",1

@@ -1,4 +1,3 @@
-"Accesso A Via Caderiva",1
 "Accesso A Via Chiappazzo",1
 "Accesso A Via Costigliolo Inferiore",1
 "Accesso Citta Mercato Compresa",1
@@ -15,7 +14,6 @@
 "Androna Cristoforo Colombo",1
 "Androna Dei Grigioni",1
 "Androna Della Corte",1
-"Androna Della Ferriera",1
 "Androna Di Cavana",1
 "Androna Ettore Oliani",1
 "Androna Fra' Paolo Naldini",1
@@ -90,10 +88,6 @@
 "Banchina Santa Lucia",1
 "Barbaria Delle Tole",1
 "Bastione Santa Caterina",1
-"Bastioni Di Porta Nuova",1
-"Bastioni Di Porta Venezia",1
-"Bastioni Di Porta Volta",1
-"Belvedere Del Lago Del Giglio",1
 "Belvedere Edoardo Firpo",1
 "Belvedere Gerolamo Da Passano",1
 "Belvedere Giovanni Carosio",1
@@ -151,12 +145,9 @@
 "Calata Giovanni Bettolo",1
 "Calata Macello",1
 "Calata Marinai D'italia",1
-"Calata Ospedaletto",1
 "Calata Piliero",1
 "Calata Pollena",1
-"Calata Ponte Di Casanova",1
 "Calata Ponticello A Marechiaro",1
-"Calata Porta Di Massa",1
 "Calata San Francesco",1
 "Calata San Marco",1
 "Calata San Mattia",1
@@ -362,7 +353,6 @@
 "Calle Daffan",1
 "Calle Da Lesina",1
 "Calle Dandolo Civran",1
-"Calle Da Ponte",1
 "Calle De Ca' Coppo",1
 "Calle De Ca' Lipoli",1
 "Calle De Castelforte",1
@@ -483,7 +473,6 @@
 "Calle Del Tagliacalse",1
 "Calle Del Tagliapiera",1
 "Calle Del Teatro",5
-"Calle Del Traghetto",2
 "Calle De Mezo",1
 "Calle Diavolo",1
 "Calle Dietro Gli Orti",1
@@ -741,7 +730,6 @@
 "Calle Ormesini",1
 "Calle Orto",1
 "Calle Oslavia",1
-"Calle Ospedaletto",2
 "Calle Ostreghe",1
 "Calle Padiglion",1
 "Calle Paglia",1
@@ -938,7 +926,6 @@
 "Calle Tomioli",1
 "Calle Tornielli O Pistor",1
 "Calle Torre",1
-"Calle Traghetto Santa Lucia",1
 "Calle Trevisan",1
 "Calle Tron",1
 "Calle Turchette",1
@@ -1199,8 +1186,6 @@
 "Campo Tolentini",1
 "Canale Della Scomenzera",1
 "Cancello Giusino",1
-"Capo Di Piazza Gianni Bartoli",1
-"Capo Di Piazza Monsignore Antonio Santin",1
 "Carrizzada 36 Sant'antonio",1
 "Carrizzada Brasiola",1
 "Carrizzada Portosecco",1
@@ -1251,7 +1236,6 @@
 "Cavalcavia John Fitzgerald Kennedy",1
 "Cavalcavia Mulino Del Dosso",1
 "Cavalcavia Padre Massimiliano Maria Kolbe",1
-"Cavalcavia Ponte Cavalcavia Detto Di Ponticelli",1
 "Cavalcavia Pontinia",1
 "Cavalcavia Stati Uniti",1
 "Cavone Delle Noci Allo Scudillo",1
@@ -1532,7 +1516,6 @@
 "Contrada Molinello",1
 "Contrada Molino",1
 "Contrada Monalla",1
-"Contrada Montagna",1
 "Contrada Montalto",1
 "Contrada Monte Centri",1
 "Contrada Monteoliveto",1
@@ -1583,7 +1566,6 @@
 "Contrada Pomara",1
 "Contrada Pomarelle",1
 "Contrada Pomolibelli",1
-"Contrada Ponte Gallo",1
 "Contrada Porcino",1
 "Contrada Portella",1
 "Contrada Porticatello",1
@@ -1783,11 +1765,6 @@
 "Corso Del Popolo",2
 "Corso Del Rinascimento",1
 "Corso Di Francia",1
-"Corso Di Porta Nuova",1
-"Corso Di Porta Romana",1
-"Corso Di Porta Ticinese",1
-"Corso Di Porta Vigentina",1
-"Corso Di Porta Vittoria",1
 "Corso D' Italia",1
 "Corso Dogali",1
 "Corso Duca D'aosta",2
@@ -1802,11 +1779,9 @@
 "Corso Ferdinando Magellano",1
 "Corso Ferdinando Maria Perrone",1
 "Corso Ferrara",1
-"Corso Ferrovia",1
 "Corso Filippo Brunelleschi",1
 "Corso Filippo Turati",4
 "Corso Firenze",1
-"Corso Fiume",2
 "Corso Francesco Ferrucci",3
 "Corso Francia",7
 "Corso Gabriele Manthone'",1
@@ -1884,8 +1859,6 @@
 "Corso Pietro Pisani",1
 "Corso Plebisciti",1
 "Corso Ponticelli",1
-"Corso Porta Borsari",1
-"Corso Porta Nuova",1
 "Corso Potenza",4
 "Corso Primo Maggio",1
 "Corso Principe Eugenio",1
@@ -1896,7 +1869,6 @@
 "Corso Raffaello",3
 "Corso Regina Margherita",10
 "Corso Regina Maria Pia",1
-"Corso Regio Parco",4
 "Corso Re Ruggero",1
 "Corso Re Umberto",6
 "Corso Rodolfo Montevecchio",1
@@ -2020,7 +1992,6 @@
 "Corte Cortalta",1
 "Corte Cortese",1
 "Corte Cristofolo",1
-"Corte Da Ponte",1
 "Corte Dario",1
 "Corte Dea Comare",1
 "Corte De Cao Molecca",1
@@ -2444,7 +2415,6 @@
 "Cortile Fioravanti",1
 "Cortile Fiore",1
 "Cortile Fiorelli",1
-"Cortile Fiume",1
 "Cortile Fontana",1
 "Cortile Frangipane",1
 "Cortile Fresia",1
@@ -2624,7 +2594,6 @@
 "Cortile Pizzo",1
 "Cortile Polito",1
 "Cortile Pollo",1
-"Cortile Ponte",1
 "Cortile Prestigiacomo",1
 "Cortile Prioli",1
 "Cortile Privato",1
@@ -2866,9 +2835,7 @@
 "Fondaco Del Vasto A Chiaia",1
 "Fondaco Monte Piccolo",1
 "Fondaco Perrone",1
-"Fondaco Porta Di Mare",1
 "Fondaco Ragno",1
-"Fondaco San Giovanni In Porta",1
 "Fondaco San Gregorio Armeno",1
 "Fondaco San Paolo",1
 "Fondaco San Potito",1
@@ -2956,7 +2923,6 @@
 "Fondamenta Eremite",1
 "Fondamenta Felzi",1
 "Fondamenta Fenice",1
-"Fondamenta Fianco Ponte Lungo",1
 "Fondamenta Fiori",1
 "Fondamenta Forner",2
 "Fondamenta Foscarini",1
@@ -2999,7 +2965,6 @@
 "Fondamenta Parmense",1
 "Fondamenta Penini",1
 "Fondamenta Pignoli",1
-"Fondamenta Ponte Piccolo",1
 "Fondamenta Pontinello Destro",1
 "Fondamenta Pontinello Sinistro",1
 "Fondamenta Priuli",2
@@ -3214,7 +3179,6 @@
 "Galleria Dell' Unione",1
 "Galleria Del Pincio",1
 "Galleria Del Reno",1
-"Galleria Di Piazza Detta Colonna",1
 "Galleria Don Luigi Sturzo",1
 "Galleria Dorica",1
 "Galleria Due Agosto 1980",1
@@ -3260,7 +3224,6 @@
 "Galleria Santa Marta",1
 "Galleria Sciarra",1
 "Galleria Spagna",1
-"Galleria Stazione",1
 "Galleria Storione",1
 "Galleria Strasburgo",1
 "Galleria Subalpina",1
@@ -3333,8 +3296,6 @@
 "Giardino Della Montagnola",1
 "Giardino Del Meloncello",1
 "Giardino Di Casa Carducci",1
-"Giardino Di Piazza Cavour",1
-"Giardino Di Piazza Minghetti",1
 "Giardino Domenico Acerbi",1
 "Giardino Domenico Maria Novaro",1
 "Giardino Enrico Boschi",1
@@ -3360,7 +3321,6 @@
 "Giardino Martiri D'istria Venezia Giulia E Dalmazia",1
 "Giardino Omero Schiassi",1
 "Giardino Otello Colli",1
-"Giardino Partigiani Del Pontevecchio",1
 "Giardino Pierfrancesco Lo Russo",1
 "Giardino Quinto Ferrari",1
 "Giardino Remo Scoto",1
@@ -3401,9 +3361,7 @@
 "Gradini Ofanto",1
 "Gradini Pallonetto A Santa Lucia",1
 "Gradini Pontano",1
-"Gradini Pontenuovo",1
 "Gradini Ponti Rossi",1
-"Gradini Rosario A Portamedina",1
 "Gradini Sangro",1
 "Gradini San Liborio",1
 "Gradini San Lorenzo",1
@@ -3425,9 +3383,7 @@
 "Gradoni Madonna Della Lama",1
 "Gradoni Santa Maria Apparente",5
 "Grande Raccordo Anulare",1
-"Interno Della Stazione",1
 "Interno Ferrovie Laziali",1
-"Interno Stazione",1
 "Interrato Acqua Morta",1
 "Interrato Redentore",1
 "Interrato Torre Pentagona",1
@@ -3729,7 +3685,6 @@
 "Largo Dei Pinguini",1
 "Largo Dei Pini",1
 "Largo Dei Pioppi",1
-"Largo Dei Portabandiera",1
 "Largo Dei Quintili",1
 "Largo Dei Risicatori",1
 "Largo Dei Santi Apostoli",1
@@ -3826,11 +3781,6 @@
 "Largo Di Boccea",1
 "Largo Diciassette Agosto",1
 "Largo Dino Buzzati",1
-"Largo Di Porta Castello",1
-"Largo Di Porta Cavalleggeri",1
-"Largo Di Porta Pesa",1
-"Largo Di Porta San Pancrazio",1
-"Largo Di Porta Sant'alessandro",1
 "Largo Di San Carlo Al Corso",1
 "Largo Di San Luca Evangelista",1
 "Largo Di Santa Felicita",1
@@ -4121,7 +4071,6 @@
 "Largo Lercara",1
 "Largo Levanna",1
 "Largo Lilibeo",1
-"Largo Lino Montagna",1
 "Largo Livio Zambeccari",1
 "Largo Lorenzo Cappelli",1
 "Largo Lorenzo Maggio",1
@@ -4240,7 +4189,6 @@
 "Largo Orologio Vecchio",1
 "Largo Os 001",1
 "Largo Os 002",1
-"Largo Ospedale Civile",1
 "Largo Ottavio Tassoni",1
 "Largo Ottorino Respighi",1
 "Largo Pablo Picasso",1
@@ -4293,7 +4241,6 @@
 "Largo Platessa",1
 "Largo Plebiscito",2
 "Largo Podgora",1
-"Largo Porta Nuova",1
 "Largo Porto Di Classe",1
 "Largo Povoletto",1
 "Largo Pozzillo",1
@@ -4320,7 +4267,6 @@
 "Largo Ravenna",1
 "Largo Ravizza Alessandrina",1
 "Largo Regina Coeli",1
-"Largo Regio Parco",1
 "Largo Re Ina",1
 "Largo Renato Angiolillo",1
 "Largo Respighi",1
@@ -4415,8 +4361,6 @@
 "Largo Sorelle Gramatica",1
 "Largo Spartaco",1
 "Largo Sperlonga",1
-"Largo Stazione",1
-"Largo Stazione Vecchia",1
 "Largo Steiner Albe",1
 "Largo Stradella",1
 "Largo Strasburgo",1
@@ -4478,7 +4422,6 @@
 "Localita' Casa Rocco",1
 "Localita' Cascine Nuove",1
 "Localita' Cascine Vecchie",1
-"Localita' Casello Autostrada Bs Centro",1
 "Localita' Castell'arienti",1
 "Localita' Cavatocco",1
 "Localita' Chioma",1
@@ -4493,7 +4436,6 @@
 "Localita' Gecca Luna",1
 "Localita' Gropada",1
 "Localita' Isolino San Giovanni",1
-"Localita' Lago",1
 "Localita' La Mara",1
 "Localita' La Mennola",1
 "Localita' La Spiaggiola",1
@@ -4534,7 +4476,6 @@
 "Lungadige Giacomo Matteotti",1
 "Lungadige Michele Sammicheli",1
 "Lungadige Panvinio",1
-"Lungadige Porta Vittoria",1
 "Lungadige Re Teodorico",1
 "Lungadige Riva Battello",1
 "Lungadige San Giorgio",1
@@ -4549,7 +4490,6 @@
 "Lungargine Enea Codotto E Antonio Maronese",1
 "Lungargine Giovanni Enrico Fabre",1
 "Lungargine Girolamo Rovetta",1
-"Lungargine Ponterotto",1
 "Lungargine Sabbionari",1
 "Lungargine San Gregorio",1
 "Lungargine San Lazzaro",1
@@ -4624,7 +4564,6 @@
 "Lungomare Tafuri",1
 "Lungomare Trieste",3
 "Lungomare Zona Industriale",1
-"Lungoparco Gropallo",1
 "Lungopo Alessandro Antonelli",1
 "Lungopo Armando Diaz",1
 "Lungopo Luigi Cadorna",1
@@ -4676,8 +4615,6 @@
 "Mercato Generale",1
 "Mercato La Palma",1
 "Mercato Muricello",1
-"Mercato Piazza D'armi",1
-"Mercato Piazza Delle Erbe",1
 "Merceria Del Capitello",1
 "Merceria Orologio",1
 "Merceria San Salvador",1
@@ -4725,13 +4662,6 @@
 "Mura Delle Chiappe",1
 "Mura Delle Grazie",1
 "Mura Di Granarolo",1
-"Mura Di Porta Castiglione",1
-"Mura Di Porta Galliera",1
-"Mura Di Porta Lame",1
-"Mura Di Porta Massimo D'azeglio",1
-"Mura Di Porta San Felice",1
-"Mura Di Porta San Vitale",1
-"Mura Di Porta Saragozza",1
 "Orto Checoso",1
 "Orto Monti",1
 "Paludo Sant'antonio",1
@@ -4740,60 +4670,6 @@
 "Parallela Di Via Udine",1
 "Parallela Di Via Vittorio Veneto",1
 "Parallela Ii Luigi Partipilo",1
-"Parco 11 Settembre 2001",1
-"Parco Achille Grandi",1
-"Parco Adriano",1
-"Parco Alessandro Tassoni",1
-"Parco Alfredo Albanese",1
-"Parco Angelo Musco",1
-"Parco Atleti Azzurri D'italia",1
-"Parco Caduti Di Tutte Le Guerre",1
-"Parco Cavaioni",1
-"Parco Cavalieri Di Vittorio Veneto",1
-"Parco Degli Aranci",1
-"Parco Degli Scipioni",1
-"Parco Dei Calanchi Di Sabbiuno",1
-"Parco Dei Cedri",1
-"Parco Dei Fusco",1
-"Parco Dei Noci",1
-"Parco Dei Pini",1
-"Parco Dei Ravennati",1
-"Parco Delcisa Gallarani",1
-"Parco Della Resistenza Dell'otto Settembre",1
-"Parco Della Rimembranza",1
-"Parco Delle Favole",1
-"Parco Delle Querce",1
-"Parco Delle Vittime Italiane Nei Gulag",1
-"Parco Dello Stadio",1
-"Parco Del Paleotto",1
-"Parco Del Valentino",1
-"Parco Di Forte Bandiera",1
-"Parco Di Monte Paderno",1
-"Parco Di Monte Sacro",1
-"Parco Di Porta Capena",1
-"Parco Di San Pellegrino",1
-"Parco Domenico Taverna",1
-"Parco Don Giacomo Alberione",1
-"Parco Don Giovanni Bosco",1
-"Parco Europa",1
-"Parco Francesco Ruffini",1
-"Parco Gianicolense",1
-"Parco Gioacchino Angelo",1
-"Parco Giuseppe Di Vittorio",1
-"Parco Guido Galli",1
-"Parco Ignazio Michelotti",1
-"Parco Ildefonso Schuster",1
-"Parco Leopardi",1
-"Parco Lunetta Gamberini",1
-"Parco Mario Riva",1
-"Parco Orlando Sirola",1
-"Parco Pier Paolo Pasolini",1
-"Parco Roberto Almagia'",1
-"Parco San Michele In Bosco",1
-"Parco Savello",1
-"Parco Suardi",1
-"Parco Torpedini",1
-"Parco Virgiliano",1
 "Passaggio Alcide De Gasperi",1
 "Passaggio Alfonso Marescalchi",1
 "Passaggio Antonino Campanello",1
@@ -4829,7 +4705,6 @@
 "Passaggio Giacomo Macri'",1
 "Passaggio Gino Marinuzzi",1
 "Passaggio Giovanni Limonta",1
-"Passaggio Giovanni Malagodi",1
 "Passaggio Giovanni Palatucci",1
 "Passaggio Giuseppe Bruno",1
 "Passaggio Giuseppe De Felice Giuffrida",1
@@ -4903,7 +4778,6 @@
 "Passo Di Chiappeto",1
 "Passo Dieci Dicembre",1
 "Passo Di Francia",1
-"Passo Di Piazza Antonio Fonda Savio",1
 "Passo Doasco",1
 "Passo Eugenio Montale",1
 "Passo Federico Donaver",1
@@ -4929,2625 +4803,6 @@
 "Piano Del Meriggio",1
 "Piano Di Massiano",1
 "Piattaforma Santa Grata",1
-"Piazza 030 L",1
-"Piazza 185 Reggimento Artiglieria Folgore",1
-"Piazza Abbeveratoio",1
-"Piazza Abbiategrasso",1
-"Piazza Abramo Lincoln",1
-"Piazza Accademia Delia",1
-"Piazza Achille Grandi",1
-"Piazza Acilia",1
-"Piazza Acquasanta",1
-"Piazza Acquaverde",1
-"Piazza Adam Mickiewicz",1
-"Piazza Addis Abeba",1
-"Piazza Adele Zoagli Mameli",1
-"Piazza Adigrat",1
-"Piazza Adriana",1
-"Piazza Adriano",5
-"Piazza Adriatico",1
-"Piazza Adua",2
-"Piazza Albania",1
-"Piazza Alberigo Gentili",1
-"Piazza Albert Einstein",1
-"Piazza Albertina",1
-"Piazza Alberto Alessio",1
-"Piazza Alberto E Kathleen Casali",1
-"Piazza Alberto Lamarmora",1
-"Piazza Alberto Marchesi",1
-"Piazza Alberto Pasini",1
-"Piazza Albina",1
-"Piazza Alcide De Gasperi",2
-"Piazza Alcyone",1
-"Piazza Aldebaran",1
-"Piazza Aldo Bozzi",1
-"Piazza Aldo Capitini",1
-"Piazza Aldo Li Gobbi",1
-"Piazza Aldo Moro",7
-"Piazza Aldrovandi",1
-"Piazza Alessandria",1
-"Piazza Alessandro D'ancona",1
-"Piazza Alessandro Manzoni",1
-"Piazza Alessandro Pancani",1
-"Piazza Alessandro Vanni",1
-"Piazza Alessandro Volta",1
-"Piazza Alfani",1
-"Piazza Alfano I",1
-"Piazza Alfonso Capecelatro",1
-"Piazza Alfonso Neuschuler",1
-"Piazza Alfonso Trucillo",1
-"Piazza Alfredo Campione",1
-"Piazza Alfredo Oriani",1
-"Piazza Alfredo Sforzini",1
-"Piazza Alpi Orobiche",1
-"Piazza Amatore Sciesa",1
-"Piazza Amba Alagi",1
-"Piazza Amedeo",1
-"Piazza Amedeo Peyron",1
-"Piazza Amendola Metropolitana",1
-"Piazza Americo Capponi",1
-"Piazza Amilcare Ponchielli",1
-"Piazza Ammiano Marcellino",1
-"Piazza Amsicora",1
-"Piazza Anco Marzio",1
-"Piazza Andrea Ampere",2
-"Piazza Andrea Del Sarto",1
-"Piazza Andrea Fusina",1
-"Piazza Andrea Massena",1
-"Piazza Andrea Sgarallino",1
-"Piazza Anfiteatro",1
-"Piazza Angelo Camillo De Meis",1
-"Piazza Angelo Dall'oca Bianca",1
-"Piazza Angelo Maiorana",1
-"Piazza Angelo Pastrello",1
-"Piazza Angelo Righetti",1
-"Piazza Angelo Sraffa",1
-"Piazza Angilberto Ii",1
-"Piazza Anita Garibaldi",3
-"Piazza Annibale Mariotti",1
-"Piazza Annibale Ricco'",1
-"Piazza Annibaliano",1
-"Piazza Annunziata",1
-"Piazza Ansidei",1
-"Piazza Antenore",1
-"Piazza Antifane",1
-"Piazza Antonello",1
-"Piazza Antonino Cascino",1
-"Piazza Antonino Gandolfo",1
-"Piazza Antonino Giuffre'",1
-"Piazza Antonino Scaravilli",1
-"Piazza Antonino Zanca",1
-"Piazza Antonio Baldini",1
-"Piazza Antonio Beccadelli",1
-"Piazza Antonio Canova",1
-"Piazza Antonio Da Sangallo",1
-"Piazza Antonio Fontanesi",1
-"Piazza Antonio Fradeletto",1
-"Piazza Antonio Ghiglione",1
-"Piazza Antonio Gramsci",4
-"Piazza Antonio Mancini",1
-"Piazza Antonio Maxia",1
-"Piazza Antonio Meucci",1
-"Piazza Antonio Mordini",1
-"Piazza Antonio Pigafetta",1
-"Piazza Antonio Pittaluga",1
-"Piazza Antonio Rosmini",1
-"Piazza Antonio Salviati",1
-"Piazza Antonio Santelmo",1
-"Piazza Antonio Sciolla",1
-"Piazza Apollodoro",1
-"Piazza Appio Claudio",1
-"Piazza Aquileia",2
-"Piazza Aragona",1
-"Piazza Arcisate",1
-"Piazza Arcivescovado",1
-"Piazza Arcole",1
-"Piazza Arena Della Vittoria",1
-"Piazza Argentina",1
-"Piazza Argo",1
-"Piazza Aristotele",1
-"Piazza Armando Diaz",2
-"Piazza Armando Grosso",1
-"Piazza Armenia",1
-"Piazza Arnaldo Fusinato",1
-"Piazza Arnoldo Mondadori",1
-"Piazza Arsenale",2
-"Piazza Artigianato",1
-"Piazza Artoria",1
-"Piazza Arturo Graf",1
-"Piazza Asmara",1
-"Piazza Asmundo",1
-"Piazza Aspromonte",1
-"Piazza Asti",1
-"Piazza Attias",1
-"Piazza Attilio Deffenu",1
-"Piazza Attilio Friggeri",1
-"Piazza Attilio Hortis",4
-"Piazza Attilio Muggia",1
-"Piazza Attilio Pecile",1
-"Piazza Augusto Albini",1
-"Piazza Augusto Conti",1
-"Piazza Augusto Lorenzini",1
-"Piazza Augusto Richard Ginori",1
-"Piazza Augusto Righi",2
-"Piazza Augusto Rostagni",1
-"Piazza Aurelio Saffi",1
-"Piazza Avesa",1
-"Piazza Axum",1
-"Piazza Azolino Hazon",1
-"Piazza Bacanal",1
-"Piazza Bagnoli",1
-"Piazza Baida",1
-"Piazza Bainsizza",1
-"Piazza Baldassarre Avanzini",1
-"Piazza Baldassarre Ferri",1
-"Piazza Baldassarre Galuppi",2
-"Piazza Ballaro'",1
-"Piazza Banchi",1
-"Piazza Bandiera",1
-"Piazza Barbacan",1
-"Piazza Barberini",1
-"Piazza Barcellona",1
-"Piazza Bardetta",1
-"Piazza Barone Turrisi",1
-"Piazza Barracche",1
-"Piazza Barriera Garibaldi",1
-"Piazza Bartolo Da Sassoferrato",1
-"Piazza Bartolomeo Da Messina",1
-"Piazza Bartolomeo Gamba",1
-"Piazza Bartolomeo Gastaldi",1
-"Piazza Basico'",1
-"Piazza Basilicata",1
-"Piazza Battelli",1
-"Piazza Beata Paola Frassinetti",1
-"Piazza Beata Rosa Venerini",1
-"Piazza Beata Vergine Del Carmelo",1
-"Piazza Beati Paoli",1
-"Piazza Beato Pareto",1
-"Piazza Belgio",1
-"Piazza Belgioioso",1
-"Piazza Bellini",1
-"Piazza Belloveso",1
-"Piazza Belluno",1
-"Piazza Belvedere",1
-"Piazza Benedetto Brin",1
-"Piazza Benedetto Cairoli",1
-"Piazza Benedetto Condorelli Fragala'",1
-"Piazza Benedetto Da Rovezzano",1
-"Piazza Bengasi",1
-"Piazza Beniamino Gigli",1
-"Piazza Benvenuto Cellini",1
-"Piazza Benvenuto Stracca",1
-"Piazza Bernardino Da Feltre",1
-"Piazza Bernardino Pio",1
-"Piazza Bernardo De Muro",1
-"Piazza Bernardo E Giovanni Odicini",1
-"Piazza Bernardo Poch",1
-"Piazza Bernardo Tanucci",1
-"Piazza Bernardo Zamagna",1
-"Piazza Biagio Pace",1
-"Piazza Bibbiena",1
-"Piazza Bilbao",1
-"Piazza Bisconte",1
-"Piazza Bligny",1
-"Piazza Boggio Lera",1
-"Piazza Bologna",1
-"Piazza Bologni",1
-"Piazza Bonadies",1
-"Piazza Bonaria",1
-"Piazza Bordonaro",1
-"Piazza Borghese",1
-"Piazza Borgo Dora",1
-"Piazza Borgo Pila",1
-"Piazza Borodin",1
-"Piazza Borromeo",1
-"Piazza Borsellino",1
-"Piazza Bortolo Belotti",1
-"Piazza Bra'",1
-"Piazza Brahms",1
-"Piazza Brennero",1
-"Piazza Brignole",1
-"Piazza Brioni",1
-"Piazza Broilo",1
-"Piazza Bruno Boni",1
-"Piazza Bruno Buozzi",2
-"Piazza Bruno Caccia",1
-"Piazza Bruzzano",1
-"Piazza Bucarest",1
-"Piazza Buenos Aires",1
-"Piazza Buonarroti Metropolitana",1
-"Piazza Buontalenti",1
-"Piazza Caballini",1
-"Piazza Caboto",1
-"Piazza Cadevilla",1
-"Piazza Caduti Civili Di Brescia",1
-"Piazza Caduti Civili Di Guerra",1
-"Piazza Caduti Della Resistenza",1
-"Piazza Caduti Del Lavoro",1
-"Piazza Caduti Del Mare",2
-"Piazza Caduti Del Terrorismo",1
-"Piazza Caduti Di Cefalonia Divisione Acqui",1
-"Piazza Caduti Di San Ruffillo",1
-"Piazza Caduti E Dispersi In Russia",1
-"Piazza Caiazzo",1
-"Piazza Cairoli",7
-"Piazza Calderini",1
-"Piazza Calipso",1
-"Piazza Calvario",1
-"Piazza Camerino",1
-"Piazza Camillo Benso Conte Di Cavour",1
-"Piazza Camillo Benso Di Cavour",3
-"Piazza Camillo Bozzolo",1
-"Piazza Camillo Cavour",1
-"Piazza Camillo Corsi",1
-"Piazza Camillo Finocchiaro Aprile",1
-"Piazza Camillo Golgi",1
-"Piazza Camillo Loriedo",1
-"Piazza Campetto",1
-"Piazza Campo De' Fiori",1
-"Piazza Campo Trincerato",1
-"Piazza Canneto",1
-"Piazza Canonica",1
-"Piazza Canto Novo",1
-"Piazza Capelvenere",1
-"Piazza Capitaneo",1
-"Piazza Capitaneria Di Porto",1
-"Piazza Capitaniato",1
-"Piazza Capizucchi",1
-"Piazza Capo",1
-"Piazza Capo Di Ferro",1
-"Piazza Capranica",1
-"Piazza Caprera",1
-"Piazza Capri",2
-"Piazza Capro",1
-"Piazza Capuana",1
-"Piazza Caracciolo",1
-"Piazza Carbonari",1
-"Piazza Cardelli",1
-"Piazza Cardinale Andrea Ferrari",1
-"Piazza Cardinale Elia Dalla Costa",1
-"Piazza Cardinale Pietro Gasparri",1
-"Piazza Cardinale Sisto Riario Sforza",1
-"Piazza Cardinal Ferrari",1
-"Piazza Caricamento",1
-"Piazza Carignano",1
-"Piazza Carlo Alberto",9
-"Piazza Carlo Alberto Dalla Chiesa",1
-"Piazza Carlo Alberto Scotti",1
-"Piazza Carlo Amati",1
-"Piazza Carlo Caneva",1
-"Piazza Carlo Ceretti",1
-"Piazza Carlo Di Robilant",1
-"Piazza Carlo Dolci",1
-"Piazza Carlo Donegani",1
-"Piazza Carlo Emanuele Ii",1
-"Piazza Carlo Erba",1
-"Piazza Carlo E Sigismondo Rossaro",1
-"Piazza Carlo Felice",2
-"Piazza Carlo Forlanini",1
-"Piazza Carloforte",1
-"Piazza Carlo Freguglia",1
-"Piazza Carlo Giachery",1
-"Piazza Carlo Giacomini",1
-"Piazza Carlo Goldoni",2
-"Piazza Carlo Iii",1
-"Piazza Carlo Irnerio",1
-"Piazza Carlo Leone Fabbri",1
-"Piazza Carlo Maria Ventimiglia",1
-"Piazza Carlo Mazzaresi",1
-"Piazza Carlo Mirabello",1
-"Piazza Carlo Montanari",1
-"Piazza Carlo Pedroni",1
-"Piazza Carlo Petrone",1
-"Piazza Carlo Poerio",1
-"Piazza Carlo Stuparich",1
-"Piazza Carlo Vita Finzi",1
-"Piazza Carmine Alla Figurella",1
-"Piazza Carnaro",1
-"Piazza Carolina",1
-"Piazza Carrara",1
-"Piazza Carso",2
-"Piazza Cartagine",1
-"Piazza Casalmaggiore",1
-"Piazza Casa Pia",1
-"Piazza Casa Professa",1
-"Piazza Caserta",1
-"Piazza Cassa Di Risparmio",1
-"Piazza Cassarelli",1
-"Piazza Castelforte",1
-"Piazza Castellani",1
-"Piazza Castello",11
-"Piazza Castelnuovo",1
-"Piazza Castrolibero",1
-"Piazza Castroreale",1
-"Piazza Catalani",1
-"Piazza Caterina Sforza",1
-"Piazza Cattaneo",1
-"Piazza Cattolica",1
-"Piazza Cavalieri Di Vittorio Veneto",1
-"Piazza Cavalieri Nicola",1
-"Piazza Cavalieri Vittorio Veneto",1
-"Piazza Cavallotti",1
-"Piazza Cavarretta",1
-"Piazza Cavour",11
-"Piazza Celimontana",1
-"Piazza Cenci",1
-"Piazza Certaldo",1
-"Piazza Cervignano",1
-"Piazza Cesarea",1
-"Piazza Cesare Augusto",1
-"Piazza Cesare Baronio",1
-"Piazza Cesare Battisti",1
-"Piazza Cesare Beccaria",2
-"Piazza Cesare Cantu'",1
-"Piazza Cesare De Cupis",1
-"Piazza Cesare Nerazzini",1
-"Piazza Cesare Stovani",1
-"Piazza Cesino",1
-"Piazza Chiara Gambacorti",1
-"Piazza Chiesa",10
-"Piazza Chiesa Della Salute",1
-"Piazza Chiesa Di Molassana",1
-"Piazza Chiesa Madre",1
-"Piazza Chiesa Nuova",1
-"Piazza Chievo",1
-"Piazza Cialdini",1
-"Piazza Cimitero",1
-"Piazza Cimone",1
-"Piazza Cincinnato",1
-"Piazza Cinque Giornate",1
-"Piazza Cinque Lampadi",1
-"Piazza Cirene",1
-"Piazza Cisterna",1
-"Piazza Cittadella",2
-"Piazza Civitella Paganico",1
-"Piazza Clari Gian Carlo Maria",1
-"Piazza Claudio Monteverdi",1
-"Piazza Clemente Xi",1
-"Piazza Clodoveo Bonazzi",1
-"Piazza Cm 001",1
-"Piazza Cola Di Rienzo",1
-"Piazza Collegio Romano",1
-"Piazza Colombo",1
-"Piazza Colonna",2
-"Piazza Colonnella",1
-"Piazza Colonnello Felice Trizio",1
-"Piazza Comitato Di Liberazione Nazionale",2
-"Piazza Comitato Liberazione Nazionale",1
-"Piazza Conca D'oro",1
-"Piazza Concezione",1
-"Piazza Confienza",1
-"Piazza Console Cesario",1
-"Piazza Contardo Ferrini",1
-"Piazza Conte Federico",1
-"Piazza Conti Di Rebaudengo",1
-"Piazza Cordusio",1
-"Piazza Coriolano",2
-"Piazza Cornelia",1
-"Piazza Cornelia Romana",1
-"Piazza Cornelio De Simoni",1
-"Piazza Corpus Domini",1
-"Piazza Corrubbio",1
-"Piazza Corsica",1
-"Piazza Corvetto",1
-"Piazza Cosimo Fanzago",1
-"Piazza Cosma Clavarino",1
-"Piazza Costaguti",1
-"Piazza Costantino",1
-"Piazza Costanzo Barbarino",1
-"Piazza Costanzo Laura",1
-"Piazza Costituzione",1
-"Piazza Crati",1
-"Piazza Crimea",2
-"Piazza Cristoforo Bonavino",1
-"Piazza Croce",1
-"Piazza Croce Dei Vespri",1
-"Piazza Crocelle Ai Mannesi",1
-"Piazza Croce Rossa Italiana",1
-"Piazza Crociferi",1
-"Piazza Crocifisso Maiorana",1
-"Piazza Cruillas",1
-"Piazza Cuba",1
-"Piazza Cuore Di Maria",1
-"Piazza Curro'",1
-"Piazza Curzio Quinto",1
-"Piazza Cusura",1
-"Piazza Dalmazia",3
-"Piazza Damiano Chiesa",1
-"Piazza Damiano Sauli",1
-"Piazza Dammuso",1
-"Piazza Daniele Manin",1
-"Piazza Daniele Ranzoni",1
-"Piazza Danisinni",1
-"Piazza Dante",8
-"Piazza Dante Alighieri",3
-"Piazza Dante Gallani",1
-"Piazza Dante Livio Bianco",1
-"Piazza Danti",1
-"Piazza D'aracoeli",1
-"Piazza D' Armi",2
-"Piazza Davide Sesia",1
-"Piazza De' Baroncelli",1
-"Piazza De' Bonsi",1
-"Piazza De' Celestini",1
-"Piazza De' Cerchi",1
-"Piazza Decollati",1
-"Piazza De Crescenzo Vincenzo",1
-"Piazza De' Davanzati",1
-"Piazza De' Donati",1
-"Piazza De Franchi",1
-"Piazza De' Frescobaldi",1
-"Piazza De' Giudici",1
-"Piazza Degli Adimari",1
-"Piazza Degli Affari",1
-"Piazza Degli Alberighi",1
-"Piazza Degli Alcioni",1
-"Piazza Degli Alpini",1
-"Piazza Degli Antinori",1
-"Piazza Degli Aragonesi",1
-"Piazza Degli Aranci",1
-"Piazza Degli Arcipelaghi",1
-"Piazza Degli Arditi",1
-"Piazza Degli Artiglieri",1
-"Piazza Degli Artisti",1
-"Piazza Degli Estensi",1
-"Piazza Degli Euganei",1
-"Piazza Degli Ontani",1
-"Piazza Degli Ottaviani",1
-"Piazza Degli Scarlatti",1
-"Piazza Degli Sforza",1
-"Piazza Degli Strozzi",1
-"Piazza Degli Unganelli",1
-"Piazza Dei Bersaglieri",1
-"Piazza Dei Bossi",1
-"Piazza Dei Caduti",1
-"Piazza Dei Caduti Sul Lavoro",1
-"Piazza Dei Calcarari",1
-"Piazza Dei Campani",1
-"Piazza Dei Canotti",1
-"Piazza Dei Cappuccini",2
-"Piazza Dei Caprettari",1
-"Piazza Dei Carabinieri",2
-"Piazza Dei Carracci",1
-"Piazza Dei Carrubi",1
-"Piazza Dei Castellani",1
-"Piazza Dei Cavalieri",1
-"Piazza Dei Cavalieri Del Lavoro",1
-"Piazza Dei Cavalieri Di Malta",1
-"Piazza Dei Cavallari",1
-"Piazza Dei Cavalleggeri",1
-"Piazza Dei Cigni",1
-"Piazza Dei Cimatori",1
-"Piazza Dei Cinquecento",1
-"Piazza Dei Ciompi",1
-"Piazza Dei Condottieri",1
-"Piazza Dei Consoli",1
-"Piazza Dei Coronari",1
-"Piazza Dei Crociferi",1
-"Piazza Dei Daini",1
-"Piazza Dei Decemviri",1
-"Piazza Dei Domenicani",1
-"Piazza Dei Facchini",1
-"Piazza Dei Fanti",1
-"Piazza Dei Filadelfi",1
-"Piazza Dei Fiori",1
-"Piazza Dei Foraggi",6
-"Piazza Dei Frutti",4
-"Piazza Dei Garibaldi",1
-"Piazza Dei Geografi",1
-"Piazza Dei Gerani",1
-"Piazza Dei Gerolomini",1
-"Piazza Dei Giuochi",1
-"Piazza Dei Giuochi Delfici",1
-"Piazza Dei Giureconsulti",1
-"Piazza Dei Giustiniani",1
-"Piazza Dei Greci",1
-"Piazza Dei Grilletti",1
-"Piazza Dei Grue",1
-"Piazza Dei Legnami",1
-"Piazza Dei Martiri",2
-"Piazza Dei Martiri 1943 1945",1
-"Piazza Dei Martiri Di Belfiore",1
-"Piazza Dei Martiri Pennesi",1
-"Piazza Dei Massimi",1
-"Piazza Dei Medici",1
-"Piazza Dei Mercanti",2
-"Piazza Dei Mille",1
-"Piazza Dei Miracoli",1
-"Piazza Dei Mirti",1
-"Piazza Dei Navigatori",2
-"Piazza Dei Pazzi",1
-"Piazza Dei Piccoli Martiri",1
-"Piazza Dei Pini",1
-"Piazza Dei Piroscafi",1
-"Piazza Dei Pitti",1
-"Piazza Dei Ponziani",1
-"Piazza Dei Prati Degli Strozzi",1
-"Piazza Dei Quartieri",1
-"Piazza Dei Quiriti",1
-"Piazza Dei Ravennati",2
-"Piazza Dei Re Di Roma",1
-"Piazza Dei Rossi",1
-"Piazza Dei Saltarelli",1
-"Piazza Dei Sanniti",1
-"Piazza Dei Santi Apostoli",1
-"Piazza Dei Santi Giovanni E Paolo",1
-"Piazza Dei Satiri",1
-"Piazza Dei Servili",1
-"Piazza Dei Sicani",1
-"Piazza Dei Siculi",1
-"Piazza Dei Signori",2
-"Piazza Dei Tedeschi",1
-"Piazza Dei Tigli",1
-"Piazza Dei Tre Re",1
-"Piazza Dei Volontari",1
-"Piazza Del Baraccano",1
-"Piazza Del Beato Angelico",1
-"Piazza Del Biscione",1
-"Piazza Del Bono",1
-"Piazza Del Calendario",1
-"Piazza Del Campidano",1
-"Piazza Del Campidoglio",1
-"Piazza Del Campo",1
-"Piazza Del Canto",1
-"Piazza Del Capitolo",1
-"Piazza Del Carmine",9
-"Piazza Del Castello",3
-"Piazza Del Castello Barberini",1
-"Piazza Del Castello Di Porcareccia",1
-"Piazza Del Catalone",1
-"Piazza Del Cavalletto",1
-"Piazza Del Chiappazzo",1
-"Piazza Del Cisternone",4
-"Piazza Del Collegio Romano",1
-"Piazza Del Colosseo",1
-"Piazza Del Convento",1
-"Piazza Del Crocifisso",2
-"Piazza Del Donatore Di Sangue",1
-"Piazza Del Drago",2
-"Piazza Del Duomo",8
-"Piazza Del Fante",1
-"Piazza Del Ferrarese",1
-"Piazza Del Ferro",1
-"Piazza Del Ferro Di Cavallo",1
-"Piazza Del Fico",1
-"Piazza Del Fiore",1
-"Piazza Del Foro",1
-"Piazza Del Francia",1
-"Piazza Del Garbo",1
-"Piazza Del Gazometro",1
-"Piazza Del Gesu'",1
-"Piazza Del Gesu' Nuovo",1
-"Piazza Del Giglio",1
-"Piazza Del Grano",1
-"Piazza Del Grillo",1
-"Piazza Della Balduina",1
-"Piazza Della Bocca Della Verita'",1
-"Piazza Della Borsa",2
-"Piazza Della Calza",1
-"Piazza Della Cancelleria",1
-"Piazza Della Canonica",1
-"Piazza Della Cattedrale",1
-"Piazza Dell' Accademia Antiquaria",1
-"Piazza Dell' Accademia Di San Luca",1
-"Piazza Della Cernaia",1
-"Piazza Della Cervelletta",1
-"Piazza Della Chiesa",3
-"Piazza Della Chiesa Dell'acquasanta",1
-"Piazza Della Chiesa Di Murta",1
-"Piazza Della Chiesa Di Sant'eusebio",1
-"Piazza Della Chiesa Nuova",1
-"Piazza Della Chiesa Sant'alfonso De Liguori",1
-"Piazza Della Citta' Leonina",1
-"Piazza Della Colonnetta",1
-"Piazza Della Commenda",1
-"Piazza Della Concezione",1
-"Piazza Della Conciliazione",1
-"Piazza Della Concordia",1
-"Piazza Della Consolata",1
-"Piazza Della Consolazione",1
-"Piazza Della Corte",1
-"Piazza Della Costituzione",3
-"Piazza Dell' Acquedotto Felice",1
-"Piazza Della Crezia",1
-"Piazza Della Croce Rossa",1
-"Piazza Della Darsena",1
-"Piazza Della Fonte Degli Acilii",1
-"Piazza Della Fortezza Vecchia",1
-"Piazza Della Gensola",1
-"Piazza Della Giuggiola",1
-"Piazza Dell' Agnello",1
-"Piazza Della Kalsa",1
-"Piazza Dell' Alberone",1
-"Piazza Della Liberazione",1
-"Piazza Della Liberta'",9
-"Piazza Della Loggia",1
-"Piazza Della Maddalena",1
-"Piazza Della Madonna Dei Monti",1
-"Piazza Della Madonna Di Loreto",1
-"Piazza Della Madonna Di Pompei",1
-"Piazza Della Marina",2
-"Piazza Della Marranella",1
-"Piazza Della Mercanzia",1
-"Piazza Della Milizia",1
-"Piazza Della Minerva",1
-"Piazza Dell' Amor Perfetto",1
-"Piazza Della Navicella",1
-"Piazza Della Pace",2
-"Piazza Della Parrocchia",1
-"Piazza Della Parte Guelfa",1
-"Piazza Della Passera",1
-"Piazza Della Pigna",1
-"Piazza Della Pilotta",1
-"Piazza Della Pinta",1
-"Piazza Della Quercia",1
-"Piazza Della Radio",1
-"Piazza Della Repubblica",29
-"Piazza Della Resistenza",1
-"Piazza Della Resistenza Partigiana",1
-"Piazza Della Rinascita",1
-"Piazza Della Rivoluzione",1
-"Piazza Della Rocca",1
-"Piazza Della Rotonda",1
-"Piazza Della Rovere",1
-"Piazza Dell' Arsenale",1
-"Piazza Della Sanita'",1
-"Piazza Della Santissima Annunziata",1
-"Piazza Della Scala",2
-"Piazza Della Scienza",1
-"Piazza Della Serenita'",1
-"Piazza Della Signoria",1
-"Piazza Dell' Assunta",1
-"Piazza Della Stazione",2
-"Piazza Della Stazione A Tommaso Natale",1
-"Piazza Della Stazione Lolli",1
-"Piazza Della Stazione Sottopasso",1
-"Piazza Dell' Ateneo Nuovo",1
-"Piazza Dell' Ateneo Salesiano",1
-"Piazza Della Torre",1
-"Piazza Della Vittoria",8
-"Piazza Della Vittoria Allo Spasimo",1
-"Piazza Del Lavoro",1
-"Piazza Delle Americhe",1
-"Piazza Delle Arti",1
-"Piazza Delle Baleari",1
-"Piazza Delle Belle Arti",1
-"Piazza Delle Camelie",1
-"Piazza Delle Carrozze",1
-"Piazza Delle Cinque Giornate",1
-"Piazza Delle Cinque Lune",1
-"Piazza Delle Cinque Scole",1
-"Piazza Delle Citta' Gemellate",1
-"Piazza Delle Cliniche",1
-"Piazza Delle Conifere",1
-"Piazza Delle Coppelle",1
-"Piazza Delle Crociate",1
-"Piazza Delle Cure",1
-"Piazza Delle Detta Crociate",1
-"Piazza Delle Erbe",4
-"Piazza Delle Fiamme Gialle",1
-"Piazza Delle Finanze",1
-"Piazza Delle Fontane Marose",1
-"Piazza Delle Fonti Di Veggio",1
-"Piazza Delle Galline",1
-"Piazza Delle Giunchiglie",1
-"Piazza Delle Gondole",1
-"Piazza Delle Grazie",2
-"Piazza Delle Guardie",1
-"Piazza Delle Iris",1
-"Piazza Delle Lamie",1
-"Piazza Delle Lavandaie",1
-"Piazza Dell' Elba",1
-"Piazza Dell' Elefante",1
-"Piazza Delle Medaglie D'oro",2
-"Piazza Dell' Emporio",1
-"Piazza Delle Murge",1
-"Piazza Delle Muse",2
-"Piazza Dell' Enciclopedia Italiana",1
-"Piazza Delle Ninfe",1
-"Piazza Del Leone",1
-"Piazza Delle Pallottole",1
-"Piazza Delle Pasque Veronesi",1
-"Piazza Delle Penne Nere",1
-"Piazza Delle Peonie",1
-"Piazza Delle Primule",1
-"Piazza Dell' Esquilino",1
-"Piazza Delle Starne",1
-"Piazza Delle Stigmate",1
-"Piazza Delle Universiadi",1
-"Piazza Delle Vettovaglie",1
-"Piazza Del Liberty",1
-"Piazza Del Limbo",1
-"Piazza Dell' Immacolata",2
-"Piazza Dell' Indipendenza",2
-"Piazza Dell' Indirizzo",1
-"Piazza Dell' Insurrezione 28 Aprile 1945",5
-"Piazza Dell' Isolotto",1
-"Piazza Dell' Odegitria",1
-"Piazza Dell' Olio",1
-"Piazza Dell' Oratorio",1
-"Piazza Dell' Origlione",1
-"Piazza Dell' Oro",1
-"Piazza Dell' Orologio",1
-"Piazza Dell' Orsa Maggiore",1
-"Piazza Dello Spazio",1
-"Piazza Dell' Ospedale Maggiore",1
-"Piazza Dello Spirito Santo",1
-"Piazza Dell' Otto Agosto",1
-"Piazza Dell' Unione",1
-"Piazza Dell' Unita' D'italia",2
-"Piazza Dell' Unita' Italiana",1
-"Piazza Dell' Universita'",2
-"Piazza Del Luogo Pio",1
-"Piazza Del Maestrale",1
-"Piazza Del Mercato",2
-"Piazza Del Mercato Centrale",1
-"Piazza Del Monastero",1
-"Piazza Del Monte Di Pieta'",2
-"Piazza Del Municipio",2
-"Piazza Del Nettuno",1
-"Piazza Del Pamiglione",1
-"Piazza Del Paradiso",1
-"Piazza Del Parlamento",2
-"Piazza Del Parlatoio",1
-"Piazza Del Pesce",1
-"Piazza Del Pigneto",1
-"Piazza Del Plebiscito",1
-"Piazza Del Ponticello",1
-"Piazza Del Popolo",2
-"Piazza Del Porto",1
-"Piazza Del Porto Di Ripetta",1
-"Piazza Del Portuale",1
-"Piazza Del Pozzetto",1
-"Piazza Del Principe Del Machiavelli",1
-"Piazza Del Quadraretto",1
-"Piazza Del Quarticciolo",1
-"Piazza Del Quirinale",1
-"Piazza Del Redentore",1
-"Piazza Del Risorgimento",2
-"Piazza Del Rosario",2
-"Piazza Del Sacro Cuore",2
-"Piazza Del Santo",1
-"Piazza Del Santuario",1
-"Piazza Del Sant'uffizio",1
-"Piazza Del Senato",1
-"Piazza Del Sole",1
-"Piazza Del Terzolle",1
-"Piazza Del Tiratoio",1
-"Piazza Del Tricolore",2
-"Piazza Del Vescovato",1
-"Piazza Del Volto Santo",1
-"Piazza De' Maccheroni",1
-"Piazza Demarini",1
-"Piazza De' Mozzi",1
-"Piazza De' Nerli",1
-"Piazza De' Peruzzi",1
-"Piazza De Renzi",1
-"Piazza Dergano",1
-"Piazza De' Ricci",1
-"Piazza Derna",2
-"Piazza Desiderato Chiaves",1
-"Piazza Desiderio Da Settignano",1
-"Piazza Detta Alfredo Cappellini",1
-"Piazza Detta Br",1
-"Piazza Detta Carita'",1
-"Piazza Detta Esedra",1
-"Piazza Detta M",1
-"Piazza Detta Mn 001",1
-"Piazza Di Badia A Ripoli",1
-"Piazza Di Bellosguardo",1
-"Piazza Di Benedetto Alonzo",1
-"Piazza Di Campitelli",1
-"Piazza Di Campopisano",1
-"Piazza Di Careggi",1
-"Piazza Di Carignano",1
-"Piazza Di Castel Di Guido",1
-"Piazza Di Castel Fusano",1
-"Piazza Di Cavana",1
-"Piazza Di Cestello",1
-"Piazza Di Cinecitta'",1
-"Piazza Diciotto Dicembre",1
-"Piazza Di Donna Olimpia",1
-"Piazza Di Donota",1
-"Piazza Digione",1
-"Piazza Di Lunghezza",1
-"Piazza Di Madonna Degli Aldobrandini",1
-"Piazza Di Monte Citorio",1
-"Piazza Di Monte D'oro",1
-"Piazza Di Montenero",1
-"Piazza Di Monte Savello",1
-"Piazza Di Montevecchio",1
-"Piazza Dinegro",1
-"Piazza Di Novella",1
-"Piazza Diocleziano",1
-"Piazza Diodoro Siculo",1
-"Piazza Di Ognissanti",1
-"Piazza Di Pasquino",1
-"Piazza Di Pietra",1
-"Piazza Di Ponte Lungo",1
-"Piazza Di Ponte Sant'angelo",1
-"Piazza Di Ponte Umberto I",1
-"Piazza Di Porta Capena",1
-"Piazza Di Porta Castiglione",3
-"Piazza Di Porta Maggiore",6
-"Piazza Di Porta Mascarella",1
-"Piazza Di Porta Metronia",1
-"Piazza Di Porta Portese",1
-"Piazza Di Porta San Donato",1
-"Piazza Di Porta San Felice",1
-"Piazza Di Porta San Giovanni",1
-"Piazza Di Porta San Lorenzo",1
-"Piazza Di Porta San Mamolo",1
-"Piazza Di Porta San Paolo",1
-"Piazza Di Porta Sant'isaia",1
-"Piazza Di Porta Santo Stefano",1
-"Piazza Di Porta San Vitale",1
-"Piazza Di Porta Saragozza",1
-"Piazza Di Priscilla",1
-"Piazza Di San Bartolomeo All'isola",1
-"Piazza Di San Benedetto",1
-"Piazza Di San Bernardo",1
-"Piazza Di San Calisto",1
-"Piazza Di San Claudio",1
-"Piazza Di San Clemente",1
-"Piazza Di San Cosimato",1
-"Piazza Di San Felice",1
-"Piazza Di San Firenze",1
-"Piazza Di San Francesco D'assisi",1
-"Piazza Di San Francesco Di Paola",1
-"Piazza Di San Giovanni",1
-"Piazza Di San Giovanni Della Malva",1
-"Piazza Di San Giovanni In Laterano",1
-"Piazza Di San Lorenzo",1
-"Piazza Di San Lorenzo In Lucina",1
-"Piazza Di San Luigi De' Francesi",1
-"Piazza Di San Macuto",1
-"Piazza Di San Marcello",1
-"Piazza Di San Marco",2
-"Piazza Di San Martino",1
-"Piazza Di San Martino Ai Monti",1
-"Piazza Di San Michele Visdomini",1
-"Piazza Di San Pancrazio",1
-"Piazza Di San Pantaleo",1
-"Piazza Di San Paolino",1
-"Piazza Di San Paolo Alla Regola",1
-"Piazza Di San Pier Damiani",1
-"Piazza Di San Pietro In Montorio",1
-"Piazza Di San Pietro In Vincoli",1
-"Piazza Di San Salvatore In Campo",1
-"Piazza Di San Salvatore In Lauro",1
-"Piazza Di San Salvi",1
-"Piazza Di San Saturnino",1
-"Piazza Di San Silvestro",1
-"Piazza Di San Simone",1
-"Piazza Di Santa Caterina Della Rota",1
-"Piazza Di Santa Cecilia",2
-"Piazza Di Santa Chiara",1
-"Piazza Di Santa Costanza",1
-"Piazza Di Santa Croce",1
-"Piazza Di Santa Croce In Gerusalemme",1
-"Piazza Di Santa Felicita",1
-"Piazza Di Santa Francesca Romana",1
-"Piazza Di Sant'agostino",1
-"Piazza Di Santa Maria Alle Fornaci",1
-"Piazza Di Santa Maria A Marignolle",1
-"Piazza Di Santa Maria Ausiliatrice",1
-"Piazza Di Santa Maria Consolatrice",1
-"Piazza Di Santa Maria Del Pignone",1
-"Piazza Di Santa Maria In Campo",1
-"Piazza Di Santa Maria In Trastevere",1
-"Piazza Di Santa Maria Liberatrice",1
-"Piazza Di Santa Maria Maggiore",2
-"Piazza Di Santa Maria Novella",1
-"Piazza Di Santa Maria Nuova",1
-"Piazza Di Santa Maria Soprarno",1
-"Piazza Di Sant'ambrogio",1
-"Piazza Di Sant'anastasia",1
-"Piazza Di Sant'andrea Della Valle",1
-"Piazza Di Sant'apollinare",1
-"Piazza Di Sant'apollonia",1
-"Piazza Di Santa Prisca",1
-"Piazza Di Santa Rufina",1
-"Piazza Di Sant'egidio",1
-"Piazza Di Sant'eurosia",1
-"Piazza Di Sant'eustachio",1
-"Piazza Di San Vincenzo Pallotti",1
-"Piazza Di San Zaccaria Papa",1
-"Piazza Di Saxa Rubra",1
-"Piazza Di Siena",1
-"Piazza Di Spagna",1
-"Piazza Di Terzanaia",1
-"Piazza Di Val D'ema",1
-"Piazza Di Verzaia",1
-"Piazza Dogana",1
-"Piazza Domenico Aspari",1
-"Piazza Domenico Cimarosa",1
-"Piazza Domenico Crisafulli",1
-"Piazza Domenico Ghirlandaio",1
-"Piazza Domenico Gnoli",1
-"Piazza Domenico Lupattelli",1
-"Piazza Domenico Peranni",1
-"Piazza Domenico Quaranta",1
-"Piazza Domenico Sobrero",1
-"Piazza Don Angelo Bruzzone",1
-"Piazza Donato",1
-"Piazza Donatori Di Sangue",1
-"Piazza Don Attilio Canepa",1
-"Piazza Don Bosco",1
-"Piazza Don Bruno De Biasio",1
-"Piazza Don Carmelo Cabella",1
-"Piazza Don Demetrio Magrini",1
-"Piazza Don Giovanni Mantero",1
-"Piazza Don Giovanni Minzoni",2
-"Piazza Don Giuseppe Cavalleri",1
-"Piazza Don Luigi Borotti",1
-"Piazza Don Paolo Albera",1
-"Piazza Don Pietro Puliti",1
-"Piazza Dresda",1
-"Piazza Duca",1
-"Piazza Duca D'aosta",3
-"Piazza Duca D'aosta Interno Stazione",1
-"Piazza Duca Degli Abruzzi",6
-"Piazza Duca Di Camastra",1
-"Piazza Duca Di Genova",2
-"Piazza Due Giugno",1
-"Piazza Due Giugno 1946",1
-"Piazza Due Palme",1
-"Piazza Duomo",6
-"Piazza Durazzo",1
-"Piazza Durazzo Pallavicini",1
-"Piazza Edmondo De Amicis",3
-"Piazza Edoardo Ferravilla",1
-"Piazza Edoardo Masdea",1
-"Piazza Edoardo Persico",1
-"Piazza Egidio Velotti",1
-"Piazza Egisto Sivelli",1
-"Piazza Elba",1
-"Piazza Eleonora Duse",1
-"Piazza Elia Benamozegh",1
-"Piazza Elio Callistio",1
-"Piazza Elio Rufino",1
-"Piazza Emanuele Brignole",1
-"Piazza Emanuele Filiberto",2
-"Piazza Emanuele Rendina Cutinelli",1
-"Piazza Embriaci",1
-"Piazza Emilia",1
-"Piazza Emilio Alessandrini",1
-"Piazza Emilio Alfieri",1
-"Piazza Emilio Lussu",1
-"Piazza Emilio Salgari",1
-"Piazza Ener Bettica",1
-"Piazza Ennio",1
-"Piazza Ennio Porrino",1
-"Piazza Enrico",1
-"Piazza Enrico Baroni",1
-"Piazza Enrico Bartelloni",1
-"Piazza Enrico Bassano",1
-"Piazza Enrico Bernardi",1
-"Piazza Enrico Bottini",1
-"Piazza Enrico Cenni",1
-"Piazza Enrico Chiaradia",1
-"Piazza Enrico Coleman",1
-"Piazza Enrico Cosenz",1
-"Piazza Enrico De Leva",1
-"Piazza Enrico De Marinis",1
-"Piazza Enrico De Nicola",2
-"Piazza Enrico D'orleans",1
-"Piazza Enrico Fermi",1
-"Piazza Enrico Malatesta",1
-"Piazza Enrico Mattei",1
-"Piazza Enrico Millo",1
-"Piazza Enrico Sienkiewicz",1
-"Piazza Enrico Tazzoli",1
-"Piazza Enrico Toti",1
-"Piazza Enzo Sarli",1
-"Piazza Epiro",1
-"Piazza Eraclito",1
-"Piazza Erasmo Piaggio",1
-"Piazza Ercole Luigi Morselli",1
-"Piazza Erculea",1
-"Piazza Eremitani",1
-"Piazza Eritrea",1
-"Piazza Ermete Novelli",1
-"Piazza Erminio Ferretto",1
-"Piazza Ernesto De Angeli",1
-"Piazza Ernesto Savio",1
-"Piazza Ero Gelli",1
-"Piazza Eroi Del Mare",1
-"Piazza Eroi D'ungheria",1
-"Piazza Errico Petrella",1
-"Piazza Eschilo",1
-"Piazza Esquilino",1
-"Piazza Ettore Casati",1
-"Piazza Ettore Castronovo",1
-"Piazza Ettore Vitale",1
-"Piazza Ettore Ximenes",1
-"Piazza Euclide",1
-"Piazza Eugenio Artom",1
-"Piazza Eugenio Biffi",1
-"Piazza Eugenio Montale",2
-"Piazza Europa",2
-"Piazza Evangelista Torricelli",2
-"Piazza Fabio Filzi",2
-"Piazza Fabrizio Girolamo",1
-"Piazza Facchini",1
-"Piazza Falchera",1
-"Piazza Farao",1
-"Piazza Farinati Degli Uberti Tosoletto",1
-"Piazza Farnese",1
-"Piazza Fatebenefratelli",1
-"Piazza Favara",1
-"Piazza Federico Bonola",1
-"Piazza Federico Chopin",1
-"Piazza Federico Del Rosso",1
-"Piazza Federico Di Svevia",1
-"Piazza Federico Ii Di Svevia",1
-"Piazza Federico Marcello Lante",1
-"Piazza Federico Mistral",1
-"Piazza Federico Sacco",1
-"Piazza Felice Bacci",1
-"Piazza Felice Cavallotti",3
-"Piazza Ferdinando Fuga",1
-"Piazza Fernando De Lucia",1
-"Piazza Fernando Ortiz",1
-"Piazza Ferretto",1
-"Piazza Ferruccio Parri",2
-"Piazza Fiammetta",1
-"Piazza Fidia",1
-"Piazza Figurella",1
-"Piazza Filangieri Marino",1
-"Piazza Filattiera",1
-"Piazza Filippo Andrea Doria Pamphili",1
-"Piazza Filippo Baldinucci",1
-"Piazza Filippo Brunelleschi",1
-"Piazza Filippo Carli",1
-"Piazza Filippo De Pisis",1
-"Piazza Filippo Galvagno",1
-"Piazza Filippo Juvara",1
-"Piazza Filippo Meda",1
-"Piazza Filippo Turati",1
-"Piazza Firenze",4
-"Piazza Fiume",1
-"Piazza Flavio Biondo",1
-"Piazza Flavio Gioia",1
-"Piazza Fonderia",1
-"Piazza Fontana",1
-"Piazza Fontanelle",1
-"Piazza Fonteiana",1
-"Piazza Fortebraccio",1
-"Piazza Fossatello",1
-"Piazza Fra' Giovanni",1
-"Piazza Fra' Girolamo Savonarola",1
-"Piazza Francesco Alario",1
-"Piazza Francesco Baracca",1
-"Piazza Francesco Bartolomeo Savi",1
-"Piazza Francesco Borgongini Duca",1
-"Piazza Francesco Borromini",1
-"Piazza Francesco Buonamici",1
-"Piazza Francesco Cacciatore",1
-"Piazza Francesco Caraffa",1
-"Piazza Francesco Carrara",3
-"Piazza Francesco Conteduca",1
-"Piazza Francesco Coppola",1
-"Piazza Francesco Crispi",2
-"Piazza Francesco Cucchi",1
-"Piazza Francesco Cupani",2
-"Piazza Francesco De Esquivel",1
-"Piazza Francesco Domenico Guerrazzi",1
-"Piazza Francesco D'ovidio",1
-"Piazza Francesco Durante",1
-"Piazza Francesco Fazio",1
-"Piazza Francesco Ferrucci",5
-"Piazza Francesco Guardi",1
-"Piazza Francesco Guardione",1
-"Piazza Francesco Guicciardini",1
-"Piazza Francesco Lo Sardo",1
-"Piazza Francesco Manfredi Baronio",1
-"Piazza Francesco Maurolico",1
-"Piazza Francesco Morlacchi",1
-"Piazza Francesco Morosini",1
-"Piazza Francesco Muzii",1
-"Piazza Francesco Napoli",1
-"Piazza Francesco Nasce'",1
-"Piazza Francesco Paolo Perez",1
-"Piazza Francesco Paolo Tosti",1
-"Piazza Francesco Rismondo",1
-"Piazza Francesco Saverio Arabia",1
-"Piazza Francesco Trombetta",1
-"Piazza Francesco Vannetti Donnini",1
-"Piazza Francesco Viviani",1
-"Piazza Francesco Vivona",1
-"Piazza Francesco Zambeccari",1
-"Piazza Francese",1
-"Piazza Francia",2
-"Piazza Franco Martelli",1
-"Piazza Franco Restivo",1
-"Piazza Franklin Delano Roosevelt",1
-"Piazza Fratelli Attilio Ed Emilio Bandiera",1
-"Piazza Fratelli Bandiera",1
-"Piazza Fratelli Pomiato",1
-"Piazza Frugose",1
-"Piazza Gabriele D'annunzio",2
-"Piazza Gabriele Vettori",1
-"Piazza Gaetano Alimonda",1
-"Piazza Gaetano Casati",1
-"Piazza Gaetano Emanuele Cali'",1
-"Piazza Gaetano Filangieri",1
-"Piazza Gaetano Marletta",1
-"Piazza Gaetano Mosca",1
-"Piazza Gaetano Salvemini",3
-"Piazza Galatea",1
-"Piazza Galeazzo Alessi",1
-"Piazza Galeno",1
-"Piazza Galeria",1
-"Piazza Galileo",1
-"Piazza Galileo Ferraris",2
-"Piazza Galileo Galilei",2
-"Piazza Galvani",1
-"Piazza Gandhi",2
-"Piazza Garibaldi",3
-"Piazza Garraffello",1
-"Piazza Gaspare Ambrosini",1
-"Piazza Gavi",1
-"Piazza Gavinana",1
-"Piazza Generale Antonino Cascino",1
-"Piazza Generale Antonio Baldissera",2
-"Piazza Generale Armando Diaz",1
-"Piazza Generale Carlo Alberto Dalla Chiesa",1
-"Piazza Generale Euclide Turba",1
-"Piazza Gennaro De Crescenzo",1
-"Piazza Genova",1
-"Piazza Gentile Da Fabriano",1
-"Piazza Geremia Bonomelli",2
-"Piazza Gerolamo Gaslini",1
-"Piazza Gerolamo Savonarola",2
-"Piazza Gerusalemme",1
-"Piazza Gesu' E Maria",2
-"Piazza Ghirlandaio",1
-"Piazza Giacinto Rizzolio",1
-"Piazza Giacomo Anelli",1
-"Piazza Giacomo Brodolini",1
-"Piazza Giacomo Carrara",1
-"Piazza Giacomo Della Chiesa",1
-"Piazza Giacomo Leopardi",2
-"Piazza Giacomo Matteotti",14
-"Piazza Giacomo Puccini",1
-"Piazza Giacomo Venezian",1
-"Piazza Giacomo Zanellato",1
-"Piazza Giambattista Bodoni",1
-"Piazza Giambattista Pergolesi",1
-"Piazza Giambattista Vico",1
-"Piazza Giampaolo Bartolommei",1
-"Piazza Giampietro Chironi",1
-"Piazza Giampietro Vieusseux",1
-"Piazza Gian Antonio Maggi",1
-"Piazza Gian Battista Vico",1
-"Piazza Giancamillo Gloriosi",1
-"Piazza Giancarlo Vallauri",1
-"Piazza Gianfranco Sforni",1
-"Piazza Gian Lorenzo Bernini",2
-"Piazza Gianni Lapo",1
-"Piazza Gian Vincenzo Gravina",1
-"Piazza Giggi Pizzirani",1
-"Piazza Gimma",1
-"Piazza Gioeni",1
-"Piazza Giordano Bruno",1
-"Piazza Giordano Da Rivalto",1
-"Piazza Giorgio Ambrosoli",1
-"Piazza Giorgio Labo'",1
-"Piazza Giorgio Simone Ohm",1
-"Piazza Giorgio Vasari",1
-"Piazza Giosia Monti",1
-"Piazza Giosue' Carducci",2
-"Piazza Giovan Battista Donati",1
-"Piazza Giovan Battista Ferrari",1
-"Piazza Giovanbattista Giorgini",1
-"Piazza Giovanbattista Pacichelli",1
-"Piazza Giovanni Agnelli",1
-"Piazza Giovanni Amendola",5
-"Piazza Giovanni Antonelli",1
-"Piazza Giovanni Antonio Aprosio",1
-"Piazza Giovanni Antonio Bazzi",1
-"Piazza Giovanni Battista Bottero",1
-"Piazza Giovanni Battista Vaccarini",1
-"Piazza Giovanni Bausan",1
-"Piazza Giovanni Bellissima",1
-"Piazza Giovanni Bernardi",1
-"Piazza Giovanni Bernardino Tafuri",1
-"Piazza Giovanni Boccaccio",1
-"Piazza Giovanni Borgese",1
-"Piazza Giovanni Bottesini",1
-"Piazza Giovanni Bovio",2
-"Piazza Giovanni Cagliero",1
-"Piazza Giovanni Dalle Bande Nere",2
-"Piazza Giovanni Da Lucca",1
-"Piazza Giovanni Da Triora",1
-"Piazza Giovanni Da Verrazzano",3
-"Piazza Giovanni Falcone",1
-"Piazza Giovanni Fattori",1
-"Piazza Giovanni Fontana",1
-"Piazza Giovanni Garau",1
-"Piazza Giovanni Giolitti",1
-"Piazza Giovanni Guareschi",1
-"Piazza Giovanni Guarino",1
-"Piazza Giovanni Lai",1
-"Piazza Giovanni Leone",1
-"Piazza Giovanni Lerda",1
-"Piazza Giovanni Marghinotti",1
-"Piazza Giovanni Maria Dettori",1
-"Piazza Giovanni Maria Lavagna",1
-"Piazza Giovanni Martinez",1
-"Piazza Giovanni Medas",1
-"Piazza Giovanni Meli",1
-"Piazza Giovanni Nicotera",1
-"Piazza Giovanni Omiccioli",1
-"Piazza Giovanni Pascoli",1
-"Piazza Giovanni Perego",1
-"Piazza Giovanni Prati",1
-"Piazza Giovanni Randaccio",1
-"Piazza Giovanni Rosadi",1
-"Piazza Giovanni Segantini",1
-"Piazza Giovanni Spadolini",1
-"Piazza Giovanni Tarello",1
-"Piazza Giovanni Toselli",1
-"Piazza Giovanni Verga",3
-"Piazza Giovanni Winckelmann",1
-"Piazza Giovanni Xxiii",11
-"Piazza Giovenale",1
-"Piazza Giovine Italia",3
-"Piazza Giudicessa Elena",1
-"Piazza Giuditta Tavani Arquati",1
-"Piazza Giuliani E Dalmati",1
-"Piazza Giuliano Della Rovere",1
-"Piazza Giulio Cesare",1
-"Piazza Giulio Rodino'",1
-"Piazza Giunone Regina",1
-"Piazza Giuseppe Arimondi",1
-"Piazza Giuseppe Bandi",1
-"Piazza Giuseppe Bignami",1
-"Piazza Giuseppe Cardinali",1
-"Piazza Giuseppe Cesare Abba",1
-"Piazza Giuseppe Di Vittorio",6
-"Piazza Giuseppe Emanuele Modigliani",1
-"Piazza Giuseppe Ermini",1
-"Piazza Giuseppe Frua",1
-"Piazza Giuseppe Garassini Garbarino",1
-"Piazza Giuseppe Garibaldi",11
-"Piazza Giuseppe Gioacchino Belli",1
-"Piazza Giuseppe Gio Montagna",1
-"Piazza Giuseppe Giusti",1
-"Piazza Giuseppe Gola",1
-"Piazza Giuseppe Grandi",2
-"Piazza Giuseppe Lipparini",1
-"Piazza Giuseppe Lombardo Radice",1
-"Piazza Giuseppe Luigi Lagrange",1
-"Piazza Giuseppe Manno",1
-"Piazza Giuseppe Massari",1
-"Piazza Giuseppe Mazzini",12
-"Piazza Giuseppe Micheli",1
-"Piazza Giuseppe Missori",2
-"Piazza Giuseppe Pasolini",1
-"Piazza Giuseppe Perotti",1
-"Piazza Giuseppe Pizzorno",1
-"Piazza Giuseppe Poggi",1
-"Piazza Giuseppe Primoli",1
-"Piazza Giuseppe Raggio",1
-"Piazza Giuseppe Rensi",1
-"Piazza Giuseppe Romita",2
-"Piazza Giuseppe Sapeto",1
-"Piazza Giuseppe Saredo",1
-"Piazza Giuseppe Sciuti",1
-"Piazza Giuseppe Toniolo",1
-"Piazza Giuseppe Verdi",6
-"Piazza Giuseppe Viviani",1
-"Piazza Giuseppe Zanardelli",1
-"Piazza Giusti",1
-"Piazza Giustino Fortunato",1
-"Piazza Gloria",1
-"Piazza Goffredo Mameli",1
-"Piazza Goffredo Villa",1
-"Piazza Gondar",1
-"Piazza Gorgona",1
-"Piazza Gorla",1
-"Piazza Granatieri Di Sardegna",1
-"Piazza Gran Cancelliere",1
-"Piazza Grande",3
-"Piazza Gran Madre Di Dio",1
-"Piazza Gran Paradiso",1
-"Piazza Graziadio Isaia Ascoli",1
-"Piazza Grazioli",1
-"Piazza Grecia",1
-"Piazza Greco",1
-"Piazza Gregorio Maria Grasso",1
-"Piazza Gregoriopoli",1
-"Piazza Gregorio Ronca",1
-"Piazza Grenoble",1
-"Piazza Grigoris Lambrakis",1
-"Piazza Grillo Cattaneo",1
-"Piazza Grimaldi",1
-"Piazza Gualfredotto Da Milano",1
-"Piazza Guerrazzi",1
-"Piazza Guglielmo Ceroni",1
-"Piazza Guglielmo Marconi",3
-"Piazza Guglielmo Massaia",1
-"Piazza Guglielmo Miani",1
-"Piazza Guglielmo Oberdan",3
-"Piazza Guglielmo Pepe",1
-"Piazza Guido Cavalcanti",1
-"Piazza Guido De Ruggiero",1
-"Piazza Guido Gozzano",2
-"Piazza Guido Piovene",1
-"Piazza Gustavo Modena",2
-"Piazza Henry Dunant",1
-"Piazza Hermada",1
-"Piazza Iacopo Barchielli",1
-"Piazza Ichnusa",1
-"Piazza Ignazio Florio",1
-"Piazza Ignazio Roberto",1
-"Piazza Ilia Peikov",1
-"Piazza Ilio Barontini",1
-"Piazza Immacolata Di Marmo",1
-"Piazza Imola",1
-"Piazza Imperatore Augusto",1
-"Piazza Imperatore Tito",1
-"Piazza In Campo Marzio",1
-"Piazza Indipendenza",3
-"Piazza Ingastone",1
-"Piazza In Piscinula",1
-"Piazza Inserra",1
-"Piazza Insubria",1
-"Piazza Invrea",1
-"Piazza Ippolito Di Pastina",1
-"Piazza Ippolito Nievo",2
-"Piazza Irnerio",1
-"Piazza Irpinia",1
-"Piazza Isabella D'aragona",1
-"Piazza Ischia",2
-"Piazza Iside",1
-"Piazza Isidoro Del Lungo",1
-"Piazza Is Maglias",1
-"Piazza Isolo",1
-"Piazza Isotta Nogarola",1
-"Piazza Istria",2
-"Piazza Italia",4
-"Piazza Jan Palach",1
-"Piazza Jenne",1
-"Piazza John Fitzgerald Kennedy",4
-"Piazza Jose' De San Martin",1
-"Piazza Lampada Della Fraternita'",1
-"Piazza Lancellotti",1
-"Piazza Larderia Superiore",1
-"Piazza Lauria",1
-"Piazza Lauro De Bosis",1
-"Piazza Lavagna",1
-"Piazza Lazzaro Papi",1
-"Piazzale Adalgiso Onesti",1
-"Piazzale Adriatico",1
-"Piazzale Adua",1
-"Piazzale Ahmed Shawky",1
-"Piazzale Ai Laghi",1
-"Piazzale Alberto Geisser",1
-"Piazzale Alberto Piccinini",1
-"Piazzale Alcide De Gasperi",2
-"Piazzale Aldo Moro",1
-"Piazzale Alessandrino",1
-"Piazzale Alfio Pappalardo",1
-"Piazzale Altiero Spinelli",1
-"Piazzale Amalfi",1
-"Piazzale Amedeo Nazzari",1
-"Piazzale Amerigo Vespucci",1
-"Piazzale Ammiraglio Bergamini",1
-"Piazzale Anita Garibaldi",2
-"Piazzale Ankara",1
-"Piazzale Anna Frank",1
-"Piazzale Antonio Baiamonti",2
-"Piazzale Antonio Cantore",1
-"Piazzale Antonio De Berti",1
-"Piazzale Antonio Tosti",1
-"Piazzale Appio",1
-"Piazzale Aquileia",1
-"Piazzale Ardeatino",1
-"Piazzale Arduino",1
-"Piazzale Aristide Stefani",1
-"Piazzale Arnaldo Da Brescia",1
-"Piazzale Asia",2
-"Piazzale Atleti Azzurri D'italia",4
-"Piazzale Augusto Righi",1
-"Piazzale Aurelio",1
-"Piazzale Aurora",1
-"Piazzale Autolinee",1
-"Piazzale Azzurri D'italia",1
-"Piazzale Bainsizza",1
-"Piazzale Barcellona",1
-"Piazzale Bell'alba",1
-"Piazzale Bell'aria",1
-"Piazzale Bellucci",1
-"Piazzale Benito Juarez",1
-"Piazzale Bernardino Zendrini",1
-"Piazzale Biancamano",2
-"Piazzale Bligny",1
-"Piazzale Bologna",1
-"Piazzale Boschetti",1
-"Piazzale Bovio",1
-"Piazzale Brasile",1
-"Piazzale Brescia",1
-"Piazzale Brigata Legnano",1
-"Piazzale Bruno Minoletti",1
-"Piazzale Buccari",1
-"Piazzale Bucintoro",1
-"Piazzale Cacciatori Delle Alpi",1
-"Piazzale Cadorna",1
-"Piazzale Caduti Di El Alamein",1
-"Piazzale Caduti Nei Lager",1
-"Piazzale Caffarelli",1
-"Piazzale Caio Mario",1
-"Piazzale Camerino",1
-"Piazzale Camillo Baldi",1
-"Piazzale Camillo Golgi",1
-"Piazzale Canton Mombello",1
-"Piazzale Cardinal Consalvi",1
-"Piazzale Carlo Alberto Radaelli",1
-"Piazzale Carlo Archinto",1
-"Piazzale Carlo Maciachini",1
-"Piazzale Carlo Magno",1
-"Piazzale Carlo Mezzacapo",1
-"Piazzale Carmine",1
-"Piazzale Castel San Pietro",1
-"Piazzale Castronovo",1
-"Piazzale Cavalieri Di Vittorio Veneto",1
-"Piazza Leccavela",1
-"Piazza Lecce",1
-"Piazzale Cesare Battisti",1
-"Piazzale Cesare Rossarol",1
-"Piazzale Cimitero Maggiore",4
-"Piazzale Cimitero Monumentale",1
-"Piazzale Cina",1
-"Piazzale Circumetnea",1
-"Piazzale Citola",1
-"Piazzale Clodio",1
-"Piazzale Cornelio Tacito",1
-"Piazzale Corradino D'ascanio",1
-"Piazzale Costantino Il Grande",1
-"Piazzale Costantino Nigra",1
-"Piazzale Cremona",1
-"Piazzale Cristoforo Colombo",2
-"Piazzale Crivellone",1
-"Piazzale Croce Rossa Italiana",1
-"Piazzale Damiano Chiesa",1
-"Piazzale Danilo Stiepovich",1
-"Piazzale Dateo",1
-"Piazzale Degli Alpini",1
-"Piazzale Degli Archivi",1
-"Piazzale Degli Artigiani",1
-"Piazzale Degli Eroi",1
-"Piazzale Degli Uffizi",1
-"Piazzale Dei Bagni",1
-"Piazzale Dei Caduti Della Montagnola",1
-"Piazzale Dei Castelli Romani",1
-"Piazzale Dei Cavalli Marini",1
-"Piazzale Dei Daini",1
-"Piazzale Dei Glicini",1
-"Piazzale Dei Legnami",1
-"Piazzale Dei Marmi",1
-"Piazzale Dei Martiri",1
-"Piazzale Dei Militari Caduti Nei Lager",1
-"Piazzale Dei Partigiani",1
-"Piazzale Dei Quaranta",1
-"Piazzale Dei Quattro Venti",1
-"Piazzale Dei Ragazzi Del 1849",1
-"Piazzale Dei Santi Pietro E Paolo",1
-"Piazzale Del Caravaggio",1
-"Piazzale Del Casino'",1
-"Piazzale Del Cimitero",2
-"Piazzale Del Cinghiale",1
-"Piazzale Del Cristo Lavoratore",1
-"Piazzale Del Fante",1
-"Piazzale Del Faro",1
-"Piazzale Del Fiocco",1
-"Piazzale Del Foro Italico",1
-"Piazzale Del Giardino Zoologico",1
-"Piazzale Della Camionale",1
-"Piazzale Della Colonna",1
-"Piazzale Della Concordia",1
-"Piazzale Della Costellazione",1
-"Piazzale Dell' Acqua Acetosa",1
-"Piazzale Della Farnesina",1
-"Piazzale Della Federiga",1
-"Piazzale Dell' Agricoltura",1
-"Piazzale Della Madonna Pellegrina",1
-"Piazzale Della Malpensata",1
-"Piazzale Della Poesia",1
-"Piazzale Della Porta Al Prato",5
-"Piazzale Della Porta Romana",1
-"Piazzale Della Posta",4
-"Piazzale Dell' Aquilone",1
-"Piazzale Della Repubblica",3
-"Piazzale Della Scienza",1
-"Piazzale Della Stanga",1
-"Piazzale Della Stazione",1
-"Piazzale Della Stazione Dell'acqua Acetosa",1
-"Piazzale Della Stazione Del Lido",1
-"Piazzale Dell' Autostrada",1
-"Piazzale Delle Americhe",1
-"Piazzale Delle Belle Arti",1
-"Piazzale Delle Canestre",1
-"Piazzale Delle Caravelle",1
-"Piazzale Delle Cascine",1
-"Piazzale Delle Erbe",1
-"Piazzale Delle Gardenie",1
-"Piazzale Delle Medaglie D'oro",1
-"Piazzale Delle Milizie",1
-"Piazzale Delle Nazioni Unite",1
-"Piazzale Delle Olimpiadi",1
-"Piazzale Delle Paradisee",1
-"Piazzale Delle Provincie",1
-"Piazzale Dell' Exultet",1
-"Piazzale Dell' Indiano",1
-"Piazzale Dell' Industria",1
-"Piazzale Dello Sport",3
-"Piazzale Dello Stadio Flaminio",1
-"Piazzale Dello Stadio Olimpico",1
-"Piazzale Del Mandorlo",1
-"Piazzale Del Municipio",1
-"Piazzale Del Museo Borghese",1
-"Piazzale Del Parco Delle Rimembranze",1
-"Piazzale Del Poggio Imperiale",1
-"Piazzale Del Re",1
-"Piazzale Del Risorgimento",1
-"Piazzale Del Tricolore",1
-"Piazzale Detta Oriente",1
-"Piazzale Diego Velasquez",1
-"Piazzale Di Giarizzole",1
-"Piazzale Dino Viola",1
-"Piazzale Diomiro Munaretto",1
-"Piazzale Di Ponte Milvio",1
-"Piazzale Di Porta Altinate",1
-"Piazzale Di Porta Lodovica",1
-"Piazzale Di Porta Pia",1
-"Piazzale Di Porta San Giovanni",1
-"Piazzale Di Porta Savonarola",1
-"Piazzale Di San Lorenzo",1
-"Piazzale Disfida Di Barletta",1
-"Piazzale Dodici Ottobre 1492",1
-"Piazzale Domenico Giuriati",1
-"Piazzale Donatello",2
-"Piazzale Donatori Di Sangue",1
-"Piazzale Don Blasco",1
-"Piazzale Don Giovanni Minzoni",1
-"Piazzale Donna Margherita",1
-"Piazzale Dopolavoro",1
-"Piazza Ledro",1
-"Piazzale Duca D'aosta",1
-"Piazzale Edmondo Puecher",1
-"Piazzale Efisio Gianasso",1
-"Piazzale Egeo",1
-"Piazzale Elsa Morante",1
-"Piazzale Emilio Casalini",1
-"Piazzale Emilio Guerra",1
-"Piazzale Ennio Flaiano",1
-"Piazzale Enrico Cosenz",1
-"Piazzale Enrico Dunant",1
-"Piazzale Enrico Fermi",1
-"Piazzale Enrico La Loggia",1
-"Piazzale Enrico Mattei",1
-"Piazzale Enrico Tiraboschi",1
-"Piazzale Ermes Visconti",1
-"Piazzale Eugenio Morelli",1
-"Piazzale Eugenio Popovich",1
-"Piazzale Europa",4
-"Piazzale Ezio Tarantelli",1
-"Piazzale Fausto Pirandello",1
-"Piazzale Ferdinando Gabotto",1
-"Piazzale Ferdinando Martini",1
-"Piazzale Ferrara",1
-"Piazzale Ferruccio Parri",2
-"Piazzale Filippo Il Macedone",1
-"Piazzale Firenze",1
-"Piazzale Flaminio",1
-"Piazzale Fossa Bagni",1
-"Piazzale Francesco Accursio",3
-"Piazzale Francesco Bacone",1
-"Piazzale Francesco Baracca",1
-"Piazzale Francesco Crispi",2
-"Piazzale Francesco Durante",1
-"Piazzale Francesco Roncalli",1
-"Piazzale Fratelli Ceirano",1
-"Piazzale Fratelli Sant'anna",1
-"Piazzale Fratelli Zavattari",1
-"Piazzale Fra' Tomaso Da Olera",1
-"Piazzale Gabriele Rosa",1
-"Piazzale Gabrio Maria Nava",1
-"Piazzale Gabrio Piola",1
-"Piazzale Galileo",1
-"Piazza Lega Lombarda",1
-"Piazzale Generale Enrico Cialdini",1
-"Piazzale Gerolamo Cassissa",1
-"Piazzale Giardino Fiorito",1
-"Piazzale Giorgio Menghini",1
-"Piazzale Giotto",1
-"Piazzale Giovanni Battista Nasalli Rocca",1
-"Piazzale Giovanni Battista Resasco",1
-"Piazzale Giovanni Dalle Bande Nere",1
-"Piazzale Giovanni De Agostini",1
-"Piazzale Giove",1
-"Piazzale Giulio Cesare",2
-"Piazzale Giulio Douhet",1
-"Piazzale Giulio Pastore",1
-"Piazzale Giuseppe Alberto Pugliese",1
-"Piazzale Giuseppe Allievo",1
-"Piazzale Giuseppe Bacchelli",1
-"Piazzale Giuseppe Capolino",1
-"Piazzale Giuseppe Garibaldi",2
-"Piazzale Giuseppe Massari",1
-"Piazzale Giuseppe Mazzini",1
-"Piazzale Giuseppe Perrucchetti",1
-"Piazzale Giuseppe Romita",1
-"Piazzale Giuseppe Rusca",1
-"Piazzale Giuseppe Sirtori",1
-"Piazzale Giuseppe Volpi",1
-"Piazzale Governo Provvisorio",1
-"Piazzale Gregorio Vii",1
-"Piazzale Grimani",1
-"Piazzale Guardini Romano",1
-"Piazzale Guglielmo Corvi",3
-"Piazzale Guglielmo Oberdan",1
-"Piazzale Guido E Bruno Parmesan",1
-"Piazzale Gustavo Bottiglieri",1
-"Piazzale Hegel",1
-"Piazzale Ignazio Calona",1
-"Piazzale Immacolatella Nuova",1
-"Piazzale Immacolatella Vecchia",1
-"Piazzale Ipponio",1
-"Piazzale Isidoro Pestarino",1
-"Piazzale Istria",2
-"Piazzale Italia",1
-"Piazzale John Fitzgerald Kennedy",1
-"Piazzale Jonio",1
-"Piazzale Konrad Adenauer",1
-"Piazzale Labicano",1
-"Piazzale La Fontaine",1
-"Piazzale Lagosta",2
-"Piazzale La Plaia",1
-"Piazza Le Laudi",1
-"Piazzale Lavater",1
-"Piazzale Lazzaretto",1
-"Piazzale Lazzaro Giovannacci",1
-"Piazzale Leonardo Da Vinci",1
-"Piazzale Leone Xiii",1
-"Piazzale Liberta'",1
-"Piazzale Libia",1
-"Piazzale Locchi",1
-"Piazzale Lodi",1
-"Piazzale Lodovico Goisis",1
-"Piazzale Lorenzo Gasparri",1
-"Piazzale Lorenzo Lotto",1
-"Piazzale Loreto",1
-"Piazzale Ludovico Antonio Scuro",1
-"Piazzale Lugano",1
-"Piazzale Luigi Cadorna",1
-"Piazzale Luigi Candiani",1
-"Piazzale Luigi Canestrini",1
-"Piazzale Luigi Emanuele Corvetto",1
-"Piazzale Luigi Kossuth",1
-"Piazzale Luigi Negrelli",1
-"Piazzale Luigi Sturzo",1
-"Piazzale Madonna Di Fatima",1
-"Piazzale Maestri Del Lavoro",1
-"Piazzale Magellano",1
-"Piazzale Malamocco",1
-"Piazzale Manila",1
-"Piazzale Marcellino Champagnat",1
-"Piazzale Marengo",1
-"Piazzale Maresciallo Diaz",1
-"Piazzale Maresciallo Giardino",1
-"Piazzale Marinai D'italia",1
-"Piazzale Mario Flaim",1
-"Piazzale Mario Jacchia",1
-"Piazzale Martesana",1
-"Piazzale Martin Luther King",1
-"Piazzale Martiri Della Deportazione",1
-"Piazzale Mater Ecclesiae",1
-"Piazzale Medaglie D'oro",2
-"Piazzale Mediterraneo",1
-"Piazzale Metronio",1
-"Piazzale Michelangiolo",1
-"Piazzale Miguel Cervantes",1
-"Piazzale Montello",1
-"Piazzale Montelungo",1
-"Piazzale Monte Re",1
-"Piazzale Montesquieu",1
-"Piazzale Napoleone I",1
-"Piazzale Niccolo' Tommaseo",1
-"Piazzale Nicola Maggio",1
-"Piazzale Nizza",1
-"Piazzale Numa Pompilio",1
-"Piazzale Oceania",1
-"Piazzale Olimpia",1
-"Piazza Leonardo",1
-"Piazza Leonardo Da Vinci",2
-"Piazza Leonardo Sciascia",2
-"Piazza Leon Battista Alberti",1
-"Piazza Leonetto Cappiello",1
-"Piazza Leone Xiii",1
-"Piazza Leoni",1
-"Piazza Leopoldo Nobili",1
-"Piazzale Ostiense",1
-"Piazzale Ovidio Serino",1
-"Piazzale Paolina Borghese",1
-"Piazzale Paolo Gorini",1
-"Piazzale Papa Giovanni Xxiii",1
-"Piazzale Pier Luigi Nervi",1
-"Piazzale Piero Zavattaro Ardizzi",1
-"Piazzale Pietro Brune'",1
-"Piazzale Pietro Favretti",1
-"Piazzale Pietro Foscari",1
-"Piazzale Pietro Mascagni",1
-"Piazzale Pino Pascali",1
-"Piazzale Pisacane",1
-"Piazzale Pola",2
-"Piazzale Pontecorvo",1
-"Piazzale Ponziano Loverini",1
-"Piazzale Porta Nuova",1
-"Piazzale Portello",1
-"Piazzale Portuense",1
-"Piazzale Posatora",1
-"Piazzale Prenestino",1
-"Piazzale Principessa Clotilde",1
-"Piazzale Prizzi",1
-"Piazzale Rava'",1
-"Piazzale Ravenna",1
-"Piazzale Recanati",1
-"Piazzale Renato Cappugi",1
-"Piazzale Rinaldo Settembrino",1
-"Piazzale Roberto Ardigo'",1
-"Piazzale Robert Schuman",1
-"Piazzale Rodolfo Morandi",1
-"Piazzale Roma",1
-"Piazzale Romolo E Remo",1
-"Piazzale Salvatore Farina",1
-"Piazzale San Benedetto",1
-"Piazzale San Gabriele Di Gorizia",1
-"Piazzale San Giuseppe",1
-"Piazzale San Leo",1
-"Piazzale San Lorenzo Giustiniani",1
-"Piazzale San Michele In Bosco",1
-"Piazzale San Paolo",2
-"Piazzale Santa Croce",1
-"Piazzale Sant'agostino",1
-"Piazzale Santa Maria Elisabetta",1
-"Piazzale Sant'antonio",1
-"Piazzale Santorre Di Santarosa",1
-"Piazzale Santo Stefano Re D'ungheria",1
-"Piazzale San Vigilio",1
-"Piazzale Scipione Borghese",1
-"Piazzale Segesta",1
-"Piazzale Segrino",1
-"Piazzale Selinunte",1
-"Piazzale Sicilia",1
-"Piazzale Siena",1
-"Piazzale Silvio Barbato",1
-"Piazzale Simone Bolivar",1
-"Piazzale Sisto V",1
-"Piazzale Socrate",1
-"Piazzale Spedali Civili",1
-"Piazzale Stazione",1
-"Piazzale Stazione Marittima",2
-"Piazzale Stazione Porta Genova",1
-"Piazzale Stefani Caterino",1
-"Piazzale Stefano Turr",1
-"Piazzale Susa",1
-"Piazzale Tenente Giuseppe Anelli",1
-"Piazzale Thomas Jefferson",1
-"Piazzale Tommaso Gar",1
-"Piazzale Tredici Giacinto",1
-"Piazzale Tripoli",1
-"Piazzale Udine",1
-"Piazzale Ugo Bassi",1
-"Piazzale Umbria",1
-"Piazzale Undici Maggio",1
-"Piazzale Ungheria",1
-"Piazzale Venezia",1
-"Piazzale Venticinque Aprile",1
-"Piazzale Veronica Gambara",1
-"Piazzale Viani Gipo",1
-"Piazzale Villa Della Regina",1
-"Piazzale Vincenzo Cuoco",2
-"Piazzale Vincenzo Tecchio",1
-"Piazzale Vittoria Colonna",1
-"Piazzale Vittorio Emanuele Iii",1
-"Piazzale Vittorio Emanuele Orlando",1
-"Piazzale Vittorio Locchi",1
-"Piazzale Zara",1
-"Piazza Libero Vinco",1
-"Piazza Liberta'",1
-"Piazza Libone",1
-"Piazza Lima",1
-"Piazza Lino Ferriani",1
-"Piazza Lionello Bettini",1
-"Piazza Lituania",1
-"Piazza Lodi",1
-"Piazza Lodovico Cerva",1
-"Piazza Lorenzo Bernini",2
-"Piazza Lorenzo Biancheri",1
-"Piazza Lorenzo Ghiberti",1
-"Piazza Lorenzo Lotto",1
-"Piazza Lorenzo Mascheroni",1
-"Piazza Lotario",1
-"Piazza Lovatelli",1
-"Piazza Lucania",1
-"Piazza Lucrezia Brunaccini",1
-"Piazza Ludovico Antonio Muratori",1
-"Piazza Ludovico Ariosto",1
-"Piazza Ludovico Fulci",1
-"Piazza Lugo",1
-"Piazza Luigi Amedeo Duca Degli Abruzzi",1
-"Piazza Luigi Angelini",1
-"Piazza Luigi Barracano",1
-"Piazza Luigi Bellini",1
-"Piazza Luigi Da Porto",1
-"Piazza Luigi Di Nocera",1
-"Piazza Luigi Diodati",1
-"Piazza Luigi Di Savoia",2
-"Piazza Luigi Di Savoia Duca Degli Abruzzi",1
-"Piazza Luigi Einaudi",1
-"Piazza Luigi Falchi",1
-"Piazza Luigi Mattirolo",1
-"Piazza Luigi Miraglia",1
-"Piazza Luigi Orlando",1
-"Piazza Luigi Pierangeli",1
-"Piazza Luigi Poderico",1
-"Piazza Luigi Porro Lambertenghi",1
-"Piazza Luigi Rizzo",1
-"Piazza Luigi Sandron",1
-"Piazza Luigi Scalia",1
-"Piazza Luigi Sturzo",1
-"Piazza Luigi Vittorio Bertarelli",1
-"Piazza Lussemburgo",1
-"Piazza Madama",1
-"Piazza Madama Cristina",1
-"Piazza Madonna Dei Poveri",1
-"Piazza Madonna Del Cenacolo",1
-"Piazza Madonna Della Provvidenza",1
-"Piazza Madonna Dell'arco",1
-"Piazza Madonna Della Salute",1
-"Piazza Madonna Delle Salette",1
-"Piazza Madonna Di Campagna",1
-"Piazza Madre Maria Teresa Spinelli",1
-"Piazza Maggiore",2
-"Piazza Magione",1
-"Piazza Malaspina",1
-"Piazza Malpighi",1
-"Piazza Mancini Battaglia",1
-"Piazza Mandorle",1
-"Piazza Manfredi Azzarita",2
-"Piazza Manfredo Fanti",1
-"Piazza Manganelli",1
-"Piazza Manin",1
-"Piazza Maravigna",1
-"Piazza Marcantonio Colonna",1
-"Piazza Marchese",1
-"Piazza Marchese Di Regalmici",4
-"Piazza Marchese Natale",1
-"Piazza Marco Aurelio",1
-"Piazza Marco Da Tomba",1
-"Piazza Marco Polo",1
-"Piazza Marco Vipsanio Agrippa",2
-"Piazza Maremma",1
-"Piazza Margana",1
-"Piazza Margherita",1
-"Piazza Maria Adelaide Di Savoia",1
-"Piazza Maria Ausiliatrice",2
-"Piazza Maria Consolatrice",1
-"Piazza Maria Montessori",1
-"Piazza Marianella",1
-"Piazza Marianna Benti Bulgarelli",1
-"Piazza Mariano Armellini",1
-"Piazza Maria Teresa",1
-"Piazza Marina",1
-"Piazza Marina Di Sferracavallo",1
-"Piazza Marinai D'italia",1
-"Piazza Mario Cutelli",1
-"Piazza Mario Francese",1
-"Piazza Mario Pagano",1
-"Piazza Marmolada",3
-"Piazza Marotta",1
-"Piazza Marsiglia",1
-"Piazza Martinelli",1
-"Piazza Martini",1
-"Piazza Martiri",1
-"Piazza Martiri Della Liberta'",2
-"Piazza Martiri Di Belfiore",1
-"Piazza Martiri D'istria E Dalmazia",1
-"Piazza Martiri Di Trarego",1
-"Piazza Martiri D'ungheria",1
-"Piazza Masaniello",1
-"Piazza Massa Carrara",1
-"Piazza Massa San Giorgio",1
-"Piazza Massaua",2
-"Piazza Massimo D'azeglio",3
-"Piazza Mastai",1
-"Piazza Masuccio",1
-"Piazza Matese",1
-"Piazza Mattei",1
-"Piazza Matteo D'aiello",1
-"Piazza Matteo Galdi",1
-"Piazza Matteo Luciani",1
-"Piazza Matteo Maria Boiardo",1
-"Piazza Matteo Schilizzi",1
-"Piazza Matteotti",1
-"Piazza Medaglia Miracolosa",1
-"Piazza Medaglie D'oro",2
-"Piazza Melozzo Da Forli'",2
-"Piazza Menenio Agrippa",1
-"Piazza Mentana",2
-"Piazza Merano",1
-"Piazza Mercantile",1
-"Piazza Mercato",9
-"Piazza Mercato Del Fieno",1
-"Piazza Mercato Delle Scarpe",1
-"Piazza Mercato Monte Po'",1
-"Piazza Meschita",1
-"Piazza Michelangelo",1
-"Piazza Michelangelo Buonarroti",3
-"Piazza Michele Amari",1
-"Piazza Michele Cappelli",1
-"Piazza Michele Cosmai",1
-"Piazza Michele Da Carbonara",1
-"Piazza Michele De Iorio",1
-"Piazza Michele Muzii",1
-"Piazza Michele Sanmicheli",1
-"Piazza Michele Vicinanza",1
-"Piazza Michelotti Biordo",1
-"Piazza Mignanelli",1
-"Piazza Mileto",1
-"Piazza Millunzi",1
-"Piazza Mincio",1
-"Piazza Minghetti",1
-"Piazza Minucciano",1
-"Piazza Miracoli",1
-"Piazza Molara",1
-"Piazza Moncenisio",1
-"Piazza Mondavio",1
-"Piazza Mondello",1
-"Piazza Monsignore Filippo Pottino",1
-"Piazza Monsignor Fortunato Farina",1
-"Piazza Monsignor Giuseppe Almici",1
-"Piazza Monte Baldo",1
-"Piazza Montecastrilli",1
-"Piazza Monte De' Cenci",1
-"Piazza Monte Di Tai",1
-"Piazza Monte Falterona",1
-"Piazza Monte Gemma",1
-"Piazza Monte Gennaro",1
-"Piazza Montegrappa",1
-"Piazza Monte Grappa",1
-"Piazza Monteleone Di Spoleto",1
-"Piazza Monteoliveto",1
-"Piazza Monte Santa Rosalia",1
-"Piazza Montesanto",1
-"Piazza Monte Tabor",1
-"Piazza Monte Titano",1
-"Piazza Monte Torrone",1
-"Piazza Monte Tufone",1
-"Piazza Montevergini",1
-"Piazza Morbegno",1
-"Piazza Morellaro",1
-"Piazza Moretto",1
-"Piazza Morrone",1
-"Piazza Municipio",2
-"Piazza Mura Gallieno",1
-"Piazza Museo Nazionale",1
-"Piazza Muzio Scevola",1
-"Piazza Napoleone Colajanni",1
-"Piazza Napoli",2
-"Piazza Navona",1
-"Piazza Nazario Sauro",3
-"Piazza Nazionale",1
-"Piazza Neghelli",1
-"Piazza Nello E Carlo Rosselli",1
-"Piazza Nettuno",2
-"Piazza Niccolo' Acciaiuoli",1
-"Piazza Niccolo' Machiavelli",1
-"Piazza Niccolo Rodolico",1
-"Piazza Niccolo' Tommaseo",3
-"Piazza Nicola Amore",1
-"Piazza Nicola Balenzano",1
-"Piazza Nicola Demidoff",1
-"Piazza Nicola Longobardi",1
-"Piazza Nicola Maria Nicolai",1
-"Piazza Nicola Matas",1
-"Piazza Nicolo' Copernico",1
-"Piazza Nicoloso Da Recco",1
-"Piazza Nicosia",1
-"Piazza Nikolajewka",1
-"Piazza Niscemi",1
-"Piazza Nizza",1
-"Piazza Noce",1
-"Piazza Nogara",1
-"Piazza Nolana",1
-"Piazza Nostra Signora Di Guadalupe",1
-"Piazza Novate Milanese",1
-"Piazza Noviziato",1
-"Piazza Oderico Da Pordenone",1
-"Piazza Odoardo Borrani",1
-"Piazza Ognina",1
-"Piazza Ogninella",1
-"Piazza Ognissanti",1
-"Piazza Olanda",1
-"Piazza Olivella",1
-"Piazza Omero",1
-"Piazza Onofrio Coppola",1
-"Piazza Orazio Giustiniani",1
-"Piazza Orazio Marucchi",1
-"Piazza Oreste Tommasini",1
-"Piazza Oria",1
-"Piazza Ormea",1
-"Piazza Otello Boccherini",1
-"Piazza Ottaviano Vimercati",1
-"Piazza Ottavilla",1
-"Piazza Ottavio Ziino",1
-"Piazza Ottocalli",1
-"Piazza Otto Novembre 1917",1
-"Piazza Ottorino Respighi",2
-"Piazza Ovidio",2
-"Piazza Padella",1
-"Piazza Padre Annibale Maria Di Francia",1
-"Piazza Padre Antonio De Pergola",1
-"Piazza Padre Pio",1
-"Piazza Padre Pio Da Pietralcina",1
-"Piazza Padre Reginaldo Giuliani",1
-"Piazza Paganica",1
-"Piazza Pagliarelli",1
-"Piazza Pagnocco",1
-"Piazza Pakistan",1
-"Piazza Palazzo",1
-"Piazza Palazzo Di Citta'",1
-"Piazza Palazzo Reale",1
-"Piazza Palestro",1
-"Piazza Pallavicino",1
-"Piazza Palmanova",1
-"Piazza Palombara Sabina",1
-"Piazza Pantelleria",1
-"Piazza Pantero Pantera",1
-"Piazza Paolo Borsellino",1
-"Piazza Paolo Carcano",1
-"Piazza Paolo Diacono",1
-"Piazza Paolo Ferrari",1
-"Piazza Paolo Rossi",1
-"Piazza Paolo Uccello",1
-"Piazza Paolo Vi",3
-"Piazza Papa Giovanni Xxiii",2
-"Piazza Papireto",1
-"Piazza Pappagallo",1
-"Piazza Parco Caduti Del 19 Luglio 1943",1
-"Piazza Parmenide",1
-"Piazza Partigiani",1
-"Piazza Pasquale Naddeo",1
-"Piazza Pasquale Paoli",2
-"Piazza Pasquale Villari",1
-"Piazza Passo Del Pordoi",1
-"Piazza Pastura",1
-"Piazza Penne Mozze",1
-"Piazza Peppino Sapienza",1
-"Piazza Perin Del Vaga",1
-"Piazza Petrarca",1
-"Piazza Pezzolo",1
-"Piazza Pia",1
-"Piazza Piattellina",1
-"Piazza Piave",1
-"Piazza Piccinino",1
-"Piazza Piedigrotta",1
-"Piazza Piediluco",1
-"Piazza Piemonte",1
-"Piazza Pier Carlo Talenti",1
-"Piazza Pier Della Francesca",1
-"Piazza Piero Calamandrei",1
-"Piazza Piero Della Francesca",1
-"Piazza Piero Dodi",1
-"Piazza Piero Puricelli",1
-"Piazza Pier Paolo Pasolini",1
-"Piazza Pier Vettori",1
-"Piazza Pietro D'illiria",1
-"Piazza Pietro Francesco Guala",1
-"Piazza Pietro Frattini",1
-"Piazza Pietro Gobetti",1
-"Piazza Pietro Leopoldo",1
-"Piazza Pietro Lupo",1
-"Piazza Pietro Mascagni",1
-"Piazza Pietro Merolli",1
-"Piazza Pietro Micca",1
-"Piazza Pietro Novelli",1
-"Piazza Pietro Paleocapa",1
-"Piazza Pietro Perugino",1
-"Piazza Pietro Thouar",1
-"Piazza Pietro Toselli",1
-"Piazza Pietro Vigo",1
-"Piazza Pignasecca",1
-"Piazza Pilastri",1
-"Piazza Pio Ix",1
-"Piazza Pio Pecchiai",1
-"Piazza Pioppo",1
-"Piazza Pio Xi",2
-"Piazza Pio Xii",2
-"Piazza Pitagora",3
-"Piazza Plebiscito",2
-"Piazza Plutarco",1
-"Piazza Po",1
-"Piazza Pola",1
-"Piazza Poli",1
-"Piazza Pollarola",1
-"Piazza Polonia",1
-"Piazza Pompei",1
-"Piazza Pompeo Batoni",1
-"Piazza Pompeo Castelli",1
-"Piazza Ponte",1
-"Piazza Ponte Dell'ammiraglio",1
-"Piazza Pontida",2
-"Piazza Porretti",1
-"Piazza Porta Carini",1
-"Piazza Porta Montalto",1
-"Piazza Portanova",1
-"Piazza Porta Ravegnana",1
-"Piazza Porta Sant'agata",1
-"Piazza Pozza",1
-"Piazza Pozzo",1
-"Piazza Pradaval",1
-"Piazza Prealpi",1
-"Piazza Precotto",1
-"Piazza Pretoria",1
-"Piazza Primo Maggio",2
-"Piazza Principe Amedeo",1
-"Piazza Principe Di Camporeale",1
-"Piazza Principessa Iolanda",1
-"Piazza Principe Umberto",2
-"Piazza Procida",1
-"Piazza Pt 001",1
-"Piazza Publio Virgilio Marone",1
-"Piazza Puliti",1
-"Piazza Pupinia",1
-"Piazza Quarto Dei Mille",1
-"Piazza Quattro Giornate",1
-"Piazza Quattro Novembre",8
-"Piazza Quinto Cecilio",1
-"Piazza Quinto Orazio Flacco",1
-"Piazza Rabin Ytzhak",1
-"Piazza Raffaele Busacca",1
-"Piazza Raffaele Casimiri",1
-"Piazza Raffaele Martelli",1
-"Piazza Raffaele Petti",1
-"Piazza Ragusa",1
-"Piazza Rassica",1
-"Piazza Ravenna",2
-"Piazza Re Camillo",1
-"Piazza Re Enzo",2
-"Piazza Regina Elena",1
-"Piazza Regina Margherita",2
-"Piazza Regina Pacis",1
-"Piazza Remo Cantoni",1
-"Piazza Remuria",1
-"Piazza Renato Casalbore",1
-"Piazza Renato Simoni",1
-"Piazza Renato Villoresi",1
-"Piazza Repubblica",4
-"Piazza Requisenz",1
-"Piazza Riccardo Balsamo Crivelli",1
-"Piazza Riccardo Cattaneo",1
-"Piazza Riccardo Moizo",1
-"Piazza Riccardo Strauss",1
-"Piazza Riccardo Wagner",1
-"Piazza Ricoldo Da Montecroce",1
-"Piazza Rio De Janeiro",1
-"Piazza Risorgimento",5
-"Piazza Rivoli",4
-"Piazza Roberto Malatesta",1
-"Piazza Rocciamelone",1
-"Piazza Rocco Chinnici",1
-"Piazza Roderigo Baezza",1
-"Piazza Roffredo Beneventano",1
-"Piazza Roma",4
-"Piazza Romano Bartolomeo",1
-"Piazza Romano Nicola",1
-"Piazza Romita",1
-"Piazza Ronchi",1
-"Piazza Rondanini",1
-"Piazza Rosarno",1
-"Piazza Rosa Scolari",1
-"Piazza Rosate",1
-"Piazza Roselle",1
-"Piazza Rosolino Pilo",1
-"Piazza Rossi",1
-"Piazza Rossini",1
-"Piazza Rossi Scotti",1
-"Piazza Rucellai",1
-"Piazza Rudolf Virchow",1
-"Piazza Ruggero Bonghi",1
-"Piazza Ruggero Di Sicilia",1
-"Piazza Ruggero Lambranzi",1
-"Piazza Ruggero Settimo",1
-"Piazza Ruggiero Bonghi",1
-"Piazza Ruggiero Bonghi Ponticelli",1
-"Piazza Sabaudia",1
-"Piazza Sabazio",1
-"Piazza Sabbioneta",1
-"Piazza Sabino Aruleno Celio",1
-"Piazza Sabotino",2
-"Piazza Sacra Famiglia",1
-"Piazza Sacro Cuore",1
-"Piazza Sagona",1
-"Piazza Salento",1
-"Piazza Salerno",4
-"Piazza Sallustio",2
-"Piazza Salvatore Allende",1
-"Piazza Salvatore Cambosu",1
-"Piazza Salvatore Di Giacomo",1
-"Piazza Salvatore Galgano",1
-"Piazza Salvatore Lo Bianco",1
-"Piazza Salvatore Pugliatti",1
-"Piazza Salvatore Quasimodo",1
-"Piazza Salvatore Viale",1
-"Piazza Salvo D'acquisto",3
-"Piazza San Babila",1
-"Piazza San Bartolomeo",1
-"Piazza San Bartolomeo Al Gignoro",1
-"Piazza San Benedetto",1
-"Piazza San Camillo De Lellis",2
-"Piazza San Carlo",4
-"Piazza San Clemente",1
-"Piazza San Cosimo",2
-"Piazza San Cristoforo",1
-"Piazza San Domenico",4
-"Piazza San Domenico Maggiore",1
-"Piazza San Domenico Savio",2
-"Piazza San Dona' Di Piave",1
-"Piazza Sandro Pertini",1
-"Piazza San Fedele",1
-"Piazza San Felice",1
-"Piazza San Felice Da Cantalicie",1
-"Piazza San Fermo",1
-"Piazza San Francesco",6
-"Piazza San Francesco D'assisi",5
-"Piazza San Francesco Di Paola",4
-"Piazza San Francesco Saverio",1
-"Piazza San Frediano",1
-"Piazza San Gabriele Arcangelo",1
-"Piazza San Gaetano",1
-"Piazza San Gaspare Del Bufalo",1
-"Piazza San Gerolamo",1
-"Piazza San Gervasio",1
-"Piazza San Giacomo",2
-"Piazza San Giacomo La Marina",1
-"Piazza San Gioachino",1
-"Piazza San Giorgio",4
-"Piazza San Giorgio Dei Genovesi",1
-"Piazza San Giovanni",3
-"Piazza San Giovanni Battista",1
-"Piazza San Giovanni Battista Alla Creta",1
-"Piazza San Giovanni Battista De La Salle",1
-"Piazza San Giovanni Bosco",2
-"Piazza San Giovanni Decollato",2
-"Piazza San Giovanni Di Dio",2
-"Piazza San Giovanni In Monte",1
-"Piazza San Giuseppe",2
-"Piazza San Gregorio",1
-"Piazza San Gregorio Al Celio",1
-"Piazza Sanita'",1
-"Piazza San Jacopino",1
-"Piazza San Jacopo In Acquaviva",1
-"Piazza San Leonardo",1
-"Piazza San Leonardo Da Porto Maurizio",1
-"Piazza San Leonardo Murialdo",1
-"Piazza San Leone",1
-"Piazza San Lorenzo",1
-"Piazza San Luca",1
-"Piazza San Luigi",4
-"Piazza San Luigi Gonzaga",1
-"Piazza San Marco",3
-"Piazza San Marino",1
-"Piazza San Martino",3
-"Piazza San Martino Di Rufoli",1
-"Piazza San Materno",1
-"Piazza San Matteo In Soarta",1
-"Piazza San Michele",3
-"Piazza San Michele Arcangelo",1
-"Piazza San Nazaro In Brolo",1
-"Piazza Sannazzaro",1
-"Piazza San Nicolo'",2
-"Piazza San Nicolo' All'albergheria",1
-"Piazza San Nicolo' Degli Scalzi",1
-"Piazza San Padre Pio Da Pietralcina",1
-"Piazza San Pancrazio",1
-"Piazza San Paolo",2
-"Piazza San Paolo All'orto",1
-"Piazza San Paolo A Ripa D'arno",1
-"Piazza San Pasquale",1
-"Piazza San Pasquale A Chiaia",1
-"Piazza San Pier Maggiore",1
-"Piazza San Pietro",2
-"Piazza San Pietro In Gessate",1
-"Piazza San Pio X",1
-"Piazza San Placido",1
-"Piazza San Ranieri",1
-"Piazza San Remigio",1
-"Piazza San Rocco",3
-"Piazza San Sepolcro",3
-"Piazza San Severo",1
-"Piazza San Silvestro",1
-"Piazza San Simone",1
-"Piazza San Simpliciano",1
-"Piazza Santa Balbina",1
-"Piazza Santa Caterina",2
-"Piazza Santa Caterina D'alessandria",1
-"Piazza Santa Caterina Da Siena",1
-"Piazza Santa Chiara",1
-"Piazza Santa Cristina",1
-"Piazza Santacroce",1
-"Piazza Santa Croce",1
-"Piazza Santa Croce In Fossabanda",1
-"Piazza Santa Domenica",1
-"Piazza Santa Fosca",1
-"Piazza Santa Francesca Romana",1
-"Piazza Sant'agata La Vetere",1
-"Piazza Santa Giulia",1
-"Piazza Santa Giustina",1
-"Piazza Sant'agostino",2
-"Piazza Sant'alessandro",1
-"Piazza Sant'alessio",1
-"Piazza Sant'alfonso A Marianella",1
-"Piazza Santa Lucia",1
-"Piazza Santa Maria",1
-"Piazza Santa Maria Alla Fontana",1
-"Piazza Santa Maria Ausiliatrice",1
-"Piazza Santa Maria Beltrade",1
-"Piazza Santa Maria Degli Angeli A Pizzofalcone",1
-"Piazza Santa Maria Dei Giardini",1
-"Piazza Santa Maria Del Campo",1
-"Piazza Santa Maria Del Carmelo",1
-"Piazza Santa Maria Del Fonte",1
-"Piazza Santa Maria Della Fede",1
-"Piazza Santa Maria Della Guardia",1
-"Piazza Santa Maria Della Pieta'",1
-"Piazza Santa Maria Delle Grazie",2
-"Piazza Santa Maria Dell'olivo",1
-"Piazza Santa Maria Del Soccorso",1
-"Piazza Santa Maria Del Suffragio",2
-"Piazza Santa Maria Di Galeria",1
-"Piazza Santa Maria Di Gesu'",1
-"Piazza Santa Maria La Nova",1
-"Piazza Santa Maria La Scala",1
-"Piazza Santa Maria Nascente",1
-"Piazza Santa Maria Nova",1
-"Piazza Santa Marina",1
-"Piazza Sant'ambrogio",1
-"Piazza Santa Monica",1
-"Piazza Sant'anastasia",1
-"Piazza Sant'andrea",2
-"Piazza Sant'angelo",1
-"Piazza Sant'angelo Dei Rossi",1
-"Piazza Santa Nicolella",1
-"Piazza Sant'anna",2
-"Piazza Sant'anna A Capuana",1
-"Piazza Sant'anna Al Capo",1
-"Piazza Sant'anselmo",1
-"Piazza Sant'antonino",1
-"Piazza Sant'antonio",4
-"Piazza Sant'apollinare",1
-"Piazza Santa Restituta",1
-"Piazza Santa Rita Da Cascia",1
-"Piazza Santa Trinita'",1
-"Piazza Sant'avendrace",1
-"Piazza Sante Bargellini",1
-"Piazza Sante De Sanctis",1
-"Piazza Sant'efisio",1
-"Piazza Sant'eframo Vecchio",1
-"Piazza Sant'elena",1
-"Piazza Sant'elena E Costantino",1
-"Piazza Sant'eligio",1
-"Piazza Sant'elisabetta",1
-"Piazza Sant'emerenziana",1
-"Piazza Sant'erasmo",1
-"Piazza Sant'eufemia",1
-"Piazza Sant'eulalia",1
-"Piazza Sant'euno",1
-"Piazza Sant'eustorgio",1
-"Piazza Santiago Del Cile",1
-"Piazza Santi Apostoli",1
-"Piazza Santi Gervasio E Protasio",1
-"Piazza Sant'ignazio",1
-"Piazza Santi Pietro E Lino",1
-"Piazza Santi Pietro E Paolo",3
-"Piazza Sant'isidoro",1
-"Piazza Sant'isidoro Alla Guilla",1
-"Piazza Santissima Trinita'",1
-"Piazza Santissimi Cosma E Damiano",1
-"Piazza Santissimi Quaranta Martiri Al Casalotto",1
-"Piazza Santissimi Quaranta Martiri Alla Guilla",1
-"Piazza Santi Vito E Modesto",1
-"Piazza Santo Carcere",1
-"Piazza Santo Domingo",1
-"Piazza Sant'oliva",1
-"Piazza San Tomaso",1
-"Piazza Sant'omobono",1
-"Piazza Sant'onofrio",2
-"Piazza Santo Rosario",1
-"Piazza Sant'orsola",1
-"Piazza Santo Spirito",2
-"Piazza Santo Stefano",2
-"Piazza San Valentino",1
-"Piazza San Vincenzo",1
-"Piazza San Vitale",1
-"Piazza San Vito",1
-"Piazza San Vittore",1
-"Piazza San Zeno",1
-"Piazza Sarajevo",1
-"Piazza Sardegna",1
-"Piazza Sassari",1
-"Piazza Saverio Mercadante",1
-"Piazza Savoia",1
-"Piazza Scaffa",1
-"Piazza Scammacca",1
-"Piazza Scanderbeg",1
-"Piazza Scansano",1
-"Piazza Schiavone",1
-"Piazza Scilla",1
-"Piazza Scipione Africano",1
-"Piazza Scipione Ammirato",2
-"Piazza Scipione L'africano",1
-"Piazza Sedici Ottobre",1
-"Piazza Sedile Del Campo",1
-"Piazza Sedile Di Portanova",1
-"Piazza Sedile Di Portarotese",1
-"Piazza Seguenza",1
-"Piazza Sei Febbraio",1
-"Piazza Semiramide",1
-"Piazza Sempione",3
-"Piazza Sempronio Asellio",1
-"Piazza Seneca",1
-"Piazza Serafino Belfanti",1
-"Piazza Sergio Corazzini",1
-"Piazza Serraglio",1
-"Piazza Serrule",1
-"Piazza Sessa Aurunca",1
-"Piazza Sett'angeli",1
-"Piazza Sette Settembre",1
-"Piazza Sferracavallo",1
-"Piazza Sforza Cesarini",1
-"Piazza Sicilia",1
-"Piazza Siderea",1
-"Piazza Sidney Sonnino",1
-"Piazza Sigmund Freud",1
-"Piazza Silesu Lao",1
-"Piazza Silvio D'amico",1
-"Piazza Simon Bolivar",1
-"Piazza Simone Bolivar",1
-"Piazza Sire Raul",1
-"Piazza Sirio",2
-"Piazza Sociale",1
-"Piazza Sofia",1
-"Piazza Solferino",3
-"Piazza Sor Capanna",1
-"Piazza Spagna",1
-"Piazza Spirito Santo",2
-"Piazza Spotorno",1
-"Piazza Stamira",1
-"Piazza Stampalia",1
-"Piazza Stanley Norton",1
-"Piazza Stati Uniti D'america",1
-"Piazza Statuto",4
-"Piazza Stazione",1
-"Piazza Stazione Acquicella",1
-"Piazza Stazione Castelfusano",1
-"Piazza Stazione San Lorenzo",1
-"Piazza Stefano Donaudy",1
-"Piazza Stella Maris",1
-"Piazza Stesicoro",4
-"Piazza Sumatra",1
-"Piazza Suor Victorine Le Dieu",1
-"Piazza Svizzera",1
-"Piazza Taddeo Gaddi",1
-"Piazza Tancredi Galimberti",1
-"Piazza Tarzana'",1
-"Piazza Tavola Tonda",1
-"Piazza Teatro San Ferdinando",1
-"Piazza Teatro Santa Cecilia",1
-"Piazza Tebaldo Brusato",1
-"Piazza Teresa Confalonieri",1
-"Piazza Teresio Olivelli",1
-"Piazza Terzi",1
-"Piazza Thomas Alva Edison",1
-"Piazza Tirana",1
-"Piazza Tiro A Segno",1
-"Piazza Tito Lucrezio Caro",1
-"Piazza Tito Minniti",1
-"Piazza Tito Speri",1
-"Piazza Tommaso Campanella",1
-"Piazza Tommaso Edison",2
-"Piazza Tommaso Natale",1
-"Piazza Tonnara",1
-"Piazza Tonnarazza",1
-"Piazza Torquato Tasso",1
-"Piazza Torrelunga",1
-"Piazza Torremango",1
-"Piazza Torta",1
-"Piazza Trapani",1
-"Piazza Trau'",1
-"Piazza Tre Bare",1
-"Piazza Tredici Vittime",1
-"Piazza Trento",3
-"Piazza Trieste",1
-"Piazza Trieste E Trento",1
-"Piazza Trilussa",1
-"Piazza Tristani",1
-"Piazza Trivulziana",1
-"Piazza Ucciardone",1
-"Piazza Uditore",1
-"Piazza Ugo Bassi",1
-"Piazza Ugo Di Toscana",1
-"Piazza Ulisse",1
-"Piazza Umanitaria",1
-"Piazza Umberto I",4
-"Piazza Umbria Jazz",1
-"Piazza Unione Europea",1
-"Piazza Unita' D'italia",1
-"Piazza Val D'elsa",1
-"Piazza Valdesi",1
-"Piazza Valsassina",1
-"Piazza Vanvitelli",1
-"Piazza Vardabasso",1
-"Piazza Varsavia",1
-"Piazza Vasco De Gama",1
-"Piazza Vasco Magrini",1
-"Piazza Vecchia",1
-"Piazza Velasca",1
-"Piazza Venino",1
-"Piazza Venticinque Aprile",6
-"Piazza Ventiquattro Febbraio 1945",1
-"Piazza Ventiquattro Maggio",5
-"Piazza Venti Settembre",3
-"Piazza Verdum",1
-"Piazza Verdun",1
-"Piazza Vergine Maria",1
-"Piazza Vescovado",1
-"Piazza Vesuvio",1
-"Piazza Vetra",1
-"Piazza Vetta D'italia",2
-"Piazza Vicere'",1
-"Piazza Vigili Del Fuoco",1
-"Piazza Vigliardi Paravia",1
-"Piazza Villa Chayes",1
-"Piazza Villagrazia",1
-"Piazza Villapizzone",1
-"Piazza Vincenzo Aprea",1
-"Piazza Vincenzo Arbarello",1
-"Piazza Vincenzo Bellini",2
-"Piazza Vincenzo Calenda",1
-"Piazza Vincenzo De Franchis",1
-"Piazza Vincenzo Fardella Di Torrearsa",1
-"Piazza Vincenzo Lanza",1
-"Piazza Vincenzo Linares",1
-"Piazza Vincenzo Spedini",1
-"Piazza Vincenzo Tineo",1
-"Piazza Vincenzo Tumminello",1
-"Piazza Vinicio Dalla Vecchia",1
-"Piazza Virgilio",2
-"Piazza Virgilio Bardella",1
-"Piazza Virgilio Titone",1
-"Piazza Vito Maria Nicolosi",1
-"Piazza Vittime Del Dovere",1
-"Piazza Vittoria",3
-"Piazza Vittorio Bottego",1
-"Piazza Vittorio Emanuele",1
-"Piazza Vittorio Emanuele Ii",1
-"Piazza Vittorio Emanuele Iii",2
-"Piazza Vittorio Emanuele Orlando",2
-"Piazza Vittorio Locchi",1
-"Piazza Vittorio Strazzeri",1
-"Piazza Vittorio Veneto",9
-"Piazza Volsanminiato",1
-"Piazza Volturno",1
-"Piazza Zaera",1
-"Piazza Zaera Mercato",1
-"Piazza Zara",2
-"Piazza Zisa",1
 "Piazzetta Accademia Militare",1
 "Piazzetta Adolfo Beria D'argentine",1
 "Piazzetta Alcide De Gasperi",1
@@ -7726,7 +4981,6 @@
 "Piazzetta Luciano Jona",1
 "Piazzetta Lucia Valentini Terrani",1
 "Piazzetta Luigi Boglino",1
-"Piazzetta Luigi La Porta",1
 "Piazzetta Luigi Settembrini",1
 "Piazzetta Madonna Degli Angeli",1
 "Piazzetta Madonna Delle Grazie",1
@@ -7780,11 +5034,7 @@
 "Piazzetta Pietro Giannone",1
 "Piazzetta Pietro Speciale",1
 "Piazzetta Pignoales",1
-"Piazzetta Ponte Caracciolo",1
-"Piazzetta Pontecorvo",1
 "Piazzetta Porcelli",1
-"Piazzetta Porta Guccia",1
-"Piazzetta Porta Reale",1
 "Piazzetta Portichetti",1
 "Piazzetta Prestifilippo",1
 "Piazzetta Primo Levi",1
@@ -7794,7 +5044,6 @@
 "Piazzetta Reale",1
 "Piazzetta Resuttana",1
 "Piazzetta Rino Bassan",1
-"Piazzetta Rosario A Portamedina",1
 "Piazzetta Rosario Di Palazzo",1
 "Piazzetta Salvatore Trinchese",1
 "Piazzetta San Bartolomeo",1
@@ -7807,7 +5056,6 @@
 "Piazzetta San Gaetano",1
 "Piazzetta San Gennaro A Materdei",1
 "Piazzetta San Giorgio",2
-"Piazzetta San Giovanni In Porta",1
 "Piazzetta San Giuseppe",1
 "Piazzetta San Giuseppe Dei Ruffi",1
 "Piazzetta San Gregorio Armeno",1
@@ -7879,7 +5127,6 @@
 "Piazzetta Zabarella",1
 "Piazzetta Zagarellai",1
 "Piazzetta Zimmillari",1
-"Pineta Di Ponte Tazio",1
 "Raccordo Cascina Gobba",1
 "Raccordo Roma Napoli Ovest",1
 "Rami Erbe",1
@@ -8002,7 +5249,6 @@
 "Ramo Pescheria",1
 "Ramo Piovene",1
 "Ramo Piscina",1
-"Ramo Ponte San Francesco",1
 "Ramo Pozzetto",1
 "Ramo Propria",1
 "Ramo Querini",1
@@ -8116,7 +5362,6 @@
 "Rio Terra' San Vio",1
 "Rio Terra' Secondo",1
 "Rio Terra' Squero Vecchio",1
-"Ripa Di Porta Ticinese",1
 "Ripa Mammea",1
 "Riva Alvise Cadamosto",1
 "Riva Ca' Di Dio",1
@@ -8205,7 +5450,6 @@
 "Salita Acquamarsa",1
 "Salita Aggio",1
 "Salita Ai Bastioni",1
-"Salita Al Castello Di Pontedecimo",1
 "Salita Aldo Li Gobbi",1
 "Salita Al Forte Crocetta",1
 "Salita Al Garbo",4
@@ -8218,7 +5462,6 @@
 "Salita Alla Costa Di Molassana",1
 "Salita Alla Costa Di San Siro",1
 "Salita Alla Costa Di Sant'eusebio",1
-"Salita Al Lago",1
 "Salita Alla Madonna Di Gretta",1
 "Salita All' Arcivescovado",1
 "Salita Al Monbeu",1
@@ -8289,7 +5532,6 @@
 "Salita Coccagna",1
 "Salita Codoro",1
 "Salita Concordia",1
-"   ",1
 "Salita Cortese",1
 "Salita Costa Di Carnoli",1
 "Salita Costa Di Sestri",1
@@ -8332,7 +5574,6 @@
 "Salita Dell' Annunziata",1
 "Salita Dell' Aquila",1
 "Salita Della Riccia",1
-"Salita Della Stazione Sferracavallo",1
 "Salita Delle Balate",1
 "Salita Delle Battistine",1
 "Salita Delle Cascine",1
@@ -8342,7 +5583,6 @@
 "Salita Dello Scorlazzino",1
 "Salita Dello Scorlazzone",1
 "Salita Dello Scudillo",6
-"Salita Dell' Ospedale",1
 "Salita Del Mandrione",1
 "Salita Del Monte Carmelo",1
 "Salita Del Petraio",1
@@ -8373,7 +5613,6 @@
 "Salita Echia",1
 "Salita Egeo",1
 "Salita Emanuele Cavallo",1
-"Salita Enrico Lagorio",1
 "Salita Ezio De Marchi",1
 "Salita Facciolini",1
 "Salita Fassolo Di Struppa",1
@@ -8432,8 +5671,6 @@
 "Salita Montevergine",1
 "Salita Mura Delle Cattive",1
 "Salita Ogliastri",1
-"Salita Ospedale Di Convalescenza",1
-"Salita Ospedale Suor Orsola",1
 "Salita Pandolfi",1
 "Salita Paradiso",1
 "Salita Partanna",1
@@ -8444,9 +5681,6 @@
 "Salita Petrazza",1
 "Salita Petrazza Case Imperiale",1
 "Salita Piedigrotta",1
-"Salita Pontecorvo",1
-"Salita Pontenuovo",1
-"Salita Porta Delle Chiappe",1
 "Salita Porteria San Raffaele",1
 "Salita Pozzicello",1
 "Salita Quaglietta",1
@@ -8544,7 +5778,6 @@
 "Scala Dei Lauri",1
 "Scala Dell' Arce Capitolina",1
 "Scala Dell' Erica",1
-"Scala Di Piazza Iside",1
 "Scala Dublino",1
 "Scala Enrico Ferolli",1
 "Scala Eugenio Geiringer",1
@@ -8564,7 +5797,6 @@
 "Scalea Andrea Il Moro",1
 "Scalea Paolo Ber",1
 "Scale Monache Cappuccine",1
-"Scale Ponte Di Chiaia",1
 "Scale San Francesco",1
 "Scaletta Bellavista",1
 "Scaletta Bersaglio",1
@@ -8599,7 +5831,6 @@
 "Scali Del Monte Pio",1
 "Scali Del Naviglio",1
 "Scali Del Pesce",1
-"Scali Del Ponte Di Marmo",1
 "Scali Del Pontino",1
 "Scali Del Refugio",1
 "Scali Del Teatro",1
@@ -8646,7 +5877,6 @@
 "Scalo Dell' Arenella",1
 "Scalo De Pinedo",1
 "Scalo Dinegro",1
-"Scalo Ferroviario",1
 "Scalo Marotti",1
 "Scalone Castel San Pietro",1
 "Scalone Nappi",1
@@ -8685,27 +5915,7 @@
 "Sottopassaggio Cesco Tomaselli",1
 "Sottopassaggio Della Stua",1
 "Sottopassaggio Del Lingotto",1
-"Sottopassaggio Gioia Melchiorre Metro'",1
 "Sottopassaggio Mario Saggin",1
-"Sottopassaggio Metro' Argentina",1
-"Sottopassaggio Metro' Cairoli",1
-"Sottopassaggio Metro' Cimiano",1
-"Sottopassaggio Metro' Cordusio",1
-"Sottopassaggio Metro' Crescenzago",1
-"Sottopassaggio Metro' Duomo",1
-"Sottopassaggio Metro' Gobba",1
-"Sottopassaggio Metro' Inganni",1
-"Sottopassaggio Metro' Lambrate",1
-"Sottopassaggio Metro' Lampugnano",1
-"Sottopassaggio Metro' Lima",1
-"Sottopassaggio Metro' Molino Dorino",1
-"Sottopassaggio Metro' Primatticcio",1
-"Sottopassaggio Metro' Romolo",1
-"Sottopassaggio Metro' San Babila",1
-"Sottopassaggio Metro' San Leonardo",1
-"Sottopassaggio Metro' Santa Radegonda",1
-"Sottopassaggio Metro' Sondrio",1
-"Sottopassaggio Metro' Udine",1
 "Sottopassaggio Pergolesi",1
 "Sottopassaggio San Lorenzo",1
 "Sottoportico Alberagno",1
@@ -8771,7 +5981,6 @@
 "Sottoportico Paradiso",1
 "Sottoportico Pignoi",1
 "Sottoportico Polacca",1
-"Sottoportico Ponte Furatola",1
 "Sottoportico Povolato",1
 "Sottoportico Pozzo Longo",1
 "Sottoportico Putte",1
@@ -8795,19 +6004,11 @@
 "Spianata Dell' Acquasola",1
 "Spianata Del Molo Mediceo",1
 "Spianata Di Castelletto",1
-"Stazione Agip",1
-"Stazione Fs",1
-"Stazione Marittima",2
-"Stazione Metro Magliana",1
-"Stazione Porta Garibaldi",1
-"Stazione Porta Susa",1
-"Stazione Santa Maria Novella",1
 "Strada 137 A",1
 "Strada 137 B",1
 "Strada 21",1
 "Strada Abbadiola",1
 "Strada Adriatica",1
-"Strada Aeroporto Sant'egidio Ripa",1
 "Strada Ai Rocco Tetti",1
 "Strada Ai Tetti Gariglio",1
 "Strada Albero Della Battaglia",1
@@ -8934,8 +6135,6 @@
 "Strada Colle Santo Spirito",1
 "Strada Colle Scorrano",1
 "Strada Colle Umberto I",1
-"Strada Colle Umberto Ponte Nese",1
-"Strada Collina Del Sole",1
 "Strada Col Martino Del Monte",1
 "Strada Colognola Migiana",1
 "Strada Colomba Pecorari",1
@@ -8946,6 +6145,7 @@
 "Strada Comunale Coltavolino",1
 "Strada Comunale Cupa Dell' Arco",1
 "Strada Comunale Cupa Principe",1
+"Strada Della Fratticiola",1
 "Strada Comunale Da Bertolla All'abbadia Di Stura",1
 "Strada Comunale Dei Cavoni",1
 "Strada Comunale Del Cartman",1
@@ -8973,7 +6173,6 @@
 "Strada Comunale Santacroce Cupa",1
 "Strada Comunale Santa Margherita",1
 "Strada Comunale Selva Cafaro",4
-"Strada Comunale Stazione",1
 "Strada Comunale Toscanella",1
 "Strada Comunale Trivio",1
 "Strada Comunale Val Pattonera",1
@@ -8986,7 +6185,6 @@
 "Strada Da Ceglie A Modugno",2
 "Strada Damachiarella",1
 "Strada Da Modugno A Carbonara",1
-"Strada Da Ponte",1
 "Strada Decima",2
 "Strada De Corte Comare",1
 "Strada De' Gironda",1
@@ -9082,9 +6280,7 @@
 "Strada Della Corte Bassa",1
 "Strada Dell' Acquedotto",1
 "Strada Della Creusa",1
-"Strada Dell' Aeroporto",4
 "Strada Della Forcella",1
-"Strada Della Fratticiola",1
 "Strada Della Gambetta",1
 "Strada Della Genovesa",1
 "Strada Della Giara",1
@@ -9166,8 +6362,6 @@
 "Strada Del Piano",1
 "Strada Del Piccione",1
 "Strada Del Pino",1
-"Strada Del Ponte Isabella A San Vito",1
-"Strada Del Ponte Verde",1
 "Strada Del Portone",1
 "Strada Del Pozzolo",1
 "Strada Del Quadrifoglio",1
@@ -9210,7 +6404,6 @@
 "Strada Dietro L'ospizio Marino",1
 "Strada Dietro San Vito",1
 "Strada Dietro Tresca",1
-"Strada Di Fiume",4
 "Strada Di Guardiella",1
 "Strada Di Lacugnano",1
 "Strada Di Montalcino",1
@@ -9227,8 +6420,6 @@
 "Strada Di Passo Varano",1
 "Strada Di Pietramelina",1
 "Strada Di Poggio Pelliccione",1
-"Strada Di Ponte D'oddi",1
-"Strada Di Pontenuovo",1
 "Strada Di Prepo",1
 "Strada Di Ramazzano",1
 "Strada Di Reaglie",1
@@ -9256,7 +6447,6 @@
 "Strada Eugubina",1
 "Strada Fabrianese",1
 "Strada Favorita Rubbiano",1
-"Strada Ferriere Dei Sabbioni",1
 "Strada Ferrigno",1
 "Strada Ferrini",1
 "Strada Ferro Di Cavallo Santa Lucia",1
@@ -9395,7 +6585,6 @@
 "Strada Nuova Per Opicina",1
 "Strada Olmo Ellera",1
 "Strada Olmo Valle",1
-"Strada Ospedale San Vito",1
 "Strada Ospedalone San Francesco",1
 "Strada Osteria Nuova Pietrafitta",1
 "Strada Ottava",1
@@ -9429,16 +6618,12 @@
 "Strada Per Pretola",1
 "Strada Per Rancolfo",1
 "Strada Per Sant'antonio",1
-"Strada Perugia Ponte Rio",1
-"Strada Perugia Ponte Valleceppi",4
 "Strada Perugia San Marco",6
 "Strada Piaggia",1
 "Strada Pian Della Genna",1
 "Strada Pian Della Genna Fontanella",1
 "Strada Pian Del Tevere",1
-"Strada Pianello Aeroporto Sant'egidio",1
 "Strada Piccione Selvette",1
-"Strada Pie' Della Collina",1
 "Strada Pievaiola",1
 "Strada Pieve Pagliaccia",1
 "Strada Pieve San Quirico",1
@@ -9452,18 +6637,6 @@
 "Strada Podere Pernossi",1
 "Strada Podere San Pietro",1
 "Strada Poggio Corti Villa Poggiolo",1
-"Strada Ponte Della Pietra San Vetturino",1
-"Strada Ponte D'oddi San Marco",1
-"Strada Ponte Felcino Ponte Pattoli",1
-"Strada Ponte Mollo",1
-"Strada Ponte Pattoli Passo Dell'acqua",1
-"Strada Ponte Pattoli Ponte Resina",1
-"Strada Ponte Pattoli Torre Colle Sciana",1
-"Strada Ponte Resina Monte Acutello",1
-"Strada Ponte Rio Ponte Pattoli",7
-"Strada Ponte Valleceppi Pretola",1
-"Strada Ponte Valleceppi Sant'egidio",1
-"Strada Porta Piccola San Gaetano",1
 "Strada Porticello",1
 "Strada Porto Nuovo",1
 "Strada Prati",4
@@ -9578,7 +6751,6 @@
 "Strada Santa Lucia",3
 "Strada Santa Lucia Canetola",1
 "Strada Santa Maria",1
-"Strada Santa Maria Della Collina",1
 "Strada Sant'angelo Belvedere",1
 "Strada Sant'angelo Di Chieli",1
 "Strada Santa Scolastica",1
@@ -9803,7 +6975,6 @@
 "Stradone Antonio Provolo",1
 "Stradone Arcidiacono Pacifico",1
 "Stradone Di Rovezzano",1
-"Stradone Porta Palio",1
 "Stradone San Fermo",1
 "Stradone Santa Lucia",5
 "Stradone San Tomaso",1
@@ -10075,7 +7246,6 @@
 "Traversa Ii Oglio Vecchio",1
 "Traversa Ii Orefici",1
 "Traversa Ii Polveriera",1
-"Traversa Ii Ponte",1
 "Traversa Ii Privata Dell' Epomeo",1
 "Traversa Ii Privata Fumaroli",1
 "Traversa Ii Privata Ippolito",1
@@ -10113,7 +7283,6 @@
 "Traversa I Paolo Della Valle",1
 "Traversa I Pietro Giannone",1
 "Traversa I Polveriera",1
-"Traversa I Ponte",1
 "Traversa I Prima Strada",1
 "Traversa I Principessa Maria",1
 "Traversa I Privata Eduardo Nicolardi",1
@@ -10533,7 +7702,6 @@
 "Via Adriatico",2
 "Via Adro",1
 "Via Adua",7
-"Via Aeroporto Angelo Berardi",1
 "Via Affile",1
 "Via A Fiorino",1
 "Via Afragola",1
@@ -10932,7 +8100,6 @@
 "Via Alenda",1
 "Via Alento",1
 "Via Aleria",1
-"Via Al Eritrea Ponte",1
 "Via Alesia",1
 "Via Alessandra",1
 "Via Alessandra Macinghi",1
@@ -11043,7 +8210,6 @@
 "Via Alessandro Menganti",1
 "Via Alessandro Milesi",3
 "Via Alessandro Minuziano",2
-"Via Alessandro Montagna",1
 "Via Alessandro Monteneri",1
 "Via Alessandro Monti",1
 "Via Alessandro Morani",1
@@ -11148,8 +8314,6 @@
 "Via Al Filatoio",1
 "Via Alfio Berretta",1
 "Via Alfio Marangon",1
-"Via Al Fiume",1
-"Via Al Fiume San Giovanni",1
 "Via Alfonsina Villa",1
 "Via Alfonsine",5
 "Via Alfonso Airoldi",1
@@ -11333,11 +8497,9 @@
 "Via Alla Costa Di Teglia",5
 "Via Alla Falconara",1
 "Via Alla Fermata",1
-"Via Alla Ferrovia",1
 "Via Alla Fontana",1
 "Via Alla Fornace Del Garbo",1
 "Via Alla Fula",1
-"Via Al Lago",2
 "Via Alla Grotta Danisinni",1
 "Via Alla Guardia",1
 "Via Allai",1
@@ -11346,11 +8508,6 @@
 "Via Alla Parrocchia",1
 "Via Alla Pastura",1
 "Via Alla Piana",1
-"Via Alla Piazza Dei Tedeschi",1
-"Via Alla Piazza Sant'isidoro",1
-"Via Alla Porta",1
-"Via Alla Porta Degli Angeli",1
-"Via Alla Porta Di San Lorenzo",1
 "Via Alla Posta",1
 "Via Alla Prevostura",1
 "Via All' Arsenale Di Terra",1
@@ -11368,7 +8525,6 @@
 "Via Alle Caserme",1
 "Via Alle Cave",1
 "Via Alle Fabbriche",1
-"Via Alle Ferriere Di Pontedecimo",1
 "Via Alle Gabbiane",1
 "Via Alleghe",1
 "Via Allegria",1
@@ -11497,7 +8653,6 @@
 "Via Ambrogio Magenta",1
 "Via Ambrogio Necchi",1
 "Via Ambrogio Negrone",1
-"Via Ambrogio Portaluppi",2
 "Via Ambrogio Sansedoni",1
 "Via Ambrogio Spinola",2
 "Via Ambrogio Traversari",2
@@ -11672,7 +8827,6 @@
 "Via Andrea Dandolo",1
 "Via Andrea D'angeli",1
 "Via Andrea D'antoni",1
-"Via Andrea Da Pontedera",1
 "Via Andrea Da Salerno",1
 "Via Andrea De Cintiis",1
 "Via Andrea Del Castagno",3
@@ -12523,7 +9677,6 @@
 "Via Antonio Pertile",1
 "Via Antonio Pesenti",3
 "Via Antonio Pianella",1
-"Via Antonio Piazza",1
 "Via Antonio Piccone",1
 "Via Antonio Picozzi",1
 "Via Antonio Pietrangeli",1
@@ -12681,7 +9834,6 @@
 "Via Antrosano",1
 "Via Anwar Sadat",1
 "Via Anzalone",1
-"Via Anzano Del Parco",1
 "Via Anzio",1
 "Via Aonio Paleario",1
 "Via Aosta",11
@@ -13375,7 +10527,6 @@
 "Via Baccio Bandinelli",1
 "Via Baccio D'agnolo",1
 "Via Baccio Da Montelupo",1
-"Via Baccio Pontelli",1
 "Via Baccio Ziliotto",1
 "Via Baceno",1
 "Via Baciadonne",1
@@ -13638,7 +10789,6 @@
 "Via Bartolomeo Maria Dal Monte",1
 "Via Bartolomeo Marliano",1
 "Via Bartolomeo Massalongo",1
-"Via Bartolomeo Montagna",2
 "Via Bartolomeo Nogara",1
 "Via Bartolomeo Panizza",1
 "Via Bartolomeo Parodi",1
@@ -13912,7 +11062,6 @@
 "Via Benedetto Zaccaria",1
 "Via Benedetto Zampieri",1
 "Via Benedetto Zevi",1
-"Via Benefattori Dell'ospedale",4
 "Via Benestare",1
 "Via Bene Vagienna",1
 "Via Beneventano Falcone",1
@@ -14196,7 +11345,6 @@
 "Via Bixio",1
 "Via Bizet",1
 "Via Bizzarone",1
-"Via Blasco D'alagona",1
 "Via Blennio",1
 "Via Blera",1
 "Via Blevio",1
@@ -14625,7 +11773,6 @@
 "Via Brunone Bianchi",1
 "Via Bruno Paciotti",1
 "Via Bruno Pincherle",1
-"Via Bruno Pontecorvo",1
 "Via Bruno Serotini",1
 "Via Bruno Slongo",1
 "Via Bruno Staffa",1
@@ -14751,7 +11898,6 @@
 "Via Ca' Del Bianco",1
 "Via Ca' Dell'albera",1
 "Via Ca' De Mussi",1
-"Via Caderiva",1
 "Via Caderossi",1
 "Via Cadevilla",1
 "Via Ca' Di Aprili",1
@@ -14849,7 +11995,6 @@
 "Via Caladoria",1
 "Via Calafati",2
 "Via Calafighera",1
-"Via Calagonone",1
 "Via Cala Luna",1
 "Via Calalzo",1
 "Via Calamandrana",1
@@ -15330,7 +12475,6 @@
 "Via Capo Due Rami",1
 "Via Capo Gallo",1
 "Via Capograsso",1
-"Via Capolago",1
 "Via Capo Linaro",1
 "Via Capoliveri",1
 "Via Capolona",1
@@ -15590,7 +12734,6 @@
 "Via Carlo Baranzelli",1
 "Via Carlo Baravalle",2
 "Via Carlo Barbiano Di Belgioioso",1
-"Via Carlo Bartolomeo Piazza",1
 "Via Carlo Bazzi",2
 "Via Carlo Bellerio",1
 "Via Carlo Belli",1
@@ -15680,7 +12823,6 @@
 "Via Carlo De Grossis",1
 "Via Carlo Del Greco",2
 "Via Carlo Della Gatta",1
-"Via Carlo Della Porta",1
 "Via Carlo Della Rocca",1
 "Via Carlo Della Valle",1
 "Via Carlo Del Papa",1
@@ -15861,7 +13003,6 @@
 "Via Carlo Poerio",3
 "Via Carlopoli",1
 "Via Carlo Poma",8
-"Via Carlo Porta",8
 "Via Carlo Promis",1
 "Via Carlo Puini",1
 "Via Carlo Questa",1
@@ -16119,7 +13260,6 @@
 "Via Casape",1
 "Via Casapinta",2
 "Via Casa Polla",1
-"Via Casa Porta",1
 "Via Casa Postiglione",1
 "Via Casa Professa",1
 "Via Casaprota",1
@@ -16164,14 +13304,12 @@
 "Via Cascinette D'ivrea",1
 "Via Case Basse",1
 "Via Case Bruciate",1
-"Via Case Ferrovieri Porta Nuova",1
 "Via Caseggi",1
 "Via Caselette",2
 "Via Case Libertas",1
 "Via Caselle",3
 "Via Caselle Torinese",1
 "Via Casello",1
-"Via Casello Ferroviario",1
 "Via Casello Ff.Ss.",1
 "Via Ca' Selvatica",1
 "Via Case Medicee",1
@@ -16201,7 +13339,6 @@
 "Via Casimiro Mondino",1
 "Via Casimiro Sperino",1
 "Via Casimiro Teja",1
-"Via Casina Del Lago",1
 "Via Casine",1
 "Via Casini",1
 "Via Casino Grande",1
@@ -16298,7 +13435,6 @@
 "Via Castel Guelfo",1
 "Via Castelguidone",1
 "Via Castellaccio",1
-"Via Castellafiume",1
 "Via Castellalto",1
 "Via Castellammare",2
 "Via Castellamonte",2
@@ -16379,7 +13515,6 @@
 "Via Castiglion De' Pepoli",1
 "Via Castiglione",5
 "Via Castiglione Cosentino",1
-"Via Castiglione Del Lago",1
 "Via Castiglione Della Pescaia",1
 "Via Castiglione Di Sicilia",1
 "Via Castiglione D'orcia",1
@@ -17010,7 +14145,6 @@
 "Via Cisberto Vecchi",1
 "Via Ciserano",1
 "Via Cisiano",1
-"Via Cislago",1
 "Via Cismon",2
 "Via Cissone",1
 "Via Cisterna Dell'olio",1
@@ -17266,7 +14400,6 @@
 "Via Colli Berici",1
 "Via Colli Della Farnesina",1
 "Via Colli Euganei",6
-"Via Collina",1
 "Via Collinense",1
 "Via Collinet",1
 "Via Colli Portuensi",1
@@ -17613,7 +14746,6 @@
 "Via Cosimo Tornabuoni",1
 "Via Cosimo Vestuti",1
 "Via Cosme' Tura",3
-"Via Cosmo Mollica Alagona",1
 "Via Cosseria",4
 "Via Cossignano",1
 "Via Cossila",1
@@ -18491,7 +15623,6 @@
 "Via Dei Casali Del Drago",1
 "Via Dei Casali Delle Cornacchiole",1
 "Via Dei Casali Di Acquafredda",1
-"Via Dei Casali Di Porta Medaglia",1
 "Via Dei Casali Di San Sisto",1
 "Via Dei Casali Di Santo Spirito",1
 "Via Dei Casali Di Tor Pagnotta",1
@@ -18847,7 +15978,6 @@
 "Via Dei Martelli",1
 "Via Dei Martinitt",1
 "Via Dei Martiri Angolani",1
-"Via Dei Martiri Della Deportazione",1
 "Via Dei Martiri Della Storta",1
 "Via Dei Martiri Di Marzabotto",1
 "Via Dei Martiri Ostiensi",1
@@ -18983,7 +16113,6 @@
 "Via Dei Polenta",1
 "Via Dei Poli",1
 "Via Dei Pompieri",1
-"Via Dei Pontefici",1
 "Via Dei Ponti",1
 "Via Dei Pontieri",1
 "Via Dei Portoghesi",1
@@ -19119,7 +16248,6 @@
 "Via Dei Tralci",1
 "Via Dei Tranquilli",1
 "Via Dei Transiti",1
-"Via Dei Trasportatori",1
 "Via Dei Trasporti",1
 "Via Dei Tre Ponti",1
 "Via Dei Tribunali",6
@@ -19523,7 +16651,6 @@
 "Via Del Fiordaliso",3
 "Via Del Fiore",1
 "Via Del Fiorino",1
-"Via Del Fiume",1
 "Via Del Flauto",1
 "Via Del Focolare",1
 "Via Del Follatoio",1
@@ -19626,7 +16753,6 @@
 "Via Del Gambero",1
 "Via Del Garofalo",1
 "Via Del Garofano",3
-"Via Del Gazometro",2
 "Via Del Gazzato",1
 "Via Del Gelsomino",4
 "Via Del Genio",3
@@ -19688,7 +16814,6 @@
 "Via Del Guasto",1
 "Via Del Guerino",1
 "Via Delia",1
-"Via Delia Fiume",1
 "Via Delianuova",1
 "Via Deliceto",1
 "Via Delio Tessa",1
@@ -19710,7 +16835,6 @@
 "Via Della Bastia",2
 "Via Dell' Abate",1
 "Via Della Battaglia",1
-"Via Della Batteria Di Porta Furba",1
 "Via Della Batteria Nomentana",1
 "Via Dell' Abbadia",1
 "Via Dell' Abbazia",1
@@ -19780,7 +16904,6 @@
 "Via Della Casa Comunale",1
 "Via Della Casa Dei Corsi",1
 "Via Della Casalina",1
-"Via Della Cascina Pontevica",1
 "Via Della Cascina Tesa",1
 "Via Della Casella",1
 "Via Della Caserma Di Cavalleria",1
@@ -19852,8 +16975,6 @@
 "Via Della Clementina",1
 "Via Della Coccinella",1
 "Via Della Colletta Superiore",1
-"Via Della Collina",1
-"Via Della Collina Volpi",1
 "Via Della Colombaia",1
 "Via Della Colonia",1
 "Via Della Colonia Agricola",1
@@ -19924,7 +17045,6 @@
 "Via Della Dataria",1
 "Via Della Dea Opi",1
 "Via Della Delizia",1
-"Via Della Detta Stazione Guglielmo Marconi",1
 "Via Della Diga",1
 "Via Dell' Adige",1
 "Via Della Direttissima",1
@@ -19940,7 +17060,6 @@
 "Via Della Dosa",1
 "Via Della Dozza",1
 "Via Della Efemera",1
-"Via Dell' Aeroporto",3
 "Via Dell' Aeroscalo",1
 "Via Dell' Aerostato",1
 "Via Della Fabbrica",1
@@ -19957,11 +17076,6 @@
 "Via Della Fenice",1
 "Via Della Ferratella In Laterano",1
 "Via Della Ferrera",1
-"Via Della Ferriera",1
-"Via Della Ferrovia",7
-"Via Della Ferrovia A San Lorenzo",1
-"Via Della Ferrovia Circumvesuviana",1
-"Via Della Ferrovia Piedimonte D'alife",1
 "Via Della Fiaccola",1
 "Via Della Fiera Di Sant'antonino",1
 "Via Della Filanda",6
@@ -20049,9 +17163,7 @@
 "Via Dell' Agnolo",1
 "Via Della Gomma",1
 "Via Dell' Agonistica",1
-"Via Del Lago Regillo",1
 "Via Della Gorgona",1
-"Via Del Lago Terrione",1
 "Via Della Grada",1
 "Via Della Grazia",1
 "Via Della Greca",1
@@ -20207,7 +17319,6 @@
 "Via Della Molinella",2
 "Via Della Mongolfiera",2
 "Via Della Monotype",1
-"Via Della Montagna",1
 "Via Della Montagnola",2
 "Via Dell' Amorino",1
 "Via Della Morla",1
@@ -20294,7 +17405,6 @@
 "Via Della Pesciara",1
 "Via Della Petraia",1
 "Via Della Petronella",1
-"Via Della Piazza",1
 "Via Della Piazzola",1
 "Via Della Piazzolla",1
 "Via Del Lapidario",1
@@ -20315,7 +17425,6 @@
 "Via Della Poiana",1
 "Via Della Polveriera",1
 "Via Della Porcigliana",1
-"Via Della Porta Zanzella",1
 "Via Della Posta",5
 "Via Della Posta Vecchia",1
 "Via Dell' Appagliatore",1
@@ -20509,17 +17618,6 @@
 "Via Dell' Assunzione",1
 "Via Della Stadera",1
 "Via Della Stamperia",1
-"Via Della Stazione",3
-"Via Della Stazione Aurelia",1
-"Via Della Stazione Del Divino Amore",1
-"Via Della Stazione Della Storta",1
-"Via Della Stazione Delle Capannelle",1
-"Via Della Stazione Delle Cascine",1
-"Via Della Stazione Del Lido",1
-"Via Della Stazione Di Acilia",1
-"Via Della Stazione Di Cesano",1
-"Via Della Stazione Di Ciampino",1
-"Via Della Stazione Vecchia",1
 "Via Della Stella",1
 "Via Dell' Astore",1
 "Via Della Strada Antica Mantovana",1
@@ -21211,11 +18309,6 @@
 "Via Dello Sparviero",2
 "Via Dello Spasimo",1
 "Via Dello Specchio",1
-"Via Dell' Ospedale",2
-"Via Dell' Ospedaletto",1
-"Via Dell' Ospedaletto Annunziata",1
-"Via Dell' Ospedaletto Giustiniani",1
-"Via Dell' Ospedaletto Marziale",1
 "Via Dello Spedaluzzo Della Ruota",1
 "Via Dello Speziale",1
 "Via Dello Spezio",1
@@ -21399,12 +18492,6 @@
 "Via Del Papiro",1
 "Via Del Pappagallo",1
 "Via Del Paradiso",4
-"Via Del Parco",4
-"Via Del Parco Della Vittoria",1
-"Via Del Parco Ferroviario",1
-"Via Del Parco Grifeo",1
-"Via Del Parco Oppio",1
-"Via Del Parco Regina Margherita",1
 "Via Del Parione",2
 "Via Del Parlamento",2
 "Via Del Parlascio",1
@@ -21420,7 +18507,6 @@
 "Via Del Pastore Faustolo",1
 "Via Del Pavione",1
 "Via Del Pavone",2
-"Via Del Pelago",1
 "Via Del Pellegrino",2
 "Via Del Pellicano",2
 "Via Del Pellicino",1
@@ -21472,7 +18558,6 @@
 "Via Del Podere Cave",1
 "Via Del Podere Cesare Battisti",1
 "Via Del Podere Di San Giusto",1
-"Via Del Podere Fiume",1
 "Via Del Podere Rosa",1
 "Via Del Podere Trieste",1
 "Via Del Podere Zara",1
@@ -21491,29 +18576,6 @@
 "Via Del Politeama",1
 "Via Del Pompelmo",1
 "Via Del Ponentino",1
-"Via Del Ponte",4
-"Via Del Ponte A Greve",1
-"Via Del Ponte A Iozzi",1
-"Via Del Ponte All'asse",1
-"Via Del Ponte Alle Mosse",1
-"Via Del Ponte Alle Riffe",1
-"Via Del Ponte A Mensola",1
-"Via Del Ponte Della Catena",1
-"Via Del Ponte Delle Memorie",1
-"Via Del Ponte Delle Sette Miglia",1
-"Via Del Ponte Del Pecora",1
-"Via Del Ponte Di Castel Giubileo",1
-"Via Del Ponte Di Certosa",1
-"Via Del Ponte Di Mezzo",1
-"Via Del Ponte Di Nona",1
-"Via Del Ponte Di Pantano",1
-"Via Del Ponte Di Tor Boacciana",1
-"Via Del Ponte Grande",1
-"Via Del Pontelungo",1
-"Via Del Ponte Pisano",2
-"Via Del Ponte Rosso",1
-"Via Del Ponte Sospeso",1
-"Via Del Ponte Vecchio",1
 "Via Del Ponticello",2
 "Via Del Ponticino",1
 "Via Del Pontiere",1
@@ -22049,7 +19111,6 @@
 "Via Di Colle Pisano",1
 "Via Di Colle Rosato",1
 "Via Di Colle Trugli",1
-"Via Di Collinaia",1
 "Via Di Collodi",1
 "Via Di Cologna",4
 "Via Dicomano",1
@@ -22299,7 +19360,6 @@
 "Via Di Piaggetta",1
 "Via Di Piaggia",1
 "Via Di Pian Savelli",1
-"Via Di Piazza Calda",1
 "Via Di Pie' Di Marmo",1
 "Via Di Pietra",1
 "Via Di Pietralacroce",1
@@ -22310,38 +19370,9 @@
 "Via Di Pila",1
 "Via Di Pino Lecce",1
 "Via Di Ponente",1
-"Via Di Ponte Galeria",1
-"Via Di Ponte Ladrone",1
-"Via Di Pontelungo",1
-"Via Di Ponte Mammolo",1
-"Via Di Ponte Quattro Capi",1
-"Via Di Ponte Rotto",1
-"Via Di Ponte Salario",1
-"Via Di Ponte Sisto",1
-"Via Di Ponte Terra",1
-"Via Di Ponte Trave",1
 "Via Di Pontignale",1
 "Via Di Ponziano",1
 "Via Di Popogna",1
-"Via Di Porta Angelica",1
-"Via Di Porta Castello",1
-"Via Di Porta Cavalleggeri",1
-"Via Di Porta Fabbrica",1
-"Via Di Porta Furba",1
-"Via Di Porta Labicana",1
-"Via Di Porta Latina",1
-"Via Di Porta Lavernale",1
-"Via Di Porta Maggiore",1
-"Via Di Porta Medaglia",1
-"Via Di Porta Pertusa",1
-"Via Di Porta Pinciana",1
-"Via Di Porta Portese",1
-"Via Di Porta San Lorenzo",1
-"Via Di Porta San Pancrazio",1
-"Via Di Porta San Sebastiano",1
-"Via Di Porta Santo Spirito",1
-"Via Di Porta Settimiana",1
-"Via Di Porta Tenaglia",1
 "Via Di Portonaccio",1
 "Via Di Pozzuoli",1
 "Via Di Prataglia",1
@@ -22353,7 +19384,6 @@
 "Via Di Prato Falcone",1
 "Via Di Pratolungo Casilino",1
 "Via Di Prato Rotondo",1
-"Via Di Prima Porta",1
 "Via Di Priscilla",1
 "Via Di Propaganda",1
 "Via Di Punta Raisi",1
@@ -22750,7 +19780,6 @@
 "Via Domenico Minichino",1
 "Via Domenico Modugno",2
 "Via Domenico Monegario",1
-"Via Domenico Montagnana",1
 "Via Domenico Montesano",1
 "Via Domenico Morelli",7
 "Via Domenico Moreni",1
@@ -23003,7 +20032,6 @@
 "Via Duccio Di Buoninsegna",2
 "Via Duccio Galimberti",4
 "Via Ducezio",2
-"Via Ducezio Parco Mira",1
 "Via Duchessa Di Galliera",1
 "Via Duchessa Jolanda",1
 "Via Due Aprile",1
@@ -23346,7 +20374,6 @@
 "Via Emilio Ghione",2
 "Via Emilio Gola",2
 "Via Emilio Granello",1
-"Via Emilio Lagostina",1
 "Via Emilio Lami",1
 "Via Emilio Lavagnino",1
 "Via Emilio Lepido",1
@@ -23598,7 +20625,6 @@
 "Via Envie",1
 "Via Enzo Benedetto",1
 "Via Enzo Ferrari",5
-"Via Enzo Ferrieri",1
 "Via Enzo Geraci",1
 "Via Enzo Longo",1
 "Via Enzo Loy",1
@@ -24454,9 +21480,6 @@
 "Via Ferrera",1
 "Via Ferrere",1
 "Via Ferreri",1
-"Via Ferriere Bruzzo",1
-"Via Ferriere Di Pra'",1
-"Via Ferriere Di Voltri",1
 "Via Ferrini",2
 "Via Ferri Vecchi",1
 "Via Ferro Fabiani",1
@@ -24740,22 +21763,6 @@
 "Via Fiumara",5
 "Via Fiumarello",1
 "Via Fiumarola",1
-"Via Fiume",25
-"Via Fiume Azzurro",1
-"Via Fiume Belice",1
-"Via Fiume Bianco",1
-"Via Fiume Delle Perle",1
-"Via Fiumedinisi",1
-"Via Fiumefreddo",2
-"Via Fiumefreddo Di Sicilia",1
-"Via Fiume Giallo",1
-"Via Fiume Grande",1
-"Via Fiume Mazaro",1
-"Via Fiume Mela",1
-"Via Fiume Nisi",1
-"Via Fiume Torto",1
-"Via Fiumetta",1
-"Via Fiume Verde",1
 "Via Fiumicello",1
 "Via Fiuminata",1
 "Via Fivizzano",1
@@ -24953,7 +21960,6 @@
 "Via Fossato Scagaggino",1
 "Via Fossato Serralta",1
 "Via Fosse Ardeatine",3
-"Via Fossi A Pontenuovo",1
 "Via Fosso Degli Arcacci",1
 "Via Fosso Dei Grossi",1
 "Via Fosso Del Giardino",1
@@ -25833,7 +22839,6 @@
 "Via Fratelli Pellas",1
 "Via Fratelli Petruzzelli",1
 "Via Fratelli Philips",1
-"Via Fratelli Piazza",1
 "Via Fratelli Pinardi",1
 "Via Fratelli Poerio",1
 "Via Fratelli Poggini",1
@@ -25940,7 +22945,6 @@
 "Via Funtanin",1
 "Via Fuorigrotta",1
 "Via Fuori Le Mura",1
-"Via Fuori Porta San Gennaro",1
 "Via Fuorni",1
 "Via Fuorni Di Sotto",1
 "Via Fura",1
@@ -26255,7 +23259,6 @@
 "Via Garzeno",1
 "Via Garzia Fioresi",1
 "Via Garzigliana",1
-"Via Gasometro",1
 "Via Gaspano",1
 "Via Gaspara Stampa",6
 "Via Gaspare Aselli",3
@@ -26730,7 +23733,6 @@
 "Via Giacomo Del Duca",3
 "Via Giacomo Delitala",1
 "Via Giacomo Della Marca",1
-"Via Giacomo Della Porta",2
 "Via Giacomo Del Rio",1
 "Via Giacomo Devoto",1
 "Via Giacomo Di Castelnuovo",1
@@ -27510,7 +24512,6 @@
 "Via Giovanni Battista Da Monte",1
 "Via Giovanni Battista Da Pesaro",1
 "Via Giovanni Battista De La Salle",1
-"Via Giovanni Battista Delponte",1
 "Via Giovanni Battista De Rolandis",1
 "Via Giovanni Battista De Rossi",2
 "Via Giovanni Battista E Albano Carraro",1
@@ -27753,7 +24754,6 @@
 "Via Giovanni Da Nono",1
 "Via Giovanni Da Pian Del Carpine",1
 "Via Giovanni Da Pisa",1
-"Via Giovanni Da Ponte Maironi",1
 "Via Giovanni Da Procida",7
 "Via Giovanni Da San Remo",1
 "Via Giovanni Da Udine",2
@@ -28425,7 +25425,6 @@
 "Via Giulio Pezzali",1
 "Via Giulio Pogiani",1
 "Via Giulio Pomponio Leto",1
-"Via Giulio Pontedera",1
 "Via Giulio Prinetti",1
 "Via Giulio Pulle'",1
 "Via Giulio Quirino Giglioli",1
@@ -28820,7 +25819,6 @@
 "Via Giuseppe Jatta",1
 "Via Giuseppe La Farina",9
 "Via Giuseppe La Masa",2
-"Via Giuseppe La Montagna",1
 "Via Giuseppe Lando Passerini",1
 "Via Giuseppe Lanza Di Scalea",4
 "Via Giuseppe La Spada",1
@@ -28863,7 +25861,6 @@
 "Via Giuseppe Maggiolini",1
 "Via Giuseppe Maielli",1
 "Via Giuseppe Majorana",1
-"Via Giuseppe Malagoli",2
 "Via Giuseppe Malinverni",1
 "Via Giuseppe Maltese",1
 "Via Giuseppe Malvica",1
@@ -29031,7 +26028,6 @@
 "Via Giuseppe Pomba",2
 "Via Giuseppe Ponzi",1
 "Via Giuseppe Ponzio",1
-"Via Giuseppe Porta",1
 "Via Giuseppe Poulet",1
 "Via Giuseppe Pozzobonelli",1
 "Via Giuseppe Pozzone",1
@@ -29319,7 +26315,6 @@
 "Via Gorgona",4
 "Via Gorgonzola",1
 "Via Gorizia",23
-"Via Gorlago",1
 "Via Gornalunga",1
 "Via Goro Dati",1
 "Via Gorzegno",1
@@ -29981,7 +26976,6 @@
 "Via I Pianicello",1
 "Via Ipogeo",1
 "Via Ipogeo Degli Ottavi",1
-"Via Ipparco Di Nicea",1
 "Via Ippia Di Elide",1
 "Via Ippica",1
 "Via Ippocampo Di Mare",1
@@ -30164,8 +27158,6 @@
 "Via Jacopo Da Levante",1
 "Via Jacopo Da Lio",1
 "Via Jacopo Dal Verme",1
-"Via Jacopo Da Montagnana",1
-"Via Jacopo Da Ponte",3
 "Via Jacopo Da Pontormo",1
 "Via Jacopo Da Riva",1
 "Via Jacopo Da Verona",1
@@ -30307,68 +27299,7 @@
 "Via Laghi Masuri",1
 "Via Laglio",1
 "Via Lagnasco",2
-"Via Lago",1
-"Via Lago Ampollino",1
-"Via Lago Ascianghi",1
-"Via Lago Cerviello",1
-"Via Lago D'averno",1
-"Via Lago Dell'anetra",1
-"Via Lago Della Rocca",1
-"Via Lago Del Matese",1
-"Via Lago Del Salto",1
-"Via Lago Del Turano",1
-"Via Lago Di Bolsena",2
-"Via Lago Di Bomba",1
-"Via Lago Di Borgiano",1
-"Via Lago Di Bracciano",1
-"Via Lago Di Caldarola",1
-"Via Lago Di Campotosto",3
-"Via Lago Di Canterno",1
-"Via Lago Di Capestrano",1
-"Via Lago Di Chiusi",1
-"Via Lago Di Civita",1
-"Via Lago Di Collepietro",1
-"Via Lago Di Corbara",1
-"Via Lago D'idro",1
-"Via Lago Di Fiastra",1
-"Via Lago Di Fimon",1
-"Via Lago Di Fondi",1
-"Via Lago Di Garda",2
-"Via Lago Di Giulianello",1
-"Via Lago Di Lesina",2
-"Via Lago Di Martignano",1
-"Via Lago Di Misurina",1
-"Via Lago Di Navelli",1
-"Via Lago Di Nemi",2
-"Via Lago Di Nicito",1
-"Via Lago Di Paola",1
-"Via Lago Di Piediluco",1
-"Via Lago Di Posta",1
-"Via Lago Di Provvidenza",1
-"Via Lago Di Scandarello",1
-"Via Lago Di Scanno",2
-"Via Lago D'iseo",2
-"Via Lago Di Varano",1
-"Via Lago Di Vico",1
-"Via Lago Dolfin",1
-"Via Lago Don Giuseppe",1
-"Via Lago D'orta",1
-"Via Lago Figoi",1
-"Via Lago Fimon",1
-"Via Lago Fusaro",1
-"Via Lago Isoletta",1
 "Via La Goletta",1
-"Via Lago Lucrino",1
-"Via Lago Maggiore",1
-"Via Lagonegro",1
-"Via Lago Negro",1
-"Via Lago Patria",1
-"Via Lago Sant'angelo",1
-"Via Lago Santo",1
-"Via Lagosta",1
-"Via Lago Tana",1
-"Via Lago Trasimeno",1
-"Via Lago Vivo",1
 "Via Lagundo",1
 "Via Laiasso",1
 "Via Laiatico",1
@@ -30455,7 +27386,6 @@
 "Via La Pergola",1
 "Via La Piana",1
 "Via Lapo Da Castiglionchio",1
-"Via La Ponte Gugliandolo",1
 "Via Lappano",1
 "Via L'aquila",4
 "Via L' Arancio",1
@@ -30643,7 +27573,6 @@
 "Viale Argonne",1
 "Viale Armando Diaz",4
 "Viale Arrigo Boito",1
-"Viale Artale Alagona",1
 "Viale Arturo Martini",1
 "Viale Asia",1
 "Viale Aspromonte",1
@@ -30897,7 +27826,6 @@
 "Viale Della Fiera",2
 "Viale Della Fontana Di Venere",1
 "Viale Della Fontana Rotonda",1
-"Viale Del Lago",1
 "Viale Della Grande Muraglia",1
 "Viale Dell' Agricoltura",2
 "Viale Dell' Albereta",1
@@ -30928,8 +27856,6 @@
 "Viale Dell' Artigianato",1
 "Viale Della Scultura",1
 "Viale Della Serenissima",1
-"Viale Della Stazione",1
-"Viale Della Stazione Di Castel Fusano",1
 "Viale Dell' Astronomia",1
 "Viale Dell' Atletica",1
 "Viale Dell' Aviazione",1
@@ -31008,9 +27934,6 @@
 "Viale Del Monumento Ai Caduti Francesi",1
 "Viale Del Muro Torto",1
 "Viale Del Museo Borghese",1
-"Viale Del Parco Del Celio",1
-"Viale Del Parco Di Villa Corsini",1
-"Viale Del Parco Mellini",1
 "Viale Del Pattinaggio",1
 "Viale Del Pegaso",1
 "Viale Del Piave",2
@@ -31036,8 +27959,6 @@
 "Viale Diego Balsamo Crivelli",1
 "Viale Di Montegrillo",1
 "Viale Di Pescina Gagliarda",1
-"Viale Di Porta Ardeatina",1
-"Viale Di Porta Vercellina",1
 "Viale Di Tramontana",1
 "Viale Dodici Giugno",1
 "Viale Dogali",1
@@ -31417,7 +28338,6 @@
 "Via Lemene",1
 "Via Lemerle",1
 "Viale Messina",1
-"Viale Metronio",1
 "Viale Michelangelo",6
 "Viale Michelangiolo",1
 "Viale Michele Cervantes",1
@@ -31426,7 +28346,6 @@
 "Viale Miramare",4
 "Viale Misurata",1
 "Via Lemno",1
-"Viale Modesto Della Porta",1
 "Viale Mogadiscio",1
 "Viale Moliere",2
 "Viale Molise",1
@@ -31484,7 +28403,6 @@
 "Viale Omero",1
 "Via Leonardi",1
 "Via Leonardo Agostini",1
-"Via Leonardo Alagon",1
 "Via Leonardo Bianchi",3
 "Via Leonardo Bistolfi",1
 "Via Leonardo Bruni",4
@@ -31620,8 +28538,6 @@
 "Viale Papa Giovanni Xxiii",3
 "Viale Papa Pio Xii",1
 "Viale Papiniano",1
-"Viale Parco De' Medici",1
-"Viale Parco Sereno",1
 "Viale Parioli",1
 "Viale Partenope",1
 "Viale Pasquale Paoli",1
@@ -31632,7 +28548,6 @@
 "Viale Petru Giovacchini",1
 "Via Le Pezze Di Rufoli",1
 "Viale Piave",2
-"Viale Piazza Armerina",1
 "Viale Piceno",1
 "Viale Pico Della Mirandola",1
 "Via Lepido Marco Emilio",1
@@ -31802,8 +28717,6 @@
 "Viale Spolverini",1
 "Via Lessing",1
 "Via Lessolo",1
-"Viale Stazione",1
-"Viale Stazione Porta Vescovo",1
 "Viale Stefano Turr",1
 "Viale Stelvio",1
 "Viale Stendhal",1
@@ -32112,7 +29025,6 @@
 "Via Lorenzo Da Bagnomarino",1
 "Via Lorenzo Da Bologna",1
 "Via Lorenzo Da Pietrasanta",1
-"Via Lorenzo Da Ponte",1
 "Via Lorenzo Delleani",3
 "Via Lorenzo Di Credi",3
 "Via Lorenzo Ellero",1
@@ -33781,7 +30693,6 @@
 "Via Matteo De Augustinis",1
 "Via Matteo Del Giudice",1
 "Via Matteo Della Corte",2
-"Via Matteo Della Porta",1
 "Via Matteo Della Rossa",1
 "Via Matteo De' Pasti",1
 "Via Matteo Di Giovanni",1
@@ -34138,7 +31049,6 @@
 "Via Michele Parise",1
 "Via Michele Peluso",1
 "Via Michele Pericle Negrotto",4
-"Via Michele Piazza",1
 "Via Michele Pietravalle",1
 "Via Michele Pironti",3
 "Via Michele Pizone",1
@@ -34222,7 +31132,6 @@
 "Via Mirabello Sannitico",1
 "Via Miracolo A Milano",1
 "Via Miraglia Accursio",1
-"Via Miralago",1
 "Via Miramare",2
 "Via Miramonte",1
 "Via Mirandola",1
@@ -34415,7 +31324,6 @@
 "Via Montacuto",1
 "Via Montafia",1
 "Via Montagano",1
-"Via Montagnareale",1
 "Via Montagnola",1
 "Via Montaguto",1
 "Via Montaigne",1
@@ -34712,7 +31620,6 @@
 "Via Monte Paularo",1
 "Via Monte Pavione",1
 "Via Monte Pecoraro",1
-"Via Monte Pelago",1
 "Via Monte Pelaiolo",1
 "Via Montepellegrino",1
 "Via Monte Pelmo",2
@@ -34963,7 +31870,6 @@
 "Via Motta",1
 "Via Motta Camastra",1
 "Via Motta D'affermo",1
-"Via Motta Fiume",1
 "Via Mottafollone",1
 "Via Mottalciata",1
 "Via Mottarone",2
@@ -35014,14 +31920,12 @@
 "Via Mulino Santa Lucia",1
 "Via Municipio",1
 "Via Muracce Della Piana",1
-"Via Muracci Dell'ospedaletto",1
 "Via Muraccio Dell'archetto",1
 "Via Muraccio Di Rischiaro",1
 "Via Muracciola",1
 "Via Mura Dei Gentili",1
 "Via Mura Della Lupa",1
 "Via Mura Della Pace",1
-"Via Mura Di Porta Carini",1
 "Via Mura Di San Vito",1
 "Via Muraiola",1
 "Via Mura San Bernardino",1
@@ -35148,7 +32052,6 @@
 "Via Neera",1
 "Via Neglia Francesco Paolo",1
 "Via Negroli",1
-"Via Negroponte",2
 "Via Neive",1
 "Via Nella Berther",1
 "Via Nemea",1
@@ -35605,7 +32508,6 @@
 "Via Offagna",2
 "Via Offanengo",1
 "Via Officina",1
-"Via Officina Ferroviaria",1
 "Via Offida",1
 "Via Ogaden",2
 "Via Oggiono",1
@@ -35635,7 +32537,6 @@
 "Via Olifante",1
 "Via Olimpia",2
 "Via Olindo Guerrini",4
-"Via Olindo Malagodi",1
 "Via Olio Di Lino",4
 "Via Olivadi",1
 "Via Olivarella",2
@@ -35871,11 +32772,6 @@
 "Via Osmano",1
 "Via Osnago",1
 "Via Osoppo",6
-"Via Ospedale",2
-"Via Ospedale Civile",1
-"Via Ospedale Di Venere",1
-"Via Ospedaletto",1
-"Via Ospedale Vecchio",1
 "Via Ospedalieri",1
 "Via Ospizio Di Beneficenza",1
 "Via Ospizio Di Beneficienza",1
@@ -36130,7 +33026,6 @@
 "Via Palabanda",1
 "Via Palagianello",1
 "Via Palagio Degli Spini",1
-"Via Palagonia",2
 "Via Palaia",1
 "Via Palamita",1
 "Via Palanzone",1
@@ -36162,7 +33057,6 @@
 "Via Paliaghetta",1
 "Via Paliano",1
 "Via Palinuro",2
-"Via Pallagorio",1
 "Via Pallante",2
 "Via Pallanza",2
 "Via Pallanzeno",1
@@ -36443,9 +33337,6 @@
 "Via Paraguay",2
 "Via Parallela",1
 "Via Paratore",1
-"Via Parco Carelli",1
-"Via Parco Dei Girasoli",1
-"Via Parco Nazionale D'abruzzo",1
 "Via Pardo",1
 "Via Parella",1
 "Via Parenzo",7
@@ -36657,8 +33548,6 @@
 "Via Pelagie",1
 "Via Pelagio I",1
 "Via Pelagio Palagi",2
-"Via Pelago",1
-"Via Pelagosa",1
 "Via Pelandi",1
 "Via Peligni",1
 "Via Pellaro",1
@@ -36668,7 +33557,6 @@
 "Via Pellegrino Ettore Lombardo",1
 "Via Pellegrino Lombardo",1
 "Via Pellegrino Matteucci",2
-"Via Pellegrino Pontecorvo",1
 "Via Pellegrino Rossi",4
 "Via Pellegrino Strobel",2
 "Via Pellegrino Tibaldi",3
@@ -36866,12 +33754,6 @@
 "Via Piastroni",1
 "Via Piave",20
 "Via Piavola A Buti",1
-"Via Piazza",1
-"Via Piazza Armerina",1
-"Via Piazza D'armi",1
-"Via Piazza Di Brignano",1
-"Via Piazza Larga",1
-"Via Piazza Larga Al Mercato",1
 "Via Piazzicella",1
 "Via Piazzolo",1
 "Via Picanello",1
@@ -36968,9 +33850,7 @@
 "Via Piero Jahier",2
 "Via Piero Malvestiti",1
 "Via Piero Martinetti",1
-"Via Piero Montagnani Marelli",1
 "Via Piero Pajardi",1
-"Via Piero Portaluppi",1
 "Via Piero Preda",1
 "Via Piero Puccioni",1
 "Via Piero Strozzi",1
@@ -37280,7 +34160,6 @@
 "Via Pietro Olina",1
 "Via Pietro Oreste",1
 "Via Pietro Orseolo",2
-"Via Pietro Orsilago",1
 "Via Pietro Ottoboni",1
 "Via Pietro Pacchiotti",1
 "Via Pietro Pajetta",1
@@ -37738,58 +34617,6 @@
 "Via Pontano",1
 "Via Pontara Sandri",1
 "Via Pontassieve",1
-"Via Ponte",3
-"Via Ponte Aleardi",1
-"Via Ponte Alto",1
-"Via Ponte A Piglieri",1
-"Via Ponte Basazenoci",1
-"Via Pontebba",2
-"Via Ponte Buggianese",1
-"Via Ponte Cittadella",1
-"Via Ponte Corleone Agnetta",1
-"Via Ponte Corleone Tolentino",1
-"Via Pontecorvo",1
-"Via Pontecurone",1
-"Via Pontedassio",1
-"Via Ponte Degli Incastri",1
-"Via Ponte Dei Francesi",1
-"Via Ponte Dei Granili",1
-"Via Ponte Del Giuscano",1
-"Via Ponte Della Cagna",1
-"Via Ponte Della Maddalena",1
-"Via Ponte Della Magliana",1
-"Via Ponte Dell'ammiraglio",1
-"Via Pontedera",1
-"Via Ponte Dese",1
-"Via Ponte Di Legno",2
-"Via Ponte Di Mare",1
-"Via Ponte Di Pietra",1
-"Via Ponte Di Tappia",1
-"Via Ponte Di Veja",1
-"Via Ponte Gardena",1
-"Via Ponte Guazzariello",1
-"Via Pontelandolfo",1
-"Via Ponte Manarini",1
-"Via Ponte Molino",1
-"Via Pontenuovo",1
-"Via Ponte Nuovo",3
-"Via Ponte Pietra",2
-"Via Ponte Pignolo",1
-"Via Ponte Rofiolo",1
-"Via Ponte Romano",1
-"Via Ponte Rosso",1
-"Via Ponte Rotto",1
-"Via Ponte San Pancrazio",1
-"Via Ponte Schiavo",2
-"Via Ponte Seura",1
-"Via Ponte Seveso",1
-"Via Pontestura",1
-"Via Pontetti San Severino",1
-"Via Pontevecchio",1
-"Via Ponte Vecchio",1
-"Via Ponte Verde",1
-"Via Ponte Vetero",1
-"Via Pontevigodarzere",1
 "Via Ponticelli",1
 "Via Ponticello",1
 "Via Ponticello Oneto",1
@@ -37821,38 +34648,7 @@
 "Via Porretti",1
 "Via Porrone Bassano",1
 "Via Por Santa Maria",1
-"Via Porta A Mare",1
-"Via Porta Buozzi",1
-"Via Porta Carini",1
-"Via Portacarrese A Montecalvario",1
-"Via Portacatena",1
-"Via Porta Catena",1
-"Via Porta Di Castello",1
-"Via Porta Di Castro",1
-"Via Porta Di Ferro",1
-"Via Porta Di Mare",2
-"Via Porta Di Massa",1
-"Via Porta Dipinta",1
-"Via Porta Di Ronga",1
-"Via Porta Dolfi",1
-"Via Porta Elina",1
 "Via Port'alba",1
-"Via Porta Mazzara",1
-"Via Portamedina",1
-"Via Portanova",3
-"Via Porta Organa",1
-"Via Porta Palatina",1
-"Via Porta Pia",1
-"Via Porta Pile",1
-"Via Porta Posillipo",1
-"Via Portara",1
-"Via Porta Rateprandi",1
-"Via Porta Rossa",1
-"Via Porta San Gennaro",1
-"Via Porta San Nicola",1
-"Via Porta Sant'agata",1
-"Via Porta San Zeno",1
-"Via Portazza",1
 "Via Portella",1
 "Via Portella Castro",1
 "Via Portella Della Ginestra",1
@@ -37996,7 +34792,6 @@
 "Via Principe Di Granatelli",1
 "Via Principe Di Napoli",2
 "Via Principe Di Napoli A Ponticelli",1
-"Via Principe Di Palagonia",1
 "Via Principe Di Pantelleria",1
 "Via Principe Di Paterno'",4
 "Via Principe Di Piemonte",1
@@ -38032,7 +34827,6 @@
 "Via Privata Costa",1
 "Via Privata Della Torre",1
 "Via Privata Delle Terme",1
-"Via Privata Del Parco Comola Ricci",1
 "Via Privata De Martino",1
 "Via Privata De Vitalis",1
 "Via Privata Enrico Maffettone",1
@@ -38093,7 +34887,6 @@
 "Via Provinciale Delle Brecce",1
 "Via Provinciale Delle Puglie",1
 "Via Provinciale Madonnelle",1
-"Via Provinciale Montagna Spaccata",1
 "Via Provinciale Napoli",1
 "Via Provinciale Pisana",1
 "Via Provinciale San Gennaro",1
@@ -38171,7 +34964,6 @@
 "Via Quarto Di Sopra",1
 "Via Quarto Fanteria",1
 "Via Quarto Mascherone",1
-"Via Quarto Ponte",1
 "Via Quarto Rubbie",1
 "Via Quarto Servilio",1
 "Via Quassolo",1
@@ -39034,7 +35826,6 @@
 "Via Rosanna",1
 "Via Rosa Raimondi Garibaldi",1
 "Via Rosario Ajello",1
-"Via Rosario A Portamedina",1
 "Via Rosario Berardi",1
 "Via Rosario Di Santa Fe'",1
 "Via Rosario Gerbasi",1
@@ -39470,7 +36261,6 @@
 "Via San Cosimo",4
 "Via San Cosimo Alta",1
 "Via San Cosmo Albanese",1
-"Via San Cosmo Fuori Porta Nolana",1
 "Via San Costantino",1
 "Via San Costanzo",2
 "Via San Crescenziano",1
@@ -39588,7 +36378,6 @@
 "Via San Giovanni Alla Guilla",1
 "Via San Giovanni Alla Paglia",1
 "Via San Giovanni A Mare",1
-"Via San Giovanni A Porta Latina",1
 "Via San Giovanni Battista",2
 "Via San Giovanni Battista De La Salle",1
 "Via San Giovanni Battista Della Salle",1
@@ -39610,7 +36399,6 @@
 "Via San Giovanni In Conca",1
 "Via San Giovanni In Corte",1
 "Via San Giovanni In Fiore",1
-"Via San Giovanni In Porta",1
 "Via San Giovanni In Valle",1
 "Via San Giovanni La Punta",1
 "Via San Giovanni Li Cuti",1
@@ -39719,7 +36507,6 @@
 "Via San Melchiade Papa",1
 "Via San Michele",7
 "Via San Michele A Castello",1
-"Via San Michele Alla Porta",1
 "Via San Michele Arcangelo",1
 "Via San Michele A Rovezzano",1
 "Via San Michele Del Carso",1
@@ -39943,7 +36730,6 @@
 "Via Santa Maria A Cancello",1
 "Via Santa Maria Ai Monti",1
 "Via Santa Maria Alemanna",1
-"Via Santa Maria Alla Porta",1
 "Via Santa Maria Antesaecula",1
 "Via Santa Maria Antica",1
 "Via Santa Maria Assunta",1
@@ -39997,7 +36783,6 @@
 "Via Santa Maria La Grande",1
 "Via Santa Maria La Nova",1
 "Via Santa Maria La Nuova",1
-"Via Santa Maria La Porta",1
 "Via Santa Maria Lascala",1
 "Via Santa Maria La Scala",1
 "Via Santa Maria Maddalena",1
@@ -41089,10 +37874,6 @@
 "Via Statonia",1
 "Via Statuto",2
 "Via Stazio",2
-"Via Stazione",5
-"Via Stazione Campo Di Marte",1
-"Via Stazione San Lorenzo",1
-"Via Stazione Tre Mestieri",1
 "Via Stazzone",5
 "Via Stefanardo Da Vimercate",1
 "Via Stefania",1
@@ -42133,8 +38914,6 @@
 "Via Vecchia San Bartolomeo",1
 "Via Vecchia San Luigi",1
 "Via Vecchia San Rocco",1
-"Via Vecchia Stazione",1
-"Via Vecchio Gasometro",1
 "Via Vecchio Molo",1
 "Via Vedizzo",1
 "Via Veglia",6
@@ -42271,7 +39050,6 @@
 "Via Vicinale Dei Monti",1
 "Via Vicinale Dell' Infermeria",1
 "Via Vicinale De Mellis",1
-"Via Vicinale Ferriera",1
 "Via Vicinale Festignano",1
 "Via Vicinale Filanda",1
 "Via Vicinale Fosso Santo Stefano",1
@@ -42360,7 +39138,6 @@
 "Via Villaglori",1
 "Via Villa Glori",6
 "Via Villagrazia",6
-"Via Villa Lago",1
 "Via Villa Laura",2
 "Via Villalba",1
 "Via Villa Maio",1
@@ -42497,7 +39274,6 @@
 "Via Vincenzo Pellecchia",1
 "Via Vincenzo Petagna",1
 "Via Vincenzo Petrone",1
-"Via Vincenzo Piazza Martini",1
 "Via Vincenzo Pierro",1
 "Via Vincenzo Pinali",1
 "Via Vincenzo Pinelli",1
@@ -42581,7 +39357,6 @@
 "Via Vitantonio Di Cagno",1
 "Via Viterbo",3
 "Via Vito Bonadonna",1
-"Via Vito Cesare Piazza",1
 "Via Vito Coco",1
 "Via Vito D'anna",2
 "Via Vito D'ondes Reggio",1
@@ -42604,7 +39379,6 @@
 "Via Vitruvio",2
 "Via Vittime Civili Di Guerra",4
 "Via Vittime Di Bologna",1
-"Via Vittime D'istria Fiume E Dalmazia",1
 "Via Vittore Carpaccio",2
 "Via Vittore Ghislandi",1
 "Via Vittore Tasca",1
@@ -42875,7 +39649,6 @@
 "Vico Cangiani Al Mercato",1
 "Vico Cangiani A Santa Maria Antesaecula",1
 "Vico Cannoni",1
-"Vico Cappella A Pontenuovo",1
 "Vico Cappuccinelle",1
 "Vico Capurso",1
 "Vico C. Arceri",1
@@ -42969,7 +39742,6 @@
 "Vico Croce Ai Miracoli",1
 "Vico Croce Al Lavinaio",1
 "Vico Croce A Sant'agostino",1
-"Vico Crocelle A Porta San Gennaro",1
 "Vico Crocifisso",1
 "Vico Cuneo",1
 "Vico Curro'",1
@@ -43072,7 +39844,6 @@
 "Vico Della Consolazione",1
 "Vico Della Croce",1
 "Vico Della Croce Bianca",1
-"Vico Della Ferrovia",1
 "Vico Della Fortuna",1
 "Vico Della Fragola",1
 "Vico Della Galera",1
@@ -43152,7 +39923,6 @@
 "Vico Dietro Il Coro San Salvatore",1
 "Vico Dietro La Chiesa",1
 "Vico Di Maso",1
-"Vico Di Piazza Santa Maria Dei Giardini",1
 "Vico Di Strada Piergiovanni Molino",1
 "Vico Dittaino",1
 "Vico Dolianova",1
@@ -43177,7 +39947,6 @@
 "Vico Federico Ii Di Svevia",1
 "Vico Ferrante Aporti",1
 "Vico Ferrari",1
-"Vico Ferrovia",1
 "Vico Figurari",1
 "Vico Figurelle A Montecalvario",1
 "Vico Finale",1
@@ -43194,7 +39963,6 @@
 "Vico Forino",1
 "Vico Fornai",1
 "Vico Fornetti",1
-"Vico Forno A Porta San Gennaro",1
 "Vico Forno Della Solitaria",1
 "Vico Forno Santa Scolastica",1
 "Vico Forno Terragine",1
@@ -43272,11 +40040,9 @@
 "Vico I Dei Venti",1
 "Vico I Del Carmine",1
 "Vico I Della Quercia",1
-"Vico I Della Stazione",1
 "Vico I Del Risorgimento",1
 "Vico I Del Santo",1
 "Vico I De Marinis",1
-"Vico I Di Piazza Capitaneo",1
 "Vico I Di Via Capitaneo",1
 "Vico I Di Via Duca Di Genova",1
 "Vico I Di Via Lena",1
@@ -43290,7 +40056,6 @@
 "Vico I Duca D'aosta",1
 "Vico I Enrico Toti",1
 "Vico I Fauna Medau",1
-"Vico I Fiume",1
 "Vico I Fontanelle",1
 "Vico I Gagliardi",1
 "Vico I Garibaldi",1
@@ -43321,10 +40086,8 @@
 "Vico Ii Dei Mandorli",1
 "Vico Ii Del Carmine",1
 "Vico Ii Della Quercia",1
-"Vico Ii Del Ponte",1
 "Vico Ii De Marinis",1
 "Vico Ii Di Contrada Grazia",1
-"Vico Ii Di Piazza Capitaneo",1
 "Vico Ii Di Via Capitaneo",1
 "Vico Ii Di Via Duca Di Genova",1
 "Vico Ii Di Via Lena",1
@@ -43339,7 +40102,6 @@
 "Vico Ii Duchesca",1
 "Vico Ii Due Porte",1
 "Vico Ii Enrico Toti",1
-"Vico Ii Fiume",2
 "Vico Ii Foglia A Santa Chiara",1
 "Vico Ii Foria",1
 "Vico Ii Franchino",1
@@ -43358,7 +40120,6 @@
 "Vico Iii Cisterna Dell'olio",1
 "Vico Iii Dei Genovesi",1
 "Vico Iii Dei Mandorli",1
-"Vico Iii Del Ponte",1
 "Vico Iii Di Via Capitaneo",1
 "Vico Iii Di Via Lena",1
 "Vico Iii Di Via Nicola Massaro",1
@@ -43367,7 +40128,6 @@
 "Vico Iii Di Via Vittorio Veneto",1
 "Vico Iii Duchesca",1
 "Vico Iii Enrico Toti",1
-"Vico Iii Fiume",1
 "Vico Iii Franchino",1
 "Vico Iii Garibaldi",1
 "Vico Iii Generale Armando Diaz",1
@@ -43381,9 +40141,7 @@
 "Vico Iii Macchie",1
 "Vico Iii Modugno",1
 "Vico Ii Indipendenza",1
-"Vico Iii Ospedale Di Venere",1
 "Vico Iii Parise",1
-"Vico Iii Portapiccola A Montecalvario",1
 "Vico Iii Principe Umberto",1
 "Vico Iii San Giovanni",1
 "Vico Iii San Sebastiano",1
@@ -43405,11 +40163,8 @@
 "Vico Ii Montesanto",1
 "Vico Ii Napoli",1
 "Vico I Indipendenza",1
-"Vico Ii Ospedale Di Venere",1
 "Vico Ii Palermo",1
 "Vico Ii Parise",1
-"Vico Ii Piazza Larga",1
-"Vico Ii Portapiccola A Montecalvario",1
 "Vico Ii Principe Di Carignano",1
 "Vico Ii Principe Umberto",1
 "Vico Ii Prolungamento Di Via Orifiamma",1
@@ -43419,7 +40174,6 @@
 "Vico Ii San Francesco Della Scarpa",1
 "Vico Ii San Gaetano",1
 "Vico Ii San Giovanni",1
-"Vico Ii San Giovanni In Porta",1
 "Vico Ii San Marco",1
 "Vico Ii San Nicola Alla Dogana",1
 "Vico Ii San Quintino",1
@@ -43458,15 +40212,10 @@
 "Vico I Nicola De Giosa",1
 "Vico Intermedio",1
 "Vico Invrea",1
-"Vico I Ospedale Di Venere",1
 "Vico I Palermo",1
 "Vico I Parise",1
 "Vico I Parrocchia",1
-"Vico I Piazza Italia",1
-"Vico I Piazza Larga",1
 "Vico I Plava",1
-"Vico I Ponte",1
-"Vico I Portapiccola A Montecalvario",1
 "Vico I Principe Di Carignano",1
 "Vico I Principe Umberto",1
 "Vico I Prolungamento Di Via Argiolas",1
@@ -43478,7 +40227,6 @@
 "Vico I San Francesco Della Scarpa",1
 "Vico I San Gaetano",1
 "Vico I San Giovanni",1
-"Vico I San Giovanni In Porta",1
 "Vico I San Marco",2
 "Vico I San Quintino",1
 "Vico I San Severo A Capodimonte",1
@@ -43508,7 +40256,6 @@
 "Vico I Venezia",1
 "Vico Iv Enrico Toti",1
 "Vico I Venti Settembre",1
-"Vico Iv Fiume",1
 "Vico Iv Garibaldi",1
 "Vico Iv Generale Armando Diaz",1
 "Vico Iv Giovanni Battista Tuveri",1
@@ -43516,7 +40263,6 @@
 "Vico Iv Is Campus",1
 "Vico Iv La Croce",1
 "Vico Iv Macchie",1
-"Vico Iv Ospedale Di Venere",1
 "Vico Iv Principe Umberto",1
 "Vico Iv San Giovanni",1
 "Vico Iv San Marco",1
@@ -43615,10 +40361,8 @@
 "Vicoletto Iii Cavone",1
 "Vicoletto Iii Del Consiglio",1
 "Vicoletto Iii Politi",1
-"Vicoletto Iii Pontenuovo",1
 "Vicoletto Iii Santa Maria A Cancello",1
 "Vicoletto Ii Politi",1
-"Vicoletto Ii Pontenuovo",1
 "Vicoletto Ii San Giovanni Maggiore",1
 "Vicoletto Ii San Paolo",1
 "Vicoletto Ii Santa Maria A Cancello",1
@@ -43626,12 +40370,10 @@
 "Vicoletto Ii Santa Maria Avvocata",1
 "Vicoletto Improta",1
 "Vicoletto I Politi",1
-"Vicoletto I Pontenuovo",1
 "Vicoletto I San Giovanni Maggiore",1
 "Vicoletto I San Paolo",1
 "Vicoletto I Santa Maria A Cancello",1
 "Vicoletto I Santa Maria Ad Agnone",1
-"Vicoletto Iv Pontenuovo",1
 "Vicoletto Leoni",1
 "Vicoletto Listone",1
 "Vicoletto Lopez",1
@@ -43649,11 +40391,8 @@
 "Vicoletto Pallonetto A Santa Lucia",1
 "Vicoletto Pietra Del Pesce",1
 "Vicoletto Pietro Colletta",1
-"Vicoletto Ponte Nuovo",1
-"Vicoletto Portamedina",1
 "Vicoletto Privato Samo",1
 "Vicoletto Privato Tarallo",1
-"Vicoletto Rosario A Portamedina",1
 "Vicoletto Rosario Di Palazzo",1
 "Vicoletto Salata All'olivella",1
 "Vicoletto San Carlo Alle Mortelle",1
@@ -43732,7 +40471,6 @@
 "Vicolo Antoniazza",1
 "Vicolo Antoniniano",1
 "Vicolo Antonino Cicala",1
-"Vicolo A Porta Nuova",1
 "Vicolo Aquila Nera",1
 "Vicolo Arabona",1
 "Vicolo Aradas",1
@@ -43889,7 +40627,6 @@
 "Vicolo Cieco Paradiso",1
 "Vicolo Cieco Parigino",1
 "Vicolo Cieco Pomodoro",1
-"Vicolo Cieco Porta Palio",1
 "Vicolo Cieco Pozza",1
 "Vicolo Cieco San Clemente",1
 "Vicolo Cieco San Giacomo",1
@@ -44060,7 +40797,6 @@
 "Vicolo Del Crivellaro",1
 "Vicolo Del Curato",1
 "Vicolo Del Divino Amore",1
-"Vicolo Del Ducato Di Piazza Pontida",1
 "Vicolo Del Falcone",1
 "Vicolo Del Farinone",1
 "Vicolo Del Ferro",1
@@ -44115,7 +40851,6 @@
 "Vicolo Dell' Addolorata",1
 "Vicolo Della Disciplina",1
 "Vicolo Della Dogana",1
-"Vicolo Della Ferrovia",1
 "Vicolo Della Fonderia",1
 "Vicolo Della Fontana",1
 "Vicolo Della Fontana Corvia",1
@@ -44181,7 +40916,6 @@
 "Vicolo Della Spiga",1
 "Vicolo Dell' Assunta",1
 "Vicolo Della Staulanza",1
-"Vicolo Della Stazione",1
 "Vicolo Della Stecca",1
 "Vicolo Della Storta",1
 "Vicolo Dell' Atleta",1
@@ -44355,14 +41089,9 @@
 "Vicolo Di Passolombardo",1
 "Vicolo Di Pietralata",1
 "Vicolo Di Pietra Papa",1
-"Vicolo Di Ponte Ladrone",1
-"Vicolo Di Ponte Mammolo",1
-"Vicolo Di Ponte Terra",1
-"Vicolo Di Porta Furba",1
 "Vicolo Di Prato Corazza",1
 "Vicolo Di Prato Falcone",1
 "Vicolo Di Prato Rotondo",1
-"Vicolo Di Prima Porta",1
 "Vicolo Di Quarto Peperino",1
 "Vicolo Di San Barnaba",1
 "Vicolo Di San Biagio",1
@@ -44412,7 +41141,6 @@
 "Vicolo Felice",1
 "Vicolo Ferrante Sanseverino",1
 "Vicolo Fiori",1
-"Vicolo Fiume Torto",1
 "Vicolo Flavio Gioia",1
 "Vicolo Fonderia",1
 "Vicolo Fontanabrolo",1
@@ -44661,7 +41389,6 @@
 "Vicolo Paganica",1
 "Vicolo Paglia Corta",1
 "Vicolo Pagliotti",1
-"Vicolo Palagonia All'alloro",1
 "Vicolo Palazzo Comunale",1
 "Vicolo Pallade",1
 "Vicolo Pallone",1
@@ -44707,12 +41434,6 @@
 "Vicolo Placido Viola",1
 "Vicolo Poeta",1
 "Vicolo Pomodoro",1
-"Vicolo Pontecorvo",1
-"Vicolo Ponte Molino",1
-"Vicolo Ponte Nuovo",1
-"Vicolo Portaccia",1
-"Vicolo Portanova",1
-"Vicolo Porta Vescovo",1
 "Vicolo Porton Rosso",1
 "Vicolo Posterla",1
 "Vicolo Pozzo",1
@@ -44807,7 +41528,6 @@
 "Vicolo San Massimo",1
 "Vicolo San Matteo",2
 "Vicolo San Mercurio",1
-"Vicolo San Michele Alla Porta",1
 "Vicolo San Michele Arcangelo",1
 "Vicolo San Nicola",1
 "Vicolo San Nicola De' Cesarini",1
@@ -44831,7 +41551,6 @@
 "Vicolo Santa Lucia",1
 "Vicolo Santa Margherita",1
 "Vicolo Santa Maria",2
-"Vicolo Santa Maria Alla Porta",1
 "Vicolo Santa Maria Assunta",1
 "Vicolo Santa Maria Del Paradiso",1
 "Vicolo Santa Maria In Conio",1
@@ -44842,7 +41561,6 @@
 "Vicolo Santa Ninfa",1
 "Vicolo Sant'antonino",1
 "Vicolo Sant'antonio",3
-"Vicolo Sant'antonio Alla Piazza Dei Tedeschi",1
 "Vicolo Sant'apollonia",1
 "Vicolo Santa Rosalia",1
 "Vicolo Santa Rosalia Al Borgo",1
@@ -44974,9 +41692,7 @@
 "Vico Ludovico Ariosto",1
 "Vico Luigi Settembrini",1
 "Vico Lungo Del Gelso",6
-"Vico Lungo Del Ponte",1
 "Vico Lungo Montecalvario",6
-"Vico Lungo Pontecorvo",1
 "Vico Lungo San Matteo",6
 "Vico Lungo San Raffaele",1
 "Vico Lungo Sant'agostino Degli Scalzi",1
@@ -45034,7 +41750,6 @@
 "Vico Olivella",1
 "Vico Orto Del Conte",1
 "Vico Orto Gemelli",1
-"Vico Ospedale Civile",1
 "Vico Ospizio",1
 "Vico Pace",1
 "Vico Pacella",1
@@ -45066,7 +41781,6 @@
 "Vico Pergolella",1
 "Vico Pergolella Morbillo",1
 "Vico Petrone",1
-"Vico Piazza Nuova",1
 "Vico Piccolo",1
 "Vico Piedigrotta",1
 "Vico Pietro Martini",1
@@ -45074,9 +41788,6 @@
 "Vico Piscicelli",1
 "Vico Pizzorosso",1
 "Vico Politi",1
-"Vico Pontecorvo",1
-"Vico Portamedina",1
-"Vico Portapiccola A Donnalbina",1
 "Vico Porticatello",1
 "Vico Potenza",1
 "Vico Prefettura",1
@@ -45087,7 +41798,6 @@
 "Vico Regina Margherita",1
 "Vico Rodia",1
 "Vico Rometta",1
-"Vico Rosario A Portamedina",1
 "Vico Rosario Di Palazzo",1
 "Vico Rose",1
 "Vico Rosini",1
@@ -45270,7 +41980,6 @@
 "Vico Verginelle",1
 "Vico Vetriera",1
 "Vico Vetro",1
-"Vico V Fiume",1
 "Vico V Garibaldi",1
 "Vico Vi Balilla",1
 "Vico Vicaria",1
@@ -45494,7 +42203,6 @@
 "Viuzzo Della Croce",1
 "Viuzzo Della Dogaia",1
 "Viuzzo Della Mattonaia",1
-"Viuzzo Della Stazione Di Castello",1
 "Viuzzo Delle Calvane",1
 "Viuzzo Delle Canne",1
 "Viuzzo Delle Case Nuove",1
