@@ -26,59 +26,29 @@
 
 package com.rapiddweller.domain.family;
 
+import com.rapiddweller.domain.person.Gender;
 import com.rapiddweller.domain.person.Person;
+import com.rapiddweller.domain.person.PersonFormatter;
 
+import java.util.Date;
 import java.util.Locale;
 
 /**
- * Represents a natural happy family.<br/><br/>
+ * Represents a family person.<br/><br/>
  *
  * @since 0.1
  */
-public class FamilyPerson {
-  private Person person;
-  private long personID;
-  private long familyID;
-  private String role;
+public class FamilyPerson extends Person {
 
-  public FamilyPerson() {
-  }
-
-  public Person getPerson() {
-    return person;
-  }
-
-  public void setPerson(Person person) {
-    this.person = person;
-  }
-
-  public long getPersonID() {
-    return personID;
-  }
-
-  public void setPersonID(long personID) {
-    this.personID = personID;
-  }
-
-  public long getFamilyID() {
-    return familyID;
-  }
-
-  public void setFamilyID(long familyID) {
-    this.familyID = familyID;
-  }
-
-  public String getRole() {
-    return role;
-  }
-
-  public void setRole(String role) {
-    this.role = role;
+  private long relations;
+  private Map<Long, >
+  public FamilyPerson(Locale locale) {
+    super(locale);
   }
 
   @Override
   public synchronized String toString() {
-    return "S";
+    return PersonFormatter.getInstance(locale).format(this);
   }
 
 }
