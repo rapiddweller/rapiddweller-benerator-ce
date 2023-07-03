@@ -26,56 +26,29 @@
 
 package com.rapiddweller.domain.family;
 
+import com.rapiddweller.domain.person.Person;
+import com.rapiddweller.domain.person.PersonFormatter;
+
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Represents a natural happy family.<br/><br/>
+ * Represents a family.<br/><br/>
  *
  * @since 0.1
  */
-public class PersonNode {
-    private long personID;
-    private FamilyDataConstraint constraint;
-    //Simple situation: 1 familyPerson -> 1 relation only
-    private RelationData relation;
+public class Family {
+  Long familyID;
+  private Map<Long, FamilyPerson> familyPersonList;
+  public Family() {
+    this.familyPersonList = new ConcurrentHashMap<>();
+  }
 
-    public PersonNode() {
-        this.constraint = new FamilyDataConstraint();
-        this.relation = new RelationData();
-    }
+  @Override
+  public synchronized String toString() {
+    return "";
+  }
 
-    public long getPersonID() {
-        return personID;
-    }
-
-    public void setPersonID(long personID) {
-        this.personID = personID;
-    }
-
-    public FamilyDataConstraint getConstraint() {
-        return constraint;
-    }
-
-    public void setConstraint(FamilyDataConstraint constraint) {
-        this.constraint = constraint;
-    }
-
-    public RelationData getRelation() {
-        return relation;
-    }
-
-    public void setRelation(RelationData relation) {
-        this.relation = relation;
-    }
-
-    @Override
-    public synchronized String toString() {
-        return "Member {personID: " + this.personID + " - " +
-                "familyID: " + this.relation.getFamilyID() + " - " +
-                "Role: " + this.relation.getFamilyRole() + " - " +
-                "lastName: " + this.constraint.getConstraintLastName() + " - " +
-                "age: " + this.constraint.getConstraintAge() + " - " +
-                "gender: " + this.constraint.getConstraintGender() + "}"
-                ;
-    }
 }
