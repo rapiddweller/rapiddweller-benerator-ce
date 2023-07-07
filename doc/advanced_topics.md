@@ -386,7 +386,7 @@ africa=EG,GH,KE,ZA
 north_america=US,CA
 central_america=MX,BS
 america=north_america,central_america,south_america
-south_america=CL,AR,EC
+south_america=BR,CL,AR,EC
 asia=JP,IN,ID,KR,KP,MY,SG,TW,TH
 oceania=AU,NZ
 ```
