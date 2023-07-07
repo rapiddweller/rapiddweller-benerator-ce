@@ -396,17 +396,18 @@ oceania=AU,NZ
 The current available datasets include the following countries and nesting regions:
 
 ```properties
+europe=western_europe,central_europe,southern_europe,eastern_europe,northern_europe
 western_europe=french,iberia
 french=FR,MC
 iberia=spanish,PT
 spanish=ES,AD
-central_europe=dach,benelux,LI
+central_europe=benelux,dach,LI
 benelux=NL,BE,LU
 dach=DE,CH,AT
 southern_europe=italian,greek,TR
 italian=IT,SM,VA
 greek=GR,CY
-eastern_europe=yugo,baltics,PL,AL,CZ,HU,RU,RO,BG,SK,UA
+eastern_europe=baltics,yugo,PL,AL,CZ,HU,RU,RO,BG,SK,UA
 baltics=EE,LT,LV
 yugo=SI,HR,BA
 northern_europe=british_isles,nordic_countries
