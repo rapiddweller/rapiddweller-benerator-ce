@@ -77,7 +77,7 @@ public class WeightedDoubleGenerator extends AbstractNonNullNumberGenerator<Doub
     }
     int sampleCount = (int) ((max - min) / granularity) + 1;
     if (sampleCount > 100000) {
-      throw new InvalidGeneratorSetupException("granularity", "too small, resulting in a set of " + sampleCount + " samples");
+      logger.warn("granularity too small, resulting in a set of {} samples", sampleCount);
     }
     probSum = new double[sampleCount];
     value = new double[sampleCount];

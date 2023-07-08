@@ -375,22 +375,56 @@ city[name=Toronto]
 Benerator comes with a predefined nesting definition for geographical datasets, called 'region':
 
 ```properties
-europe=western_europe,central_europe,
-southern_europe,eastern_europe,northern_europe=
+europe=western_europe,central_europe,southern_europe,eastern_europe,northern_europe
 western_europe=PT,ES,AD,FR,MC
 central_europe=BE,NL,LU,DE,CH,AT,LI
-southern_europe=IT,SM,GR,CY,TR
+southern_europe=IT,SM,VA,GR,CY,TR
 eastern_europe=AL,SI,CZ,HU,PL,RU,RO,BG,HR,BA,EE,LT,LV,SK,UA
-northern_europe=UK,IE,DK,SE,NO,FI,IS
+northern_europe=GB,IE,DK,SE,NO,FI,IS
 near_east=AF,IR,IL,JO,KZ,PK,QA,SA,AE
 africa=EG,GH,KE,ZA
 north_america=US,CA
 central_america=MX,BS
 america=north_america,central_america,south_america
-south_america=AR,BR,EC
+south_america=BR,CL,AR,EC
 asia=JP,IN,ID,KR,KP,MY,SG,TW,TH
-australia=AU,NZ
+oceania=AU,NZ
 ```
+
+### Default Datasets:
+
+The current available datasets include the following countries and nesting regions:
+
+```properties
+europe=western_europe,central_europe,southern_europe,eastern_europe,northern_europe
+western_europe=french,iberia
+french=FR,MC
+iberia=spanish,PT
+spanish=ES,AD
+central_europe=benelux,dach,LI
+benelux=NL,BE,LU
+dach=DE,CH,AT
+southern_europe=italian,greek,TR
+italian=IT,SM,VA
+greek=GR,CY
+eastern_europe=baltics,yugo,PL,AL,CZ,HU,RU,RO,BG,SK,UA
+baltics=EE,LT,LV
+yugo=SI,HR,BA
+northern_europe=british_isles,nordic_countries
+british_isles=GB,IE
+nordic_countries=scandinavia,FI,IS
+scandinavia=SE,DK,NO
+north_america=US,CA
+oceania=AU,NZ
+VE
+VN
+TH
+BR
+```
+
+If you use the 'dataset' for any countries that are not included in the list above, you will receive an ERROR message, and the data will fall back to the US.
+
+We will update more datasets in the future, and we will be very glad if everyone can contribute to the Benerator application by adding datasets for countries that are not currently included.
 
 ## Chaining generators
 

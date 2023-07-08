@@ -1,0 +1,211 @@
+"state.country.isoCode";"state.id";"name";"postalCode";"areaCode";"language";"population"
+"VE";"P";"Acarigua";3301;255;"es";920000
+"VE";"C";"Achaguas";7002;247;"es";560000
+"VE";"J";"Altagracia de Orituco";2320;235;"es";820000
+"VE";"B";"Anaco";6003;281;"es";1550000
+"VE";"B";"Aragua de Barcelona";6002;281;"es";1550000
+"VE";"N";"Aragua de Maturín";6211;287;"es";920000
+"VE";"P";"Araure";3303;255;"es";920000
+"VE";"R";"Araya";6102;293;"es";980000
+"VE";"C";"Arichuna";7007;247;"es";560000
+"VE";"E";"Arismendi";4161;273;"es";820000
+"VE";"L";"Bailadores";5133;271;"es";870000
+"VE";"D";"Barbacoas";2301;243;"es";1630000
+"VE";"B";"Barcelona";6001;281;"es";1550000
+"VE";"E";"Barinas";5201;273;"es";820000
+"VE";"K";"Barquisimeto";3023;251;"es";1850000
+"VE";"G";"Bejuma";2015;241;"es";2220000
+"VE";"C";"Biruaca";7007;247;"es";560000
+"VE";"T";"Boconó";5039;271;"es";760000
+"VE";"T";"Boconó";3103;271;"es";760000
+"VE";"C";"Bruzual";7005;247;"es";560000
+"VE";"V";"Cabimas";4013;261;"es";3800000
+"VE";"K";"Cabudare";3023;251;"es";1850000
+"VE";"D";"Cagua";2122;243;"es";1630000
+"VE";"F";"Caicara del Orinoco";8007;235;"es";1720000
+"VE";"B";"Caigua";6009;281;"es";1550000
+"VE";"J";"Calabozo";2312;235;"es";820000
+"VE";"D";"Camatagua";2335;243;"es";1630000
+"VE";"B";"Cantaura";6007;281;"es";1550000
+"VE";"A";"Caracas";1012;212;"es";1943901
+"VE";"A";"Caracas";1020;212;"es";1943901
+"VE";"A";"Caracas";1015;212;"es";1943901
+"VE";"A";"Caracas";1014;212;"es";1943901
+"VE";"A";"Caracas";1011;212;"es";1943901
+"VE";"N";"Caripe";6211;287;"es";920000
+"VE";"N";"Caripito";6211;287;"es";920000
+"VE";"K";"Carora";3050;251;"es";1850000
+"VE";"R";"Carúpano";6150;293;"es";980000
+"VE";"R";"Casanay";6102;293;"es";980000
+"VE";"X";"Catia La Mar";1162;212;"es";340000
+"VE";"J";"Chaguaramas";2358;235;"es";820000
+"VE";"M";"Charallave";1210;212;"es";2940000
+"VE";"U";"Chivacoa";3202;251;"es";660000
+"VE";"F";"Ciudad Bolívar";8001;235;"es";1720000
+"VE";"F";"Ciudad Guayana";8053;286;"es";1720000
+"VE";"V";"Ciudad Ojeda";4019;261;"es";3800000
+"VE";"C";"Ciudad Sucre";7006;247;"es";560000
+"VE";"B";"Clarines";6008;281;"es";1550000
+"VE";"H";"Cojedes";2202;258;"es";330000
+"VE";"S";"Colón";5024;276;"es";1020000
+"VE";"D";"Colonia Tovar";1030;243;"es";1630000
+"VE";"I";"Coro";4126;259;"es";980000
+"VE";"I";"Coro";4154;259;"es";980000
+"VE";"M";"Cúa";1211;212;"es";2940000
+"VE";"R";"Cumaná";6101;293;"es";980000
+"VE";"M";"Cúpira";1233;212;"es";2940000
+"VE";"Y";"Curiapo";6401;287;"es";190000
+"VE";"I";"Dabajuro";4118;259;"es";980000
+"VE";"L";"Ejido";5111;271;"es";870000
+"VE";"C";"El Amparo";7008;247;"es";560000
+"VE";"F";"El Callao";8056;235;"es";1720000
+"VE";"B";"El Chaparro";6010;281;"es";1550000
+"VE";"D";"El Consejo";2107;243;"es";1630000
+"VE";"F";"El Dorado";8054;235;"es";1720000
+"VE";"D";"El Limón";2105;243;"es";1630000
+"VE";"C";"Elorza";7002;247;"es";560000
+"VE";"H";"El Pao";2203;258;"es";330000
+"VE";"F";"El Paují";8056;235;"es";1720000
+"VE";"J";"El Socorro";2355;235;"es";820000
+"VE";"B";"El Tigre";6050;281;"es";1550000
+"VE";"K";"El Tocuyo";3018;251;"es";1850000
+"VE";"L";"El Vigía";5145;271;"es";870000
+"VE";"G";"Guacara";2014;241;"es";2220000
+"VE";"C";"Guachara";7003;247;"es";560000
+"VE";"U";"Guama";3207;251;"es";660000
+"VE";"P";"Guanare";3350;255;"es";920000
+"VE";"B";"Guanta";6014;281;"es";1550000
+"VE";"M";"Guarenas";1220;212;"es";2940000
+"VE";"C";"Guasdualito";5063;247;"es";560000
+"VE";"F";"Guasipati";8055;235;"es";1720000
+"VE";"M";"Guatire";1221;212;"es";2940000
+"VE";"J";"Guayabal";3009;235;"es";820000
+"VE";"G";"Güigüe";2013;241;"es";2220000
+"VE";"M";"Higuerote";1231;212;"es";2940000
+"VE";"F";"Iboriwo";8058;235;"es";1720000
+"VE";"Z";"Isla Ratón";7101;248;"es";180000
+"VE";"O";"Juan Griego";6309;295;"es";570000
+"VE";"F";"Kavanayén";8059;235;"es";1720000
+"VE";"O";"La Asunción";6311;295;"es";570000
+"VE";"Z";"La Esmeralda";7101;248;"es";180000
+"VE";"S";"La Fría";5020;276;"es";1020000
+"VE";"S";"La Grita";5022;276;"es";1020000
+"VE";"X";"La Guaira";1160;212;"es";340000
+"VE";"T";"La Quebrada";3147;271;"es";760000
+"VE";"D";"La Victoria";2121;243;"es";1630000
+"VE";"V";"La Villa del Rosario";4004;261;"es";3800000
+"VE";"B";"Lechería";6016;281;"es";1550000
+"VE";"G";"Los Guayos";2011;241;"es";2220000
+"VE";"M";"Los Teques";1240;212;"es";2940000
+"VE";"V";"Machiques";4021;261;"es";3800000
+"VE";"X";"Maiquetia";1160;212;"es";340000
+"VE";"M";"Mamporal";1241;212;"es";2940000
+"VE";"C";"Mantecal";7005;247;"es";560000
+"VE";"B";"Mapire";6011;281;"es";1550000
+"VE";"V";"Maracaibo";4001;261;"es";3800000
+"VE";"V";"Maracaibo";4002;261;"es";3800000
+"VE";"V";"Maracaibo";4005;261;"es";3800000
+"VE";"D";"Maracay";2103;243;"es";1630000
+"VE";"D";"Maracay";2101;243;"es";1630000
+"VE";"G";"Mariara";2017;241;"es";2220000
+"VE";"R";"Marigüitar";6107;293;"es";980000
+"VE";"F";"Maripa";8057;235;"es";1720000
+"VE";"Z";"Maroa";7101;248;"es";180000
+"VE";"N";"Maturín";6201;287;"es";920000
+"VE";"L";"Mérida";5115;271;"es";870000
+"VE";"S";"Michelena";5037;276;"es";1020000
+"VE";"T";"Monte Carmelo";3121;271;"es";760000
+"VE";"G";"Morón";2051;241;"es";2220000
+"VE";"L";"Mucuchíes";5130;271;"es";870000
+"VE";"G";"Naguanagua";2005;241;"es";2220000
+"VE";"U";"Nirgua";3205;251;"es";660000
+"VE";"D";"Ocumare de la Costa";2117;243;"es";1630000
+"VE";"M";"Ocumare del Tuy";1209;212;"es";2940000
+"VE";"B";"Onoto";6012;281;"es";1550000
+"VE";"J";"Ortiz";2340;235;"es";820000
+"VE";"P";"Ospino";3352;255;"es";920000
+"VE";"S";"Palmira";5015;276;"es";1020000
+"VE";"D";"Palo Negro";2117;243;"es";1630000
+"VE";"O";"Pampatar";6316;295;"es";570000
+"VE";"F";"Paraitepuy de Roraima";8056;235;"es";1720000
+"VE";"B";"Pariguán";6013;281;"es";1550000
+"VE";"Y";"Pedernales";6401;287;"es";190000
+"VE";"M";"Petare";1073;212;"es";2940000
+"VE";"O";"Porlamar";6301;295;"es";570000
+"VE";"S";"Pregonero";5020;276;"es";1020000
+"VE";"Z";"Puerto Ayacucho";7101;248;"es";180000
+"VE";"G";"Puerto Cabello";2050;241;"es";2220000
+"VE";"B";"Puerto La Cruz";6009;281;"es";1550000
+"VE";"B";"Puerto La Cruz";6023;281;"es";1550000
+"VE";"C";"Puerto Páez";7004;247;"es";560000
+"VE";"B";"Puerto Píritu";6022;281;"es";1550000
+"VE";"N";"Punta de Mata";6217;287;"es";920000
+"VE";"I";"Punto Fijo";4123;259;"es";980000
+"VE";"I";"Punto Fijo";4102;259;"es";980000
+"VE";"S";"Queniquea";5054;276;"es";1020000
+"VE";"K";"Quíbor";3061;251;"es";1850000
+"VE";"R";"Río Caribe";6104;293;"es";980000
+"VE";"M";"Río Chico";1236;212;"es";2940000
+"VE";"M";"Río Chico";4160;212;"es";2940000
+"VE";"S";"Rubio";5030;276;"es";1020000
+"VE";"E";"Sabaneta";4161;273;"es";820000
+"VE";"M";"San Antonio de Los Altos";1204;212;"es";2940000
+"VE";"S";"San Antonio del Táchira";5007;276;"es";1020000
+"VE";"K";"Sanare";3028;251;"es";1850000
+"VE";"H";"San Carlos";2201;258;"es";330000
+"VE";"V";"San Carlos del Zulia";4044;261;"es";3800000
+"VE";"Z";"San Carlos de Río Negro";7101;248;"es";180000
+"VE";"D";"San Casimiro";2120;243;"es";1630000
+"VE";"S";"San Cristóbal";5001;276;"es";1020000
+"VE";"G";"San Diego";2006;241;"es";2220000
+"VE";"U";"San Felipe";3201;251;"es";660000
+"VE";"U";"San Felipe";3221;251;"es";660000
+"VE";"C";"San Fernando de Apure";7001;247;"es";560000
+"VE";"Z";"San Fernando de Atabapo";7101;248;"es";180000
+"VE";"M";"San Francisco de Yare";1212;212;"es";2940000
+"VE";"F";"San Francisco de Yuruaní";8055;235;"es";1720000
+"VE";"G";"San Joaquín";2018;241;"es";2220000
+"VE";"M";"San José de Barlovento";1235;212;"es";2940000
+"VE";"B";"San José de Guanipa";6054;281;"es";1550000
+"VE";"J";"San Juan de los Morros";2301;235;"es";820000
+"VE";"Z";"San Juan de Manapiare";7101;248;"es";180000
+"VE";"C";"San Juan de Payara";7006;247;"es";560000
+"VE";"D";"San Mateo";2120;243;"es";1630000
+"VE";"B";"San Mateo";2120;281;"es";1550000
+"VE";"B";"San Miguel";3145;281;"es";1550000
+"VE";"B";"San Miguel";3119;281;"es";1550000
+"VE";"F";"San Rafael de Kamoirán";8054;235;"es";1720000
+"VE";"V";"San Rafael del Moján";4044;261;"es";3800000
+"VE";"D";"San Sebastián";2340;243;"es";1630000
+"VE";"B";"Santa Ana";6027;281;"es";1550000
+"VE";"S";"Santa Ana del Táchira";5051;276;"es";1020000
+"VE";"D";"Santa Cruz";2106;243;"es";1630000
+"VE";"F";"Santa Elena de Uairén";8052;235;"es";1720000
+"VE";"M";"Santa Lucía";5204;212;"es";2940000
+"VE";"D";"Santa Rita";4020;243;"es";1630000
+"VE";"D";"Santa Rita";2106;243;"es";1630000
+"VE";"M";"Santa Teresa del Tuy";1215;212;"es";2940000
+"VE";"B";"San Tomé";6016;281;"es";1550000
+"VE";"K";"Sarare";3015;251;"es";1850000
+"VE";"V";"Sinamaica";4037;261;"es";3800000
+"VE";"B";"Soledad";6015;281;"es";1550000
+"VE";"S";"Táriba";5017;276;"es";1020000
+"VE";"H";"Tinaco";2206;258;"es";330000
+"VE";"H";"Tinaquillo";2209;258;"es";330000
+"VE";"G";"Tocuyito";2035;241;"es";2220000
+"VE";"T";"Trujillo";3150;272;"es";760000
+"VE";"I";"Tucacas";2055;259;"es";980000
+"VE";"Y";"Tucupita";6401;287;"es";190000
+"VE";"D";"Turmero";2115;243;"es";1630000
+"VE";"F";"Upata";8052;235;"es";1720000
+"VE";"B";"Urica";6017;281;"es";1550000
+"VE";"I";"Urumaco";4141;259;"es";980000
+"VE";"G";"Valencia";2001;241;"es";2220000
+"VE";"T";"Valera";3101;271;"es";760000
+"VE";"B";"Valle de Guanape";6018;281;"es";1550000
+"VE";"J";"Valle de la Pascua";2350;235;"es";820000
+"VE";"B";"Vidoño";6011;281;"es";1550000
+"VE";"F";"Wönken";8053;235;"es";1720000
+"VE";"U";"Yaritagua";3203;251;"es";660000
+"VE";"J";"Zaraza";2332;235;"es";820000
+"VE";"B";"Zuata";6012;281;"es";1550000
