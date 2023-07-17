@@ -51,4 +51,9 @@
     <echo>Check database</echo>
     <iterate type="test_upserter" source="mongo" consumer="ConsoleExporter">
     </iterate>
+
+    <!--       Clear memstore for later use -->
+    <execute>
+        mem.close()
+    </execute>
 </setup>
