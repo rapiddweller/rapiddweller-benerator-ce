@@ -26,7 +26,7 @@ public class MongoDBClient extends MongoClient {
 
     public MongoDBRunCommandResult runCommand(Bson query) {
         Document result = this.getDatabase(this.database).runCommand(query);
-        if (((Document) query).containsKey("delete")) { // Except delete command don't have cursor
+        if (((Document) query).containsKey("delete")) { // Exception: delete command don't have cursor
             long cursorId = 0L;
             List<Document> documents = Collections.emptyList();
             return new MongoDBRunCommandResult(cursorId, documents.iterator());
