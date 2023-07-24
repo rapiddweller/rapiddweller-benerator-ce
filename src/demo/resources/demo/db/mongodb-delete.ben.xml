@@ -1,0 +1,36 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://benerator.de/schema/benerator-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <import platforms="db" domains="address,person"/>
+
+    <mongodb id="mongo" environment="environment" system="mongodb"/>
+
+    <setting name="counts" value="10"/>
+
+    <generate type="mongo_delete" count="{counts}" consumer="mongo">
+        <id name="_id" type="object" generator="MongoDBObjectIdGenerator"/>
+        <attribute name="user_id" type="int" min="1" max="9999"/>
+        <attribute name="amount" type="double" generator="new RandomDoubleGenerator(10, 5000, 2)"/>
+        <attribute name="product" type="string" values="'Shirt', 'Pants', 'Shoes', 'Socks'"/>
+        <attribute name="country" type="string" generator="CountryGenerator"/>
+        <variable name="person" generator="PersonGenerator"/>
+        <variable name="address" generator="AddressGenerator"/>
+    </generate>
+
+    <echo>Delete element from mongo_delete collection</echo>
+    <iterate type="mongo_delete" source="mongo"
+             selector="delete: 'mongo_delete', deletes:[{q:{product:'Shirt'}, limit:0}]"
+             consumer="NoConsumer">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <echo>Check remaining data</echo>
+    <iterate type="mongo_delete" source="mongo" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <echo>{ftl:Deleted: ${10 - mongo_delete.counter}}</echo>
+</setup>

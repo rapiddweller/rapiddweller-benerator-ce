@@ -46,6 +46,11 @@ public class MongoDBSimpleIntegrationTest extends AbstractBeneratorIntegrationTe
     public void mongoDBDeleterTest() {
         assumeTestActive("mongodb");
         BeneratorContext context = parseAndExecuteFile("demo/db/mongodb-deleteCollection.ben.xml");
+      
+    @Test
+    public void mongoDBDeleteTest() {
+        assumeTestActive("mongodb");
+        BeneratorContext context = parseAndExecuteFile("demo/db/mongodb-delete.ben.xml");
         Assert.assertEquals("demo/db", context.getContextUri());
     }
 }
