@@ -2,10 +2,12 @@ package com.rapiddweller.platform.mongodb;
 
 import com.mongodb.client.model.Filters;
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.consumer.NoConsumer;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
+import com.rapiddweller.benerator.storage.StorageSystemUpdater;
 import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
@@ -238,6 +240,11 @@ public class MongoDBSystem extends CustomStorageSystem {
     var targetType = (ComplexTypeDescriptor) getTypeDescriptor(target);
     targetType = targetType == null ? new ComplexTypeDescriptor(target, descriptorProvider) : targetType;
     return new StorageSystemInserter(this, targetType);
+  }
+
+  public Consumer deleter(String target) {
+    mongoDBClient.getDatabase(this.mongoDBClientProvider.getDatabase()).getCollection(target).drop();
+    return new NoConsumer();
   }
 
 }

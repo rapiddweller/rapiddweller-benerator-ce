@@ -29,6 +29,27 @@ public class MongoDBSimpleIntegrationTest extends AbstractBeneratorIntegrationTe
     }
 
     @Test
+    public void mongoDBUpserterTest() {
+        assumeTestActive("mongodb");
+        BeneratorContext context = parseAndExecuteFile("demo/db/mongodb-upserter.ben.xml");
+        Assert.assertEquals("demo/db", context.getContextUri());
+    }
+
+    @Test
+    public void mongoDBUpserter2Test() {
+        assumeTestActive("mongodb");
+        BeneratorContext context = parseAndExecuteFile("demo/db/mongodb-upserter2.ben.xml");
+        Assert.assertEquals("demo/db", context.getContextUri());
+    }
+
+    @Test
+    public void mongoDBDeleterTest() {
+        assumeTestActive("mongodb");
+        BeneratorContext context = parseAndExecuteFile("demo/db/mongodb-deleteCollection.ben.xml");
+        Assert.assertEquals("demo/db", context.getContextUri());
+    }
+      
+    @Test
     public void mongoDBDeleteTest() {
         assumeTestActive("mongodb");
         BeneratorContext context = parseAndExecuteFile("demo/db/mongodb-delete.ben.xml");

@@ -1,0 +1,71 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://benerator.de/schema/benerator-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <import platforms="db" domains="address,person"/>
+    <memstore id="mem"/>
+    <memstore id="mem2"/>
+
+    <mongodb id="mongo" environment="environment" system="mongodb"/>
+
+    <setting name="counts" value="10"/>
+
+    <generate type="test_upserter" count="{counts}" consumer="mongo,ConsoleExporter">
+        <id name="_id" type="object" generator="MongoDBObjectIdGenerator"/>
+        <attribute name="user_id" type="int" min="1" max="9999"/>
+        <attribute name="amount" type="double" generator="new RandomDoubleGenerator(10, 5000, 2)"/>
+        <attribute name="product" type="string" values="'Shirt', 'Pants', 'Shoes', 'Socks'"/>
+    </generate>
+
+<!--    Prepare data for dynamic parameter -->
+    <generate type="productToUpdate" count="10" consumer="mem2,ConsoleExporter">
+        <attribute name="item" type="string" values="'Hats', 'Coats', 'Bags', 'Pants'"/>
+    </generate>
+
+    <echo>Upsert database by using memstore</echo>
+    <iterate type="productToUpdate" source="mem2" consumer="NoConsumer">
+        <iterate type="test_upserter" source="mongo" selector="{ftl:find: 'test_upserter', filter:{product:'${productToUpdate.item}'}}"
+                 consumer="mem,mongo.updater()">
+            <attribute name="price" type="double" constant="100"/>
+        </iterate>
+
+<!--        Check if update or not-->
+        <execute>
+            match = mem.getEntities('test_upserter').size()
+        </execute>
+
+        <if test="match > 0">
+            <!--        Echo update counter -->
+            <then>
+                <execute>
+                    modifiedCount =  mem.entityCount('test_upserter')
+                </execute>
+                <echo>{ftl:"updateCount" : ${modifiedCount}} </echo>
+            </then>
+            <!--        insert new data if not exit -->
+            <!--        if not using inserter, new data will have the old attributes of test_upserter -->
+            <else>
+                <setting name="add" value="1"/>
+                <generate type="temp" count="{add}" consumer="mongo.inserter('test_upserter')">
+                    <attribute name="product" type="string" source="productToUpdate.item"/>
+                    <attribute name="price" type="double" constant="50"/>
+                </generate>
+                <echo>{ftl:"upsertAdd" : ${productToUpdate.item}} </echo>
+            </else>
+        </if>
+
+<!--        Must clear memstore for iterate check -->
+        <execute>
+            mem.close()
+        </execute>
+    </iterate>
+
+    <echo>Check database</echo>
+    <iterate type="test_upserter" source="mongo" consumer="ConsoleExporter">
+    </iterate>
+
+    <iterate type="test_upserter" source="mongo" consumer="mongo.deleter('test_upserter')">
+    </iterate>
+</setup>
