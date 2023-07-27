@@ -26,29 +26,118 @@
 
 package com.rapiddweller.domain.family;
 
-import com.rapiddweller.domain.person.Gender;
 import com.rapiddweller.domain.person.Person;
-import com.rapiddweller.domain.person.PersonFormatter;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- * Represents a family person.<br/><br/>
- *
- * @since 0.1
+ * Represents a family person with additional family identification data:<br/>
+ * - personID: long<br/>
+ * - familyID: long<br/>
+ * - familyRole: {@link FamilyRole}<br/>
+ * - relations: contain a Map of related {@link FamilyPerson} with corresponding {@link RelationStatus} to that person<br/>
  */
 public class FamilyPerson extends Person {
+    private long personID;
+    private long familyID;
+    private FamilyRole familyRole;
+    private Map<FamilyPerson, RelationStatus> relations;
 
-  private long relations;
-  private Map<Long, >
-  public FamilyPerson(Locale locale) {
-    super(locale);
-  }
+    // Constructor -----------------------------------------------------------------------------------------------
+    public FamilyPerson(Locale locale) {
+        super(locale);
+        this.relations = new HashMap<>();
+    }
 
-  @Override
-  public synchronized String toString() {
-    return PersonFormatter.getInstance(locale).format(this);
-  }
+    public FamilyPerson() {
+        super(Locale.getDefault());
+    }
+
+    // Getter/Setter -----------------------------------------------------------------------------------------------
+
+    public long getPersonID() {
+        return personID;
+    }
+
+    public void setPersonID(long personID) {
+        this.personID = personID;
+    }
+
+    public long getFamilyID() {
+        return familyID;
+    }
+
+    public void setFamilyID(long familyID) {
+        this.familyID = familyID;
+    }
+
+    public FamilyRole getFamilyRole() {
+        return familyRole;
+    }
+
+    public void setFamilyRole(FamilyRole familyRole) {
+        this.familyRole = familyRole;
+    }
+
+    public Map<FamilyPerson, RelationStatus> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(Map<FamilyPerson, RelationStatus> relations) {
+        this.relations = relations;
+    }
+
+    // Access FamilyPerson with condition -------------------------------------------------------------------------------------------------------
+
+    public boolean isRelationWithPersonID(long personID) {
+        return this.relations.containsKey(personID);
+    }
+
+    public boolean isRelationStatusExist(RelationStatus relationStatus) {
+        return this.relations.containsValue(relationStatus);
+    }
+
+    public void addRelationStatusWithPerson(FamilyPerson relatedMember, RelationStatus relationStatus) {
+        this.relations.put(relatedMember, relationStatus);
+        //add revert relations to related member
+        switch (relationStatus) {
+            case DIVORCED:
+                relatedMember.getRelations().put(this, RelationStatus.DIVORCED);
+                break;
+            case MARRIAGE:
+                relatedMember.getRelations().put(this, RelationStatus.MARRIAGE);
+                break;
+            case BIOLOGICAL:
+                relatedMember.getRelations().put(this, RelationStatus.CARETAKER);
+                break;
+            case CARETAKER:
+                relatedMember.getRelations().put(this, RelationStatus.BIOLOGICAL);
+                break;
+            case ADOPTED:
+                relatedMember.getRelations().put(this, RelationStatus.BENEFIT_PROVIDER);
+                break;
+            case BENEFIT_PROVIDER:
+                relatedMember.getRelations().put(this, RelationStatus.ADOPTED);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public synchronized String toString() {
+        return "FamilyPerson{" +
+                "personID: " + personID +
+                ", familyID: " + familyID +
+                ", familyRole: " + familyRole +
+                ", familyName: " + this.getFamilyName() +
+                ", givenName: " + this.getGivenName() +
+                ", gender: " + this.getGender() +
+                ", age: " + this.getAge() +
+                ", email: " + this.getEmail() +
+                '}';
+    }
 
 }
