@@ -25,30 +25,30 @@
  */
 
 package com.rapiddweller.domain.family;
-
-import com.rapiddweller.domain.person.Person;
-import com.rapiddweller.domain.person.PersonFormatter;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
- * Represents a family.<br/><br/>
+ * Represents family roles.<br/>
  *
- * @since 0.1
  */
-public class Family {
-  Long familyID;
-  private Map<Long, FamilyPerson> familyPersonList;
-  public Family() {
-    this.familyPersonList = new ConcurrentHashMap<>();
-  }
+public enum FamilyRole {
+    FATHER("father"),
+    MOTHER("mother"),
+    FATHER_DIVERSE("father_diverse"),
+    MOTHER_DIVERSE("mother_diverse"),
+    SON("son"),
+    DAUGHTER("daughter"),
+    DIVERSE_CHILD("diverse_child"),
+    TWIN_SON("twin_son"),
+    TWIN_DAUGHTER("twin_daughter"),
+    GRANDFATHER("grandfather"),
+    GRANDMOTHER("grandmother");
 
-  @Override
-  public synchronized String toString() {
-    return "";
-  }
+    private final String displayName;
 
+    FamilyRole(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
 }

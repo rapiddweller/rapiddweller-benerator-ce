@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+    <import domains="family" />
+    <generate type="family" count="10000" consumer="ConsoleExporter">
+
+        <variable name="familyContainer" generator="FamilyGenerator"/>
+        <variable name="parent1" script="familyContainer.familyPersonList.get(0)"/>
+        <variable name="parent2" script="familyContainer.familyPersonList.get(1)"/>
+        <variable name="children1" script="familyContainer.familyPersonList.get(2)" />
+
+        <attribute name="parent1_familyName" script="parent1.familyName" />
+        <attribute name="parent1_givenName" script="parent1.givenName" />
+        <attribute name="parent1_age" script="parent1.age" />
+        <attribute name="parent1_gender" script="parent1.gender" />
+        <attribute name="parent1_ID" script="parent1.personID" />
+        <attribute name="parent1_role" script="parent1.familyRole" />
+
+        <attribute name="parent2_familyName" script="parent2.familyName" />
+        <attribute name="parent2_givenName" script="parent2.givenName" />
+        <attribute name="parent2_age" script="parent2.age" />
+        <attribute name="parent2_gender" script="parent2.gender" />
+        <attribute name="parent2_ID" script="parent2.personID" />
+        <attribute name="parent2_role" script="parent2.familyRole" />
+
+        <attribute name="children1_familyName" script="children1.familyName" />
+        <attribute name="children1_givenName" script="children1.givenName" />
+        <attribute name="children1_age" script="children1.age" />
+        <attribute name="children1_gender" script="children1.gender" />
+        <attribute name="children1_ID" script="children1.personID" />
+        <attribute name="children1_role" script="children1.familyRole" />
+
+    </generate>
+
+</setup>
