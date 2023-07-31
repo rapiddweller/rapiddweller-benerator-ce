@@ -31,15 +31,11 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.dataset.DatasetBasedGenerator;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.primitive.BooleanGenerator;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
-import com.rapiddweller.benerator.primitive.datetime.DateGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Converter;
-import com.rapiddweller.common.Period;
-import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.person.*;
 
@@ -93,7 +89,6 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
     this.birthDateGenerator = registerComponent(new BirthDateGenerator(20, 60));
     this.femaleFamilyNameConverters = new HashMap<>();
     this.personIDGenerator = registerComponent(new IncrementGenerator());
-//    this.fieldAndTypeList = getFieldNameAndTypeFromEntityAndParents(this.getClass());
   }
 
   // properties ------------------------------------------------------------------------------------------------------
@@ -379,16 +374,6 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
       age--;
     }
     return age;
-  }
-
-  private Date createRandomDateWithAge(int age) {
-//    Calendar min = TimeUtil.calendar(TimeUtil.tomorrow());
-//    min.add(Calendar.YEAR, -maxAgeYears - 1);
-//    Calendar max = TimeUtil.calendar(TimeUtil.today());
-//    max.add(Calendar.YEAR, -minAgeYears);
-//    setSource(new DateGenerator(min.getTime(), max.getTime(),
-//            Period.DAY.getMillis(), SequenceManager.RANDOM_SEQUENCE));
-    return new Date();
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
