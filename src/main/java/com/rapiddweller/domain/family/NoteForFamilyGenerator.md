@@ -23,7 +23,7 @@ Limitation:
 Only fixed structure of family can be generated: 2 parent (father-mother), 4 grandparent (grandfather-grandmother of father/mother), children with maximum children number set default to 10, adopted to 5.
 Diverse Gender is not applied, FamilyPersonGenerator is base on logic of PersonGenerator, this type of gender is not supported in this model now (change DiverseParentQuota attribute can cause error).
 In this implementation, I re-construct new BirthdayGenerator, set attribute and init(context) again each time generate (to custom age from constraint), I think this can potentially cause performance issue. This will need to be improved.
-Some test for generate non-null FamilyContainer, FamilyPerson as link below. The logic for constraints between FamilyPerson and performance test is not conducted all. This will need to be improved. 
+Some test for generate non-null FamilyContainer, FamilyPerson as link below. Need more test and feedback to improve this type of Generator.
 ```
 src/test/java/com/rapiddweller/domain/family
 ```

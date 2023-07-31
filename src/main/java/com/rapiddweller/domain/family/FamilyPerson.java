@@ -91,8 +91,8 @@ public class FamilyPerson extends Person {
 
     // Access FamilyPerson with condition -------------------------------------------------------------------------------------------------------
 
-    public boolean isRelationWithPersonID(long personID) {
-        return this.relations.containsKey(personID);
+    public boolean isRelationWithPerson(FamilyPerson person) {
+        return this.relations.containsKey(person);
     }
 
     public boolean isRelationStatusExist(RelationStatus relationStatus) {

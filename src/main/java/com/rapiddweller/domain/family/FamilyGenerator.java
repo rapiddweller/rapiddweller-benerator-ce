@@ -231,7 +231,7 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
         return secondParent;
     }
 
-    private List<FamilyPerson> generateChildrenFromParent(FamilyPerson firstFamilyPerson, FamilyPerson secondFamilyPerson, RelationConstraints higherRelationConstraints) {
+    private List<FamilyPerson> generateChildrenFromParent(FamilyPerson firstFamilyPerson, FamilyPerson secondFamilyPerson, RelationConstraints lowerRelationConstraints) {
         List<FamilyPerson> result = new ArrayList<>();
         int parent1Age = firstFamilyPerson.getAge();
         int parent2Age = secondFamilyPerson.getAge();
