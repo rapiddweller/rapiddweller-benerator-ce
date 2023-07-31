@@ -146,8 +146,5 @@ public class DefaultRandomProvider implements RandomProvider {
     }
     return samples[i].getValue();
   }
-  public boolean randomBoolean() {
-    return random.nextBoolean();
-  }
 
 }

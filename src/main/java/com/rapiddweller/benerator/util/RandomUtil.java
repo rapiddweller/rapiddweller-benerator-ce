@@ -83,8 +83,5 @@ public class RandomUtil {
   public static Object randomFromWeightLiteral(String literal) {
     return random.randomFromWeightLiteral(literal);
   }
-  public static boolean randomBoolean() {
-    return random.randomBoolean();
-  }
 
 }
