@@ -42,6 +42,5 @@ public interface RandomProvider {
   char randomDigit(int min);
   Date randomDate(Date min, Date max);
   Object randomFromWeightLiteral(String literal);
-  boolean randomBoolean();
 
 }
