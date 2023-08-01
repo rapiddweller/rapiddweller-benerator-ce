@@ -86,10 +86,10 @@ public class WeightedStringGenerator extends NonNullGeneratorProxy<String> {
   @Override
   public synchronized void init(GeneratorContext context) {
     assertNotInitialized();
-    List<WeightedSample<String>> samples = mergeTwoArraysInWeightedSample(value, weight);
+    List<WeightedSample<String>> weightedSamples = mergeTwoArraysInWeightedSample(value, weight);
 
     Generator<String> source = context.getGeneratorFactory()
-        .createWeightedSampleGenerator(samples, String.class);
+        .createWeightedSampleGenerator(weightedSamples, String.class);
     setSource(WrapperFactory.asNonNullGenerator(source));
     super.init(context);
   }

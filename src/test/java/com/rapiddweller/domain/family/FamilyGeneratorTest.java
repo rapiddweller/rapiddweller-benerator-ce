@@ -31,7 +31,7 @@ public class FamilyGeneratorTest extends GeneratorClassTest {
         for (int i = 0; i < 100; i++) {
             w = g.generate(w);
             FamilyContainer c = w.unwrap();
-            // print name, fullname, fax and office phone
+            // print familyPerson toString method
             System.out.println(c.getFamilyPersonList().toString());
 
             //check familyPersonList

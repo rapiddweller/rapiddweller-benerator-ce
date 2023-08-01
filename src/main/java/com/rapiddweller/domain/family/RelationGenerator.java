@@ -30,5 +30,5 @@ package com.rapiddweller.domain.family;
  * Define method generateFromEntityAndRelation take argument of {@link FamilyPerson} and {@link RelationConstraints} to generate related entity.<br/>
  */
 public interface RelationGenerator<E> {
-    E generateFromEntityAndRelation(E Entity, RelationConstraints relationConstraints);
+    E generateFromEntityAndRelation(E entity, RelationConstraints relationConstraints);
 }
