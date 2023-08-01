@@ -34,9 +34,6 @@ import com.rapiddweller.common.ConversionException;
  */
 public class SameStringConstraint implements Constraint<String>{
 
-    // Constructor ------------------------------------------------------------------------------------------------------
-    public SameStringConstraint() {
-    }
     // implement Constraint Interface ----------------------------------------------------------------------------------
     @Override
     public Class<String> getSourceType() {

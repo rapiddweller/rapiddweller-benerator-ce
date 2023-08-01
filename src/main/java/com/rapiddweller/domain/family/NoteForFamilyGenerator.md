@@ -19,11 +19,16 @@ Custom attribute up to now:
   + peerRelation (between parents or grandparents - same rule): MinDiffAgeInPeerRelation(default=-2), MaxDiffAgeInPeerRelation(default=5), ParentFamilyNameEnable(default=true-parents have same familyName), DivorcedParentQuota(default=0.2-this set relation between parents is DIVORCED), DiverseParentQuota(default=1-this is not applicable, please check Limitation)
   + higherRelation (between parent and grandparent): MinDiffAgeInHigherRelation(default=20), MaxDiffAgeInPeerRelation(default=50)- if father role, grandparents has same family name as father, different for mother role.
   + lowerRelation (between parent and children): MinDiffAgeInLowerRation(default=-50), MaxDiffAgeInLowerRelation(default=-20), MaxBiologicalChildrenNumber(default=10), MaxChildrenAdoptedNumber(default=5), MaxChildrenTwinCase(default=2)
+
 Limitation:
-Only fixed structure of family can be generated: 2 parent (father-mother), 4 grandparent (grandfather-grandmother of father/mother), children with maximum children number set default to 10, adopted to 5.
-Diverse Gender is not applied, FamilyPersonGenerator is base on logic of PersonGenerator, this type of gender is not supported in this model now (change DiverseParentQuota attribute can cause error).
-In this implementation, I re-construct new BirthdayGenerator, set attribute and init(context) again each time generate (to custom age from constraint), I think this can potentially cause performance issue. This will need to be improved.
-Some test for generate non-null FamilyContainer, FamilyPerson as link below. Need more test and feedback to improve this type of Generator.
+
+- Only fixed structure of family can be generated: 2 parent (father-mother), 4 grandparent (grandfather-grandmother of father/mother), children with maximum children number set default to 10, adopted to 5.
+
+- Diverse Gender is not applied, FamilyPersonGenerator is base on logic of PersonGenerator, this type of gender is not supported in this model now (change DiverseParentQuota attribute can cause error).
+
+- In this implementation, I re-construct new BirthdayGenerator, set attribute and init(context) again each time generate (to custom age from constraint), I think this can potentially cause performance issue. This will need to be improved.
+
+- Some test for generate non-null FamilyContainer, FamilyPerson as link below. Need more test and feedback to improve this type of Generator.
 ```
 src/test/java/com/rapiddweller/domain/family
 ```

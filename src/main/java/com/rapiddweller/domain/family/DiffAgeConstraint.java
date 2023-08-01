@@ -35,8 +35,9 @@ public class DiffAgeConstraint implements Constraint<Integer>{
     private Integer minDiffAge;
 
     // Constructor ------------------------------------------------------------------------------------------------------
+    //default constructor that config same value as source
     public DiffAgeConstraint() {
-        this(-2,5);
+        this(0,0);
     }
     public DiffAgeConstraint(Integer minDiffAge, Integer maxDiffAge) {
         this.minDiffAge = minDiffAge;
@@ -83,6 +84,6 @@ public class DiffAgeConstraint implements Constraint<Integer>{
 
     @Override
     public boolean isThreadSafe() {
-        return true;
+        return false;
     }
 }

@@ -32,22 +32,9 @@ import com.rapiddweller.common.ConversionException;
  * Constraint that convert method return role as {@link FamilyRole} corresponding with Source in a peer relation (age comparison).<br/>
  *
  */
-public class PeerRoleConstraint implements Constraint<FamilyRole>{
+public class PeerRoleConstraint extends AbstractRoleConstraint{
 
-    // Constructor ------------------------------------------------------------------------------------------------------
-    public PeerRoleConstraint() {
-    }
-    // implement Constraint Interface ----------------------------------------------------------------------------------
-    @Override
-    public Class<FamilyRole> getSourceType() {
-        return FamilyRole.class;
-    }
-
-    @Override
-    public Class<FamilyRole> getTargetType() {
-        return FamilyRole.class;
-    }
-
+    // implement abstract method in AbstractRoleConstraint -------------------------------------------------------------
     @Override
     public FamilyRole convert(FamilyRole sourceValue) throws ConversionException {
         switch (sourceValue) {
@@ -67,15 +54,5 @@ public class PeerRoleConstraint implements Constraint<FamilyRole>{
                 throw new IllegalArgumentException("This FamilyRole is not suitable for peer relation.");
         }
 
-    }
-
-    @Override
-    public boolean isParallelizable() {
-        return false;
-    }
-
-    @Override
-    public boolean isThreadSafe() {
-        return true;
     }
 }

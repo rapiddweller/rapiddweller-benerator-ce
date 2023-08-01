@@ -29,22 +29,29 @@ package com.rapiddweller.domain.family;
 import com.rapiddweller.common.ConversionException;
 
 /**
- * Constraint that convert method return role as {@link FamilyRole} corresponding with Source in a higher relation (age comparison).<br/>
+ * Constraint that convert method return role as {@link FamilyRole} corresponding with Source in a peer relation (age comparison).<br/>
+ *
  */
-public class HigherRoleConstraint extends AbstractRoleConstraint {
+abstract class AbstractRoleConstraint implements Constraint<FamilyRole>{
 
-    // implement abstract method in AbstractRoleConstraint -------------------------------------------------------------
+    // implement Constraint Interface ----------------------------------------------------------------------------------
+    @Override
+    public Class<FamilyRole> getSourceType() {
+        return FamilyRole.class;
+    }
 
     @Override
-    public FamilyRole convert(FamilyRole sourceValue) throws ConversionException {
-        switch (sourceValue) {
-            case FATHER:
-            case MOTHER:
-            case MOTHER_DIVERSE:
-            case FATHER_DIVERSE:
-                return FamilyRole.GRANDFATHER;
-            default:
-                throw new IllegalArgumentException("This FamilyRole is not suitable for higher relation.");
-        }
+    public Class<FamilyRole> getTargetType() {
+        return FamilyRole.class;
+    }
+
+    @Override
+    public boolean isParallelizable() {
+        return false;
+    }
+
+    @Override
+    public boolean isThreadSafe() {
+        return true;
     }
 }

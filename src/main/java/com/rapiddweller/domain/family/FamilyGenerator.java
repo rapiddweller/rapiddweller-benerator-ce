@@ -56,7 +56,10 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
     private final RelationConstraints higherRelationConstraints;
     private int maxBiologicalChildrenNumber;
     private int maxChildrenAdoptedNumber;
-    private int maxChildrenTwinCase;
+    // constrain name as String
+    private static final String FAMILY_NAME = "familyName";
+    private static final String AGE = "age";
+    private static final String ROLE = "role";
 
     // Constructor ----------------------------------------------------------------------------------------------------
 
@@ -73,21 +76,20 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
         this.divorcedCaseGen = registerComponent(new WeightedStringGenerator(new String[]{"divorced", "nonDivorced"}, new double[]{0.2, 0.8}));
         //Create default Peer Relation Constraints
         this.peerRelationConstraints = new RelationConstraints();
-        this.peerRelationConstraints.registerOrUpdateConstraint("age", new DiffAgeConstraint(-2, 5));
-        this.peerRelationConstraints.registerOrUpdateConstraint("familyName", new SameStringConstraint());
-        this.peerRelationConstraints.registerOrUpdateConstraint("role", new PeerRoleConstraint());
+        this.peerRelationConstraints.registerOrUpdateConstraint(AGE, new DiffAgeConstraint(-2, 5));
+        this.peerRelationConstraints.registerOrUpdateConstraint(FAMILY_NAME, new SameStringConstraint());
+        this.peerRelationConstraints.registerOrUpdateConstraint(ROLE, new PeerRoleConstraint());
         //Create default Lower Relation Constraints
         this.lowerRelationConstraints = new RelationConstraints();
-        this.lowerRelationConstraints.registerOrUpdateConstraint("age", new DiffAgeConstraint(-40, -20));
-        this.lowerRelationConstraints.registerOrUpdateConstraint("familyName", new SameStringConstraint());
+        this.lowerRelationConstraints.registerOrUpdateConstraint(AGE, new DiffAgeConstraint(-40, -20));
+        this.lowerRelationConstraints.registerOrUpdateConstraint(FAMILY_NAME, new SameStringConstraint());
         this.maxBiologicalChildrenNumber = 10;
         this.maxChildrenAdoptedNumber = 5;
-        this.maxChildrenTwinCase = 2;
         //Create default Higher Relation Constraints
         this.higherRelationConstraints = new RelationConstraints();
-        this.higherRelationConstraints.registerOrUpdateConstraint("age", new DiffAgeConstraint(20, 40));
-        this.higherRelationConstraints.registerOrUpdateConstraint("familyName", new SameStringConstraint());
-        this.higherRelationConstraints.registerOrUpdateConstraint("role", new HigherRoleConstraint());
+        this.higherRelationConstraints.registerOrUpdateConstraint(AGE, new DiffAgeConstraint(20, 40));
+        this.higherRelationConstraints.registerOrUpdateConstraint(FAMILY_NAME, new SameStringConstraint());
+        this.higherRelationConstraints.registerOrUpdateConstraint(ROLE, new HigherRoleConstraint());
     }
 
     // Attributes --------------------------------------------------------------------------------------
@@ -111,20 +113,20 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
 
     // Peer Relation Setup
     public void setMinDiffAgeInPeerRelation(int minDiffAge) {
-        var temp = (DiffAgeConstraint) this.peerRelationConstraints.getConstraintByName("age");
+        var temp = (DiffAgeConstraint) this.peerRelationConstraints.getConstraintByName(AGE);
         temp.setMinDiffAge(minDiffAge);
     }
 
     public void setMaxDiffAgeInPeerRelation(int maxDiffAge) {
-        var temp = (DiffAgeConstraint) this.peerRelationConstraints.getConstraintByName("age");
+        var temp = (DiffAgeConstraint) this.peerRelationConstraints.getConstraintByName(AGE);
         temp.setMaxDiffAge(maxDiffAge);
     }
 
     public void setParentFamilyNameEnable(boolean status) {
         if (status) {
-            this.peerRelationConstraints.registerOrUpdateConstraint("familyName", new SameStringConstraint());
+            this.peerRelationConstraints.registerOrUpdateConstraint(FAMILY_NAME, new SameStringConstraint());
         } else {
-            this.peerRelationConstraints.removeConstraintByName("familyName");
+            this.peerRelationConstraints.removeConstraintByName(FAMILY_NAME);
         }
     }
 
@@ -138,12 +140,12 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
 
     // Lower Relation Setup
     public void setMinDiffAgeInLowerRelation(int minDiffAge) {
-        var temp = (DiffAgeConstraint) this.lowerRelationConstraints.getConstraintByName("age");
+        var temp = (DiffAgeConstraint) this.lowerRelationConstraints.getConstraintByName(AGE);
         temp.setMinDiffAge(minDiffAge);
     }
 
     public void setMaxDiffAgeInLowerRelation(int maxDiffAge) {
-        var temp = (DiffAgeConstraint) this.lowerRelationConstraints.getConstraintByName("age");
+        var temp = (DiffAgeConstraint) this.lowerRelationConstraints.getConstraintByName(AGE);
         temp.setMaxDiffAge(maxDiffAge);
     }
 
@@ -155,18 +157,14 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
         this.maxChildrenAdoptedNumber = maxChildrenAdoptedNumber;
     }
 
-    public void setMaxChildrenTwinCase(int maxChildrenTwinCase) {
-        this.maxChildrenTwinCase = maxChildrenTwinCase;
-    }
-
     // Higher Relation Setup
     public void setMinDiffAgeInHigherRelation(int minDiffAge) {
-        var temp = (DiffAgeConstraint) this.higherRelationConstraints.getConstraintByName("age");
+        var temp = (DiffAgeConstraint) this.higherRelationConstraints.getConstraintByName(AGE);
         temp.setMinDiffAge(minDiffAge);
     }
 
     public void setMaxDiffAgeInHigherRelation(int maxDiffAge) {
-        var temp = (DiffAgeConstraint) this.higherRelationConstraints.getConstraintByName("age");
+        var temp = (DiffAgeConstraint) this.higherRelationConstraints.getConstraintByName(AGE);
         temp.setMaxDiffAge(maxDiffAge);
     }
 
@@ -280,13 +278,13 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
         FamilyPerson grandparent2 = this.familyPersonGen.generateFromEntityAndRelation(grandparent1, peerRelationConstraints);
         grandparent2.addRelationStatusWithPerson(grandparent1, RelationStatus.MARRIAGE);
         //grandparent of mother will have different family name with mother
-        this.higherRelationConstraints.removeConstraintByName("familyName");
+        this.higherRelationConstraints.removeConstraintByName(FAMILY_NAME);
         FamilyPerson grandparent3 = this.familyPersonGen.generateFromEntityAndRelation(mother, higherRelationConstraints);
         grandparent3.addRelationStatusWithPerson(mother, RelationStatus.BIOLOGICAL);
         FamilyPerson grandparent4 = this.familyPersonGen.generateFromEntityAndRelation(grandparent3, peerRelationConstraints);
         grandparent4.addRelationStatusWithPerson(grandparent3, RelationStatus.MARRIAGE);
         //restore original status of higher relation constraint
-        this.higherRelationConstraints.registerOrUpdateConstraint("familyName", new SameStringConstraint());
+        this.higherRelationConstraints.registerOrUpdateConstraint(FAMILY_NAME, new SameStringConstraint());
         return new ArrayList<>(List.of(grandparent1, grandparent2, grandparent3, grandparent4));
     }
 
