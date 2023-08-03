@@ -69,8 +69,8 @@ public class WeightedStringGenerator extends NonNullGeneratorProxy<String> {
   // Generator interface implementation ------------------------------------------------------------------------------
 
   @Override
-  public boolean isThreadSafe() {
-    return true;
+  public Class<String> getGeneratedType() {
+    return String.class;
   }
 
   @Override
@@ -79,8 +79,8 @@ public class WeightedStringGenerator extends NonNullGeneratorProxy<String> {
   }
 
   @Override
-  public Class<String> getGeneratedType() {
-    return String.class;
+  public boolean isThreadSafe() {
+    return true;
   }
 
   @Override

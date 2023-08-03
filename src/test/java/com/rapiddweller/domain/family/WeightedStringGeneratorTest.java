@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link WeightedStringGenerator}.<br/><br/>
  *
@@ -39,5 +42,19 @@ public class WeightedStringGeneratorTest extends GeneratorClassTest {
         for (int i=0; i<resultPercentEachString.size();i++) {
             Assert.assertTrue(resultPercentEachString.get(i)>=weight[i]-deviation && resultPercentEachString.get(i)<=weight[i]+deviation);
         }
+    }
+
+    @Test
+    public void otherMethodTest() {
+        String[] value = new String[] {"case1","case2","case3","case4","case5","case6"};
+        double[] weight = new double[] {0.1,0.3,0.1,0.2,0.2,0.1};
+        WeightedStringGenerator generator = new WeightedStringGenerator();
+        generator.setWeight(weight);
+        generator.setValue(value);
+        assertEquals(weight, generator.getWeight());
+        assertEquals(value, generator.getValue());
+        assertEquals(String.class, generator.getGeneratedType());
+        assertTrue(generator.isThreadSafe());
+        assertTrue(generator.isParallelizable());
     }
 }
