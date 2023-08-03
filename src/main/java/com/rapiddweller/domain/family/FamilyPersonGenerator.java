@@ -66,6 +66,7 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
     private NobilityTitleGenerator nobilityTitleGenerator;
     private SalutationProvider salutationProvider;
     private BirthDateGenerator birthDateGenerator;
+    private BirthDateGenerator firstPersonBirthDateGenerator;
     private EMailAddressBuilder emailGenerator;
     private final IncrementGenerator personIDGenerator;
 
@@ -85,7 +86,8 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
         this.datasetName = datasetName;
         this.locale = locale;
         this.genderGenerator = registerComponent(new GenderGenerator(0.5));
-        this.birthDateGenerator = registerComponent(new BirthDateGenerator(20, 60));
+        this.birthDateGenerator = registerComponent(new BirthDateGenerator(1, 105));
+        this.firstPersonBirthDateGenerator = registerComponent(new BirthDateGenerator(21, 60));
         this.femaleFamilyNameConverters = new HashMap<>();
         this.personIDGenerator = registerComponent(new IncrementGenerator());
     }
@@ -93,11 +95,11 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
     // properties ------------------------------------------------------------------------------------------------------
 
     public void setMinAgeYears(int minAgeYears) {
-        birthDateGenerator.setMinAgeYears(minAgeYears);
+        firstPersonBirthDateGenerator.setMinAgeYears(minAgeYears);
     }
 
     public void setMaxAgeYears(int maxAgeYears) {
-        birthDateGenerator.setMaxAgeYears(maxAgeYears);
+        firstPersonBirthDateGenerator.setMaxAgeYears(maxAgeYears);
     }
 
     public double getFemaleQuota() {
@@ -117,20 +119,10 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
         nobilityTitleGenerator.setNobleQuota(nobleQuota);
     }
 
-    public Locale getLocale() {
-        return acadTitleGenerator.getLocale();
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
     @Override
     public String getDataset() {
         return datasetName;
     }
-
-    // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
 
     public void setDataset(String datasetName) {
         this.datasetName = datasetName;
@@ -140,6 +132,18 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
     public String getNesting() {
         return REGION_NESTING;
     }
+
+    public Locale getLocale() {
+        return acadTitleGenerator.getLocale();
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
+
+
 
     @Override
     public FamilyPerson generateForDataset(String datasetToUse) {
@@ -171,9 +175,7 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
                 (Gender.MALE.equals(person.getGender()) ? maleNobilityTitleGenerator :
                         nobilityTitleGenerator);
         person.setNobilityTitle(generateNullable(nobTitleGenerator));
-        this.birthDateGenerator = registerComponent(new BirthDateGenerator(21, 60));
-        this.birthDateGenerator.init(context);
-        Date birthdate = generateNullable(birthDateGenerator);
+        Date birthdate = generateNullable(firstPersonBirthDateGenerator);
         person.setBirthDate(birthdate);
         person.setAge(this.getAge(birthdate));
         person.setEmail(emailGenerator.generate(givenName, familyName));
@@ -188,6 +190,7 @@ public class FamilyPersonGenerator extends CompositeGenerator<FamilyPerson>
         secondNameTest = registerAndInitComponent(new BooleanGenerator(0.2));
         genderGenerator.init(context);
         birthDateGenerator.init(context);
+        firstPersonBirthDateGenerator.init(context);
         acadTitleGenerator =
                 registerAndInitComponent(new AcademicTitleGenerator(locale));
         acadTitleGenerator.setLocale(locale);

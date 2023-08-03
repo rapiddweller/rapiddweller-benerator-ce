@@ -103,12 +103,12 @@ public class FamilyGenerator extends CompositeGenerator<FamilyContainer>
     }
 
     // Age range for first parent (root)
-    public void setFirstParentMinAgeYears(int age) {
-        this.familyPersonGen.setMinAgeYears(age);
+    public void setFirstParentMinAgeYears(int minAgeYear) {
+        this.familyPersonGen.setMinAgeYears(minAgeYear);
     }
 
-    public void setFirstParentMaxAgeYears(int age) {
-        this.familyPersonGen.setMinAgeYears(age);
+    public void setFirstParentMaxAgeYears(int maxAgeYear) {
+        this.familyPersonGen.setMaxAgeYears(maxAgeYear);
     }
 
     // Peer Relation Setup

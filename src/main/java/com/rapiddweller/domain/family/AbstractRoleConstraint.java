@@ -26,8 +26,6 @@
 
 package com.rapiddweller.domain.family;
 
-import com.rapiddweller.common.ConversionException;
-
 /**
  * Constraint that convert method return role as {@link FamilyRole} corresponding with Source in a peer relation (age comparison).<br/>
  *
@@ -52,6 +50,6 @@ abstract class AbstractRoleConstraint implements Constraint<FamilyRole>{
 
     @Override
     public boolean isThreadSafe() {
-        return true;
+        return false;
     }
 }

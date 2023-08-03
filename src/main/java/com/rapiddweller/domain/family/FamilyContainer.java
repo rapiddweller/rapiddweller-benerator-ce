@@ -83,7 +83,7 @@ public class FamilyContainer {
     return getMemberWithRoleInList(grandParentRoles);
   }
 
-  public int numberOfRoleInFamily(FamilyRole role) {
+  public int getNumberOfRoleInFamily(FamilyRole role) {
     return countMemberWithRoleInList(Set.of(role));
   }
 

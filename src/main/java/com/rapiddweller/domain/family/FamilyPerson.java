@@ -52,7 +52,7 @@ public class FamilyPerson extends Person {
     }
 
     public FamilyPerson() {
-        super(Locale.getDefault());
+        this(Locale.getDefault());
     }
 
     // Getter/Setter -----------------------------------------------------------------------------------------------
@@ -90,14 +90,6 @@ public class FamilyPerson extends Person {
     }
 
     // Access FamilyPerson with condition -------------------------------------------------------------------------------------------------------
-
-    public boolean isRelationWithPerson(FamilyPerson person) {
-        return this.relations.containsKey(person);
-    }
-
-    public boolean isRelationStatusExist(RelationStatus relationStatus) {
-        return this.relations.containsValue(relationStatus);
-    }
 
     public void addRelationStatusWithPerson(FamilyPerson relatedMember, RelationStatus relationStatus) {
         this.relations.put(relatedMember, relationStatus);
