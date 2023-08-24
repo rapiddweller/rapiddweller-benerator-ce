@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<setup xmlns="https://www.benerator.de/schema/${version.version}"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/${version.version} benerator-${version.version}.xsd">
+
+    <echo>
+        Populates a database
+    </echo>
+
+    <echo>defining a database that will be referred by the id 'db' later</echo>
+    <database id="db"/>
+
+
+    <echo>Drop the simpledb if it already exist. If it does not exist yet, the error message is ignored</echo>
+    <execute target="db" type="sql" onError="ignore">
+        DROP TABLE IF EXISTS simpledb;
+    </execute>
+
+    <echo>Creating simpledb</echo>
+    <execute target="db" type="sql">
+        CREATE TABLE simpledb (
+        id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY,
+        user_id INT NOT NULL,
+        username VARCHAR ( 50 ) UNIQUE NOT NULL,
+        password VARCHAR ( 50 ) NOT NULL,
+        email VARCHAR ( 255 ) UNIQUE NOT NULL,
+        created_on TIMESTAMP NOT NULL,
+        last_login TIMESTAMP,
+        PRIMARY KEY (id)
+        );
+    </execute>
+
+    <echo>Generating 100 entries for simpledb</echo>
+    <generate type="simpledb" consumer="db,ConsoleExporter" count="100">
+        <id name="id" mode="ignored" />
+        <attribute name="user_id" generator="IncrementGenerator"/>
+        <attribute name="username" unique="true"/>
+        <attribute name="email" unique="true" />
+    </generate>
+</setup>

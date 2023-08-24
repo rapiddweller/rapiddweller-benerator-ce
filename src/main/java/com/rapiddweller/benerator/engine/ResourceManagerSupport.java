@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.benerator.consumer.ConsumerChain;
 import com.rapiddweller.common.IOUtil;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -63,7 +64,11 @@ public class ResourceManagerSupport implements ResourceManager {
   public void close() {
     logger.debug("Closing resources: {}", this);
     for (int i = resources.size() - 1; i >= 0; i--) {
-      IOUtil.close(resources.get(i));
+      Closeable resource = resources.get(i);
+      // check instanceof ConsumerChain to avoid close resource 2 times
+      if(!(resource instanceof ConsumerChain)){
+        IOUtil.close(resource);
+      }
     }
     resources.clear();
   }

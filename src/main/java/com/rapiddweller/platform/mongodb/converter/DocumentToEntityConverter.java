@@ -24,7 +24,7 @@ public class DocumentToEntityConverter extends ThreadSafeConverter<Document, Ent
     public Entity convert(Document document) throws ConversionException {
         Entity entity = new Entity(typeDescriptor);
         document.keySet().stream()
-                .filter(e -> !e.equals("_id"))
+//                .filter(e -> !e.equals("_id"))
                 .forEach(e -> setComponent(e, document, entity));
         return entity;
     }

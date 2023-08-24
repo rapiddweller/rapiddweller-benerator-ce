@@ -27,14 +27,16 @@
 package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.FileFormat;
+import com.rapiddweller.benerator.FileFormats;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.TypedEntitySource;
 import com.rapiddweller.benerator.composite.BlankEntityGenerator;
 import com.rapiddweller.benerator.composite.ComponentTypeConverter;
+import com.rapiddweller.benerator.composite.CompositeEntityGenerator;
 import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.composite.SimpleTypeEntityGenerator;
-import com.rapiddweller.benerator.composite.CompositeEntityGenerator;
 import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
@@ -56,8 +58,6 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.benerator.FileFormat;
-import com.rapiddweller.benerator.FileFormats;
 import com.rapiddweller.platform.csv.CSVEntitySourceProvider;
 import com.rapiddweller.platform.dbunit.DbUnitEntitySource;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
@@ -85,6 +85,29 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   @Override
+  protected Generator<?> createExplicitGenerator(ComplexTypeDescriptor type, Uniqueness uniqueness, BeneratorContext context) {
+    Generator<?> generator = DescriptorUtil.getGeneratorByName(type, context);
+    if (generator == null && type.getDynamicSource() != null) {
+      generator = createDynamicSourceGenerator(type, uniqueness, context);
+    }
+    if (generator == null && type.getSource() != null) {
+      generator = createSourceGenerator(type, uniqueness, context);
+    }
+    if (generator == null) {
+      generator = createScriptGenerator(type);
+    }
+    return generator;
+  }
+
+  protected Generator<?> createDynamicSourceGenerator(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    if (descriptor.getDynamicSource() != null) {
+      var dynamicSourceGenerator = FactoryUtil.createDynamicSourceGenerator(uniqueness, context, descriptor, this);
+      return WrapperFactory.applyConverter(dynamicSourceGenerator, new ComponentTypeConverter(descriptor));
+    }
+    return null;
+  }
+
+  @Override
   protected Generator<?> applyComponentBuilders(Generator<?> source, boolean iterationMode, ComplexTypeDescriptor descriptor,
                                                 String instanceName, Uniqueness uniqueness, BeneratorContext context) {
     source = createMutatingEntityGenerator(instanceName, descriptor, uniqueness, context, source, iterationMode);
@@ -99,6 +122,19 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     if (sourceSpec == null) {
       return null;
     }
+    return createSourceFromSpec(sourceSpec,descriptor,uniqueness,context);
+  }
+
+  public Generator<Entity> resolveDynamicSourceGenerator(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    // if no sourceObject is specified, there's nothing to do
+    String sourceSpec = descriptor.getDynamicSource();
+    if (sourceSpec == null) {
+      return null;
+    }
+    return createSourceFromSpec(sourceSpec, descriptor,uniqueness,context);
+  }
+
+  private Generator<Entity> createSourceFromSpec(String sourceSpec, ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
     Object sourceObject;
     if (ScriptUtil.isScript(sourceSpec)) {
       Object tmp = ScriptUtil.evaluate(sourceSpec, context);
@@ -149,7 +185,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
             }
           } catch (Exception e) {
             throw BeneratorExceptionFactory.getInstance().internalError(
-                "Error resolving source: " + sourceSpec, e);
+                    "Error resolving source: " + sourceSpec, e);
           }
         }
       }
@@ -157,7 +193,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
 
     if (generator == null) {
       throw BeneratorFactory.getInstance().createExceptionFactory().syntaxErrorForText(
-          "source='" + sourceSpec + "'", "Unable to resolve source");
+              "source='" + sourceSpec + "'", "Unable to resolve source");
     }
     if (generator.getGeneratedType() != Entity.class) {
       generator = new SimpleTypeEntityGenerator(generator, descriptor);

@@ -7,7 +7,7 @@ Download Benerator from:
 [https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/)
 
 You should download the most recent version of the rapiddweller-benerator-dist archive from the download page, e.g.
-_rapiddweller-benerator-ce-3.0.1-jdk-11-dist.zip_ .
+_rapiddweller-benerator-ce-3.1.0-jdk-11-dist.zip_ .
 
 !!! warning
 
@@ -26,10 +26,10 @@ Create an environment variable BENERATOR_HOME that points to the path you extrac
 
 **Windows Details**: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the
 User Variables section. Enter BENERATOR_HOME as name and the path as value (
-e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-3.0.0`). Click OK several times.
+e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-3.1.0`). Click OK several times.
 
 **Mac/Unix/Linux Details**: Open the file .profile in your user directory. Add an entry that points to benerator, e.g.:
-`export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-3.0.0`
+`export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-3.1.0`
 
 ## Optional: Install JDBC drivers
 
@@ -48,21 +48,41 @@ However, if you need to use a closed source database driver, the vendor usually 
 install their driver. So, if you are using Oracle DB or DB2, get the JDBC drivers from these sites:
 
 • Oracle [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html](http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html): Click on "Oracle Database 11g Release 2 (11.2.0.1.0) drivers".
-Download ojdbc6.jar and put it into Benerator's lib directory. You will need to create a free Oracle account.
+Download `ojdbc6.jar` and put it into Benerator's lib directory. You will need to create a free Oracle account.
 
 • DB2 [http://www-306.ibm.com/software/data/db2/java](http://www-306.ibm.com/software/data/db2/java): Follow the link 'IBM Data Server Driver for JDBC and SQLJ', download the driver archive and
-copy the contained file db2jcc.jar to Benerator's lib directory.
+copy the contained file `db2jcc.jar` to Benerator's lib directory.
 
 ## Optional: Set up log4j2
 
 Troubleshooting is simpler if you make use of log4j's configuration capabilities. If you do not know (or care) about logging, simply skip this step.
-Otherwise, put a custom log4j2.xml file into the BENERATOR_HOME/lib directory.
+Otherwise, put a custom `log4j2.xml` file into the `BENERATOR_HOME/lib` directory.
 
 ## Mac OS X configuration
 
-On Mac OS X you need to provide benerator with an explicit configuration of the JAVA_HOME path. See http://developer.apple.com/qa/qa2001/qa1170.html
+### Installation using Homebrew (Recommended for Mac OS users)
+
+You can install Benerator on macOS using Homebrew, a popular package manager. First, you need to ensure Homebrew is installed on your system. If not, follow the instructions on the [Homebrew website](https://brew.sh/).
+
+Once Homebrew is installed, you can install Benerator by running the following command in your terminal:
+
+```shell
+brew install benerator
+```
+
+After the installation completes, you can verify the installation by checking the Benerator version:
+
+```shell
+benerator --version
+```
+
+This should display the installed version of Benerator.
+
+### Manual configuration
+
+On Mac OS X you need to provide Benerator with an explicit configuration of the JAVA_HOME path. See http://developer.apple.com/qa/qa2001/qa1170.html
 for a good introduction to the OS X way of setting up Java. It is based on aliases conventions. If you are not familiar with that, you should read the
-article. If Java 6 (or newer) is the default version you will use, you can simply define JAVA_HOME by adding the following line to your .profile: in
+article. If Java 11 (or newer) is the default version you will use, you can simply define JAVA_HOME by adding the following line to your .profile: in
 your user directory:
 
 ```shell
@@ -84,7 +104,7 @@ On any OS, open a console window (shell,cmd or powershell) and type ...
 ```shell
 $ benerator -–version
 
-Benerator Community Edition 3.0.1-jdk-11
+Benerator Community Edition 3.1.0-jdk-11
 Java version:  11.0.11
 JVM product:   OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)
 System:        Mac OS X 10.16 x86_64

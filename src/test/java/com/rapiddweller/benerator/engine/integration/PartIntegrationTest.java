@@ -47,7 +47,7 @@ public class PartIntegrationTest extends AbstractBeneratorIntegrationTest {
               "<setup>\n"
             + "    <memstore id='mem'/>\n"
             + "    <generate type='person' count='5000' consumer='mem'>\n"
-            + "        <part name='children' maxCount='2'>\n"
+            + "        <part name='children' container='list' maxCount='2'>\n"
             + "        </part>\n"
             + "    </generate>\n"
             + "</setup>\n";

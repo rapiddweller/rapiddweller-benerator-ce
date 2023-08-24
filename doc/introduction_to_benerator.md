@@ -112,23 +112,26 @@ However, it has two historic limitations:
 
 Though, Benerator Community Edition still has an impressive performance.
 
-### Benerator Professional & Full Edition
+### Benerator Light & Professional Edition
 
-The rapiddweller Benerator Professional & Full Editions aim at providing an easy and effortless 
-start for using Benerator and to benerate realistic data in simple as well as complex scenarios. This includes:
+The rapiddweller Benerator Light & Professional Editions aim at providing an easy and effortless 
+start for using Benerator and to benerate model-based realistic data in simple as well as complex scenarios. This includes:
 
 - Benerator UI
 - Ready-to-use templates
 - Demos
 - Best practices from countless benerator projects 
 - A powerful RESTful / JSON API
-- Container support for Docker / Kubernetes
+- Container support for Docker / Kubernetes / OpenShift
 - And much more.
 
 #### Benerator UI
 
 Benerator UI is an integrated graphical development environment with 
 
+- Auto-generation of Benerator models (e.g. from JSON files)
+- Auto-scanning and model generation from connected databases
+- Multiple Wizards
 - Editing support by context-sensitive auto-completion
 - Code snippets for many use-cases
 - Templates for projects and files
@@ -160,4 +163,5 @@ Improvements against the Community Edition are
 
 !!! note
 
-    Learn more about all editions and its features on **[www.benerator.de](https://www.benerator.de)**.
+    Learn more about all editions and its features on **[www.benerator.de](https://www.benerator.de)** or 
+    **[Book a Demo](https://info.rapiddweller.com/meetings/rapiddweller/benerator-demo)**.

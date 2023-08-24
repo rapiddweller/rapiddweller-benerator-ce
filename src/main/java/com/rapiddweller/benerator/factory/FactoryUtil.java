@@ -33,6 +33,7 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.FeatureWeight;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.util.DynamicSourceGenerator;
 import com.rapiddweller.benerator.primitive.ScriptGenerator;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
@@ -42,6 +43,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.regex.RegexParser;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.FeatureDescriptor;
 import com.rapiddweller.model.data.FeatureDetail;
 import com.rapiddweller.model.data.Uniqueness;
@@ -204,6 +206,10 @@ public class FactoryUtil {
   public static Generator<?> createScriptGenerator(String scriptText) {
     Script script = ScriptUtil.parseScriptText(scriptText);
     return new ScriptGenerator(script);
+  }
+
+  public static Generator<?> createDynamicSourceGenerator(Uniqueness uniqueness, BeneratorContext context, ComplexTypeDescriptor descriptor, ComplexTypeGeneratorFactory factory) {
+    return new DynamicSourceGenerator(uniqueness, context, descriptor, factory);
   }
 
 }

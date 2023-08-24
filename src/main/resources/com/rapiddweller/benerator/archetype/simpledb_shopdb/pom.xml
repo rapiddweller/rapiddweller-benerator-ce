@@ -1,0 +1,121 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>${setup.groupId}</groupId>
+    <artifactId>${setup.projectName}</artifactId>
+    <version>${setup.version}</version>
+
+    <packaging>jar</packaging>
+    <name>${setup.projectName} data generation project</name>
+    <description>Start populating the database by typing 'mvn benerator:generate' on the command line.</description>
+    <properties>
+        <database_h2.version>1.4.200</database_h2.version>
+        <database_hsqldb.version>1.8.0.7</database_hsqldb.version>
+        <database_icu4j.version>67.1</database_icu4j.version>
+        <database_jaybird.version>4.0.1.java11</database_jaybird.version>
+        <database_mssqldb.version>9.2.1.jre11</database_mssqldb.version>
+        <database_oracle.version>21.1.0.0</database_oracle.version>
+        <database_mysql-connector-java.version>8.0.29</database_mysql-connector-java.version>
+        <database_postgresql.version>42.4.3</database_postgresql.version>
+        <database_derbyclient.version>10.7.1.1</database_derbyclient.version>
+        <logging_log4j-api.version>[2.17.0,)</logging_log4j-api.version>
+        <logging_log4j-core.version>[2.17.0,)</logging_log4j-core.version>
+    </properties>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.rapiddweller</groupId>
+                <artifactId>benerator-maven-plugin</artifactId>
+                <version>${version.version}</version>
+                <configuration>
+                    <descriptor>benerator.xml</descriptor>
+                    <encoding>${setup.encoding}</encoding>
+                    <validate>true</validate>
+                    <dbUrl>${setup.dbUrl}</dbUrl>
+                    <dbDriver>${setup.dbDriver}</dbDriver>
+                    <dbSchema>${setup.dbSchema}</dbSchema>
+                    <dbUser>${setup.dbUser}</dbUser>
+                    <dbPassword>${setup.dbPassword}</dbPassword>
+                </configuration>
+
+                <dependencies>
+                    <!--  databases -->
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${database_h2.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.derby</groupId>
+                        <artifactId>derbyclient</artifactId>
+                        <version>${database_derbyclient.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.firebirdsql.jdbc</groupId>
+                        <artifactId>jaybird</artifactId>
+                        <version>${database_jaybird.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${database_mysql-connector-java.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                        <version>${database_hsqldb.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.microsoft.sqlserver</groupId>
+                        <artifactId>mssql-jdbc</artifactId>
+                        <version>${database_mssqldb.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.oracle.database.jdbc</groupId>
+                        <artifactId>ojdbc11</artifactId>
+                        <version>${database_oracle.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${database_postgresql.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.ibm.icu</groupId>
+                        <artifactId>icu4j</artifactId>
+                        <version>${database_icu4j.version}</version>
+                    </dependency>
+                    <!-- logging -->
+                    <dependency>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-api</artifactId>
+                        <version>${logging_log4j-api.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-core</artifactId>
+                        <version>${logging_log4j-core.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

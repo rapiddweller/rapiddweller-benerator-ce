@@ -311,4 +311,23 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
     Assert.assertEquals("/demo/watermark", benCtx.getContextUri());
   }
 
+  /**
+   * Test files empty csv.
+   */
+  @Test
+  public void testFilesEmptyCSV() {
+    context.setContextUri("/demo/file");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/file/empty_csv.ben.xml");
+    Assert.assertEquals("/demo/file", benCtx.getContextUri());
+  }
+
+  /**
+   * Demo files simplecity demo.
+   */
+  @Test
+  public void demoSimpleCities() {
+    context.setContextUri("/demo/simple");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/simple/cities.ben.xml");
+    Assert.assertEquals("/demo/simple", benCtx.getContextUri());
+  }
 }

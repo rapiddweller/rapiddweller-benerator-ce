@@ -3,7 +3,7 @@ AE,,971,5[05],United Arab Emirates,8000000
 AF,,91,75,Afghanistan,31000000
 AG,,,,Antigua and Barbuda,0
 AI,,,,Anguilla,0
-AL,,355,6[0-9],Albania,3000000
+AL,sq,355,6[0-9],Albania,3000000
 AM,,,,Armenia,3000000
 AN,,,,Netherlands Antilles,0
 AO,,,,Angola,19000000
@@ -134,7 +134,7 @@ LU,fr_LU,352,6[269][18],Luxembourg,0,district,canton,commune
 LV,lv_LV,371,,Latvia,2000000,district
 LY,,377,[46],Libyan Arab Jamahiriya,6000000
 MA,,,,Morocco,32000000
-MC,fr_MC,,,Monaco,0
+MC,fr_MC,377,,Monaco,0
 MD,,,,Moldovia,3000000
 ME,,,,Montenegro,0
 MF,,,,Saint Martin,0
@@ -198,7 +198,7 @@ SG,,65,[89],Singapore,500000
 SH,,,,Saint Helena,0
 SI,sl_SI,386,,Slovenia,2000000
 SJ,,,,Svalbard and Jan Mayen,0
-SK,,,,Slovakia,5000000
+SK,sk_SK,421,(090[1-9]|09[1-5][0-9]),Slovakia,5000000
 SL,,,,Sierra Leone,5000000
 SM,it_SM,378,66,San Marino,0
 SN,,,,Senegal,12000000
@@ -225,15 +225,15 @@ TT,,,,Trinidad and Tobago,0
 TV,,,,Tuvalu,0
 TW,zh_TW,886,9,"Taiwan, Province of China",23000000
 TZ,,,,"Tanzania, United Republic of",43000000
-UA,,380,(39|50|6[3678]|97),Ukraine,45000000
+UA,uk_UA,380,(39|50|6[3678]|97),Ukraine,45000000
 UG,,,,Uganda,31000000
 UM,,,,United States Minor Outlying Islands,0
 US,en_US,1,,United States,312000000
 UY,,,,Uruguay,3000000
 UZ,,,,Uzbekistan,27000000
-VA,,,,Vatican City State,0
+VA,it_VA,39,06698,Vatican City State,0
 VC,,,,Saint Vincent and the Grenadines,0
-VE,,,,Venezuela,29000000
+VE,es_VE,58,(41[245678]|42[46]),Venezuela,29000000
 VG,,,,"Virgin Islands, British ",0
 VI,,,,"Virgin Islands, U.S. ",0
 VN,vi_VN,84,9[0-9],Viet Nam,87000000

@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="runBen test CE" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-11" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
+    <option name="MAIN_CLASS_NAME" value="com.rapiddweller.benerator.main.Benerator" />
+    <module name="rapiddweller-benerator-ce" />
+    <option name="PROGRAM_PARAMETERS" value="postgres.types.ben.xml" />
+    <option name="WORKING_DIRECTORY" value="$MODULE_DIR$/src/demo/resources/demo/db/" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.rapiddweller.benerator.main.*" />
+        <option name="ENABLED" value="false" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

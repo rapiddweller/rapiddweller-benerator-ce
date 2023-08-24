@@ -1,0 +1,183 @@
+{
+    "store": {
+      "name": "ElectroMart",
+      "location": "New York",
+      "departments": [
+        {
+          "name": "Electronics",
+          "categories": [
+            {
+              "name": "Computers",
+              "products": [
+                {
+                  "id": 1,
+                  "name": "Laptop",
+                  "brand": "Apple",
+                  "price": 1499.99,
+                  "reviews": [
+                    {
+                      "user": "JohnDoe",
+                      "rating": 4,
+                      "comment": "Great laptop for work!"
+                    },
+                    {
+                      "user": "JaneSmith",
+                      "rating": 5,
+                      "comment": "Fast and reliable."
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "name": "Desktop",
+                  "brand": "Dell",
+                  "price": 1099.99,
+                  "reviews": [
+                    {
+                      "user": "AlexBrown",
+                      "rating": 4,
+                      "comment": "Excellent performance."
+                    },
+                    {
+                      "user": "EmilyDavis",
+                      "rating": 5,
+                      "comment": "Love the design and speed."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Mobile Phones",
+              "products": [
+                {
+                  "id": 3,
+                  "name": "iPhone 12",
+                  "brand": "Apple",
+                  "price": 999.99,
+                  "reviews": [
+                    {
+                      "user": "SamWilson",
+                      "rating": 5,
+                      "comment": "Best phone I've ever had!"
+                    },
+                    {
+                      "user": "SarahJohnson",
+                      "rating": 4,
+                      "comment": "Great camera quality."
+                    }
+                  ]
+                },
+                {
+                  "id": 4,
+                  "name": "Galaxy S21",
+                  "brand": "Samsung",
+                  "price": 899.99,
+                  "reviews": [
+                    {
+                      "user": "MichaelLee",
+                      "rating": 5,
+                      "comment": "Amazing display and performance."
+                    },
+                    {
+                      "user": "LauraGarcia",
+                      "rating": 4,
+                      "comment": "Good battery life."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Home Appliances",
+          "categories": [
+            {
+              "name": "Kitchen Appliances",
+              "products": [
+                {
+                  "id": 5,
+                  "name": "Refrigerator",
+                  "brand": "LG",
+                  "price": 1499.99,
+                  "reviews": [
+                    {
+                      "user": "DavidSmith",
+                      "rating": 4,
+                      "comment": "Spacious and energy-efficient."
+                    },
+                    {
+                      "user": "JenniferJohnson",
+                      "rating": 5,
+                      "comment": "Keeps food fresh for longer."
+                    }
+                  ]
+                },
+                {
+                  "id": 6,
+                  "name": "Dishwasher",
+                  "brand": "Bosch",
+                  "price": 899.99,
+                  "reviews": [
+                    {
+                      "user": "MatthewBrown",
+                      "rating": 5,
+                      "comment": "Saves time and cleans perfectly."
+                    },
+                    {
+                      "user": "OliviaDavis",
+                      "rating": 4,
+                      "comment": "Quiet operation and efficient."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Laundry Appliances",
+              "products": [
+                {
+                  "id": 7,
+                  "name": "Washing Machine",
+                  "brand": "Samsung",
+                  "price": 999.99,
+                  "reviews": [
+                    {
+                      "user": "DanielWilson",
+                      "rating": 4,
+                      "comment": "Multiple washing modes and good capacity."
+                    },
+                    {
+                      "user": "SophiaLee",
+                      "rating": 5,
+                      "comment": "Gentle on clothes and energy-saving."
+                    }
+                  ]
+                },
+                {
+                  "id": 8,
+                  "name": "Dryer",
+                  "brand": "Whirlpool",
+                  "price": 799.99,
+                  "reviews": [
+                    {
+                      "user": "JamesMiller",
+                      "rating": 5,
+                      "comment": "Dries clothes quickly and evenly."
+                    },
+                    {
+                      "user": "EmmaMoore",
+                      "rating": 4,
+                      "comment": "Easy to use and reliable."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+  

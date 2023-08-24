@@ -1,0 +1,21 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 http://benerator.de/schema/benerator-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US" defaultSeparator=";">
+
+    <import domains="address" />
+    <generate type="numbers" count="100" consumer="ConsoleExporter">
+        <id name="id" type="int" generator="IncrementGenerator"/>
+        <attribute name="europe" generator="AddressGenerator" dataset="europe"/>
+        <attribute name="western_europe" generator="AddressGenerator" dataset="western_europe"/>
+        <attribute name="central_europe" generator="AddressGenerator" dataset="central_europe"/>
+        <attribute name="southern_europe" generator="AddressGenerator" dataset="southern_europe"/>
+        <attribute name="eastern_europe" generator="AddressGenerator" dataset="eastern_europe"/>
+        <attribute name="north_america" generator="AddressGenerator" dataset="north_america"/>
+        <attribute name="oceania" generator="AddressGenerator" dataset="oceania"/>
+        <attribute name="french" generator="AddressGenerator" dataset="french"/>
+        <attribute name="iberia" generator="AddressGenerator" dataset="iberia"/>
+    </generate>
+
+</setup>

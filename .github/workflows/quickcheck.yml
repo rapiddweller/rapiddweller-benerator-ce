@@ -10,7 +10,7 @@ env:
 
 jobs:
 
-    ###################### Sonar ######################
+  ###################### Sonar ######################
 
   sonar:
     if: ${{ (!contains(github.event.head_commit.message, 'dependabot'))  && (!contains(github.event.head_commit.message, 'Bump')) }}
@@ -99,7 +99,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres:12.2-alpine
+        image: postgis/postgis
         # Provide the password for postgres
         env:
           DB_HOST: postgres
@@ -166,6 +166,16 @@ jobs:
           target.db.password=benerator
           target.db.authenticationDatabase=admin
           target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+      - name: set db default env for mongodb connection
+        run: |
+          echo "
+          db.db.host=mongodb
+          db.db.port=27017
+          db.db.database=benerator
+          db.db.user=benerator
+          db.db.password=benerator
+          db.db.authenticationDatabase=admin
+          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
       - name: set db properties for mongodb connection2
         run: |
           echo "
@@ -176,6 +186,16 @@ jobs:
           mongoPassword=benerator
           mongoAuthenticationDatabase=admin
           mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+      - name: set env file for demo/db mongodb connection
+        run: |
+          echo "
+          mongodb.db.host=mongodb
+          mongodb.db.port=27017
+          mongodb.db.database=benerator
+          mongodb.db.user=benerator
+          mongodb.db.password=benerator
+          mongodb.db.authenticationDatabase=admin
+          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
       - name: set db properties for postgres connection
         run: |
           echo "
@@ -187,6 +207,14 @@ jobs:
           dbSchema=public
           idStrategy=increment
           idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+      - name: set env file for postgres connection
+        run: |
+          echo "
+          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+          postgres.db.driver=org.postgresql.Driver
+          postgres.db.user=root
+          postgres.db.password=Benerator123!
+          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
       - name: set db properties for mysql connetion
         run: |
           echo "

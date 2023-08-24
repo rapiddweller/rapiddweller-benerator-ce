@@ -49,27 +49,8 @@ import com.rapiddweller.jdbacl.JDBCDriverInfo;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.TextArea;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -115,8 +96,6 @@ public class CreateProjectPanel extends JPanel {
   JTextField dbPasswordField;
   JComboBox dbSnapshotField;
   JButton testButton;
-  PropertyFileField createTablesField;
-  PropertyFileField dropTablesField;
 
   public CreateProjectPanel(I18NSupport i18n) {
     super(new BorderLayout());
@@ -213,11 +192,6 @@ public class CreateProjectPanel extends JPanel {
     dbSnapshotField = createComboBoxRow(i18n, pane, (Object[]) supportedFormats);
     pane.endRow();
 
-    // 'create/drop table' scripts
-    createTablesField = new PropertyFileField(setup, "createScriptFile", 20, FileTypeSupport.filesOnly, FileOperation.OPEN);
-    pane.addElement(i18n.getString("createScriptFile"), createTablesField);
-    dropTablesField = new PropertyFileField(setup, "dropScriptFile", 20, FileTypeSupport.filesOnly, FileOperation.OPEN);
-    pane.addElement(i18n.getString("dropScriptFile"), dropTablesField);
     pane.addSeparator();
 
     createTextField("encoding", pane);
@@ -310,7 +284,15 @@ public class CreateProjectPanel extends JPanel {
         messages[i] = ToStringConverter.convert(error, "null");
       }
     }
-    JOptionPane.showMessageDialog(CreateProjectPanel.this, messages, "Error", JOptionPane.ERROR_MESSAGE);
+    String errorMessage = "";
+    for (String s : messages){
+      errorMessage = String.format("%s%s\n", errorMessage, s);
+    }
+
+    JLabel jLabel = new JLabel();
+    jLabel.setText(String.format("<html><div WIDTH=%d>%s</div></html>", 400, errorMessage));
+
+    JOptionPane.showMessageDialog(CreateProjectPanel.this, jLabel, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
 
@@ -327,14 +309,10 @@ public class CreateProjectPanel extends JPanel {
       dbPasswordField.setEnabled(useDB);
       testButton.setEnabled(useDB);
       dbSnapshotField.setEnabled(useDB);
-      createTablesField.setEnabled(useDB);
-      dropTablesField.setEnabled(useDB);
 
       boolean shop = setup.isShopProject();
       if (shop) {
         dbSnapshotField.setEnabled(false);
-        createTablesField.setEnabled(false);
-        dropTablesField.setEnabled(false);
       }
     }
   }

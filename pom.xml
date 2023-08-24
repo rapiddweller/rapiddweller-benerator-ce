@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rapiddweller</groupId>
     <artifactId>rapiddweller-benerator-ce</artifactId>
-    <version>3.1.0-jdk-11-SNAPSHOT</version>
+    <version>3.2.0-jdk-11-SNAPSHOT</version>
     <name>rapiddweller Benerator</name>
     <description>
         rapiddweller 'Benerator' is a software solution to
@@ -124,30 +124,31 @@
         <maven.compiler.target>11</maven.compiler.target>
         <build_number>${buildNumber}</build_number>
         <_rd_common_version>2.0.0-jdk-11</_rd_common_version>
-        <_rd_format_version>1.1.5-jdk-11</_rd_format_version>
-        <_rd_jdbacl_version>1.1.14-jdk-11</_rd_jdbacl_version>
+        <_rd_format_version>1.1.6-jdk-11-SNAPSHOT</_rd_format_version>
+        <_rd_jdbacl_version>1.1.15-jdk-11-SNAPSHOT</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11</_rd_script_version>
         <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
         <database_h2.version>2.1.210</database_h2.version>
         <database_hsqldb.version>1.8.0.10</database_hsqldb.version>
         <database_icu4j.version>72.1</database_icu4j.version>
-        <database_jaybird.version>5.0.0.java11</database_jaybird.version>
-        <database_mssqldb.version>12.1.0.jre11-preview</database_mssqldb.version>
+        <database_jaybird.version>5.0.1.java11</database_jaybird.version>
+        <database_mssqldb.version>12.2.0.jre11</database_mssqldb.version>
         <database_mysql-connector-java.version>8.0.29</database_mysql-connector-java.version>
         <database_oracle.version>21.8.0.0</database_oracle.version>
-        <database_postgresql.version>42.5.1</database_postgresql.version>
+        <database_postgresql.version>42.5.3</database_postgresql.version>
         <database_mariadb-java-client.version>3.1.1</database_mariadb-java-client.version>
         <mongodb.version>3.12.11</mongodb.version>
         <dependency_antlr-runtime.version>3.5.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
         <dependency_xml-apis.version>1.0.b2</dependency_xml-apis.version>
-        <dependency_slf4j.version>2.0.6</dependency_slf4j.version>
+        <dependency_slf4j.version>1.7.36</dependency_slf4j.version>
         <dependency_log4j.version>2.19.0</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scriptengine_freemarker.version>2.3.32</scriptengine_freemarker.version>
         <scriptengine_graalvm.version>22.3.1</scriptengine_graalvm.version>
         <test_junit.version>4.13.2</test_junit.version>
+        <dependency_javassist.version>3.28.0-GA</dependency_javassist.version>
     </properties>
 
     <dependencies>
@@ -206,6 +207,18 @@
             <version>${mongodb.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${database_postgresql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.db2</groupId>
+            <artifactId>jcc</artifactId>
+            <version>11.5.8.0</version>
+            <scope>provided</scope>
+        </dependency>
 
 
         <!-- rapiddweller dependencies -->
@@ -250,7 +263,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.0.0</version>
+            <version>5.1.1</version>
             <scope>test</scope>
         </dependency>
         <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
@@ -268,6 +281,12 @@
             <version>${database_derbyclient.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${dependency_javassist.version}</version>
+        </dependency>
+
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -310,12 +329,6 @@
             <artifactId>graal-sdk</artifactId>
             <version>${scriptengine_graalvm.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${database_postgresql.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <!--  xml support -->
         <dependency>
             <groupId>xml-apis</groupId>
@@ -331,7 +344,7 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.1</version>
+            <version>4.0.2</version>
             <scope>runtime</scope>
         </dependency>
         <!-- annotations -->
@@ -339,6 +352,17 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
+        </dependency>
+        <!-- java faker -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>1.8.0</version>
         </dependency>
 
     </dependencies>
@@ -495,6 +519,9 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <excludes>
                         <exclude>**/*ShopDemoIntegrationExtDBTest*.class</exclude>
+                        <exclude>**/*PostgresDataTypeIntegrationTest*.class</exclude>
+                        <exclude>**/*MongoDBSimpleIntegrationTest*.class</exclude>
+                        <exclude>**/*JsonGenerationTest*.class</exclude>
                     </excludes>
                     <!--suppress UnresolvedMavenProperty -->
                     <argLine>${surefire.jacoco.args}</argLine>
@@ -502,10 +529,13 @@
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M8</version>
+                <version>3.0.0-M9</version>
                 <configuration>
                     <includes>
                         <include>**/*ShopDemoIntegrationExtDBTest.class</include>
+                        <include>**/*PostgresDataTypeIntegrationTest.class</include>
+                        <include>**/*MongoDBSimpleIntegrationTest.class</include>
+                        <include>**/*JsonGenerationTest.class</include>
                     </includes>
                     <skipTests>${skipTests}</skipTests>
                     <skipITs>${skipITs}</skipITs>
@@ -551,11 +581,11 @@
             </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.5.0</version>
                 <configuration>
                     <doclint>none</doclint>
                     <source>${maven.compiler.source}</source>
@@ -629,7 +659,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M8</version>
+                <version>3.0.0-M9</version>
                 <reportSets>
                     <reportSet>
                         <!-- defines aggregate unit test report -->

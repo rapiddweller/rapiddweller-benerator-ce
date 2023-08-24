@@ -15,51 +15,63 @@
 
 # rapiddweller-benerator-ce
 
-Welcome to [rapiddweller Benerator](https://www.benerator.de), a powerful software solution for data generation, obfuscation, and migration for development, testing, and training purposes. Our core goals are to provide model-driven test data generation that satisfies complex data validity requirements, anonymize production data for showcases and serious performance testing projects, efficiently generate large data volumes, and offer wide customizability and ease of use for non-developers.
+Welcome to [rapiddweller Benerator](https://www.benerator.de), a powerful 
+software solution for data generation, obfuscation, and migration for 
+development, testing, and training purposes. 
+Our core goals are to provide model-driven test data generation that 
+satisfies complex data validity requirements, anonymize production data for 
+showcases and serious performance testing projects, efficiently generate large 
+data volumes, and offer wide customization possibilities and ease of use for 
+non-developers.
 
 ## Quickstart ( use benerator version from releases )
 
 1. make sure you have installed **Java 11 JDK** or higher and **JAVA_HOME** environment variable is set correctly 
 2. download the latest benerator version from [Releases](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases)
 3. unzip .tar.gz to *choose/your/path*
-4. open a terminal (bash / PowerShell) and add environment variable BENERATOR_HOME=*choose/your/path* and add *choose/your/path*/bin to your PATH variable
+4. add environment variable BENERATOR_HOME=*choose/your/path* and add *choose/your/path*/bin to your PATH variable
 For example **(these environment variables are only set in your terminal session, read more about environment variables [here](https://en.wikipedia.org/wiki/Environment_variable))**
 
-#### Linux bash  
-```shell
-export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-3.0.1-jdk-11-dist  
-export PATH=$BENERATOR_HOME/bin:$PATH 
-chmod a+x $BENERATOR_HOME/bin/*.sh
-```
-
-#### Windows 10 PowerShell  
-```powershell
-$env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-3.0.1-jdk-11-dist'  
-$env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-3.0.1-jdk-11-dist\bin'
-```
-
+   * Linux bash
+      ```shell
+      export BENERATOR_HOME=/home/user1/rapiddweller-benerator-ce-3.1.0-jdk-11-dist  
+      export PATH=$BENERATOR_HOME/bin:$PATH 
+      chmod a+x $BENERATOR_HOME/bin/*.sh
+      ```
+   * Mac 
+     Install with Homebrew 
+     Link to Homebrew Formular [here](https://formulae.brew.sh/formula/benerator)
+     ```shell
+     brew install benerator
+     ```
+   * Windows 10 PowerShell  
+     ```powershell
+     $env:BENERATOR_HOME='C:\Users\user1\rapiddweller-benerator-ce-3.1.0-jdk-11-dist'  
+     $env:Path += 'C:\Users\user1\rapiddweller-benerator-ce-3.1.0-jdk-11-dist\bin'
+     ```
+     
 5. create your own benerator script myscript.xml with the following content
-```xml
-<setup>
-    <import domains="person,organization"/>
-    <generate type="customer" count="1000" threads="1" consumer="LoggingConsumer,CSVEntityExporter">
-      <variable name="person" generator="new PersonGenerator{minAgeYears='21', maxAgeYears='67',femaleQuota='0.5'}" />
-      <variable name="company" generator="CompanyNameGenerator" />
-      <attribute name="first_name" script="person.familyName" />
-      <attribute name="last_name" script="person.givenName" />
-      <attribute name="birthDate" script="person.birthDate" converter="new java.text.SimpleDateFormat('dd.MM.YYYY')" />
-      <attribute name="superuser" values="true, false" />
-      <attribute name="salutation" script="person.salutation " />
-      <attribute name="academicTitle" script="person.academicTitle" />
-      <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + this.tc_creation + '.de'" />
-    </generate>
-  </setup>
-```
-
+    ```xml
+    <setup>
+        <import domains="person,organization"/>
+        <generate type="customer" count="1000" threads="1" consumer="LoggingConsumer,CSVEntityExporter">
+          <variable name="person" generator="new PersonGenerator{minAgeYears='21', maxAgeYears='67',femaleQuota='0.5'}" />
+          <variable name="company" generator="CompanyNameGenerator" />
+          <attribute name="first_name" script="person.familyName" />
+          <attribute name="last_name" script="person.givenName" />
+          <attribute name="birthDate" script="person.birthDate" converter="new java.text.SimpleDateFormat('dd.MM.YYYY')" />
+          <attribute name="superuser" values="true, false" />
+          <attribute name="salutation" script="person.salutation " />
+          <attribute name="academicTitle" script="person.academicTitle" />
+          <attribute name="email" script="'info@' + company.shortName.replace(' ', '-') + this.tc_creation + '.de'" />
+        </generate>
+      </setup>
+    ```
+   
 6. run your first benerator script 
-```powershell
-benerator myscript.xml
-``` 
+    ```powershell
+    benerator myscript.xml
+    ``` 
 
 And that's it! You're ready to start using rapiddweller Benerator CE. We hope you find it as useful as we do. If you have any questions, please reach out to us on GitHub or visit our website www.benerator.de for more information.
 
@@ -75,10 +87,10 @@ Please note that these instructions are a basic guide to get you started with th
 - Anonymization of production data for showcases and serious performance testing projects
 - Efficient generation of large data volumes, scaling up to companies with billions of customers and Big Data projects
 - Early applicability in projects
-- Efficiency by creating reuseable and extendable data models 
+- Efficiency by creating reusable and extendable data models 
 - Low Code approach to have more transparency 
 - Little maintenance effort with ongoing implementation through configuration by exception
-- Wide and easy customizability
+- Wide and easy customization possibilities
 - Applicability by non-developers
 - Intuitive data definition format
 - Satisfying stochastic requirements on data
@@ -86,9 +98,9 @@ Please note that these instructions are a basic guide to get you started with th
 - Supporting distributed and heterogeneous applications
 - Establishing a common data generation platform for different business domains and software systems
 
-### Data Synthesization  
+### Data Synthesis  
 Performance test data can be completely synthesized. A basic setup can be imported e.g. from DbUnit files, CSV files and fixed column width files. A descriptor file configures how imported data should be processed and adds completely synthesized data. The processed or generated data finally is stored in the system under test.
-![Data Synthesization](https://github.com/rapiddweller/rapiddweller-benerator-ce/blob/development/doc/assets/grafik1.png)
+![Data Synthesis](https://github.com/rapiddweller/rapiddweller-benerator-ce/blob/development/doc/assets/grafik1.png)
 
 ### Production Data Anonymization  
 Production data can be easily extracted from production systems. Tables can be imported unmodified, filtered, anonymized and converted.
@@ -119,32 +131,33 @@ mvn -version
 1. Choose how to install:
 
    a) Download a Prebuilt Distribution from **Project Overview > Releases**
-   (current release is `3.0.1`, cp. rapiddweller-benerator-ce-3.0.1-jdk-11-dist.zip)
+   (current release is `3.1.0`, cp. rapiddweller-benerator-ce-3.1.0-jdk-11-dist.zip)
    and unzip the downloaded file in an appropriate directory, e.g.
    `/Developer/Applications` or `C:\Program Files\Development`.
 
    b) Checkout repository and build your own rapiddweller-benerator-ce using  
-   maven command `mvn clean install`
-    
+   maven commands `mvn clean install` followed by `mvn assembly:single`
+   (now you have a packed distribution af the current development)
+
    __Please note__: We highly recommend using option 1a and download our release packages to ease your start.
    If you clone our GitHub repository, there are no binaries included, and you need to build benerator yourself.
-   Building benerator requires a proper java/maven setup on your system. Learn more in 
+   Building benerator requires a proper java/maven setup on your system. Learn more in [Chapter Prerequisites](#prerequisites).
 
-3. Set **BENERATOR_HOME**  
+2. Set **BENERATOR_HOME**  
    Create an environment variable BENERATOR_HOME that points to the path you extracted Benerator to.
 
    - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the
      User Variables section. Enter BENERATOR_HOME as name and the path as value
-     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-3.0.1-jdk-11`). Click OK several times.
+     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-3.1.0-jdk-11`). Click OK several times.
 
    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
-     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-3.0.1-jdk-11`
+     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-3.1.0-jdk-11`
 
-4. On Unix/Linux/Mac systems: **Set permissions**  
+3. On Unix/Linux/Mac systems: **Set permissions**  
    Open a shell on the installation's root directory and execute
    `chmod a+x bin/*.sh`
 
-5. Mac OS X configuration **Set JAVA_HOME**
+4. Mac OS X configuration **Set JAVA_HOME**
    On Mac OS X you need to provide benerator with an explicit configuration of the JAVA_HOME path.
    See [http://developer.apple.com/qa/qa2001/qa1170.html](http://developer.apple.com/qa/qa2001/qa1170.html) 
    for a good introduction to the OS X way of setting up Java. It is based on aliases

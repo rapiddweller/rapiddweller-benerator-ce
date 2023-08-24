@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <memstore id="mem"/>
+
+    <import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data700" count="{count}" consumer="mem" >
+        <attribute name="massEffect_specie" generator="new DataFakerGenerator('massEffect','specie')"/>
+        <attribute name="massEffect_cluster" generator="new DataFakerGenerator('massEffect','cluster')"/>
+        <attribute name="matz_quote" generator="new DataFakerGenerator('matz','quote')"/>
+        <attribute name="mbti_name" generator="new DataFakerGenerator('mbti','name')"/>
+        <attribute name="mbti_type" generator="new DataFakerGenerator('mbti','type')"/>
+        <attribute name="mbti_personage" generator="new DataFakerGenerator('mbti','personage')"/>
+        <attribute name="mbti_merit" generator="new DataFakerGenerator('mbti','merit')"/>
+        <attribute name="mbti_weakness" generator="new DataFakerGenerator('mbti','weakness')"/>
+        <attribute name="mbti_characteristic" generator="new DataFakerGenerator('mbti','characteristic')"/>
+        <attribute name="measurement_length" generator="new DataFakerGenerator('measurement','length')"/>
+        <attribute name="measurement_weight" generator="new DataFakerGenerator('measurement','weight')"/>
+        <attribute name="measurement_height" generator="new DataFakerGenerator('measurement','height')"/>
+        <attribute name="measurement_volume" generator="new DataFakerGenerator('measurement','volume')"/>
+        <attribute name="measurement_metricHeight" generator="new DataFakerGenerator('measurement','metricHeight')"/>
+        <attribute name="measurement_metricLength" generator="new DataFakerGenerator('measurement','metricLength')"/>
+        <attribute name="measurement_metricVolume" generator="new DataFakerGenerator('measurement','metricVolume')"/>
+        <attribute name="measurement_metricWeight" generator="new DataFakerGenerator('measurement','metricWeight')"/>
+        <attribute name="medical_symptoms" generator="new DataFakerGenerator('medical','symptoms')"/>
+        <attribute name="medical_medicineName" generator="new DataFakerGenerator('medical','medicineName')"/>
+        <attribute name="medical_diseaseName" generator="new DataFakerGenerator('medical','diseaseName')"/>
+        <attribute name="medical_hospitalName" generator="new DataFakerGenerator('medical','hospitalName')"/>
+        <attribute name="military_armyRank" generator="new DataFakerGenerator('military','armyRank')"/>
+        <attribute name="military_navyRank" generator="new DataFakerGenerator('military','navyRank')"/>
+        <attribute name="military_marinesRank" generator="new DataFakerGenerator('military','marinesRank')"/>
+        <attribute name="military_airForceRank" generator="new DataFakerGenerator('military','airForceRank')"/>
+        <attribute name="military_dodPaygrade" generator="new DataFakerGenerator('military','dodPaygrade')"/>
+        <attribute name="minecraft_itemName" generator="new DataFakerGenerator('minecraft','itemName')"/>
+        <attribute name="minecraft_tileName" generator="new DataFakerGenerator('minecraft','tileName')"/>
+        <attribute name="minecraft_entityName" generator="new DataFakerGenerator('minecraft','entityName')"/>
+        <attribute name="minecraft_animalName" generator="new DataFakerGenerator('minecraft','animalName')"/>
+        <attribute name="minecraft_monsterName" generator="new DataFakerGenerator('minecraft','monsterName')"/>
+        <attribute name="minecraft_tileItemName" generator="new DataFakerGenerator('minecraft','tileItemName')"/>
+        <attribute name="money_currencyCode" generator="new DataFakerGenerator('money','currencyCode')"/>
+        <attribute name="money_currency" generator="new DataFakerGenerator('money','currency')"/>
+        <attribute name="moneyHeist_character" generator="new DataFakerGenerator('moneyHeist','character')"/>
+        <attribute name="moneyHeist_quote" generator="new DataFakerGenerator('moneyHeist','quote')"/>
+        <attribute name="moneyHeist_heist" generator="new DataFakerGenerator('moneyHeist','heist')"/>
+        <attribute name="mood_feeling" generator="new DataFakerGenerator('mood','feeling')"/>
+        <attribute name="mood_emotion" generator="new DataFakerGenerator('mood','emotion')"/>
+        <attribute name="mood_tone" generator="new DataFakerGenerator('mood','tone')"/>
+        <attribute name="mountain_name" generator="new DataFakerGenerator('mountain','name')"/>
+        <attribute name="mountain_range" generator="new DataFakerGenerator('mountain','range')"/>
+        <attribute name="mountaineering_mountaineer" generator="new DataFakerGenerator('mountaineering','mountaineer')"/>
+        <attribute name="movie_quote" generator="new DataFakerGenerator('movie','quote')"/>
+        <attribute name="music_key" generator="new DataFakerGenerator('music','key')"/>
+        <attribute name="music_chord" generator="new DataFakerGenerator('music','chord')"/>
+        <attribute name="music_genre" generator="new DataFakerGenerator('music','genre')"/>
+        <attribute name="music_instrument" generator="new DataFakerGenerator('music','instrument')"/>
+        <attribute name="myst_games" generator="new DataFakerGenerator('myst','games')"/>
+        <attribute name="myst_characters" generator="new DataFakerGenerator('myst','characters')"/>
+        <attribute name="myst_quotes" generator="new DataFakerGenerator('myst','quotes')"/>
+        <attribute name="myst_creatures" generator="new DataFakerGenerator('myst','creatures')"/>
+        <attribute name="myst_ages" generator="new DataFakerGenerator('myst','ages')"/>
+        <attribute name="name_name" generator="new DataFakerGenerator('name','name')"/>
+        <attribute name="name_prefix" generator="new DataFakerGenerator('name','prefix')"/>
+        <attribute name="name_suffix" generator="new DataFakerGenerator('name','suffix')"/>
+        <attribute name="name_lastName" generator="new DataFakerGenerator('name','lastName')"/>
+        <attribute name="name_fullName" generator="new DataFakerGenerator('name','fullName')"/>
+        <attribute name="name_firstName" generator="new DataFakerGenerator('name','firstName')"/>
+        <attribute name="name_title" generator="new DataFakerGenerator('name','title')"/>
+        <attribute name="name_username" generator="new DataFakerGenerator('name','username')"/>
+        <attribute name="name_nameWithMiddle" generator="new DataFakerGenerator('name','nameWithMiddle')"/>
+        <attribute name="naruto_character" generator="new DataFakerGenerator('naruto','character')"/>
+        <attribute name="naruto_village" generator="new DataFakerGenerator('naruto','village')"/>
+        <attribute name="naruto_eye" generator="new DataFakerGenerator('naruto','eye')"/>
+        <attribute name="naruto_demon" generator="new DataFakerGenerator('naruto','demon')"/>
+        <attribute name="nation_flag" generator="new DataFakerGenerator('nation','flag')"/>
+        <attribute name="nation_language" generator="new DataFakerGenerator('nation','language')"/>
+        <attribute name="nation_isoCountry" generator="new DataFakerGenerator('nation','isoCountry')"/>
+        <attribute name="nation_nationality" generator="new DataFakerGenerator('nation','nationality')"/>
+        <attribute name="nation_capitalCity" generator="new DataFakerGenerator('nation','capitalCity')"/>
+        <attribute name="nation_isoLanguage" generator="new DataFakerGenerator('nation','isoLanguage')"/>
+        <attribute name="natoPhoneticAlphabet_codeWord" generator="new DataFakerGenerator('natoPhoneticAlphabet','codeWord')"/>
+        <attribute name="newGirl_characters" generator="new DataFakerGenerator('newGirl','characters')"/>
+        <attribute name="newGirl_quotes" generator="new DataFakerGenerator('newGirl','quotes')"/>
+        <attribute name="nigeria_name" generator="new DataFakerGenerator('nigeria','name')"/>
+        <attribute name="nigeria_food" generator="new DataFakerGenerator('nigeria','food')"/>
+        <attribute name="nigeria_places" generator="new DataFakerGenerator('nigeria','places')"/>
+        <attribute name="nigeria_schools" generator="new DataFakerGenerator('nigeria','schools')"/>
+        <attribute name="nigeria_celebrities" generator="new DataFakerGenerator('nigeria','celebrities')"/>
+        <attribute name="number_digit" generator="new DataFakerGenerator('number','digit')"/>
+        <attribute name="number_negative" generator="new DataFakerGenerator('number','negative')"/>
+        <attribute name="number_positive" generator="new DataFakerGenerator('number','positive')"/>
+        <attribute name="number_randomDigit" generator="new DataFakerGenerator('number','randomDigit')"/>
+        <attribute name="number_randomDigitNotZero" generator="new DataFakerGenerator('number','randomDigitNotZero')"/>
+        <attribute name="number_randomNumber" generator="new DataFakerGenerator('number','randomNumber')"/>
+        <attribute name="olympicSport_unusual" generator="new DataFakerGenerator('olympicSport','unusual')"/>
+        <attribute name="olympicSport_summerOlympics" generator="new DataFakerGenerator('olympicSport','summerOlympics')"/>
+        <attribute name="olympicSport_winterOlympics" generator="new DataFakerGenerator('olympicSport','winterOlympics')"/>
+        <attribute name="olympicSport_summerParalympics" generator="new DataFakerGenerator('olympicSport','summerParalympics')"/>
+        <attribute name="olympicSport_winterParalympics" generator="new DataFakerGenerator('olympicSport','winterParalympics')"/>
+        <attribute name="olympicSport_ancientOlympics" generator="new DataFakerGenerator('olympicSport','ancientOlympics')"/>
+        <attribute name="onePiece_location" generator="new DataFakerGenerator('onePiece','location')"/>
+        <attribute name="onePiece_character" generator="new DataFakerGenerator('onePiece','character')"/>
+        <attribute name="onePiece_quote" generator="new DataFakerGenerator('onePiece','quote')"/>
+        <attribute name="onePiece_sea" generator="new DataFakerGenerator('onePiece','sea')"/>
+        <attribute name="onePiece_island" generator="new DataFakerGenerator('onePiece','island')"/>
+        <attribute name="onePiece_akumasNoMi" generator="new DataFakerGenerator('onePiece','akumasNoMi')"/>
+        <attribute name="oscarMovie_character" generator="new DataFakerGenerator('oscarMovie','character')"/>
+        <attribute name="oscarMovie_quote" generator="new DataFakerGenerator('oscarMovie','quote')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data700" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data700.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

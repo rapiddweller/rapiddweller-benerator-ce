@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+<memstore id="mem"/>
+
+<import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data1000" count="{count}" consumer="mem" >
+        <attribute name="theExpanse_quotes" generator="new DataFakerGenerator('theExpanse','quotes')"/>
+        <attribute name="theItCrowd_characters" generator="new DataFakerGenerator('theItCrowd','characters')"/>
+        <attribute name="theItCrowd_actors" generator="new DataFakerGenerator('theItCrowd','actors')"/>
+        <attribute name="theItCrowd_emails" generator="new DataFakerGenerator('theItCrowd','emails')"/>
+        <attribute name="theItCrowd_quotes" generator="new DataFakerGenerator('theItCrowd','quotes')"/>
+        <attribute name="theKingkillerChronicle_location" generator="new DataFakerGenerator('theKingkillerChronicle','location')"/>
+        <attribute name="theKingkillerChronicle_character" generator="new DataFakerGenerator('theKingkillerChronicle','character')"/>
+        <attribute name="theKingkillerChronicle_creature" generator="new DataFakerGenerator('theKingkillerChronicle','creature')"/>
+        <attribute name="theKingkillerChronicle_book" generator="new DataFakerGenerator('theKingkillerChronicle','book')"/>
+        <attribute name="theRoom_locations" generator="new DataFakerGenerator('theRoom','locations')"/>
+        <attribute name="theRoom_characters" generator="new DataFakerGenerator('theRoom','characters')"/>
+        <attribute name="theRoom_actors" generator="new DataFakerGenerator('theRoom','actors')"/>
+        <attribute name="theRoom_quotes" generator="new DataFakerGenerator('theRoom','quotes')"/>
+        <attribute name="theThickOfIt_positions" generator="new DataFakerGenerator('theThickOfIt','positions')"/>
+        <attribute name="theThickOfIt_characters" generator="new DataFakerGenerator('theThickOfIt','characters')"/>
+        <attribute name="theThickOfIt_departments" generator="new DataFakerGenerator('theThickOfIt','departments')"/>
+        <attribute name="theVentureBros_character" generator="new DataFakerGenerator('theVentureBros','character')"/>
+        <attribute name="theVentureBros_quote" generator="new DataFakerGenerator('theVentureBros','quote')"/>
+        <attribute name="theVentureBros_vehicle" generator="new DataFakerGenerator('theVentureBros','vehicle')"/>
+        <attribute name="theVentureBros_organization" generator="new DataFakerGenerator('theVentureBros','organization')"/>
+        <attribute name="touhou_gameName" generator="new DataFakerGenerator('touhou','gameName')"/>
+        <attribute name="touhou_trackName" generator="new DataFakerGenerator('touhou','trackName')"/>
+        <attribute name="touhou_characterName" generator="new DataFakerGenerator('touhou','characterName')"/>
+        <attribute name="touhou_characterFirstName" generator="new DataFakerGenerator('touhou','characterFirstName')"/>
+        <attribute name="touhou_characterLastName" generator="new DataFakerGenerator('touhou','characterLastName')"/>
+        <attribute name="tron_location" generator="new DataFakerGenerator('tron','location')"/>
+        <attribute name="tron_character" generator="new DataFakerGenerator('tron','character')"/>
+        <attribute name="tron_quote" generator="new DataFakerGenerator('tron','quote')"/>
+        <attribute name="tron_vehicle" generator="new DataFakerGenerator('tron','vehicle')"/>
+        <attribute name="tron_game" generator="new DataFakerGenerator('tron','game')"/>
+        <attribute name="tron_tagline" generator="new DataFakerGenerator('tron','tagline')"/>
+        <attribute name="tron_alternateCharacterSpelling" generator="new DataFakerGenerator('tron','alternateCharacterSpelling')"/>
+        <attribute name="twinPeaks_location" generator="new DataFakerGenerator('twinPeaks','location')"/>
+        <attribute name="twinPeaks_character" generator="new DataFakerGenerator('twinPeaks','character')"/>
+        <attribute name="twinPeaks_quote" generator="new DataFakerGenerator('twinPeaks','quote')"/>
+        <attribute name="twitter_userName" generator="new DataFakerGenerator('twitter','userName')"/>
+        <attribute name="twitter_userId" generator="new DataFakerGenerator('twitter','userId')"/>
+        <attribute name="university_name" generator="new DataFakerGenerator('university','name')"/>
+        <attribute name="university_prefix" generator="new DataFakerGenerator('university','prefix')"/>
+        <attribute name="university_suffix" generator="new DataFakerGenerator('university','suffix')"/>
+        <attribute name="vForVendetta_characters" generator="new DataFakerGenerator('vForVendetta','characters')"/>
+        <attribute name="vForVendetta_quotes" generator="new DataFakerGenerator('vForVendetta','quotes')"/>
+        <attribute name="vForVendetta_speeches" generator="new DataFakerGenerator('vForVendetta','speeches')"/>
+        <attribute name="vehicle_make" generator="new DataFakerGenerator('vehicle','make')"/>
+        <attribute name="vehicle_color" generator="new DataFakerGenerator('vehicle','color')"/>
+        <attribute name="vehicle_style" generator="new DataFakerGenerator('vehicle','style')"/>
+        <attribute name="vehicle_model" generator="new DataFakerGenerator('vehicle','model')"/>
+        <attribute name="vehicle_vin" generator="new DataFakerGenerator('vehicle','vin')"/>
+        <attribute name="vehicle_driveType" generator="new DataFakerGenerator('vehicle','driveType')"/>
+        <attribute name="vehicle_fuelType" generator="new DataFakerGenerator('vehicle','fuelType')"/>
+        <attribute name="vehicle_carType" generator="new DataFakerGenerator('vehicle','carType')"/>
+        <attribute name="vehicle_carOptions" generator="new DataFakerGenerator('vehicle','carOptions')"/>
+        <attribute name="vehicle_manufacturer" generator="new DataFakerGenerator('vehicle','manufacturer')"/>
+        <attribute name="vehicle_makeAndModel" generator="new DataFakerGenerator('vehicle','makeAndModel')"/>
+        <attribute name="vehicle_transmission" generator="new DataFakerGenerator('vehicle','transmission')"/>
+        <attribute name="vehicle_standardSpecs" generator="new DataFakerGenerator('vehicle','standardSpecs')"/>
+        <attribute name="vehicle_licensePlate" generator="new DataFakerGenerator('vehicle','licensePlate')"/>
+        <attribute name="verb_base" generator="new DataFakerGenerator('verb','base')"/>
+        <attribute name="verb_past" generator="new DataFakerGenerator('verb','past')"/>
+        <attribute name="verb_ingForm" generator="new DataFakerGenerator('verb','ingForm')"/>
+        <attribute name="verb_pastParticiple" generator="new DataFakerGenerator('verb','pastParticiple')"/>
+        <attribute name="verb_simplePresent" generator="new DataFakerGenerator('verb','simplePresent')"/>
+        <attribute name="videoGame_platform" generator="new DataFakerGenerator('videoGame','platform')"/>
+        <attribute name="videoGame_genre" generator="new DataFakerGenerator('videoGame','genre')"/>
+        <attribute name="videoGame_title" generator="new DataFakerGenerator('videoGame','title')"/>
+        <attribute name="volleyball_position" generator="new DataFakerGenerator('volleyball','position')"/>
+        <attribute name="volleyball_team" generator="new DataFakerGenerator('volleyball','team')"/>
+        <attribute name="volleyball_player" generator="new DataFakerGenerator('volleyball','player')"/>
+        <attribute name="volleyball_coach" generator="new DataFakerGenerator('volleyball','coach')"/>
+        <attribute name="volleyball_formation" generator="new DataFakerGenerator('volleyball','formation')"/>
+        <attribute name="warhammerFantasy_locations" generator="new DataFakerGenerator('warhammerFantasy','locations')"/>
+        <attribute name="warhammerFantasy_heros" generator="new DataFakerGenerator('warhammerFantasy','heros')"/>
+        <attribute name="warhammerFantasy_factions" generator="new DataFakerGenerator('warhammerFantasy','factions')"/>
+        <attribute name="warhammerFantasy_quotes" generator="new DataFakerGenerator('warhammerFantasy','quotes')"/>
+        <attribute name="warhammerFantasy_creatures" generator="new DataFakerGenerator('warhammerFantasy','creatures')"/>
+        <attribute name="weather_description" generator="new DataFakerGenerator('weather','description')"/>
+        <attribute name="weather_temperatureCelsius" generator="new DataFakerGenerator('weather','temperatureCelsius')"/>
+        <attribute name="weather_temperatureFahrenheit" generator="new DataFakerGenerator('weather','temperatureFahrenheit')"/>
+        <attribute name="witcher_location" generator="new DataFakerGenerator('witcher','location')"/>
+        <attribute name="witcher_character" generator="new DataFakerGenerator('witcher','character')"/>
+        <attribute name="witcher_quote" generator="new DataFakerGenerator('witcher','quote')"/>
+        <attribute name="witcher_witcher" generator="new DataFakerGenerator('witcher','witcher')"/>
+        <attribute name="witcher_school" generator="new DataFakerGenerator('witcher','school')"/>
+        <attribute name="witcher_monster" generator="new DataFakerGenerator('witcher','monster')"/>
+        <attribute name="worldOfWarcraft_hero" generator="new DataFakerGenerator('worldOfWarcraft','hero')"/>
+        <attribute name="worldOfWarcraft_quotes" generator="new DataFakerGenerator('worldOfWarcraft','quotes')"/>
+        <attribute name="yoda_quote" generator="new DataFakerGenerator('yoda','quote')"/>
+        <attribute name="zelda_character" generator="new DataFakerGenerator('zelda','character')"/>
+        <attribute name="zelda_game" generator="new DataFakerGenerator('zelda','game')"/>
+        <attribute name="zodiac_sign" generator="new DataFakerGenerator('zodiac','sign')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data1000" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data1000.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

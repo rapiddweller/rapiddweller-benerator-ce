@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+<memstore id="mem"/>
+
+<import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data800" count="{count}" consumer="mem" >
+        <attribute name="oscarMovie_getYear" generator="new DataFakerGenerator('oscarMovie','getYear')"/>
+        <attribute name="oscarMovie_getChoice" generator="new DataFakerGenerator('oscarMovie','getChoice')"/>
+        <attribute name="oscarMovie_movieName" generator="new DataFakerGenerator('oscarMovie','movieName')"/>
+        <attribute name="oscarMovie_actor" generator="new DataFakerGenerator('oscarMovie','actor')"/>
+        <attribute name="oscarMovie_releaseDate" generator="new DataFakerGenerator('oscarMovie','releaseDate')"/>
+        <attribute name="overwatch_location" generator="new DataFakerGenerator('overwatch','location')"/>
+        <attribute name="overwatch_quote" generator="new DataFakerGenerator('overwatch','quote')"/>
+        <attribute name="overwatch_hero" generator="new DataFakerGenerator('overwatch','hero')"/>
+        <attribute name="passport_valid" generator="new DataFakerGenerator('passport','valid')"/>
+        <attribute name="phoneNumber_extension" generator="new DataFakerGenerator('phoneNumber','extension')"/>
+        <attribute name="phoneNumber_cellPhone" generator="new DataFakerGenerator('phoneNumber','cellPhone')"/>
+        <attribute name="phoneNumber_phoneNumberNational" generator="new DataFakerGenerator('phoneNumber','phoneNumberNational')"/>
+        <attribute name="phoneNumber_subscriberNumber" generator="new DataFakerGenerator('phoneNumber','subscriberNumber')"/>
+        <attribute name="phoneNumber_phoneNumber" generator="new DataFakerGenerator('phoneNumber','phoneNumber')"/>
+        <attribute name="photography_iso" generator="new DataFakerGenerator('photography','iso')"/>
+        <attribute name="photography_brand" generator="new DataFakerGenerator('photography','brand')"/>
+        <attribute name="photography_camera" generator="new DataFakerGenerator('photography','camera')"/>
+        <attribute name="photography_genre" generator="new DataFakerGenerator('photography','genre')"/>
+        <attribute name="photography_lens" generator="new DataFakerGenerator('photography','lens')"/>
+        <attribute name="photography_imageTag" generator="new DataFakerGenerator('photography','imageTag')"/>
+        <attribute name="photography_aperture" generator="new DataFakerGenerator('photography','aperture')"/>
+        <attribute name="photography_shutter" generator="new DataFakerGenerator('photography','shutter')"/>
+        <attribute name="photography_term" generator="new DataFakerGenerator('photography','term')"/>
+        <attribute name="pokemon_name" generator="new DataFakerGenerator('pokemon','name')"/>
+        <attribute name="pokemon_location" generator="new DataFakerGenerator('pokemon','location')"/>
+        <attribute name="pokemon_move" generator="new DataFakerGenerator('pokemon','move')"/>
+        <attribute name="princessBride_character" generator="new DataFakerGenerator('princessBride','character')"/>
+        <attribute name="princessBride_quote" generator="new DataFakerGenerator('princessBride','quote')"/>
+        <attribute name="programmingLanguage_name" generator="new DataFakerGenerator('programmingLanguage','name')"/>
+        <attribute name="programmingLanguage_creator" generator="new DataFakerGenerator('programmingLanguage','creator')"/>
+        <attribute name="relationships_parent" generator="new DataFakerGenerator('relationships','parent')"/>
+        <attribute name="relationships_direct" generator="new DataFakerGenerator('relationships','direct')"/>
+        <attribute name="relationships_any" generator="new DataFakerGenerator('relationships','any')"/>
+        <attribute name="relationships_extended" generator="new DataFakerGenerator('relationships','extended')"/>
+        <attribute name="relationships_inLaw" generator="new DataFakerGenerator('relationships','inLaw')"/>
+        <attribute name="relationships_spouse" generator="new DataFakerGenerator('relationships','spouse')"/>
+        <attribute name="relationships_sibling" generator="new DataFakerGenerator('relationships','sibling')"/>
+        <attribute name="residentEvil_location" generator="new DataFakerGenerator('residentEvil','location')"/>
+        <attribute name="residentEvil_character" generator="new DataFakerGenerator('residentEvil','character')"/>
+        <attribute name="residentEvil_creature" generator="new DataFakerGenerator('residentEvil','creature')"/>
+        <attribute name="residentEvil_equipment" generator="new DataFakerGenerator('residentEvil','equipment')"/>
+        <attribute name="residentEvil_biologicalAgent" generator="new DataFakerGenerator('residentEvil','biologicalAgent')"/>
+        <attribute name="restaurant_name" generator="new DataFakerGenerator('restaurant','name')"/>
+        <attribute name="restaurant_type" generator="new DataFakerGenerator('restaurant','type')"/>
+        <attribute name="restaurant_description" generator="new DataFakerGenerator('restaurant','description')"/>
+        <attribute name="restaurant_namePrefix" generator="new DataFakerGenerator('restaurant','namePrefix')"/>
+        <attribute name="restaurant_nameSuffix" generator="new DataFakerGenerator('restaurant','nameSuffix')"/>
+        <attribute name="restaurant_review" generator="new DataFakerGenerator('restaurant','review')"/>
+        <attribute name="rickAndMorty_location" generator="new DataFakerGenerator('rickAndMorty','location')"/>
+        <attribute name="rickAndMorty_character" generator="new DataFakerGenerator('rickAndMorty','character')"/>
+        <attribute name="rickAndMorty_quote" generator="new DataFakerGenerator('rickAndMorty','quote')"/>
+        <attribute name="robin_quote" generator="new DataFakerGenerator('robin','quote')"/>
+        <attribute name="rockBand_name" generator="new DataFakerGenerator('rockBand','name')"/>
+        <attribute name="ruPaulDragRace_quote" generator="new DataFakerGenerator('ruPaulDragRace','quote')"/>
+        <attribute name="ruPaulDragRace_queen" generator="new DataFakerGenerator('ruPaulDragRace','queen')"/>
+        <attribute name="science_element" generator="new DataFakerGenerator('science','element')"/>
+        <attribute name="science_scientist" generator="new DataFakerGenerator('science','scientist')"/>
+        <attribute name="seinfeld_character" generator="new DataFakerGenerator('seinfeld','character')"/>
+        <attribute name="seinfeld_quote" generator="new DataFakerGenerator('seinfeld','quote')"/>
+        <attribute name="seinfeld_business" generator="new DataFakerGenerator('seinfeld','business')"/>
+        <attribute name="shakespeare_hamletQuote" generator="new DataFakerGenerator('shakespeare','hamletQuote')"/>
+        <attribute name="shakespeare_asYouLikeItQuote" generator="new DataFakerGenerator('shakespeare','asYouLikeItQuote')"/>
+        <attribute name="shakespeare_kingRichardIIIQuote" generator="new DataFakerGenerator('shakespeare','kingRichardIIIQuote')"/>
+        <attribute name="shakespeare_romeoAndJulietQuote" generator="new DataFakerGenerator('shakespeare','romeoAndJulietQuote')"/>
+        <attribute name="show_play" generator="new DataFakerGenerator('show','play')"/>
+        <attribute name="show_adultMusical" generator="new DataFakerGenerator('show','adultMusical')"/>
+        <attribute name="show_kidsMusical" generator="new DataFakerGenerator('show','kidsMusical')"/>
+        <attribute name="siliconValley_url" generator="new DataFakerGenerator('siliconValley','url')"/>
+        <attribute name="siliconValley_app" generator="new DataFakerGenerator('siliconValley','app')"/>
+        <attribute name="siliconValley_character" generator="new DataFakerGenerator('siliconValley','character')"/>
+        <attribute name="siliconValley_quote" generator="new DataFakerGenerator('siliconValley','quote')"/>
+        <attribute name="siliconValley_company" generator="new DataFakerGenerator('siliconValley','company')"/>
+        <attribute name="siliconValley_invention" generator="new DataFakerGenerator('siliconValley','invention')"/>
+        <attribute name="siliconValley_motto" generator="new DataFakerGenerator('siliconValley','motto')"/>
+        <attribute name="siliconValley_email" generator="new DataFakerGenerator('siliconValley','email')"/>
+        <attribute name="simpsons_location" generator="new DataFakerGenerator('simpsons','location')"/>
+        <attribute name="simpsons_character" generator="new DataFakerGenerator('simpsons','character')"/>
+        <attribute name="simpsons_quote" generator="new DataFakerGenerator('simpsons','quote')"/>
+        <attribute name="sip_method" generator="new DataFakerGenerator('sip','method')"/>
+        <attribute name="sip_rtpPort" generator="new DataFakerGenerator('sip','rtpPort')"/>
+        <attribute name="sip_bodyString" generator="new DataFakerGenerator('sip','bodyString')"/>
+        <attribute name="sip_bodyBytes" generator="new DataFakerGenerator('sip','bodyBytes')"/>
+        <attribute name="sip_contentType" generator="new DataFakerGenerator('sip','contentType')"/>
+        <attribute name="sip_messagingPort" generator="new DataFakerGenerator('sip','messagingPort')"/>
+        <attribute name="sip_provisionalResponseCode" generator="new DataFakerGenerator('sip','provisionalResponseCode')"/>
+        <attribute name="sip_successResponseCode" generator="new DataFakerGenerator('sip','successResponseCode')"/>
+        <attribute name="sip_redirectResponseCode" generator="new DataFakerGenerator('sip','redirectResponseCode')"/>
+        <attribute name="sip_clientErrorResponseCode" generator="new DataFakerGenerator('sip','clientErrorResponseCode')"/>
+        <attribute name="sip_serverErrorResponseCode" generator="new DataFakerGenerator('sip','serverErrorResponseCode')"/>
+        <attribute name="sip_globalErrorResponseCode" generator="new DataFakerGenerator('sip','globalErrorResponseCode')"/>
+        <attribute name="sip_provisionalResponsePhrase" generator="new DataFakerGenerator('sip','provisionalResponsePhrase')"/>
+        <attribute name="sip_successResponsePhrase" generator="new DataFakerGenerator('sip','successResponsePhrase')"/>
+        <attribute name="sip_redirectResponsePhrase" generator="new DataFakerGenerator('sip','redirectResponsePhrase')"/>
+        <attribute name="sip_clientErrorResponsePhrase" generator="new DataFakerGenerator('sip','clientErrorResponsePhrase')"/>
+        <attribute name="sip_serverErrorResponsePhrase" generator="new DataFakerGenerator('sip','serverErrorResponsePhrase')"/>
+        <attribute name="sip_globalErrorResponsePhrase" generator="new DataFakerGenerator('sip','globalErrorResponsePhrase')"/>
+        <attribute name="sip_nameAddress" generator="new DataFakerGenerator('sip','nameAddress')"/>
+        <attribute name="size_adjective" generator="new DataFakerGenerator('size','adjective')"/>
+        <attribute name="slackEmoji_emoji" generator="new DataFakerGenerator('slackEmoji','emoji')"/>
+        <attribute name="slackEmoji_activity" generator="new DataFakerGenerator('slackEmoji','activity')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data800" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data800.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

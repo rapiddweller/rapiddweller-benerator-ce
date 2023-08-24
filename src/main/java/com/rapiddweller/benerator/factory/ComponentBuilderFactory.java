@@ -51,6 +51,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.benerator.wrapper.ItemListGenerator;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.model.data.AlternativeGroupDescriptor;
@@ -59,6 +60,8 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.IdDescriptor;
+import com.rapiddweller.model.data.ItemElementDescriptor;
+import com.rapiddweller.model.data.ItemListDescriptor;
 import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
@@ -110,6 +113,10 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       result = createReferenceBuilder((ReferenceDescriptor) descriptor, context);
     } else if (descriptor instanceof IdDescriptor) {
       result = createIdBuilder((IdDescriptor) descriptor, ownerUniqueness, context);
+    } else if (descriptor instanceof ItemElementDescriptor) {
+      result = createItemElementBuilder(descriptor, ownerUniqueness, context);
+    } else if (descriptor instanceof ItemListDescriptor) {
+      result = createItemListBuilder(descriptor, ownerUniqueness, context);
     } else {
       throw BeneratorExceptionFactory.getInstance().configurationError(
           "Not a supported element: " + descriptor.getClass());
@@ -146,7 +153,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   private static ComponentBuilder<?> createPartBuilder(
       ComponentDescriptor part, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
-    if (iterationMode) {
+    var containerValue = part.getDetailValue("container");
+    if (iterationMode &&  containerValue == null) {
       if (part.getTypeDescriptor() instanceof ComplexTypeDescriptor) {
         return createPartModifier(part, context);
       } else {
@@ -174,7 +182,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
     List<GenerationStep<Entity>> components =
         GenerationStepFactory.createMutatingGenerationSteps(typeDescriptor, true, Uniqueness.NONE, context);
-    return new PartModifier(part.getName(), components, typeDescriptor.getScope());
+    Converter<?, ?> converter = DescriptorUtil.getConverter(typeDescriptor.getConverter(), context);
+    return new PartModifier(part.getName(), components, typeDescriptor.getScope(), converter);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -377,8 +386,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       return null;
     }
     String container = instance.getContainer();
-    if (container == null) {
-      long defaultMinCount = (instance.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
+    if (container == null || container.equals("map")) {
+      long defaultMinCount = 1;
       Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, defaultMinCount, 1L, true, context);
       if (longCountGenerator instanceof ConstantGenerator
           && longCountGenerator.generate(new ProductWrapper<>()).unwrap() == 1L) {
@@ -405,4 +414,17 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     }
   }
 
+  private static ComponentBuilder<?> createItemListBuilder(
+          ComponentDescriptor list, Uniqueness ownerUniqueness, BeneratorContext context) {
+    Generator<?> generator = createSingleInstanceGenerator(list, ownerUniqueness, context);
+    // wrap product within array list
+    generator = new ItemListGenerator(generator);
+    return builderFromGenerator(generator, list, context);
+  }
+
+  private static ComponentBuilder<?> createItemElementBuilder(
+          ComponentDescriptor list, Uniqueness ownerUniqueness, BeneratorContext context) {
+    Generator<?> generator = createSingleInstanceGenerator(list, ownerUniqueness, context);
+    return builderFromGenerator(generator, list, context);
+  }
 }

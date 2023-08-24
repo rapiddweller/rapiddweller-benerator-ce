@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+<memstore id="mem"/>
+
+<import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data600" count="{count}" consumer="mem" >
+        <attribute name="hobby_activity" generator="new DataFakerGenerator('hobby','activity')"/>
+        <attribute name="hololive_talent" generator="new DataFakerGenerator('hololive','talent')"/>
+        <attribute name="horse_name" generator="new DataFakerGenerator('horse','name')"/>
+        <attribute name="horse_breed" generator="new DataFakerGenerator('horse','breed')"/>
+        <attribute name="house_room" generator="new DataFakerGenerator('house','room')"/>
+        <attribute name="house_furniture" generator="new DataFakerGenerator('house','furniture')"/>
+        <attribute name="howIMetYourMother_character" generator="new DataFakerGenerator('howIMetYourMother','character')"/>
+        <attribute name="howIMetYourMother_quote" generator="new DataFakerGenerator('howIMetYourMother','quote')"/>
+        <attribute name="howIMetYourMother_highFive" generator="new DataFakerGenerator('howIMetYourMother','highFive')"/>
+        <attribute name="howIMetYourMother_catchPhrase" generator="new DataFakerGenerator('howIMetYourMother','catchPhrase')"/>
+        <attribute name="howToTrainYourDragon_locations" generator="new DataFakerGenerator('howToTrainYourDragon','locations')"/>
+        <attribute name="howToTrainYourDragon_characters" generator="new DataFakerGenerator('howToTrainYourDragon','characters')"/>
+        <attribute name="howToTrainYourDragon_dragons" generator="new DataFakerGenerator('howToTrainYourDragon','dragons')"/>
+        <attribute name="idNumber_valid" generator="new DataFakerGenerator('idNumber','valid')"/>
+        <attribute name="idNumber_invalid" generator="new DataFakerGenerator('idNumber','invalid')"/>
+        <attribute name="idNumber_ssnValid" generator="new DataFakerGenerator('idNumber','ssnValid')"/>
+        <attribute name="idNumber_validPtNif" generator="new DataFakerGenerator('idNumber','validPtNif')"/>
+        <attribute name="idNumber_validSvSeSsn" generator="new DataFakerGenerator('idNumber','validSvSeSsn')"/>
+        <attribute name="idNumber_validEnZaSsn" generator="new DataFakerGenerator('idNumber','validEnZaSsn')"/>
+        <attribute name="idNumber_inValidEnZaSsn" generator="new DataFakerGenerator('idNumber','inValidEnZaSsn')"/>
+        <attribute name="idNumber_invalidSvSeSsn" generator="new DataFakerGenerator('idNumber','invalidSvSeSsn')"/>
+        <attribute name="idNumber_singaporeanFin" generator="new DataFakerGenerator('idNumber','singaporeanFin')"/>
+        <attribute name="idNumber_singaporeanFinBefore2000" generator="new DataFakerGenerator('idNumber','singaporeanFinBefore2000')"/>
+        <attribute name="idNumber_singaporeanUin" generator="new DataFakerGenerator('idNumber','singaporeanUin')"/>
+        <attribute name="idNumber_singaporeanUinBefore2000" generator="new DataFakerGenerator('idNumber','singaporeanUinBefore2000')"/>
+        <attribute name="idNumber_validZhCNSsn" generator="new DataFakerGenerator('idNumber','validZhCNSsn')"/>
+        <attribute name="idNumber_invalidPtNif" generator="new DataFakerGenerator('idNumber','invalidPtNif')"/>
+        <attribute name="idNumber_validEsMXSsn" generator="new DataFakerGenerator('idNumber','validEsMXSsn')"/>
+        <attribute name="idNumber_invalidEsMXSsn" generator="new DataFakerGenerator('idNumber','invalidEsMXSsn')"/>
+        <attribute name="idNumber_peselNumber" generator="new DataFakerGenerator('idNumber','peselNumber')"/>
+        <attribute name="industrySegments_industry" generator="new DataFakerGenerator('industrySegments','industry')"/>
+        <attribute name="industrySegments_sector" generator="new DataFakerGenerator('industrySegments','sector')"/>
+        <attribute name="industrySegments_subSector" generator="new DataFakerGenerator('industrySegments','subSector')"/>
+        <attribute name="industrySegments_superSector" generator="new DataFakerGenerator('industrySegments','superSector')"/>
+        <attribute name="internet_url" generator="new DataFakerGenerator('internet','url')"/>
+        <attribute name="internet_port" generator="new DataFakerGenerator('internet','port')"/>
+        <attribute name="internet_image" generator="new DataFakerGenerator('internet','image')"/>
+        <attribute name="internet_uuid" generator="new DataFakerGenerator('internet','uuid')"/>
+        <attribute name="internet_domainWord" generator="new DataFakerGenerator('internet','domainWord')"/>
+        <attribute name="internet_macAddress" generator="new DataFakerGenerator('internet','macAddress')"/>
+        <attribute name="internet_ipV4Cidr" generator="new DataFakerGenerator('internet','ipV4Cidr')"/>
+        <attribute name="internet_ipV6Cidr" generator="new DataFakerGenerator('internet','ipV6Cidr')"/>
+        <attribute name="internet_uuidv3" generator="new DataFakerGenerator('internet','uuidv3')"/>
+        <attribute name="internet_userAgent" generator="new DataFakerGenerator('internet','userAgent')"/>
+        <attribute name="internet_slug" generator="new DataFakerGenerator('internet','slug')"/>
+        <attribute name="internet_domainName" generator="new DataFakerGenerator('internet','domainName')"/>
+        <attribute name="internet_emailAddress" generator="new DataFakerGenerator('internet','emailAddress')"/>
+        <attribute name="internet_safeEmailAddress" generator="new DataFakerGenerator('internet','safeEmailAddress')"/>
+        <attribute name="internet_ipV4Address" generator="new DataFakerGenerator('internet','ipV4Address')"/>
+        <attribute name="internet_getIpV4Address" generator="new DataFakerGenerator('internet','getIpV4Address')"/>
+        <attribute name="internet_privateIpV4Address" generator="new DataFakerGenerator('internet','privateIpV4Address')"/>
+        <attribute name="internet_getPrivateIpV4Address" generator="new DataFakerGenerator('internet','getPrivateIpV4Address')"/>
+        <attribute name="internet_publicIpV4Address" generator="new DataFakerGenerator('internet','publicIpV4Address')"/>
+        <attribute name="internet_getPublicIpV4Address" generator="new DataFakerGenerator('internet','getPublicIpV4Address')"/>
+        <attribute name="internet_ipV6Address" generator="new DataFakerGenerator('internet','ipV6Address')"/>
+        <attribute name="internet_getIpV6Address" generator="new DataFakerGenerator('internet','getIpV6Address')"/>
+        <attribute name="internet_domainSuffix" generator="new DataFakerGenerator('internet','domainSuffix')"/>
+        <attribute name="internet_password" generator="new DataFakerGenerator('internet','password')"/>
+        <attribute name="job_position" generator="new DataFakerGenerator('job','position')"/>
+        <attribute name="job_field" generator="new DataFakerGenerator('job','field')"/>
+        <attribute name="job_title" generator="new DataFakerGenerator('job','title')"/>
+        <attribute name="job_seniority" generator="new DataFakerGenerator('job','seniority')"/>
+        <attribute name="job_keySkills" generator="new DataFakerGenerator('job','keySkills')"/>
+        <attribute name="kaamelott_character" generator="new DataFakerGenerator('kaamelott','character')"/>
+        <attribute name="kaamelott_quote" generator="new DataFakerGenerator('kaamelott','quote')"/>
+        <attribute name="kpop_iGroups" generator="new DataFakerGenerator('kpop','iGroups')"/>
+        <attribute name="kpop_iiGroups" generator="new DataFakerGenerator('kpop','iiGroups')"/>
+        <attribute name="kpop_iiiGroups" generator="new DataFakerGenerator('kpop','iiiGroups')"/>
+        <attribute name="kpop_girlGroups" generator="new DataFakerGenerator('kpop','girlGroups')"/>
+        <attribute name="kpop_boyBands" generator="new DataFakerGenerator('kpop','boyBands')"/>
+        <attribute name="kpop_solo" generator="new DataFakerGenerator('kpop','solo')"/>
+        <attribute name="leagueOfLegends_location" generator="new DataFakerGenerator('leagueOfLegends','location')"/>
+        <attribute name="leagueOfLegends_quote" generator="new DataFakerGenerator('leagueOfLegends','quote')"/>
+        <attribute name="leagueOfLegends_champion" generator="new DataFakerGenerator('leagueOfLegends','champion')"/>
+        <attribute name="leagueOfLegends_masteries" generator="new DataFakerGenerator('leagueOfLegends','masteries')"/>
+        <attribute name="leagueOfLegends_rank" generator="new DataFakerGenerator('leagueOfLegends','rank')"/>
+        <attribute name="leagueOfLegends_summonerSpell" generator="new DataFakerGenerator('leagueOfLegends','summonerSpell')"/>
+        <attribute name="lebowski_character" generator="new DataFakerGenerator('lebowski','character')"/>
+        <attribute name="lebowski_quote" generator="new DataFakerGenerator('lebowski','quote')"/>
+        <attribute name="lebowski_actor" generator="new DataFakerGenerator('lebowski','actor')"/>
+        <attribute name="locality_displayName" generator="new DataFakerGenerator('locality','displayName')"/>
+        <attribute name="locality_localeStringWithoutReplacement" generator="new DataFakerGenerator('locality','localeStringWithoutReplacement')"/>
+        <attribute name="locality_allSupportedLocales" generator="new DataFakerGenerator('locality','allSupportedLocales')"/>
+        <attribute name="locality_localeString" generator="new DataFakerGenerator('locality','localeString')"/>
+        <attribute name="lordOfTheRings_location" generator="new DataFakerGenerator('lordOfTheRings','location')"/>
+        <attribute name="lordOfTheRings_character" generator="new DataFakerGenerator('lordOfTheRings','character')"/>
+        <attribute name="lorem_character" generator="new DataFakerGenerator('lorem','character')"/>
+        <attribute name="lorem_word" generator="new DataFakerGenerator('lorem','word')"/>
+        <attribute name="lorem_words" generator="new DataFakerGenerator('lorem','words')"/>
+        <attribute name="lorem_characters" generator="new DataFakerGenerator('lorem','characters')"/>
+        <attribute name="lorem_sentence" generator="new DataFakerGenerator('lorem','sentence')"/>
+        <attribute name="lorem_paragraph" generator="new DataFakerGenerator('lorem','paragraph')"/>
+        <attribute name="marketing_buzzwords" generator="new DataFakerGenerator('marketing','buzzwords')"/>
+        <attribute name="marvelSnap_event" generator="new DataFakerGenerator('marvelSnap','event')"/>
+        <attribute name="marvelSnap_character" generator="new DataFakerGenerator('marvelSnap','character')"/>
+        <attribute name="marvelSnap_zone" generator="new DataFakerGenerator('marvelSnap','zone')"/>
+        <attribute name="marvelSnap_rank" generator="new DataFakerGenerator('marvelSnap','rank')"/>
+        <attribute name="massEffect_character" generator="new DataFakerGenerator('massEffect','character')"/>
+        <attribute name="massEffect_quote" generator="new DataFakerGenerator('massEffect','quote')"/>
+        <attribute name="massEffect_planet" generator="new DataFakerGenerator('massEffect','planet')"/>
+
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data600" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data600.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

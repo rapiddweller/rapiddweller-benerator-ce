@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_LIST;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_PART;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
 
@@ -63,7 +64,7 @@ public class PartParser extends AbstractComponentParser {
       }
     }
     mapInstanceDetails(element, true, result);
-    if (result.getLocalType().getSource() == null) {
+    if (result.getLocalType().getSource() == null && (((ComplexTypeDescriptor) result.getLocalType()).getDynamicSource() == null)) {
       applyDefaultCounts(result);
     }
     if (owner != null) {
@@ -86,9 +87,11 @@ public class PartParser extends AbstractComponentParser {
       return parse(element, owner, null);
     } else if (ModelParser.isSimpleTypeComponent(elementName)) {
       return modelParser.parseSimpleTypeComponent(element, owner, null);
+    } else if (EL_LIST.equals(elementName)) {
+      return modelParser.getItemListParser().parse(element, owner);
     } else {
       throw BeneratorExceptionFactory.getInstance().configurationError("Expected one of these element names: " +
-          EL_ATTRIBUTE + ", " + EL_ID + ", " + EL_REFERENCE + ", or " + EL_PART + ". Found: " + elementName);
+          EL_ATTRIBUTE + ", " + EL_ID + ", " + EL_REFERENCE + ", " + EL_LIST + ", or " + EL_PART + ". Found: " + elementName);
     }
   }
 

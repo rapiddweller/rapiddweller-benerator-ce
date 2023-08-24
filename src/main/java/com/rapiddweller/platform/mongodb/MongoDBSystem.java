@@ -1,9 +1,13 @@
 package com.rapiddweller.platform.mongodb;
 
 import com.mongodb.client.model.Filters;
+import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.consumer.NoConsumer;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.benerator.storage.StorageSystemInserter;
+import com.rapiddweller.benerator.storage.StorageSystemUpdater;
 import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
@@ -106,7 +110,13 @@ public class MongoDBSystem extends CustomStorageSystem {
   @Override
   public DataSource<Entity> queryEntities(String collection, String query, Context context) {
     MongoDBDataSource mongoDBDataSource = new MongoDBDataSource(mongoDBClientProvider, collection, query, context);
-    DocumentToEntityConverter documentToEntityConverter = new DocumentToEntityConverter((ComplexTypeDescriptor) getTypeDescriptor(collection));
+    ComplexTypeDescriptor descriptor = (ComplexTypeDescriptor) getTypeDescriptor(collection);
+    if (descriptor == null) {
+      DataModel dm = new DataModel();
+      DescriptorProvider dp = new DefaultDescriptorProvider("default", dm);
+      descriptor = new ComplexTypeDescriptor(collection, dp);
+    }
+    DocumentToEntityConverter documentToEntityConverter = new DocumentToEntityConverter(descriptor);
     return new ConvertingDataSource<>(mongoDBDataSource, documentToEntityConverter);
   }
 
@@ -154,8 +164,7 @@ public class MongoDBSystem extends CustomStorageSystem {
   public void update(Entity entity) {
     String entityType = getEntityType(entity);
     addTypeDescriptor(entity.descriptor);
-    String idName = MongoDBUtils.getIdName(entity.descriptor);
-    mongoDBClient.replaceDocument(entityType, Filters.eq(idName, entity.get(idName)), convertEntityToDocument(entity));
+    mongoDBClient.replaceDocument(entityType, Filters.eq("_id", entity.get("_id")), convertEntityToDocument(entity));
   }
 
   private String getEntityType(Entity entity) {
@@ -227,5 +236,15 @@ public class MongoDBSystem extends CustomStorageSystem {
     mongoDBClient.close();
   }
 
+  public Consumer inserter(String target) {
+    var targetType = (ComplexTypeDescriptor) getTypeDescriptor(target);
+    targetType = targetType == null ? new ComplexTypeDescriptor(target, descriptorProvider) : targetType;
+    return new StorageSystemInserter(this, targetType);
+  }
+
+  public Consumer deleter(String target) {
+    mongoDBClient.getDatabase(this.mongoDBClientProvider.getDatabase()).getCollection(target).drop();
+    return new NoConsumer();
+  }
 
 }

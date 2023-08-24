@@ -117,7 +117,7 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
   private void normalize() {
     int sampleCount = (int) ((max - min) / granularity) + 1;
     if (sampleCount > 100000) {
-      throw new InvalidGeneratorSetupException("granularity", "too small, resulting in a set of " + sampleCount + " samples");
+      logger.warn("granularity too small, resulting in a set of {} samples", sampleCount);
     }
     probSum = new float[sampleCount];
     if (sampleCount == 1) {

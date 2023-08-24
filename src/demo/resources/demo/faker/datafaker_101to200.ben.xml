@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+<memstore id="mem"/>
+
+<import domains="faker"/>
+
+    <setting name="count" value="1000"/>
+
+    <generate type="datafaker_data200" count="{count}" consumer="mem" >
+        <attribute name="basketball_coaches" generator="new DataFakerGenerator('basketball','coaches')"/>
+        <attribute name="basketball_players" generator="new DataFakerGenerator('basketball','players')"/>
+        <attribute name="battlefield1_map" generator="new DataFakerGenerator('battlefield1','map')"/>
+        <attribute name="battlefield1_classes" generator="new DataFakerGenerator('battlefield1','classes')"/>
+        <attribute name="battlefield1_vehicle" generator="new DataFakerGenerator('battlefield1','vehicle')"/>
+        <attribute name="battlefield1_weapon" generator="new DataFakerGenerator('battlefield1','weapon')"/>
+        <attribute name="battlefield1_faction" generator="new DataFakerGenerator('battlefield1','faction')"/>
+        <attribute name="beer_name" generator="new DataFakerGenerator('beer','name')"/>
+        <attribute name="beer_style" generator="new DataFakerGenerator('beer','style')"/>
+        <attribute name="beer_brand" generator="new DataFakerGenerator('beer','brand')"/>
+        <attribute name="beer_hop" generator="new DataFakerGenerator('beer','hop')"/>
+        <attribute name="beer_yeast" generator="new DataFakerGenerator('beer','yeast')"/>
+        <attribute name="beer_malt" generator="new DataFakerGenerator('beer','malt')"/>
+        <attribute name="bigBangTheory_character" generator="new DataFakerGenerator('bigBangTheory','character')"/>
+        <attribute name="bigBangTheory_quote" generator="new DataFakerGenerator('bigBangTheory','quote')"/>
+        <attribute name="bloodtype_aboTypes" generator="new DataFakerGenerator('bloodtype','aboTypes')"/>
+        <attribute name="bloodtype_rhTypes" generator="new DataFakerGenerator('bloodtype','rhTypes')"/>
+        <attribute name="bloodtype_pTypes" generator="new DataFakerGenerator('bloodtype','pTypes')"/>
+        <attribute name="bloodtype_bloodGroup" generator="new DataFakerGenerator('bloodtype','bloodGroup')"/>
+        <attribute name="bojackHorseman_characters" generator="new DataFakerGenerator('bojackHorseman','characters')"/>
+        <attribute name="bojackHorseman_quotes" generator="new DataFakerGenerator('bojackHorseman','quotes')"/>
+        <attribute name="bojackHorseman_tongueTwisters" generator="new DataFakerGenerator('bojackHorseman','tongueTwisters')"/>
+        <attribute name="book_author" generator="new DataFakerGenerator('book','author')"/>
+        <attribute name="book_publisher" generator="new DataFakerGenerator('book','publisher')"/>
+        <attribute name="book_genre" generator="new DataFakerGenerator('book','genre')"/>
+        <attribute name="book_title" generator="new DataFakerGenerator('book','title')"/>
+        <attribute name="bool_bool" generator="new DataFakerGenerator('bool','bool')"/>
+        <attribute name="bossaNova_artist" generator="new DataFakerGenerator('bossaNova','artist')"/>
+        <attribute name="bossaNova_song" generator="new DataFakerGenerator('bossaNova','song')"/>
+        <attribute name="brand_sport" generator="new DataFakerGenerator('brand','sport')"/>
+        <attribute name="brand_car" generator="new DataFakerGenerator('brand','car')"/>
+        <attribute name="brand_watch" generator="new DataFakerGenerator('brand','watch')"/>
+        <attribute name="brooklynNineNine_characters" generator="new DataFakerGenerator('brooklynNineNine','characters')"/>
+        <attribute name="brooklynNineNine_quotes" generator="new DataFakerGenerator('brooklynNineNine','quotes')"/>
+        <attribute name="buffy_characters" generator="new DataFakerGenerator('buffy','characters')"/>
+        <attribute name="buffy_quotes" generator="new DataFakerGenerator('buffy','quotes')"/>
+        <attribute name="buffy_bigBads" generator="new DataFakerGenerator('buffy','bigBads')"/>
+        <attribute name="buffy_episodes" generator="new DataFakerGenerator('buffy','episodes')"/>
+        <attribute name="buffy_celebrities" generator="new DataFakerGenerator('buffy','celebrities')"/>
+        <attribute name="business_creditCardType" generator="new DataFakerGenerator('business','creditCardType')"/>
+        <attribute name="business_creditCardExpiry" generator="new DataFakerGenerator('business','creditCardExpiry')"/>
+        <attribute name="camera_brand" generator="new DataFakerGenerator('camera','brand')"/>
+        <attribute name="camera_model" generator="new DataFakerGenerator('camera','model')"/>
+        <attribute name="camera_brandWithModel" generator="new DataFakerGenerator('camera','brandWithModel')"/>
+        <attribute name="cannabis_types" generator="new DataFakerGenerator('cannabis','types')"/>
+        <attribute name="cannabis_strains" generator="new DataFakerGenerator('cannabis','strains')"/>
+        <attribute name="cannabis_terpenes" generator="new DataFakerGenerator('cannabis','terpenes')"/>
+        <attribute name="cannabis_categories" generator="new DataFakerGenerator('cannabis','categories')"/>
+        <attribute name="cannabis_buzzwords" generator="new DataFakerGenerator('cannabis','buzzwords')"/>
+        <attribute name="cannabis_brands" generator="new DataFakerGenerator('cannabis','brands')"/>
+        <attribute name="cannabis_cannabinoidAbbreviations" generator="new DataFakerGenerator('cannabis','cannabinoidAbbreviations')"/>
+        <attribute name="cannabis_cannabinoids" generator="new DataFakerGenerator('cannabis','cannabinoids')"/>
+        <attribute name="cannabis_medicalUses" generator="new DataFakerGenerator('cannabis','medicalUses')"/>
+        <attribute name="cannabis_healthBenefits" generator="new DataFakerGenerator('cannabis','healthBenefits')"/>
+        <attribute name="cat_name" generator="new DataFakerGenerator('cat','name')"/>
+        <attribute name="cat_breed" generator="new DataFakerGenerator('cat','breed')"/>
+        <attribute name="cat_registry" generator="new DataFakerGenerator('cat','registry')"/>
+        <attribute name="chess_title" generator="new DataFakerGenerator('chess','title')"/>
+        <attribute name="chess_player" generator="new DataFakerGenerator('chess','player')"/>
+        <attribute name="chess_tournament" generator="new DataFakerGenerator('chess','tournament')"/>
+        <attribute name="chess_opening" generator="new DataFakerGenerator('chess','opening')"/>
+        <attribute name="chiquito_terms" generator="new DataFakerGenerator('chiquito','terms')"/>
+        <attribute name="chiquito_sentences" generator="new DataFakerGenerator('chiquito','sentences')"/>
+        <attribute name="chiquito_jokes" generator="new DataFakerGenerator('chiquito','jokes')"/>
+        <attribute name="chiquito_expressions" generator="new DataFakerGenerator('chiquito','expressions')"/>
+        <attribute name="chuckNorris_fact" generator="new DataFakerGenerator('chuckNorris','fact')"/>
+        <attribute name="clashOfClans_rank" generator="new DataFakerGenerator('clashOfClans','rank')"/>
+        <attribute name="clashOfClans_troop" generator="new DataFakerGenerator('clashOfClans','troop')"/>
+        <attribute name="clashOfClans_defensiveBuilding" generator="new DataFakerGenerator('clashOfClans','defensiveBuilding')"/>
+        <attribute name="cnpj_valid" generator="new DataFakerGenerator('cnpj','valid')"/>
+        <attribute name="cnpj_invalid" generator="new DataFakerGenerator('cnpj','invalid')"/>
+        <attribute name="code_asin" generator="new DataFakerGenerator('code','asin')"/>
+        <attribute name="code_isbnGs1" generator="new DataFakerGenerator('code','isbnGs1')"/>
+        <attribute name="code_isbnGroup" generator="new DataFakerGenerator('code','isbnGroup')"/>
+        <attribute name="code_isbn10" generator="new DataFakerGenerator('code','isbn10')"/>
+        <attribute name="code_isbn13" generator="new DataFakerGenerator('code','isbn13')"/>
+        <attribute name="code_imei" generator="new DataFakerGenerator('code','imei')"/>
+        <attribute name="code_ean8" generator="new DataFakerGenerator('code','ean8')"/>
+        <attribute name="code_gtin8" generator="new DataFakerGenerator('code','gtin8')"/>
+        <attribute name="code_gtin13" generator="new DataFakerGenerator('code','gtin13')"/>
+        <attribute name="code_ean13" generator="new DataFakerGenerator('code','ean13')"/>
+        <attribute name="code_isbnRegistrant" generator="new DataFakerGenerator('code','isbnRegistrant')"/>
+        <attribute name="coffee_descriptor" generator="new DataFakerGenerator('coffee','descriptor')"/>
+        <attribute name="coffee_name1" generator="new DataFakerGenerator('coffee','name1')"/>
+        <attribute name="coffee_name2" generator="new DataFakerGenerator('coffee','name2')"/>
+        <attribute name="coffee_body" generator="new DataFakerGenerator('coffee','body')"/>
+        <attribute name="coffee_region" generator="new DataFakerGenerator('coffee','region')"/>
+        <attribute name="coffee_country" generator="new DataFakerGenerator('coffee','country')"/>
+        <attribute name="coffee_variety" generator="new DataFakerGenerator('coffee','variety')"/>
+        <attribute name="coffee_notes" generator="new DataFakerGenerator('coffee','notes')"/>
+        <attribute name="coffee_blendName" generator="new DataFakerGenerator('coffee','blendName')"/>
+        <attribute name="coffee_intensifier" generator="new DataFakerGenerator('coffee','intensifier')"/>
+        <attribute name="coin_flip" generator="new DataFakerGenerator('coin','flip')"/>
+        <attribute name="collection_build" generator="new DataFakerGenerator('collection','build')"/>
+        <attribute name="collection_build" generator="new DataFakerGenerator('collection','build')"/>
+        <attribute name="color_name" generator="new DataFakerGenerator('color','name')"/>
+        <attribute name="color_hex" generator="new DataFakerGenerator('color','hex')"/>
+        <attribute name="commerce_department" generator="new DataFakerGenerator('commerce','department')"/>
+        <attribute name="commerce_material" generator="new DataFakerGenerator('commerce','material')"/>
+        <attribute name="commerce_price" generator="new DataFakerGenerator('commerce','price')"/>
+    </generate>
+
+    <echo>Check if enough data has been generated</echo>
+
+    <iterate type="datafaker_data200" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="datafaker_data200.counter != 1000">
+        <error>Not enough data has been generated</error>
+    </if>
+</setup>

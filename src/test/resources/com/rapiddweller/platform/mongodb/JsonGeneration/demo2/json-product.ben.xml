@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd">
+
+    <import domains="person,organization,address" platforms="db,csv"/>
+
+    <!--    Prepare Database source-->
+    <!--    H2 DB-->
+    <database id="dbH2" environment="environment" system="h2"/>
+    <execute type="sql" target="dbH2" uri="scripts/h2.initschema.sql"/>
+    <database id="schemaH2" environment="environment" system="h2" schema="schemaH2"/>
+    <generate type="tableH2" count="20" consumer="schemaH2">
+        <attribute name="id" generator="IncrementGenerator"/>
+        <attribute name="string_value" type="string" pattern="[A-Z]{15}"/>
+        <attribute name="long_value" type="long" min="0" max="100"/>
+        <attribute name="boolean_value" type="boolean" values="true,false"/>
+        <attribute name="double_value" type="double" min="0" max="100"/>
+        <attribute name="decimal_value" type="big_decimal" min="0" max="100"/>
+        <attribute name="date_value" type="date" generator="DateTimeGenerator"/>
+    </generate>
+    <evaluate assert="result == 20" target="dbH2">select count(*) from schemaH2.tableH2</evaluate>
+    <!--    Postgres DB-->
+    <database id="dbPostgres" environment="environment" system="postgres"/>
+    <execute type="sql" target="dbPostgres">
+        DROP TABLE IF EXISTS schema_postgres.table_postgres;
+        DROP SCHEMA IF EXISTS schema_postgres;
+        CREATE SCHEMA IF NOT EXISTS schema_postgres;
+        CREATE TABLE IF NOT EXISTS schema_postgres.table_postgres
+        (
+        id              INT PRIMARY KEY,
+        string_value    VARCHAR(30),
+        long_value      BIGINT,
+        bool_value      BOOLEAN,
+        double_value    DOUBLE PRECISION,
+        decimal_value   NUMERIC,
+        date_value      DATE
+        );
+    </execute>
+    <database id="schema_postgres" environment="environment" system="postgres" schema="schema_postgres"/>
+    <generate type="table_postgres" count="20" consumer="schema_postgres">
+        <attribute name="id" generator="IncrementGenerator"/>
+        <attribute name="string_value" type="string" pattern="[A-Z]{15}"/>
+        <attribute name="long_value" type="long" min="0" max="100"/>
+        <attribute name="boolean_value" type="boolean" values="'true','false'"/>
+        <attribute name="double_value" type="double" min="0" max="100"/>
+        <attribute name="decimal_value" type="big_decimal" min="0" max="100"/>
+        <attribute name="date_value" type="date" generator="DateTimeGenerator"/>
+    </generate>
+    <evaluate assert="result == 20" target="dbPostgres">select count(*) from schema_postgres.table_postgres</evaluate>
+
+    <!--    Mongo DB-->
+
+    <mongodb id="mongo" environment="environment" system="mongodb"/>
+    <pre-parse-generate target="mongo"/>
+
+    <setting name="counts" value="100"/>
+    <!--    Generate data from DB source-->
+    <!--    Use consumer="new JsonFileExporter(<Path>Ex:"src/test/resources/com/rapiddweller/platform/mongodb/JsonGeneration/demo2/product-result.json")" to export to JSON File-->
+    <generate type="store" count="{counts}" consumer="ConsoleExporter,mongo">
+        <!--Declare variable use for attribute-->
+        <variable name="address"
+                  generator="new AddressGenerator{dataset='US'}"/>
+        <variable name="item"
+                  source="item.ent.csv"/>
+        <!--Start JSON-->
+        <attribute name="name" type="string" constant="ElectronicMart"/>
+        <attribute name="location" type="string" script="address.city.name"/>
+        <part name="departments" container="list" minCount="5" maxCount="5">
+            <attribute name="name" type="string" constant="Electronics"/>
+            <part name="categories" container="list" minCount="2" maxCount="5">
+                <attribute name="name" type="string" constant="Computers"/>
+                <part name="products" container="list" minCount="2" maxCount="5">
+                    <attribute name="floatData" type="float" constant="123456789.987654321"/>
+                    <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+                    <attribute name="longData" type="long" constant="123456789.987654321"/>
+                    <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+                    <attribute name="objectData1" type="object" constant="123456789"/>
+                    <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+                    <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+                    <attribute name="booleanData" type="boolean" constant="true"/>
+                    <attribute name="dateData" type="date" generator="DateGenerator"/>
+                    <attribute name="id" type="int" generator="IncrementGenerator"/>
+                    <attribute name="name" type="string" script="item.name"/>
+                    <attribute name="brand" type="string" script="item.brand"/>
+                    <attribute name="price" type="string" script="item.price"/>
+                    <part name="reviews" container="list" minCount="2" maxCount="5">
+                        <attribute name="name" type="string"
+                                   generator="new PersonGenerator{dataset='US',locale='us',minAgeYears='18', maxAgeYears='75',femaleQuota='0.5'}"/>
+                        <attribute name="rating" type="int" min="1" max="5" distribution="random"/>
+                        <attribute name="comment" type="string" source="comments.wgt.csv"/>
+                        <attribute name="floatData" type="float" constant="123456789.987654321"/>
+                        <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+                        <attribute name="longData" type="long" constant="123456789.987654321"/>
+                        <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+                        <attribute name="objectData1" type="object" constant="123456789"/>
+                        <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+                        <attribute name="objectData2" type="object" constant="123456789.987654321asmgdklfgfjkgukdf"/>
+                        <attribute name="booleanData" type="boolean" constant="true"/>
+                        <attribute name="dateData" type="date" generator="DateGenerator"/>
+                        <part name="nestedObjectConstant">
+                            <attribute name="floatData" type="float" constant="123456789.987654321"/>
+                            <attribute name="doubleData" type="double" constant="123456789.987654321"/>
+                            <attribute name="longData" type="long" constant="123456789.987654321"/>
+                            <attribute name="decimalData" type="big_decimal" constant="123456789.987654321"/>
+                            <attribute name="objectData1" type="object" constant="123456789"/>
+                            <attribute name="objectData2" type="object" constant="123456789.987654321"/>
+                            <attribute name="objectData2" type="object"
+                                       constant="123456789.987654321asmgdklfgfjkgukdf"/>
+                            <attribute name="booleanData" type="boolean" constant="true"/>
+                            <attribute name="dateData" type="date" generator="DateGenerator"/>
+                        </part>
+                        <part name="nestedObjectH2db">
+                            <attribute name="id" source="dbH2" selector="select id from `schemaH2`.`tableH2`" cyclic="true"/>
+                            <attribute name="string_data" source="dbH2"
+                                       selector="select string_value from `schemaH2`.`tableH2`" cyclic="true"/>
+                            <attribute name="long_data" source="dbH2"
+                                       selector="select long_value from `schemaH2`.`tableH2`" cyclic="true"/>
+                            <attribute name="bool_data" source="dbH2"
+                                       selector="select bool_value from `schemaH2`.`tableH2`" cyclic="true"/>
+                            <attribute name="double_data" source="dbH2"
+                                       selector="select double_value from `schemaH2`.`tableH2`" cyclic="true"/>
+                            <attribute name="decimal_data" source="dbH2"
+                                       selector="select decimal_value from `schemaH2`.`tableH2`" cyclic="true"/>
+                            <attribute name="date_data" source="dbH2"
+                                       selector="select date_value from `schemaH2`.`tableH2`" cyclic="true"/>
+                        </part>
+                        <part name="nestedObjectPostgresdb">
+                            <attribute name="id" source="dbPostgres" selector="select id from schema_postgres.table_postgres" cyclic="true"/>
+                            <attribute name="string_data" source="dbPostgres"
+                                       selector="select string_value from schema_postgres.table_postgres" cyclic="true"/>
+                            <attribute name="long_data" source="dbPostgres"
+                                       selector="select long_value from schema_postgres.table_postgres" cyclic="true"/>
+                            <attribute name="bool_data" source="dbPostgres"
+                                       selector="select bool_value from schema_postgres.table_postgres" cyclic="true"/>
+                            <attribute name="double_data" source="dbPostgres"
+                                       selector="select double_value from schema_postgres.table_postgres" cyclic="true"/>
+                            <attribute name="decimal_data" source="dbPostgres"
+                                       selector="select decimal_value from schema_postgres.table_postgres" cyclic="true"/>
+                            <attribute name="date_data" source="dbPostgres"
+                                       selector="select date_value from schema_postgres.table_postgres" cyclic="true"/>
+                        </part>
+                    </part>
+                </part>
+            </part>
+        </part>
+    </generate>
+    <!--    Check data with iterate and mongo.inserter('insertedtable')-->
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="store" source="mongo" consumer="mongo.inserter('insertedtable')">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="store.counter != counts">
+        <echo lang="ftl">Wrong amount of data: ${store.counter} elements</echo>
+    </if>
+    <if test="store.counter == counts">
+        <echo lang="ftl">Success generated ${store.counter} data</echo>
+    </if>
+    <!--    Store in multiple consumer (HOLD some)-->
+    <iterate type="store" source="mongo" consumer="NoConsumer"/>
+<!--    <iterate type="store" source="mongo" consumer="LoggerConsumer"/>-->
+<!--    <iterate type="store" source="mongo" consumer="CSVEntityExporter"/>-->
+<!--    <iterate type="store" source="mongo" consumer="SQLEntityExporter"/>-->
+    <!--    Iterate and use selector for MongoDB (not yet finish, try to implement)-->
+    <iterate type="store" source="mongo" consumer="NoConsumer">
+    </iterate>
+</setup>

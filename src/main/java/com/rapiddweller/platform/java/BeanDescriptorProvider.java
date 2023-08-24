@@ -35,6 +35,7 @@ import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.TypeMapper;
+import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
 
 import java.beans.PropertyDescriptor;
@@ -99,12 +100,20 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
    * @see TypeMapper#concreteType(java.lang.String) TypeMapper#concreteType(java.lang.String)
    */
   public Class<?> concreteType(String primitiveType) {
+
     try {
       Class<?> result = mapper.concreteType(primitiveType);
+      PrimitiveType classType = PrimitiveType.getInstance(primitiveType);
+
       if (result == null) {
-        result = Class.forName(primitiveType);
+        if (classType != null) {
+          result = Class.forName(classType.getJavaType().getName());
+        } else {
+          result = Class.forName(primitiveType);
+        }
       }
       return result;
+
     } catch (ClassNotFoundException e) {
       throw BeneratorExceptionFactory.getInstance().configurationError("No class mapping found for '" + primitiveType + "'", e);
     }

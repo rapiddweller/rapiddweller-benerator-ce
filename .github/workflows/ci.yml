@@ -130,7 +130,7 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: "benerator"
           MONGO_INITDB_ROOT_PASSWORD: "benerator"
       postgres:
-        image: postgres:12.2-alpine
+        image: postgis/postgis
         env:
           DB_HOST: postgres
           DB_PORT: "5432"
@@ -196,6 +196,16 @@ jobs:
           target.db.password=benerator
           target.db.authenticationDatabase=admin
           target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+      - name: set db default env for mongodb connection
+        run: |
+          echo "
+          db.db.host=mongodb
+          db.db.port=27017
+          db.db.database=benerator
+          db.db.user=benerator
+          db.db.password=benerator
+          db.db.authenticationDatabase=admin
+          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
       - name: set db properties for mongodb connection2
         run: |
           echo "
@@ -206,6 +216,16 @@ jobs:
           mongoPassword=benerator
           mongoAuthenticationDatabase=admin
           mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+      - name: set env file for demo/db mongodb connection
+        run: |
+          echo "
+          mongodb.db.host=mongodb
+          mongodb.db.port=27017
+          mongodb.db.database=benerator
+          mongodb.db.user=benerator
+          mongodb.db.password=benerator
+          mongodb.db.authenticationDatabase=admin
+          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
       - name: set db properties for postgres connection
         run: |
           echo "
@@ -217,6 +237,14 @@ jobs:
           dbSchema=public
           idStrategy=increment
           idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+      - name: set env file for postgres connection
+        run: |
+          echo "
+          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+          postgres.db.driver=org.postgresql.Driver
+          postgres.db.user=root
+          postgres.db.password=Benerator123!
+          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
       - name: set db properties for mysql connetion
         run: |
           echo "
@@ -268,7 +296,7 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: "benerator"
           MONGO_INITDB_ROOT_PASSWORD: "benerator"
       postgres:
-        image: postgres:12.2-alpine
+        image: postgis/postgis
         env:
           DB_HOST: postgres
           DB_PORT: "5432"
@@ -334,6 +362,16 @@ jobs:
           target.db.password=benerator
           target.db.authenticationDatabase=admin
           target.db.clean=true" > src/demo/resources/demo/shop/conf/mongodb.env.properties
+      - name: set db default env for mongodb connection
+        run: |
+          echo "
+          db.db.host=mongodb
+          db.db.port=27017
+          db.db.database=benerator
+          db.db.user=benerator
+          db.db.password=benerator
+          db.db.authenticationDatabase=admin
+          db.db.clean=true" > src/demo/resources/demo/shop/conf/environment.env.properties
       - name: set db properties for mongodb connection2
         run: |
           echo "
@@ -344,6 +382,16 @@ jobs:
           mongoPassword=benerator
           mongoAuthenticationDatabase=admin
           mongoClean=true" > src/demo/resources/demo/shop/mongodb/shop.mongodb.properties
+      - name: set env file for demo/db mongodb connection
+        run: |
+          echo "
+          mongodb.db.host=mongodb
+          mongodb.db.port=27017
+          mongodb.db.database=benerator
+          mongodb.db.user=benerator
+          mongodb.db.password=benerator
+          mongodb.db.authenticationDatabase=admin
+          mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
       - name: set db properties for postgres connection
         run: |
           echo "
@@ -355,6 +403,14 @@ jobs:
           dbSchema=public
           idStrategy=increment
           idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+      - name: set env file for postgres connection
+        run: |
+          echo "
+          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+          postgres.db.driver=org.postgresql.Driver
+          postgres.db.user=root
+          postgres.db.password=Benerator123!
+          postgres.db.schema=public" > src/demo/resources/demo/db/conf/conf.env.properties
       - name: set db properties for mysql connetion
         run: |
           echo "
@@ -762,7 +818,8 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: |
+      - name: set db properties for postgres connection
+        run: |
           echo "
           dbUrl=jdbc:postgresql://postgres:5432/benerator
           dbDriver=org.postgresql.Driver
@@ -772,10 +829,20 @@ jobs:
           dbSchema=public
           idStrategy=increment
           idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+      - name: set env file for postgres connection
+        run: |
+          echo "
+          postgres.db.url=jdbc:postgresql://postgres:5432/benerator
+          postgres.db.driver=org.postgresql.Driver
+          postgres.db.user=root
+          postgres.db.password=Benerator123!
+          postgres.db.schema=public" > $ARTIFACT_FULLNAME/demo/db/conf/conf.env.properties
       - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
       - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
       - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/postgresalltypes.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/postgres-composite.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
         with:
@@ -1076,3 +1143,19 @@ jobs:
           asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
           asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
           asset_content_type: application/zip
+
+  ###################### Trigger EE Pipeline ######################
+
+  trigger_ee_pipelines:
+    runs-on: ubuntu-latest
+    needs:
+      - publish_jdk11
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: trigger EE pipelines
+        if: startsWith(github.ref, 'refs/heads/development')
+        run: curl -X POST --fail -F token=$EE_TOKEN -F ref=development https://gitlab.dwellerlab.com/api/v4/projects/112/trigger/pipeline;
+        env:
+          EE_TOKEN: ${{ secrets.EE_TOKEN }}

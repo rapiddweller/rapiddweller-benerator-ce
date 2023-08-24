@@ -1,0 +1,167 @@
+{
+    "people": [
+        {
+            "id": 1,
+            "name": {
+                "first": "John",
+                "last": "Doe"
+            },
+            "age": 32,
+            "gender": "Male",
+            "contact": {
+                "email": "john.doe@example.com",
+                "phone": "+1-555-1234"
+            },
+            "address": {
+                "street": "123 Main Street",
+                "city": "New York",
+                "state": "NY",
+                "zipCode": "10001",
+                "country": "United States"
+            },
+            "education": [
+                {
+                    "institution": {
+                        "name": "University of XYZ",
+                        "location": "New York",
+                        "type": "University"
+                    },
+                    "degree": {
+                        "name": "Bachelor of Science",
+                        "level": "Undergraduate"
+                    },
+                    "major": "Computer Science",
+                    "graduationYear": 2012
+                },
+                {
+                    "institution": {
+                        "name": "ABC Coding Bootcamp",
+                        "location": "California",
+                        "type": "Bootcamp"
+                    },
+                    "degree": {
+                        "name": "Certificate",
+                        "level": "Professional"
+                    },
+                    "major": "Web Development",
+                    "graduationYear": 2013
+                }
+            ],
+            "skills": [
+                {
+                    "name": "JavaScript",
+                    "level": "Advanced"
+                },
+                {
+                    "name": "Python",
+                    "level": "Intermediate"
+                },
+                {
+                    "name": "HTML",
+                    "level": "Advanced"
+                },
+                {
+                    "name": "CSS",
+                    "level": "Advanced"
+                },
+                {
+                    "name": "React",
+                    "level": "Intermediate"
+                }
+            ],
+            "employmentHistory": [
+                {
+                    "company": {
+                        "name": "Tech Solutions Inc.",
+                        "location": "New York",
+                        "industry": "Technology"
+                    },
+                    "position": "Software Engineer",
+                    "startDate": "2013-01-01",
+                    "endDate": "2016-12-31"
+                },
+                {
+                    "company": {
+                        "name": "Innovative Designs Ltd.",
+                        "location": "California",
+                        "industry": "Technology"
+                    },
+                    "position": "Senior Developer",
+                    "startDate": "2017-01-01",
+                    "endDate": null
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": {
+                "first": "Jane",
+                "last": "Smith"
+            },
+            "age": 28,
+            "gender": "Female",
+            "contact": {
+                "email": "jane.smith@example.com",
+                "phone": "+1-555-5678"
+            },
+            "address": {
+                "street": "456 Oak Avenue",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zipCode": "90001",
+                "country": "United States"
+            },
+            "education": [
+                {
+                    "institution": {
+                        "name": "University of ABC",
+                        "location": "California",
+                        "type": "University"
+                    },
+                    "degree": {
+                        "name": "Bachelor of Arts",
+                        "level": "Undergraduate"
+                    },
+                    "major": "Marketing",
+                    "graduationYear": 2015
+                }
+            ],
+            "skills": [
+                {
+                    "name": "Marketing Strategy",
+            "level": "Advanced"
+                },
+                {
+                    "name": "Social Media Management",
+                    "level": "Intermediate"
+                },
+                {
+                    "name": "Content Writing",
+                    "level": "Advanced"
+                }
+            ],
+            "employmentHistory": [
+                {
+                    "company": {
+                        "name": "Global Marketing Agency",
+                        "location": "California",
+                        "industry": "Marketing"
+                    },
+                    "position": "Marketing Specialist",
+                    "startDate": "2016-01-01",
+                    "endDate": "2019-12-31"
+                },
+                {
+                    "company": {
+                        "name": "Tech Startup Inc.",
+                        "location": "California",
+                        "industry": "Technology"
+                    },
+                    "position": "Digital Marketing Manager",
+                    "startDate": "2020-01-01",
+                    "endDate": null
+                }
+            ]
+        }
+    ]
+}

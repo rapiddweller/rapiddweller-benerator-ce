@@ -37,6 +37,7 @@
                 <include>org.firebirdsql.jdbc:jaybird:jar</include>
                 <include>javax.resource:connector-api:jar</include>
                 <include>org.mongodb:mongo-java-driver:jar</include>
+                <include>com.ibm.db2:jcc:jar</include>
             </includes>
         </dependencySet>
         <dependencySet>
@@ -61,6 +62,9 @@
                 <include>xml-apis:xml-apis:jar</include>
                 <include>org.apache.logging.log4j:*:jar</include>
                 <include>org.slf4j:*:jar</include>
+                <include>com.github.javafaker:*:jar</include>
+                <include>net.datafaker:*:jar</include>
+                <include>org.javassist:javassist:jar</include>
             </includes>
         </dependencySet>
     </dependencySets>

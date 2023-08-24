@@ -61,4 +61,7 @@ public class StorageSystemInserter extends StorageSystemConsumer {
     }
   }
 
+  public ComplexTypeDescriptor getTargetType() {
+    return targetType;
+  }
 }

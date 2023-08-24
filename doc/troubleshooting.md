@@ -6,8 +6,8 @@ If you get an OutOfMemoryError, first increase the Java heap size by a `-Xmx env
 the script files).
 
 Another potential cause for OutOfMemoryErrors is the application of distributions to very large data sets. Most sequences and all other types of
-distribution require the source data to fit into RAM. So either use an 'unlimited' sequence like 'expand', 'repeat' or 'randomWalk' or simply repeat
-data set iteration by adding cyclic="true" to the configuration.
+distribution require the source data to fit into RAM. So either use an 'unlimited' sequence like '`expand`', '`repeat`' or '`randomWalk`' or simply repeat
+data set iteration by adding `cyclic="true"` to the configuration.
 
 ## temp Directory
 
@@ -78,7 +78,7 @@ Usually can fix this by choosing the right schema for your database, e.g.
 <database id="db" ... schema="PUBLIC" />
 ```
 
-If you are not sure which schema is applicable in your case, edit the logging configuration in log4j.xml (as described above) and set the category 
+If you are not sure which schema is applicable in your case, edit the logging configuration in `log4j.xml` (as described above) and set the category 
 **`com.rapiddweller.platform.db`** to **debug**.
 
 You will then get a list of schemas as Benerator scans the database metadata, e.g. for an Oracle system:
