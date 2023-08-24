@@ -219,6 +219,12 @@
             <version>11.5.8.0</version>
             <scope>provided</scope>
         </dependency>
+<!--        vertica jdbc driver-->
+        <dependency>
+            <groupId>com.vertica.jdbc</groupId>
+            <artifactId>vertica-jdbc</artifactId>
+            <version>23.3.0-0</version>
+        </dependency>
 
 
         <!-- rapiddweller dependencies -->

@@ -5,7 +5,7 @@
     <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
     <option name="MAIN_CLASS_NAME" value="com.rapiddweller.benerator.main.Benerator" />
     <module name="rapiddweller-benerator-ce" />
-    <option name="PROGRAM_PARAMETERS" value="postgres.types.ben.xml" />
+    <option name="PROGRAM_PARAMETERS" value="dbenv-new.ben.xml" />
     <option name="WORKING_DIRECTORY" value="$MODULE_DIR$/src/demo/resources/demo/db/" />
     <extension name="coverage">
       <pattern>
