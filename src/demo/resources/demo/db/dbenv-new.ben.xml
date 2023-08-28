@@ -4,9 +4,10 @@
     <import platforms="db"/>
     <database id="database" environment="database_new" system="target"/>
     <execute type="sql" target="database">
+        drop table if exists sample;
         create table sample (
         id int primary key
         );
     </execute>
-    <generate type="SAMPLE" count="1" consumer="database"/>
+    <generate type="SAMPLE" count="1000" consumer="database"/>
 </setup>
