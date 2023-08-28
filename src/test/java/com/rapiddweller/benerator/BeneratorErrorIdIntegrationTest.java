@@ -1043,7 +1043,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0574_syn_attr_ill_selector() {
     BeneratorResult result = runFile("test_0574_syn_attr_ill_selector.ben.xml");
     assertResult(BeneratorErrorIds.DB_QUERY_FAILED, // TODO should be SYN_ILL_SELECTOR
-        "Error in database query: 'none': Unexpected token: NONE in statement [none]",
+        "Error in query: 'none': unexpected token: NONE",
         ExitCodes.INTERNAL_SOFTWARE_ERROR, result);
   }
 
@@ -1060,7 +1060,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0575_syn_attr_ill_sub_selector() {
     BeneratorResult result = runFile("test_0575_syn_attr_ill_sub_selector.ben.xml");
     assertResult(BeneratorErrorIds.DB_QUERY_FAILED, // TODO should be SYN_ATTR_SUB_SELECTOR
-        "Error in database query: 'none': Unexpected token: NONE in statement [none]",
+        "Error in query: 'none': unexpected token: NONE",
         ExitCodes.INTERNAL_SOFTWARE_ERROR, result);
   }
 
