@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="https://www.benerator.de/schema/3.0.0"
        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
@@ -5,13 +7,16 @@
 
     <!-- define a database that will be referred by the id 'db' later -->
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
-    <database id="db" environment="database_new" system="target"/>
+    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC"
+              tableFilter="db_.*"/>
 
     <execute target="db" onError="warn">
         DROP TABLE IF EXISTS "playlist";
         DROP TABLE IF EXISTS TRACK;
         DROP TABLE IF EXISTS PLAYLIST_TRACK;
+    </execute>
 
+    <execute target="db">
         CREATE TABLE "playlist" (
         PLAYLIST_ID int NOT NULL,
         name varchar(16) NOT NULL,
@@ -34,7 +39,6 @@
 
     <generate type="playlist" count="20" consumer="db">
         <id name="PLAYLIST_ID" type="int" generator="IncrementGenerator"/>
-        <attribute name="name" type="string" unique="true" pattern="[A-Z]{16}"/> <!-- 3 uppercase letters -->
     </generate>
 
     <generate type="TRACK" count="20" consumer="db">
