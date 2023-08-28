@@ -5,8 +5,8 @@
     <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
     <option name="MAIN_CLASS_NAME" value="com.rapiddweller.benerator.main.Benerator" />
     <module name="rapiddweller-benerator-ce" />
-    <option name="PROGRAM_PARAMETERS" value="dbenv-new.ben.xml" />
-    <option name="WORKING_DIRECTORY" value="$MODULE_DIR$/src/demo/resources/demo/db/" />
+    <option name="PROGRAM_PARAMETERS" value="shop-vertica.ben.xml" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/demo/resources/demo/shop" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.rapiddweller.benerator.main.*" />
