@@ -408,7 +408,7 @@ jobs:
       - name: set env file for vertica connection
         run: |
           echo "
-          target.db.url=jdbc:vertica://localhost:5433
+          target.db.url=jdbc:vertica://vertica:5433
           target.db.driver=com.vertica.jdbc.Driver
           target.db.user=dbadmin
           target.db.password=none
