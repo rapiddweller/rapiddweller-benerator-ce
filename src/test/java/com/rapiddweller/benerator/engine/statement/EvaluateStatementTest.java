@@ -224,7 +224,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
           null, "sql", constant(db), null, null, constant("fatal"), null, constant(Boolean.FALSE),
           constant(Boolean.FALSE), null, null);
       Object result = stmt.evaluateAsSql(context, "fatal", null, db, Encodings.UTF_8, text);
-      assertEquals(2, result);
+      assertEquals(2L, result);
     } finally {
       db.execute("shutdown");
       db.close();
@@ -238,7 +238,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
       db = prepareInMemoryDb();
       DBExecutionResult result = EvaluateStatement.runSql(null, db, false, "fatal", Encodings.UTF_8,
           "select count(*) from eval_stmt_test", ';', false, false);
-      assertEquals(2, result.result);
+      assertEquals(2L, result.result);
       assertFalse(result.changedStructure);
     } finally {
       db.execute("shutdown");
@@ -253,7 +253,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
       db = prepareInMemoryDb();
       DBExecutionResult result = EvaluateStatement.runSql(null, db, false, "fatal", Encodings.UTF_8,
           "select count(*) from eval_stmt_test", ';', false, true);
-      assertEquals(2, result.result);
+      assertEquals(2L, result.result);
       assertFalse(result.changedStructure);
     } finally {
       db.execute("shutdown");
@@ -269,7 +269,8 @@ public class EvaluateStatementTest extends AbstractStatementTest {
       String uri = getClass().getName().replace('.', '/') + ".sql";
       DBExecutionResult result = EvaluateStatement.runSql(uri, db, false, "fatal",
           Encodings.UTF_8, null, ';', false, false);
-      assertEquals(2, result.result);
+      Long v = 2L;
+      assertEquals(v, result.result);
     } finally {
       db.execute("shutdown");
       db.close();
