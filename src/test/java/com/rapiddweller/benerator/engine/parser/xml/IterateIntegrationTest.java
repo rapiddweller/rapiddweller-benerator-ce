@@ -46,6 +46,8 @@ public class IterateIntegrationTest extends AbstractBeneratorIntegrationTest {
     // create DB
     DefaultDBSystem db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL("benetest"),
         HSQLUtil.DRIVER, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
+    db.setCatalog("PUBLIC");
+    db.setSchema("PUBLIC");
     db.getDialect();
     try {
       // prepare DB

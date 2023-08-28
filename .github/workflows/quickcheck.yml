@@ -147,6 +147,8 @@ jobs:
         env:
           ORACLE_ALLOW_REMOTE: 'true'
           ORACLE_ENABLE_XDB: 'true'
+      vertica:
+        image: vertica/vertica-ce
 
     steps:
       - uses: actions/checkout@v3
@@ -196,6 +198,14 @@ jobs:
           mongodb.db.password=benerator
           mongodb.db.authenticationDatabase=admin
           mongodb.db.clean=true" > src/demo/resources/demo/db/conf/environment.env.properties
+      - name: set env file for vertica connection
+        run: |
+          echo "
+          target.db.url=jdbc:vertica://vertica:5433
+          target.db.driver=com.vertica.jdbc.Driver
+          target.db.user=dbadmin
+          target.db.password=none
+          target.db.schema=public" > src/demo/resources/demo/shop/conf/vertica.env.properties
       - name: set db properties for postgres connection
         run: |
           echo "

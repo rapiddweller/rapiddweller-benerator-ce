@@ -28,80 +28,80 @@
 #        published_ports:
 #          - "39000:9000"
 #          - "39001:9001"
-#      mongodb:
-#        name: mongodb_local
-#        docker_image: mongo:latest
-#        network: "{{ network }}"
-#        env: {
-#          DB_HOST: mongodb,
-#          DB_PORT: "27017",
-#          DB_CONNECTION: "benerator",
-#          MONGO_INITDB_ROOT_USERNAME: "benerator",
-#          MONGO_INITDB_ROOT_PASSWORD: "benerator"
-#        }
-#        published_ports:
-#          - "37017:27017"
-#      postgres:
-#        name: postgres_local
-#        docker_image: postgis/postgis
-#        network: "{{ network }}"
-#        volumes:
-#          - ./scripts/:/docker-entrypoint-initdb.d/
-#        env: {
-#          POSTGRES_DB: benerator,
-#          POSTGRES_USER: benerator,
-#          POSTGRES_PASSWORD: benerator
-#        }
-#        published_ports:
-#          - "35432:5432"
-#      mysql:
-#        name: mysql_local
-#        docker_image: mariadb
-#        network: "{{ network }}"
-#        env: {
-#          MARIADB_ROOT_PASSWORD: benerator,
-#          MARIADB_DATABASE: benerator,
-#          MARIADB_USER: benerator
-#        }
-#        published_ports:
-#          - "33306:3306"
-#      mssql:
-#        name: mssql_local
-#        docker_image: mcr.microsoft.com/azure-sql-edge
-#        network: "{{ network }}"
-#        env: {
-#          ACCEPT_EULA: Y,
-#          SA_PASSWORD: Benerator123!
-#        }
-#        published_ports:
-#          - "31433:1433"
-#      oracle:
-#        name: oracle_local
-#        docker_image: oracleinanutshell/oracle-xe-11g
-#        network: "{{ network }}"
-#        env: {
-#          ORACLE_ALLOW_REMOTE: 'true',
-#          ORACLE_ENABLE_XDB: 'true',
-#          # user: XDB PW: xdb
-#        }
-#        published_ports:
-#          - "31521:1521"
-#      db2:
-#        # db: testdb, user db2inst1 pw: benerator
-#        name: db2_local
-#        docker_image: ibmcom/db2
-#        network: "{{ network }}"
-#        privileged: true
-#        volumes:
-#          - /home/akell/Documents/docker/db2/database:/database
-#        env: {
-#          LICENSE: 'accept',
-#          DB2INST1_PASSWORD: benerator,
-#          DBNAME: testdb,
-#          SAMPLEDB: 'true',
-#        }
-#        published_ports:
-#          - "50000:50000"
+      mongodb:
+        name: mongodb_local
+        docker_image: mongo:latest
+        network: "{{ network }}"
+        env: {
+          DB_HOST: mongodb,
+          DB_PORT: "27017",
+          DB_CONNECTION: "benerator",
+          MONGO_INITDB_ROOT_USERNAME: "benerator",
+          MONGO_INITDB_ROOT_PASSWORD: "benerator"
+        }
+        published_ports:
+          - "37017:27017"
+      postgres:
+        name: postgres_local
+        docker_image: postgis/postgis
+        network: "{{ network }}"
+        volumes:
+          - ./scripts/:/docker-entrypoint-initdb.d/
+        env: {
+          POSTGRES_DB: benerator,
+          POSTGRES_USER: benerator,
+          POSTGRES_PASSWORD: benerator
+        }
+        published_ports:
+          - "35432:5432"
+      mysql:
+        name: mysql_local
+        docker_image: mariadb
+        network: "{{ network }}"
+        env: {
+          MARIADB_ROOT_PASSWORD: benerator,
+          MARIADB_DATABASE: benerator,
+          MARIADB_USER: benerator
+        }
+        published_ports:
+          - "33306:3306"
+      mssql:
+        name: mssql_local
+        docker_image: mcr.microsoft.com/azure-sql-edge
+        network: "{{ network }}"
+        env: {
+          ACCEPT_EULA: Y,
+          SA_PASSWORD: Benerator123!
+        }
+        published_ports:
+          - "31433:1433"
+      oracle:
+        name: oracle_local
+        docker_image: oracleinanutshell/oracle-xe-11g
+        network: "{{ network }}"
+        env: {
+          ORACLE_ALLOW_REMOTE: 'true',
+          ORACLE_ENABLE_XDB: 'true',
+          # user: XDB PW: xdb
+        }
+        published_ports:
+          - "31521:1521"
+      db2:
+        # db: testdb, user db2inst1 pw: benerator
+        name: db2_local
+        docker_image: ibmcom/db2
+        network: "{{ network }}"
+        privileged: true
+        volumes:
+          - /home/akell/Documents/docker/db2/database:/database
+        env: {
+          LICENSE: 'accept',
+          DB2INST1_PASSWORD: benerator,
+          DBNAME: testdb,
+          SAMPLEDB: 'true',
+        }
+        published_ports:
+          - "50000:50000"
 #      firebird:
 #        name: firebird_local
 #        docker_image: jacobalberty/firebird

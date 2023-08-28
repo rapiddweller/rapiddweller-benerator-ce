@@ -1,0 +1,169 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.benerator.de/schema/3.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US">
+
+    <comment>
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ! Demonstration file for populating the shop database. !
+        ! !
+        ! You can choose a database and a stage like this: !
+        ! -Dstage=development -Ddatabase=oracle !
+        ! !
+        ! These database types are provided: !
+        ! oracle, db2, sql_server, mysql, postgres, hsql, !
+        ! hsqlmem, firebird, derby, h2 !
+        ! !
+        ! ...and these stage configurations: !
+        ! development, perftest !
+        ! !
+        ! Set up your database connection in the file !
+        ! &lt;database&gt;/shop.&lt;database&gt;.properties !
+        ! !
+        ! You may want to try different generation quantities in !
+        ! shop.&lt;stage&gt;.properties !
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    </comment>
+
+    <import domains="person,net,product"/>
+    <import platforms="db"/>
+
+    <comment>setting default values</comment>
+    <setting name="stage" default="development"/>
+    <setting name="database" default="vertica"/>
+
+    <comment>import stage and database specific properties</comment>
+    <include
+            uri="{ftl:${database}/shop.${database}.properties}"/> <!-- ftl: is the prefix used for scripting with FreeMarker Template Language -->
+    <include uri="{ftl:shop.${stage}.properties}"/>
+
+    <comment>log the settings to the console</comment>
+    <echo>Starting generation for</echo>
+    <echo>{ftl: ${product_count + 6} products}</echo>
+    <echo>{ftl: ${customer_count + 1} customers}</echo>
+    <echo>{ftl: ${orders_per_customer} orders per customer}</echo>
+    <echo>{ftl: ${items_per_order} items per order}</echo>
+    <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
+
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" environment="vertica" system="target"/>
+
+    <comment>drop the current tables/sequences if they exist and recreate them</comment>
+    <execute uri="{ftl:${database}/drop_tables.${database}.sql}" target="db" onError="ignore"/>
+    <execute uri="{ftl:${database}/create_tables.${database}.sql}" target="db"/>
+
+    <bean id="idGen" spec="new IncrementGenerator(1000)"/>
+
+    <comment>Creating a valid base data set for regression testing by importing a DbUnit file</comment>
+    <iterate source="shop.dbunit.xml" consumer="db"/>
+
+    <comment>Importing some more predefined products from a CSV file</comment>
+    <iterate source="products.import.csv" type="db_product" encoding="utf-8" consumer="db"/>
+
+    <comment>You could import them from a fixed column width file as well, e.g.
+        iterate name="db_product" source="products.import.fcw"
+        pattern="ean_code[13],name[30],category_id[9],price[8r0],manufacturer[30]" consumer="db" /
+    </comment>
+
+    <comment>
+        Creating products of random attributes and category and exporting them to
+        the database as well as to a fixed column width file
+    </comment>
+    <generate type="db_product" count="{product_count}" consumer="db">
+        <id name="ean_code" generator="new EANGenerator(true)"/>
+        <reference name="category_id" targetType="db_category" source="db" distribution="random"/>
+        <attribute name="price" min="0.49" max="99.99" granularity="0.10" distribution="cumulated"/>
+        <!-- Export the generated products not only to the database, but also to a fixed column width file -->
+        <consumer class="FixedWidthEntityExporter">
+            <property name="uri" value="target/products.fcw"/>
+            <property name="columns" value="ean_code[13],name[30l],price[10.2r0]"/>
+        </consumer>
+    </generate>
+
+    <!--  comment>create one default order for each customer based on a DBUnit template</comment -->
+    <!-- generate name="db_order" consumer="db">
+        <id name="id" generator="idGen" />
+        <attribute name="customer_id" source="db" selector="select id from db_customer" />
+        <iterate source="default_order.dbunit.xml" type="db_order_item" consumer="db">
+            <id name="id" generator="idGen" />
+        </generate>
+    </generate-->
+
+    <comment>create customers</comment>
+    <generate type="db_user" count="{customer_count}" consumer="db">
+        <variable name="person" generator="PersonGenerator" dataset="{country}" locale="{locale}"/>
+        <id name="id" generator="idGen"/>
+        <attribute name="name" script="person.givenName + ' ' + person.familyName"/>
+        <attribute name="email" generator="EMailAddressGenerator"/>
+        <attribute name="password" pattern="[A-Za-z0-9]{8,12}"/>
+        <reference name="role_id" constant="customer"/>
+        <generate type="db_customer" count="1" consumer="db">
+            <id name="id" script="db_user.id"/>
+            <attribute name="category" values="'A','B','C'"/>
+            <attribute name="salutation" script="person.salutation"/>
+            <attribute name="first_name" script="person.givenName"/>
+            <attribute name="last_name" script="person.familyName"/>
+            <attribute name="birth_date" script="person.birthDate"/>
+            <!-- Export the customers not only to the database, but their names and passwords to a CSV file -->
+            <consumer class="CSVEntityExporter">
+                <property name="uri" value="target/customers.csv"/>
+                <property name="columns" value="id,password"/>
+            </consumer>
+        </generate>
+    </generate>
+
+    <comment>create orders for random customers and random products</comment>
+    <generate type="db_order" count="{customer_count * orders_per_customer}" consumer="db">
+        <id name="id" generator="idGen"/>
+        <reference name="customer_id" source="db" targetType="db_customer" cyclic="true"/>
+        <attribute name="total_price" constant="0"/>
+        <attribute name="order_date" generator="DateTimeGenerator"/>
+        <attribute name="created_at" generator="DateTimeGenerator"/>
+    </generate>
+
+    <comment>create order items</comment>
+    <generate type="db_order_item"
+              count="{customer_count * orders_per_customer * items_per_order}" consumer="db">
+        <variable name="product" source="db" selector="select ean_code, price from db_product"
+                  distribution="cumulated"/>
+        <id name="id" generator="idGen"/>
+        <attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>
+        <reference name="order_id" source="db" selector="select id from db_order where id &gt; 1" cyclic="true"/>
+        <reference name="product_ean_code" script="product[0]"/>
+        <attribute name="total_price" script="product[1] * db_order_item.number_of_items"/>
+    </generate>
+
+    <comment>Update order data, calculating the total sum of each order</comment>
+    <iterate source="db" type="db_order" consumer="db.updater()">
+        <attribute name="total_price" source="db"
+                   selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
+                   cyclic="true"/>
+    </iterate>
+
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="db_order" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_order.counter != 301">
+        <error>{ftl: ${db_order.counter} items}</error>
+    </if>
+    <iterate type="db_order_item" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_order_item.counter != 1501">
+        <error>{ftl: ${db_order_item.counter} items}</error>
+    </if>
+    <iterate type="db_user" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_user.counter != 104">
+        <error>{ftl: ${db_user.counter} items}</error>
+    </if>
+    <iterate type="db_product" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_product.counter != 57">
+        <error>{ftl: ${db_product.counter} items}</error>
+    </if>
+</setup>
