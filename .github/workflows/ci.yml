@@ -343,6 +343,8 @@ jobs:
         env:
           ORACLE_ALLOW_REMOTE: 'true'
           ORACLE_ENABLE_XDB: 'true'
+      vertica:
+        image: vertica/vertica-ce
 
     steps:
       - uses: actions/checkout@v3
@@ -403,6 +405,14 @@ jobs:
           dbSchema=public
           idStrategy=increment
           idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+      - name: set env file for vertica connection
+        run: |
+          echo "
+          target.db.url=jdbc:vertica://localhost:5433
+          target.db.driver=com.vertica.jdbc.Driver
+          target.db.user=dbadmin
+          target.db.password=none
+          target.db.schema=public" > src/demo/resources/demo/shop/conf/vertica.env.properties
       - name: set env file for postgres connection
         run: |
           echo "
