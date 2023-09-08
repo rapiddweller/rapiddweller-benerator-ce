@@ -26,15 +26,21 @@ public class Hash implements Converter<Object,String>, ThreadAware, Closeable {
   private String type;
   private HashFormat format;
   private ThreadLocal<MessageDigest> md;
+  private String salt;
 
   public Hash() {
     this("MD5", HashFormat.hex);
   }
 
   public Hash(String type, HashFormat format) {
+    this(type,format,"");
+  }
+
+  public Hash(String type, HashFormat format, String salt) {
     this.type = type;
     this.format = format;
     this.md = ThreadLocal.withInitial(() -> getMessageDigest(this.type));
+    this.salt = salt;
   }
 
   public static MessageDigest getMessageDigest(String type) {
@@ -76,8 +82,11 @@ public class Hash implements Converter<Object,String>, ThreadAware, Closeable {
   @Override
   public String convert(Object sourceValue) throws ConversionException {
     String sourceText = (sourceValue != null ? sourceValue.toString() : "");
-    md.get().update(sourceText.getBytes(StandardCharsets.UTF_8));
-    byte[] digest = md.get().digest();
+    //add salt if exist
+    if (salt != null && !salt.isBlank()) {
+      md.get().update(salt.getBytes(StandardCharsets.UTF_8));
+    }
+    byte[] digest = md.get().digest(sourceText.getBytes(StandardCharsets.UTF_8));
     switch (format) {
       case hex:    return DatatypeConverter.printHexBinary(digest);
       case base64: return DatatypeConverter.printBase64Binary(digest);

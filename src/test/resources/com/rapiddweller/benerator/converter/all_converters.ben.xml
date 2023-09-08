@@ -16,6 +16,14 @@
         <attribute name="sha256hex" constant="sha256hex"/>
         <attribute name="sha256base64" constant="sha256base64"/>
         <attribute name="middleMask" constant="middleMask"/>
+        <attribute name="sha512hex" constant="sha512hex"/>
+        <attribute name="sha512hex_salt" constant="sha512hex"/>
+        <attribute name="sha512base64" constant="sha512base64"/>
+        <attribute name="sha512base64_salt" constant="sha512base64"/>
+        <attribute name="sha3_512hex" constant="sha3_512hex"/>
+        <attribute name="sha3_512hex_salt" constant="sha3_512hex"/>
+        <attribute name="sha3_512base64" constant="sha3_512base64"/>
+        <attribute name="sha3_512base64_salt" constant="sha3_512base64"/>
     </generate>
 
     <memstore id="dst"/>
@@ -32,5 +40,13 @@
         <attribute name="sha256hex" converter="SHA256Hash"/>
         <attribute name="sha256base64" converter="SHA1HashBase64"/>
         <attribute name="middleMask" converter="new MiddleMask(2,3)"/>
+        <attribute name="sha512hex" converter="SHA512Hash"/>
+        <attribute name="sha512hex_salt" converter="new SHA512Hash('MYSECRETSALTEDsdfsdfkjh2343grgSDGSDF!')"/>
+        <attribute name="sha512base64" converter="SHA512HashBase64"/>
+        <attribute name="sha512base64_salt" converter="new SHA512HashBase64('MYSECRETSALTEDsdfsdfkjh2343grgSDGSDF!')"/>
+        <attribute name="sha3_512hex" converter="SHA3_512Hash"/>
+        <attribute name="sha3_512hex_salt" converter="new SHA3_512Hash('MYSECRETSALTEDsdfsdfkjh2343grgSDGSDF!')"/>
+        <attribute name="sha3_512base64" converter="SHA3_512HashBase64"/>
+        <attribute name="sha3_512base64_salt" converter="new SHA3_512HashBase64('MYSECRETSALTEDsdfsdfkjh2343grgSDGSDF!')"/>
     </iterate>
 </setup>
