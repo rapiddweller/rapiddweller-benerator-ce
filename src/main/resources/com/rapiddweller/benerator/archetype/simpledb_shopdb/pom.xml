@@ -11,8 +11,7 @@
     <name>${setup.projectName} data generation project</name>
     <description>Start populating the database by typing 'mvn benerator:generate' on the command line.</description>
     <properties>
-        <database_h2.version>1.4.200</database_h2.version>
-        <database_hsqldb.version>1.8.0.7</database_hsqldb.version>
+        <database_h2.version>2.2.220</database_h2.version>
         <database_icu4j.version>67.1</database_icu4j.version>
         <database_jaybird.version>4.0.1.java11</database_jaybird.version>
         <database_mssqldb.version>9.2.1.jre11</database_mssqldb.version>

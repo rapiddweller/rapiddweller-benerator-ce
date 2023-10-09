@@ -128,12 +128,12 @@
         <_rd_jdbacl_version>1.1.16-jdk-11-SNAPSHOT</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11</_rd_script_version>
         <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
-        <database_h2.version>2.1.210</database_h2.version>
+        <database_h2.version>2.2.224</database_h2.version>
         <database_hsqldb.version>2.7.2</database_hsqldb.version>
         <database_icu4j.version>72.1</database_icu4j.version>
         <database_jaybird.version>5.0.1.java11</database_jaybird.version>
         <database_mssqldb.version>12.2.0.jre11</database_mssqldb.version>
-        <database_mysql-connector-java.version>8.0.29</database_mysql-connector-java.version>
+        <database_mysql-connector-java.version>8.0.33</database_mysql-connector-java.version>
         <database_oracle.version>21.8.0.0</database_oracle.version>
         <database_postgresql.version>42.5.3</database_postgresql.version>
         <database_mariadb-java-client.version>3.1.1</database_mariadb-java-client.version>
@@ -370,7 +370,18 @@
             <artifactId>datafaker</artifactId>
             <version>1.8.0</version>
         </dependency>
+        <!--  fix security issues -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.21</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.0</version>
+        </dependency>
     </dependencies>
 
     <build>

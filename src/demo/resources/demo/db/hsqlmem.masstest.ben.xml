@@ -8,7 +8,7 @@
     <!-- define a database that will be referred by the id 'db' later -->
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
     <database id="db" url="jdbc:hsqldb:mem:beneratormass" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC"
-              tableFilter="db_.*"/>
+              tableFilter="db_.*" />
 
     <execute target="db" onError="warn">
         DROP TABLE IF EXISTS db_dummy;
