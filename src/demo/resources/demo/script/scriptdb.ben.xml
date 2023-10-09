@@ -73,7 +73,7 @@
     </generate>
 
     <echo>Printing generated data</echo>
-    <iterate type="querylist" source="sql.ent.csv" consumer="mem"/>
+    <iterate type="querylist" source="sql.ent.csv" consumer="mem,ConsoleExporter"/>
     <iterate type="playlist" source="db" consumer="NoConsumer"/>
     <iterate type="TRACK" source="db" consumer="NoConsumer"/>
     <iterate type="PLAYLIST_TRACK" source="db" consumer="NoConsumer"/>

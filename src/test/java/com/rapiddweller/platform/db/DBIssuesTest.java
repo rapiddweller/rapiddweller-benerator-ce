@@ -21,7 +21,7 @@ public class DBIssuesTest extends AbstractBeneratorIntegrationTest {
 				"    <database id='db' url='jdbc:h2:mem:target' driver='org.h2.Driver' user='sa' schema='public'/>\n" +
 				"    <execute target='db'>\n" +
 				"        drop table customer if exists;\n" +
-				"        create table customer ( name VARCHAR not null );\n" +
+				"        create table customer ( name VARCHAR(1000) not null );\n" +
 				"    </execute>\n" +
 				"    <generate type='customer' count='10' consumer='db'/>\n" +
 				"    <execute target='db'>drop table customer if exists;</execute>\n" +
