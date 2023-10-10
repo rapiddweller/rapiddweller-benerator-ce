@@ -6,28 +6,28 @@
     project_dir: "{{lookup('env','PWD')}}"
     network: rddnet
     supported_services:
-#      minio:
-#        name: minio_local
-#        docker_image: "minio/minio"
-#        network: "{{ network }}"
-#        command: 'server --console-address ":9001" /data'
-#        env: {
-#          MINIO_ACCESS_KEY: "benadmin",
-#          MINIO_SECRET_KEY: "rdadm123!",
-#          MINIO_COMPRESS: "true",
-#          MINIO_COMPRESS_EXTENSIONS: ".csv,.xml"
-#        }
-#        entrypoint: >
-#          /bin/sh -c "
-#          /usr/bin/mc config host add minio_local http://minio:9000 benadmin rdadm123!;
-#          /usr/bin/mc mb minio_local/demo;
-#          /usr/bin/mc mb minio_local/project;
-#          /usr/bin/mc mb minio_local/snapshot;
-#          exit 0;
-#          "
-#        published_ports:
-#          - "39000:9000"
-#          - "39001:9001"
+      #      minio:
+      #        name: minio_local
+      #        docker_image: "minio/minio"
+      #        network: "{{ network }}"
+      #        command: 'server --console-address ":9001" /data'
+      #        env: {
+      #          MINIO_ACCESS_KEY: "benadmin",
+      #          MINIO_SECRET_KEY: "rdadm123!",
+      #          MINIO_COMPRESS: "true",
+      #          MINIO_COMPRESS_EXTENSIONS: ".csv,.xml"
+      #        }
+      #        entrypoint: >
+      #          /bin/sh -c "
+      #          /usr/bin/mc config host add minio_local http://minio:9000 benadmin rdadm123!;
+      #          /usr/bin/mc mb minio_local/demo;
+      #          /usr/bin/mc mb minio_local/project;
+      #          /usr/bin/mc mb minio_local/snapshot;
+      #          exit 0;
+      #          "
+      #        published_ports:
+      #          - "39000:9000"
+      #          - "39001:9001"
       mongodb:
         name: mongodb_local
         docker_image: mongo:latest
@@ -56,12 +56,13 @@
           - "35432:5432"
       mysql:
         name: mysql_local
-        docker_image: mariadb
+        docker_image: mysql
         network: "{{ network }}"
         env: {
-          MARIADB_ROOT_PASSWORD: benerator,
-          MARIADB_DATABASE: benerator,
-          MARIADB_USER: benerator
+          # mysql
+          MYSQL_ROOT_USER: root,
+          MYSQL_ROOT_PASSWORD: benerator,
+          MYSQL_DATABASE: benerator
         }
         published_ports:
           - "33306:3306"
@@ -102,18 +103,18 @@
         }
         published_ports:
           - "50000:50000"
-#      firebird:
-#        name: firebird_local
-#        docker_image: jacobalberty/firebird
-#        network: "{{ network }}"
-#        env: {
-#          ISC_PASSWORD: 'benerator',
-#          FIREBIRD_DATABASE: 'benerator',
-#          FIREBIRD_USER: 'benerator',
-#          FIREBIRD_PASSWORD: 'benerator',
-#        }
-#        published_ports:
-#          - "33050:3050"
+      #      firebird:
+      #        name: firebird_local
+      #        docker_image: jacobalberty/firebird
+      #        network: "{{ network }}"
+      #        env: {
+      #          ISC_PASSWORD: 'benerator',
+      #          FIREBIRD_DATABASE: 'benerator',
+      #          FIREBIRD_USER: 'benerator',
+      #          FIREBIRD_PASSWORD: 'benerator',
+      #        }
+      #        published_ports:
+      #          - "33050:3050"
       vertica:
         #vertica db docker
         name: vertica_local
