@@ -258,3 +258,11 @@ jobs:
           idStrategy=seqhilo
           idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
       - run: mvn $MAVEN_CLI_OPTS clean verify -DskipUTs=true -DskipITs=false
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v3
