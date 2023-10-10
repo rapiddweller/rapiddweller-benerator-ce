@@ -561,6 +561,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/script/scriptdb.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_script-jdk11-log
           path: benerator.log
@@ -596,6 +597,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/memstore/memstore.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_memstore-jdk11-log
           path: benerator.log
@@ -631,6 +633,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/watermark/watermark.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_watermark-jdk11-log
           path: benerator.log
@@ -666,6 +669,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/anon/anon.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_anon-jdk11-log
           path: benerator.log
@@ -706,6 +710,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/db/dbenvconf.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_db-jdk11-log
           path: benerator.log
@@ -750,6 +755,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_files-jdk11-log
           path: benerator.log
@@ -785,6 +791,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_hsqlmem-jdk11-log
           path: benerator.log
@@ -865,6 +872,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/db/postgres-composite.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_postgresql-jdk11-log
           path: benerator.log
@@ -882,9 +890,6 @@ jobs:
         image: mysql
         # Provide the password for postgres
         env:
-          DB_HOST: "mysql"
-          DB_PORT: "3306"
-          DB_CONNECTION: "mysql"
           # mysql
           MYSQL_ROOT_USER: "root"
           MYSQL_ROOT_PASSWORD: "Benerator123!"
@@ -921,10 +926,11 @@ jobs:
           idStrategy=increment
           idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
       - run: cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
-      - run: sleep 60s
+      - run: sleep 80s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mysql.ben.xml
       - name: Upload logfile
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: E2ET_mysql-jdk11-log
           path: benerator.log
