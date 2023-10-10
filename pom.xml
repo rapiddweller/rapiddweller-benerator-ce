@@ -134,21 +134,21 @@
         <database_jaybird.version>5.0.1.java11</database_jaybird.version>
         <database_mssqldb.version>12.2.0.jre11</database_mssqldb.version>
         <database_mysql-connector-java.version>8.0.33</database_mysql-connector-java.version>
-        <database_oracle.version>21.8.0.0</database_oracle.version>
-        <database_postgresql.version>42.5.3</database_postgresql.version>
-        <database_mariadb-java-client.version>3.1.1</database_mariadb-java-client.version>
-        <mongodb.version>3.12.11</mongodb.version>
+        <database_oracle.version>21.9.0.0</database_oracle.version>
+        <database_postgresql.version>42.5.4</database_postgresql.version>
+        <database_mariadb-java-client.version>3.1.2</database_mariadb-java-client.version>
+        <mongodb.version>3.12.12</mongodb.version>
         <dependency_antlr-runtime.version>3.5.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
-        <dependency_xml-apis.version>1.0.b2</dependency_xml-apis.version>
-        <dependency_slf4j.version>1.7.36</dependency_slf4j.version>
-        <dependency_log4j.version>2.19.0</dependency_log4j.version>
+        <dependency_xml-apis.version>2.0.2</dependency_xml-apis.version>
+        <dependency_slf4j.version>2.0.5</dependency_slf4j.version>
+        <dependency_log4j.version>2.20.0</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scriptengine_freemarker.version>2.3.32</scriptengine_freemarker.version>
         <scriptengine_graalvm.version>22.3.1</scriptengine_graalvm.version>
         <test_junit.version>4.13.2</test_junit.version>
-        <dependency_javassist.version>3.28.0-GA</dependency_javassist.version>
+        <dependency_javassist.version>3.29.2-GA</dependency_javassist.version>
     </properties>
 
     <dependencies>
@@ -368,7 +368,7 @@
         <dependency>
             <groupId>net.datafaker</groupId>
             <artifactId>datafaker</artifactId>
-            <version>1.8.0</version>
+            <version>1.8.1</version>
         </dependency>
         <!--  fix security issues -->
         <dependency>
