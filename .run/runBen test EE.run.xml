@@ -3,8 +3,8 @@
     <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
     <option name="MAIN_CLASS_NAME" value="com.rapiddweller.benerator_ee.main.EEBenerator" />
     <module name="rapiddweller-benerator-ee" />
-    <option name="PROGRAM_PARAMETERS" value="descriptor.xml" />
-    <option name="WORKING_DIRECTORY" value="$USER_HOME$/PycharmProjects/rd-lib-datauniverseshaper/" />
+    <option name="PROGRAM_PARAMETERS" value="create_xls.ben.xml" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../rapiddweller-benerator-ee/src/demo/resources/demo/file/" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.rapiddweller.benerator.main.*" />
