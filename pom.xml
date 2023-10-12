@@ -141,7 +141,7 @@
         <dependency_antlr-runtime.version>3.5.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
-        <dependency_xml-apis.version>2.0.2</dependency_xml-apis.version>
+        <dependency_xml-apis.version>1.0.b2</dependency_xml-apis.version>
         <dependency_slf4j.version>1.7.36</dependency_slf4j.version>
         <dependency_log4j.version>2.19.0</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -232,6 +232,12 @@
             <groupId>com.rapiddweller</groupId>
             <artifactId>rd-lib-common</artifactId>
             <version>${_rd_common_version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xml-apis</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.rapiddweller</groupId>
@@ -247,6 +253,16 @@
             <groupId>com.rapiddweller</groupId>
             <artifactId>rd-lib-script</artifactId>
             <version>${_rd_script_version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>poi-ooxml-full</artifactId>
+                    <groupId>org.apache.poi</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>poi</artifactId>
+                    <groupId>org.apache.poi</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -339,7 +355,7 @@
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>2.0.2</version>
+            <version>1.0.b2</version>
         </dependency>
         <!-- JAXB (for Java MessageDigest support, eg. MD5) -->
         <dependency>
@@ -361,26 +377,9 @@
         </dependency>
         <!-- java faker -->
         <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>1.0.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>snakeyaml</artifactId>
-                    <groupId>org.yaml</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>net.datafaker</groupId>
             <artifactId>datafaker</artifactId>
-            <version>1.8.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>snakeyaml</artifactId>
-                    <groupId>org.yaml</groupId>
-                </exclusion>
-            </exclusions>
+            <version>1.9.0</version>
         </dependency>
         <!--  fix security issues -->
         <dependency>

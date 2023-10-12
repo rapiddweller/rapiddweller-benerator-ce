@@ -6,15 +6,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 
 public class FakerGeneratorTest extends GeneratorTest {
-    @Test
-    public void testFaker() {
-        FakerGenerator generator = new FakerGenerator();
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-            Object tld = generator.generate();
-            assertNotNull(tld);
-        }
-    }
 
     @Test
     public void testDataFaker() {
