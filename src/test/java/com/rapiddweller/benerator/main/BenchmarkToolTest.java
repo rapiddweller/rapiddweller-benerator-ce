@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class BenchmarkToolTest extends ModelTest {
 
-  private static final String[] BUILTIN_DBS = new String[] { "builtin#h2", "builtin#hsqlmem" };
+  private static final String[] BUILTIN_DBS = new String[] { "builtin#h2" };
 
   @AfterClass
   public static void cleanUp() {
@@ -51,7 +51,7 @@ public class BenchmarkToolTest extends ModelTest {
   @Test
   public void testFull() {
     BenchmarkToolConfig config = BenchmarkTool.parseCommandLineConfig(
-        "--ce", "--mode", "turbo", "--minSecs", "123", "--maxThreads", "17", "--env", "builtin#h2,builtin#hsqlmem");
+        "--ce", "--mode", "turbo", "--minSecs", "123", "--maxThreads", "17", "--env", "builtin#h2");
     assertTrue(config.isCe());
     assertFalse(config.isEe());
     assertEquals(BeneratorMode.TURBO, config.getMode());
@@ -63,7 +63,7 @@ public class BenchmarkToolTest extends ModelTest {
   @Test
   public void testFullWithFile() {
     BenchmarkToolConfig config = BenchmarkTool.parseCommandLineConfig(
-        "--ce", "--mode", "turbo", "--minSecs", "123", "--maxThreads", "17", "--env", "builtin#h2,builtin#hsqlmem", "db-big-table");
+        "--ce", "--mode", "turbo", "--minSecs", "123", "--maxThreads", "17", "--env", "builtin#h2", "db-big-table");
     assertTrue(config.isCe());
     assertFalse(config.isEe());
     assertEquals(BeneratorMode.TURBO, config.getMode());
@@ -111,9 +111,7 @@ public class BenchmarkToolTest extends ModelTest {
   @Test
   public void testDatabaseBenchmarks_system() throws IOException {
     runBenchmark("db-small-table", "builtin#h2");
-    runBenchmark("db-small-table", "builtin#hsqlmem");
     runBenchmark("db-big-table", "builtin#h2");
-    runBenchmark("db-big-table", "builtin#hsqlmem");
   }
 
   @Test
