@@ -330,4 +330,11 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
     BeneratorContext benCtx = parseAndExecuteFile("/demo/simple/cities.ben.xml");
     Assert.assertEquals("/demo/simple", benCtx.getContextUri());
   }
+
+  @Test
+  public void demoConsumptionTemplate() {
+    context.setContextUri("/demo/simple");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/simple/consumption_template.xml");
+    Assert.assertEquals("/demo/simple", benCtx.getContextUri());
+  }
 }
