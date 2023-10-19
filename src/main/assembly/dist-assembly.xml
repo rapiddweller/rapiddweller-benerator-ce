@@ -201,6 +201,7 @@
                 <include>net.datafaker:*:jar</include>
                 <include>org.javassist:javassist:jar</include>
                 <include>commons-io:commons-io:jar</include>
+                <include>com.github.mifmif:generex:jar</include>
             </includes>
         </dependencySet>
     </dependencySets>
