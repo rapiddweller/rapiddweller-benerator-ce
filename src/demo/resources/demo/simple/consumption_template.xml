@@ -13,7 +13,7 @@
     <iterate type="consumplist" source="mem" consumer="ConsoleExporter">
         <attribute name="category" type="string" script="consumplist.category"/>
         <attribute name="transactionId" type="string" script="consumplist.transactionId"/>
-        <part name="data" minCount="1" maxCount="1">
+        <part name="COUNTRY_Code(Aplha2)" minCount="1" maxCount="1">
             <attribute name="ISO_3166-1_NUM-3" type="string" script="consumplist.iso"/>
         </part>
     </iterate>
