@@ -52,6 +52,7 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   /**
    * Demo postgres multi schema.
    */
+  @Ignore("for manual internal testing")
   @Test
   public void DemoPostgresMultiSchema() {
     assumeTestActive("postgres");

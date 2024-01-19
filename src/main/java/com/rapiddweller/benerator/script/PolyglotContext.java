@@ -63,7 +63,7 @@ class PolyglotContext {
                     previousMissingObject = missingObject;
                 }
             }
-            if (e.getMessage().contains(("NameError: "))) {
+            else if (e.getMessage().contains(("NameError: "))) {
                 String missingObject = e.getMessage().replace("NameError: name '", "").replace("' is not defined", "");
                 if (!Objects.equals(previousMissingObject, missingObject)) {
                     this.migrateBeneratorContext2GraalVM(context, language, missingObject);
