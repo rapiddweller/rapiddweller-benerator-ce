@@ -55,14 +55,23 @@ class PolyglotContext {
             this.updatePolyglotLocalFromGlobal(context, language);
             returnValue = polyglotCtx.eval(language, text);
         } catch (org.graalvm.polyglot.PolyglotException e) {
-            if (e.getMessage().contains("is not defined")) {
+            if (e.getMessage().contains("ReferenceError: ")) {
                 String missingObject = e.getMessage().replace("ReferenceError: ", "").replace(" is not defined", "");
                 if (!Objects.equals(previousMissingObject, missingObject)) {
                     this.migrateBeneratorContext2GraalVM(context, language, missingObject);
                     returnValue = evalScript(context, text, language);
                     previousMissingObject = missingObject;
                 }
-            } else {
+            }
+            if (e.getMessage().contains(("NameError: "))) {
+                String missingObject = e.getMessage().replace("NameError: name '", "").replace("' is not defined", "");
+                if (!Objects.equals(previousMissingObject, missingObject)) {
+                    this.migrateBeneratorContext2GraalVM(context, language, missingObject);
+                    returnValue = evalScript(context, text, language);
+                    previousMissingObject = missingObject;
+                }
+            }
+            else {
                 throw new ScriptException(e.getMessage(), null);
             }
         }
