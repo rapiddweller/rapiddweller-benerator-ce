@@ -161,7 +161,7 @@ jobs:
           MYSQL_DATABASE: "benerator"
       # Label used to access the service container
       mssql:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        image: mcr.microsoft.com/mssql/server
         # Provide the password for postgres
         env:
           DB_HOST: "mssql"
@@ -945,7 +945,7 @@ jobs:
       # Label used to access the service container
       mssql:
         # Docker Hub image
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        image: mcr.microsoft.com/mssql/server
         # Provide the password for postgres
         env:
           ACCEPT_EULA: Y,
