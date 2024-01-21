@@ -295,7 +295,7 @@ jobs:
     defaults:
       run:
         shell: bash
-    container: maven:3.9.6-amazoncorretto-21-al2023
+    container: maven:3.9-amazoncorretto-21
     services:
       mongodb:
         image: mongo:latest
