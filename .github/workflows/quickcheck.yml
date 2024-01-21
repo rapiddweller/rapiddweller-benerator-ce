@@ -18,7 +18,7 @@ jobs:
     defaults:
       run:
         shell: bash
-    container: maven:3.9-amazoncorretto-21
+    container: maven:3.9-eclipse-temurin-21
     steps:
       - uses: actions/checkout@v3
         with:
@@ -131,7 +131,7 @@ jobs:
           MYSQL_DATABASE: "benerator"
       # Label used to access the service container
       mssql:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        image: mcr.microsoft.com/mssql/server
         # Provide the password for postgres
         env:
           DB_HOST: "mssql"
