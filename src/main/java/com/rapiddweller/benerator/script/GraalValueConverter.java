@@ -23,6 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.ConversionException;
@@ -64,6 +65,12 @@ public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
         result = value.asInt();
       } else if (value.fitsInLong()) {
         result = handleLongValue(value);
+      } else if (value.fitsInFloat()) {
+        return value.asFloat();
+      } else if (value.fitsInByte()) {
+        return value.asByte();
+      } else if (value.fitsInDouble()) {
+        return value.asDouble();
       } else if (value.hasArrayElements()) {
         result = getArrayFromValue(value, referenceMap, depth);
       } else if (value.isString()) {
