@@ -23,7 +23,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.ConversionException;
@@ -32,72 +31,92 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import org.graalvm.polyglot.Value;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
- * Convert Graal Values into Java Types
- * https://www.graalvm.org/sdk/javadoc/org/graalvm/polyglot/Value.html
- * <p>
- * Created at 30.12.2020
- *
- * @author Alexander Kell
- * @since 1.1.0
+ * Converts GraalVM Polyglot Values into corresponding Java types.
+ * Throws RuntimeException if a value exceeds the int limits.
  */
 public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
 
-  /**
-   * Instantiates a new Graal value converter.
-   */
+  private static final Logger logger = Logger.getLogger(GraalValueConverter.class.getName());
+
   public GraalValueConverter() {
     super(Value.class, Object.class);
   }
 
-  /**
-   * Value 2 java converter object.
-   *
-   * @param value the value
-   * @return the object
-   */
   public static Object value2JavaConverter(Value value) {
-    if (value.fitsInInt()) {
-      return value.asInt();
-    } else if (value.hasArrayElements()) {
-      return getArrayFromValue(value);
-    } else if (value.fitsInLong()) {
-      return value.asLong();
-    } else if (value.fitsInFloat()) {
-      return value.asFloat();
-    } else if (value.fitsInByte()) {
-      return value.asByte();
-    } else if (value.fitsInDouble()) {
-      return value.asDouble();
-    } else if (value.isString()) {
-      return value.asString();
-    } else if (value.isHostObject()) {
-      return value.asHostObject();
-    } else if (value.isBoolean()) {
-      return value.asBoolean();
-    } else if (value.isDate()) {
-      return value.asDate();
-    } else if (value.isNativePointer()) {
-      return value.asNativePointer();
-    } else if (value.hasMembers()) {
-      // Convert the value to a java.util.Map
-      Entity result = new Entity((ComplexTypeDescriptor) null);
-      value.getMemberKeys().forEach(key -> result.setComponent(key, value2JavaConverter(value.getMember(key))));
-      return result;
-    } else {
-      return null;
-    }
-
+    return value2JavaConverter(value, new HashMap<>(), 0);
   }
 
-  private static Object getArrayFromValue(Value val) {
-    Object[] out = new Object[(int) val.getArraySize()];
-    for (int i = 0; i < val.getArraySize(); i++) {
-      out[i] = value2JavaConverter(val.getArrayElement(i));
+  private static Object value2JavaConverter(Value value, Map<Value, Object> referenceMap, int depth) throws ConversionException {
+    logger.fine("Converting value at depth " + depth + ": " + value);
+    if (referenceMap.containsKey(value)) {
+      logger.fine("Value already processed, returning cached result.");
+      return referenceMap.get(value);
     }
 
+    Object result;
+    try {
+      if (value.fitsInInt()) {
+        result = value.asInt();
+      } else if (value.fitsInLong()) {
+        result = handleLongValue(value);
+      } else if (value.hasArrayElements()) {
+        result = getArrayFromValue(value, referenceMap, depth);
+      } else if (value.isString()) {
+        result = value.asString();
+      } else if (value.isHostObject()) {
+        return value.asHostObject();
+      } else if (value.isBoolean()) {
+        return value.asBoolean();
+      } else if (value.isDate()) {
+        return value.asDate();
+      } else if (value.isNativePointer()) {
+        return value.asNativePointer();
+      } else if (value.hasMembers()) {
+        result = convertValueToEntity(value, referenceMap, depth);
+      } else {
+        result = null;
+      }
+
+      referenceMap.put(value, result);
+    } catch (Exception e) {
+      logger.severe("Error converting value: " + e.getMessage());
+      throw new ConversionException("Error converting value", e);
+    }
+
+    return result;
+  }
+
+  private static Object handleLongValue(Value value) {
+    long longValue = value.asLong();
+    if (longValue > Integer.MAX_VALUE || longValue < Integer.MIN_VALUE) {
+      throw new RuntimeException("Value exceeds int limits: " + longValue);
+    }
+    return (int) longValue;
+  }
+
+  private static Object[] getArrayFromValue(Value val, Map<Value, Object> referenceMap, int depth) throws ConversionException {
+    Object[] out = new Object[(int) val.getArraySize()];
+    for (int i = 0; i < val.getArraySize(); i++) {
+      out[i] = value2JavaConverter(val.getArrayElement(i), referenceMap, depth + 1);
+    }
     return out;
+  }
+
+  private static Entity convertValueToEntity(Value value, Map<Value, Object> referenceMap, int depth) {
+    Entity result = new Entity((ComplexTypeDescriptor) null);
+    value.getMemberKeys().forEach(key -> {
+      try {
+        result.setComponent(key, value2JavaConverter(value.getMember(key), referenceMap, depth + 1));
+      } catch (ConversionException e) {
+        logger.warning("Error converting entity member: " + key + "; " + e.getMessage());
+      }
+    });
+    return result;
   }
 
   @Override
@@ -105,3 +124,4 @@ public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
     return value2JavaConverter(sourceValue);
   }
 }
+
