@@ -347,12 +347,12 @@ jobs:
           ACCEPT_EULA: Y,
           SA_PASSWORD: Benerator123!
       # Label used to access the service container
-      oracle:
-        image: oracleinanutshell/oracle-xe-11g
-        # user: XDB PW: xdb
-        env:
-          ORACLE_ALLOW_REMOTE: 'true'
-          ORACLE_ENABLE_XDB: 'true'
+#      oracle:
+#        image: oracleinanutshell/oracle-xe-11g
+#        # user: XDB PW: xdb
+#        env:
+#          ORACLE_ALLOW_REMOTE: 'true'
+#          ORACLE_ENABLE_XDB: 'true'
       vertica:
         image: vertica/vertica-ce
 

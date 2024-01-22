@@ -114,6 +114,7 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   /**
    * Demo oracle shop.
    */
+  @Ignore("issue with sonarqube image")
   @Test
   public void DemoOracleShop() {
     assumeTestActive("oracle");
