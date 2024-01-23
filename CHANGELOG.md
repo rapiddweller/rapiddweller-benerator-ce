@@ -4,13 +4,18 @@
 ## 3.2.0
 
 ### Release Highlights
-- ...
+- Add installation option for mac user: homebrew formula benerator
+- Enriching Datasets and Region-Specific Functionality #413
+- All Generator should have a default value applicable directly to an attribute #414
+- Improve compatibility of benerator with Vertica #394
+- updated many dependencies and fixed vulnerabilities
+- Improved GraalVM Script implementation to have a more reliable dynamic migration between Polyglot and Benerator Context
 
 #### Bug Fixes
-- ... 
-
-#### Depenency Updated
-- ...
+- benerator-wizard database project SQL type not mapped #379
+- db archetype not working as expected and need improvements #386
+- TypeNotFoundException when updating MongoDB collection entries #395
+- Get NullPointerException when iterate from empty csv file #405
 
 ---
 
