@@ -1,6 +1,19 @@
 # Changelog
 
 <!--lint disable no-duplicate-headings-->
+## 3.2.0
+
+### Release Highlights
+- ...
+
+#### Bug Fixes
+- ... 
+
+#### Depenency Updated
+- ...
+
+---
+
 ## 3.1.0
 
 ### Release Highlights
