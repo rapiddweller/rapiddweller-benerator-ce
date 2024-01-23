@@ -3,19 +3,24 @@
 <!--lint disable no-duplicate-headings-->
 ## 3.2.0
 
-### Release Highlights
-- Add installation option for mac user: homebrew formula benerator
-- Enriching Datasets and Region-Specific Functionality #413
-- All Generator should have a default value applicable directly to an attribute #414
-- Improve compatibility of benerator with Vertica #394
-- updated many dependencies and fixed vulnerabilities
-- Improved GraalVM Script implementation to have a more reliable dynamic migration between Polyglot and Benerator Context
+### Overview
+This release introduces significant enhancements, including a new installation option for Mac users, enriched datasets, improved compatibility, and several key bug fixes. We've also made improvements under the hood with updated dependencies and more reliable scripting with GraalVM.
 
-#### Bug Fixes
-- benerator-wizard database project SQL type not mapped #379
-- db archetype not working as expected and need improvements #386
-- TypeNotFoundException when updating MongoDB collection entries #395
-- Get NullPointerException when iterate from empty csv file #405
+### New Features
+- **Mac Installation Option**: Homebrew formula 'benerator' now available.
+- **Enriched Datasets**: Enhanced region-specific functionality for diverse datasets (#413).
+
+### Improvements
+- **Default Values in Generators**: All generators now have default values applicable directly to an attribute (#414).
+- **Vertica Compatibility**: Improved Benerator's compatibility with Vertica database (#394).
+- **Dependency Updates**: Updated numerous dependencies to enhance performance and security.
+- **GraalVM Script Implementation**: Enhanced for more reliable dynamic migration between Polyglot and Benerator Context.
+
+### Bug Fixes
+- Fixed an issue where the benerator-wizard didn't map SQL types correctly in database projects (#379).
+- Addressed problems in the db archetype's functionality and performance (#386).
+- Resolved TypeNotFoundException when updating MongoDB collection entries (#395).
+- Fixed NullPointerException occurring when iterating from an empty CSV file (#405).
 
 ---
 
