@@ -38,3 +38,45 @@ Note this uses `5.6.7` as an example release number.
   ```
 
 8. The GitHub pipeline creates the release artifacts
+
+## Release to Homebrew
+
+1. Fork the [Homebrew/homebrew-core](https://github.com/Homebrew/homebrew-core)
+to your personal Github account.
+
+2. Tap (download a local clone of) the repository of core Homebrew formulae:
+
+  ```shell
+  brew tap --force homebrew/core
+  ```
+
+3. Change to the directory containing Homebrew formulae:
+
+  ```shell
+  cd "$(brew --repository homebrew/core)"
+  ```
+
+4. Add your pushable forked repository as a new remote:
+
+  ```shell
+  git remote add <YOUR_USERNAME> https://github.com/<YOUR_USERNAME>/homebrew-core.git
+  ```
+
+  `<YOUR_USERNAME>` is your GitHub username, not your local machine username.
+
+5. Update brew formula with the automation command [`bump-formula-pr`](https://docs.brew.sh/Manpage#bump-formula-pr-options-formula):
+
+  ```shell
+  brew bump-formula-pr \
+    --url="https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/download/5.6.7/rapiddweller-benerator-ce-5.6.7-jdk-11-dist.tar.gz" \
+    --sha256="PASTE THE SHA256 CHECKSUM HERE" \
+    benerator
+  ```
+
+Note the `url` need to point to correct asset, version from our github release.
+
+This will create a pull request into the Homebrew core repository.
+Once the Homebrew maintainers team approve it will be merged.
+
+See [Homebrew's Documentation](https://docs.brew.sh/How-To-Open-a-Homebrew-Pull-Request.html)
+for more detail.
