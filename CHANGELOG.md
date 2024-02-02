@@ -1,6 +1,17 @@
 # Changelog
 
 <!--lint disable no-duplicate-headings-->
+
+## 3.2.1
+
+### Overview
+Hotfix for Error BEN-0243: Domain not found: address after upgrading to v3.1.0 #423
+
+### Bug Fixes
+- Fail to import domain when exec "java -jar" #426
+
+---
+
 ## 3.2.0
 
 ### Overview
