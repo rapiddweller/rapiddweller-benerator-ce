@@ -56,10 +56,20 @@ public class GraalScript implements Script {
     }
 
     @Override
-    public Object evaluate(Context context) throws ScriptException {
-        Value returnValue = globalPolyglotCtx.evalScript(context, text, language);
-        GraalValueConverter converter = new GraalValueConverter();
-        return converter.convert(returnValue);
+    public synchronized Object evaluate(Context context) throws ScriptException {
+        try {
+            Value returnValue = globalPolyglotCtx.evalScript(context, text, language);
+            GraalValueConverter converter = new GraalValueConverter();
+            return converter.convert(returnValue);
+        } catch (IllegalStateException e) {
+            if(e.getMessage().contains("Multi threaded access requested")) {
+                throw new ScriptException(String.format("Multi thread access requested. GraalVM Context is not thread safe. " +
+                        "Please check your script and make sure there is no multi thread access with '%s'", text), null);
+            }
+            else {
+                throw new ScriptException("Error evaluating script: " + text, e);
+            }
+        }
     }
 
     @Override
