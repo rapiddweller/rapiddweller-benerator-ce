@@ -30,6 +30,12 @@
         return query;
         }
 
+        // db get entitiy count
+        function getEntityCount(entity) {
+        const count = db.countEntities(entity);
+        print('entity count for ' + entity + ' : ' + count);
+        }
+
     </execute>
 
     <execute target="db" onError="warn">
@@ -87,4 +93,8 @@
         <attribute name="PLAYLIST_TRACK" source="db" selector="{js:getQuery2(1)}" cyclic="true"/>
     </generate>
 
+    <echo>Printing entity count using JS and AbstractDatabase countEntities function</echo>
+    <execute type="js">getEntityCount('playlist');</execute>
+    <execute type="js">getEntityCount('TRACK');</execute>
+    <execute type="js">getEntityCount('PLAYLIST_TRACK');</execute>
 </setup>
