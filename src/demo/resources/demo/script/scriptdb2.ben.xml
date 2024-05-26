@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<setup defaultDataset="US" defaultLocale="en" defaultPageSize="100" defaultSeparator="|">
+
+    <!-- define a database that will be referred by the id 'db' later -->
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" url="jdbc:h2:mem:testdb" driver="org.h2.Driver" user="sa" schema="PUBLIC"
+              tableFilter="db_.*"/>
+
+    <memstore id="mem"/>
+
+    <!-- SQL commands to set up the database schema -->
+    <execute target="db" onError="warn">
+        DROP TABLE IF EXISTS db_user;
+    </execute>
+
+    <execute target="db">
+        CREATE TABLE db_user (
+        id int NOT NULL,
+        name varchar(16) NOT NULL,
+        PRIMARY KEY (id)
+        );
+    </execute>
+
+    <!-- JavaScript code to create and store entities -->
+    <execute type="js">
+        print('DB-URL: ' + db.getUrl());
+
+        Entity = Java.type('com.rapiddweller.model.data.Entity');
+
+        // Create 1000 users using a loop
+        for (var i = 1; i &lt;= 1000; i++) {
+        var user = new Entity('db_user', context.getLocalDescriptorProvider());
+        user.set('id', i);
+        user.set('name', 'User' + i);
+        db.store(user);
+        }
+
+        // Persist everything
+        db.flush();
+
+        print('Created 1000 users successfully.');
+    </execute>
+
+    <echo>Printing generated data</echo>
+    <iterate type="db_user" source="db" consumer="ConsoleExporter"/>
+</setup>

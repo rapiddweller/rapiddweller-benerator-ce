@@ -247,6 +247,17 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
   }
 
   /**
+   * Demo script db.
+   */
+  @Test
+  public void demoScriptDb2() {
+    context.setContextUri("/demo/script");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/script/scriptdb2.ben.xml");
+    Assert.assertEquals("/demo/script", benCtx.getContextUri());
+
+  }
+
+  /**
    * Demo script code.
    */
   @Test
