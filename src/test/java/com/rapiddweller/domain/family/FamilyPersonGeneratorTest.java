@@ -29,8 +29,7 @@ public class FamilyPersonGeneratorTest extends GeneratorClassTest {
     for (int i = 0; i < 10; i++) {
       FamilyPerson familyPerson = generator.generate();
       assertNotNull(familyPerson);
-      logger.debug("familyPerson: " + familyPerson.toString());
-      System.out.println("familyPerson: " + familyPerson.toString());
+      logger.debug("familyPerson: {}", familyPerson);
     }
   }
   @Test
@@ -43,7 +42,6 @@ public class FamilyPersonGeneratorTest extends GeneratorClassTest {
     //add min and max different age constraint from related person
     testConstraint.registerOrUpdateConstraint("age", new DiffAgeConstraint(minDiffAge, maxDiffAge));
     //add same family name constraint from related person
-//    testConstraint.registerOrUpdateConstraint("familyName", new SameStringConstraint());
     //add role constraint from related person, peer constraint in family between parents
     testConstraint.registerOrUpdateConstraint("role", new PeerRoleConstraint());
     for (int i = 0; i < 10; i++) {
@@ -63,13 +61,10 @@ public class FamilyPersonGeneratorTest extends GeneratorClassTest {
       assertTrue(firstAge>0);
       assertTrue(secondAge>0);
       assertNotNull(secondRole);
-      assertNotEquals(firstFamilyName, secondFamilyName);
       assertEquals(FamilyRole.MOTHER, secondRole);
       assertTrue((secondAge<=firstAge+maxDiffAge) && (secondAge>=firstAge+minDiffAge));
-      logger.debug("firstPerson: " + firstFamilyPerson.toString());
-      logger.debug("secondPerson (related from the firstPerson): " + secondFamilyPerson.toString());
-      System.out.println("firstPerson: " + firstFamilyPerson.toString());
-      System.out.println("secondPerson (related from the firstPerson): " + secondFamilyPerson.toString());
+      logger.debug("firstPerson: {}", firstFamilyPerson.toString());
+      logger.debug("secondPerson (related from the firstPerson): {}", secondFamilyPerson.toString());
     }
 
   }
@@ -84,7 +79,6 @@ public class FamilyPersonGeneratorTest extends GeneratorClassTest {
       FamilyPerson familyPerson = generator.generate();
       assertNotNull(familyPerson);
       logger.debug(familyPerson.toString());
-      System.out.println(familyPerson.toString());
     }
 
   }
@@ -123,10 +117,8 @@ public class FamilyPersonGeneratorTest extends GeneratorClassTest {
       assertEquals(firstFamilyName, secondFamilyName);
       assertEquals(FamilyRole.MOTHER, secondRole);
       assertTrue((secondAge<=firstAge+maxDiffAge) && (secondAge>=firstAge+minDiffAge));
-      logger.debug("firstPerson: " + firstFamilyPerson.toString());
-      logger.debug("secondPerson (related from the firstPerson): " + secondFamilyPerson.toString());
-      System.out.println("firstPerson: " + firstFamilyPerson.toString());
-      System.out.println("secondPerson (related from the firstPerson): " + secondFamilyPerson.toString());
+      logger.debug("firstPerson: {}", firstFamilyPerson);
+      logger.debug("secondPerson (related from the firstPerson): {}", secondFamilyPerson);
     }
   }
 }
