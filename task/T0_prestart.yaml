@@ -115,21 +115,6 @@
       #        }
       #        published_ports:
       #          - "33050:3050"
-      vertica:
-        #vertica db docker
-        name: vertica_local
-        docker_image: vertica/vertica-ce:11.1.0-0
-        network: "{{ network }}"
-        env: {
-          APP_DB_USER: "benerator",
-          APP_DB_PASSWORD: "benerator",
-          TZ: "Europe/Prague",
-          APP_DB_NAME: "benerator",
-          VERTICA_MEMDEBUG: "2",
-        }
-        published_ports:
-          - "5433:5433"
-          - "5444:5444"
 
 
   tasks:
