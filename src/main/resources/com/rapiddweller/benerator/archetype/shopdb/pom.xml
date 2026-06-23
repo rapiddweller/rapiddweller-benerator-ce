@@ -15,10 +15,10 @@
         <database_h2.version>2.2.220</database_h2.version>
         <database_icu4j.version>67.1</database_icu4j.version>
         <database_jaybird.version>4.0.1.java11</database_jaybird.version>
-        <database_mssqldb.version>9.2.1.jre11</database_mssqldb.version>
+        <database_mssqldb.version>12.8.2.jre11</database_mssqldb.version>
         <database_oracle.version>21.1.0.0</database_oracle.version>
-        <database_mysql-connector-java.version>8.0.29</database_mysql-connector-java.version>
-        <database_postgresql.version>42.4.3</database_postgresql.version>
+        <database_mysql-connector-java.version>8.4.0</database_mysql-connector-java.version>
+        <database_postgresql.version>42.7.11</database_postgresql.version>
         <database_derbyclient.version>10.7.1.1</database_derbyclient.version>
         <logging_log4j-api.version>[2.17.0,)</logging_log4j-api.version>
         <logging_log4j-core.version>[2.17.0,)</logging_log4j-core.version>
@@ -72,8 +72,8 @@
                         <version>${database_jaybird.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
+                        <groupId>com.mysql</groupId>
+                        <artifactId>mysql-connector-j</artifactId>
                         <version>${database_mysql-connector-java.version}</version>
                     </dependency>
                     <dependency>
