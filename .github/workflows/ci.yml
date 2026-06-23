@@ -1065,8 +1065,20 @@ jobs:
       - run: bash dot.env
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: apt update && apt -y install gnupg
-      - name: generate key
-        run: gpg --batch --import <(echo "$GPG_PRIVATE_KEY_ENCODED" | base64 -d)
+      - name: import signing key
+        run: |
+          set -euo pipefail
+          if [ -z "${GPG_PRIVATE_KEY_ENCODED:-}" ]; then
+            echo "::error::Secret GPG_PRIVATE_KEY_ENCODED is empty or missing."
+            exit 1
+          fi
+          echo "$GPG_PRIVATE_KEY_ENCODED" | base64 -d | gpg --batch --import
+          # Fail fast with a clear message instead of dying later at the sign goal.
+          if ! gpg --list-secret-keys --with-colons | grep -q '^sec'; then
+            echo "::error::No secret key present after import. GPG_PRIVATE_KEY_ENCODED must be base64 of an ASCII-armored *secret* key (gpg --armor --export-secret-keys), not a public key, and must not be expired."
+            exit 1
+          fi
+          gpg --list-secret-keys
         env:
           GPG_PRIVATE_KEY_ENCODED: ${{ secrets.GPG_PRIVATE_KEY_ENCODED }}
       - name: Publish package
