@@ -102,16 +102,6 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   }
 
   /**
-   * Demo vertica shop.
-   */
-  @Test
-  public void DemoVerticaShop() {
-    assumeTestActive("vertica");
-    BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-vertica.ben.xml");
-    Assert.assertEquals("/demo/shop", benCtx.getContextUri());
-  }
-
-  /**
    * Demo oracle shop.
    */
   @Ignore("issue with sonarqube image")

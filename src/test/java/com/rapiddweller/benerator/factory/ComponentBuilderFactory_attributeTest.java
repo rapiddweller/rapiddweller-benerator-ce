@@ -579,6 +579,42 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
   }
 
   @Test
+  public void test_int_type_nullQuota() {
+    checkBuilder("number_test",
+        (product) -> (product == null || product instanceof Integer),
+        new NullQuotaValidator(0.5, 0.1),
+        "type", "int",
+        "nullQuota", "0.5");
+  }
+
+  @Test
+  public void test_double_type_nullQuota() {
+    checkBuilder("number_test",
+        (product) -> (product == null || product instanceof Double),
+        new NullQuotaValidator(0.5, 0.1),
+        "type", "double",
+        "nullQuota", "0.5");
+  }
+
+  @Test
+  public void test_big_decimal_type_nullQuota() {
+    checkBuilder("number_test",
+        (product) -> (product == null || product instanceof BigDecimal),
+        new NullQuotaValidator(0.5, 0.1),
+        "type", "big_decimal",
+        "nullQuota", "0.5");
+  }
+
+  @Test
+  public void test_string_type_nullQuota() {
+    checkBuilder("string_test",
+        (product) -> (product == null || product instanceof String),
+        new NullQuotaValidator(0.5, 0.1),
+        "type", "string",
+        "nullQuota", "0.5");
+  }
+
+  @Test
   public void test_string() {
     checkBuilder("string_test",
         (product) -> product instanceof String,

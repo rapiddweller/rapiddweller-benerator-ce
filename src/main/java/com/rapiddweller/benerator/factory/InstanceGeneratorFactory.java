@@ -80,11 +80,18 @@ public class InstanceGeneratorFactory {
     // check nullability
     boolean nullable = DescriptorUtil.isNullable(descriptor, context);
 
+    // An explicit, fractional nullQuota (0 < nullQuota < 1) must be realized by injecting
+    // nulls into actually generated values (done below by applyNullSettings). In that case
+    // the type generator itself has to produce non-null values, so the 'nullify each nullable'
+    // optimization (which would create a generator that returns only null) must be suppressed.
+    Double nullQuota = descriptor.getNullQuota();
+    boolean nullifyEachNullable = nullable && (nullQuota == null || nullQuota == 1.);
+
     // create an appropriate generator
     TypeDescriptor type = descriptor.getTypeDescriptor();
     String instanceName = descriptor.getName();
     if (type != null) {
-      generator = MetaGeneratorFactory.createTypeGenerator(type, instanceName, nullable, uniqueness, context);
+      generator = MetaGeneratorFactory.createTypeGenerator(type, instanceName, nullifyEachNullable, uniqueness, context);
     } else {
       ComponentDescriptor defaultConfig = context.getDefaultComponentConfig(instanceName);
       if (defaultConfig != null) {
@@ -99,8 +106,10 @@ public class InstanceGeneratorFactory {
         throw BeneratorExceptionFactory.getInstance().missingInfo("Type of " + instanceName + " is not defined");
       }
     }
-    GeneratorFactory generatorFactory = context.getGeneratorFactory();
-    generator = generatorFactory.applyNullSettings(generator, nullable, descriptor.getNullQuota());
+    // Note: null settings (nullable/nullQuota) are applied by the caller (e.g. by
+    // ComponentBuilderFactory.builderFromGenerator or VariableGeneratorFactory), so that
+    // nulls are injected exactly once. Direct callers that do not wrap the result in a
+    // component/variable builder apply them explicitly.
     return generator;
   }
 
