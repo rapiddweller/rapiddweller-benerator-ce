@@ -573,6 +573,8 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     }
     Generator generator = InstanceGeneratorFactory.createSingleInstanceGenerator(
         descriptor, Uniqueness.NONE, context);
+    generator = context.getGeneratorFactory().applyNullSettings(
+        generator, DescriptorUtil.isNullable(descriptor, context), descriptor.getNullQuota());
     generator = WrapperFactory.applyConverter(generator, new Entity2JavaConverter());
     generator.init(context);
     return generator;

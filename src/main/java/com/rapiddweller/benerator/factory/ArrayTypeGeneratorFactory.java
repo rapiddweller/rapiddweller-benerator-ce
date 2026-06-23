@@ -211,6 +211,8 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
       if (element.getMode() != Mode.ignored) {
         Generator<?> generator = InstanceGeneratorFactory.createSingleInstanceGenerator(
             element, uniqueness, context);
+        generator = context.getGeneratorFactory().applyNullSettings(
+            generator, DescriptorUtil.isNullable(element, context), element.getNullQuota());
         result[i] = generator;
       }
     }
