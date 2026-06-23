@@ -796,6 +796,11 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
+                        <!-- Pinned: gpg-plugin 3.2.x enforces "best practices" that ignore
+                             the gpg.passphrase from settings.xml and break batch signing
+                             ("No secret key"). 3.1.0 is the last release compatible with the
+                             classic settings.xml passphrase plus imported-key CI setup. -->
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
