@@ -122,7 +122,7 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     services:
       mongodb:
-        image: mongo:latest
+        image: mongo:4.4
         env:
           DB_HOST: mongodb
           DB_PORT: "27017"
@@ -288,7 +288,7 @@ jobs:
     container: maven:3.9-eclipse-temurin-21
     services:
       mongodb:
-        image: mongo:latest
+        image: mongo:4.4
         env:
           DB_HOST: mongodb
           DB_PORT: "27017"
