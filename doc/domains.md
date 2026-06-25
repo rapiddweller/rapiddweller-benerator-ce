@@ -206,6 +206,10 @@ an `Orlando` in both `FL` and `WV`), so combine `stateFilter` and `cityFilter` t
 state or city fails fast with a clear configuration error instead of silently generating something
 else.
 
+This works for every supported country, using that country's own state ids and names — e.g. Germany
+(`stateFilter="BY"` or `"Bayern"`) or France, whose state ids are numeric region codes
+(`stateFilter="11"` or `"Île-de-France"`).
+
 > The properties are named `stateFilter`/`cityFilter` (not `state`/`city`) because `state` is the
 > generator's reserved lifecycle property and would be silently ignored.
 

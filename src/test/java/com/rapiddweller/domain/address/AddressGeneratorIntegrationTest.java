@@ -11,25 +11,38 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Verifies the documented AddressGenerator state/city example (doc/domains.md, Address domain) works
- * through the XML DSL -- i.e. that the {@code <property name="state"/>} / {@code city} wiring reaches
- * the generator and produces correlated, filtered addresses. This guards the documented snippet the
- * same way DataFakerIntegrationTest guards the faker example.
+ * Verifies the documented AddressGenerator state/city examples (doc/domains.md, Address domain) work
+ * through the XML DSL -- i.e. that the {@code <property name="stateFilter"/>} / {@code cityFilter}
+ * wiring reaches the generator and produces correlated, filtered addresses. Guards the documented
+ * snippets the same way DataFakerIntegrationTest guards the faker example, across several countries.
  */
 public class AddressGeneratorIntegrationTest extends AbstractBeneratorIntegrationTest {
 
+    private static final String PREFIX = "com/rapiddweller/domain/address";
+
+    /** US: Orlando, FL. */
     @Test
-    public void testDocumentedStateCityExample() {
+    public void testDocumentedStateCityExampleUS() {
+        runAndAssert(PREFIX + "/address_state_city.ben.xml", "FL", "ORLANDO");
+    }
+
+    /** France as a benerator model: Paris, Île-de-France (numeric state id "11"). */
+    @Test
+    public void testStateCityExampleFrance() {
+        runAndAssert(PREFIX + "/address_state_city_fr.ben.xml", "11", "PARIS");
+    }
+
+    private void runAndAssert(String benFile, String expectedState, String expectedCityUpperCase) {
         MemStore mem = new MemStore("mem", context.getDataModel());
         context.setGlobal("mem", mem);
 
-        parseAndExecuteFile("com/rapiddweller/domain/address/address_state_city.ben.xml");
+        parseAndExecuteFile(benFile);
 
         Collection<Entity> rows = mem.getEntities("address");
         assertEquals(10, rows.size());
         for (Entity row : rows) {
-            assertEquals("FL", row.get("state"));
-            assertEquals("ORLANDO", String.valueOf(row.get("city")).toUpperCase());
+            assertEquals(expectedState, row.get("state"));
+            assertEquals(expectedCityUpperCase, String.valueOf(row.get("city")).toUpperCase());
             assertNotNull("zip should be generated", row.get("zip"));
         }
     }

@@ -198,6 +198,58 @@ public class AddressGeneratorTest extends GeneratorClassTest {
     generator.init(context);
   }
 
+  /** Filtering also works for Germany: state id "BY" restricts to Bavarian addresses. */
+  @Test
+  public void testGermanStateFilter() {
+    AddressGenerator generator = new AddressGenerator("DE");
+    generator.setStateFilter("BY");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      assertEquals("BY", generator.generate().getCity().getState().getId());
+    }
+  }
+
+  /** Germany, state by full name + city: Bayern / München stays correlated. */
+  @Test
+  public void testGermanStateAndCityFilter() {
+    AddressGenerator generator = new AddressGenerator("DE");
+    generator.setStateFilter("Bayern");
+    generator.setCityFilter("München");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Address address = generator.generate();
+      assertEquals("BY", address.getCity().getState().getId());
+      assertEquals("München", address.getCity().getName());
+      assertNotNull(address.getPostalCode());
+    }
+  }
+
+  /** Filtering also works for France, whose state ids are numeric region codes ("11" = Île-de-France). */
+  @Test
+  public void testFrenchStateFilter() {
+    AddressGenerator generator = new AddressGenerator("FR");
+    generator.setStateFilter("11");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      assertEquals("11", generator.generate().getCity().getState().getId());
+    }
+  }
+
+  /** France, state by full name + city: Île-de-France / Paris stays correlated. */
+  @Test
+  public void testFrenchStateAndCityFilter() {
+    AddressGenerator generator = new AddressGenerator("FR");
+    generator.setStateFilter("Île-de-France");
+    generator.setCityFilter("Paris");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Address address = generator.generate();
+      assertEquals("11", address.getCity().getState().getId());
+      assertEquals("Paris", address.getCity().getName());
+      assertNotNull(address.getPostalCode());
+    }
+  }
+
   // helper ----------------------------------------------------------------------------------------------------------
 
   private void check(Country country, boolean supported) {
