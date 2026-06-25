@@ -354,7 +354,11 @@ data[name=Nakita Schamberger, HarryPotter=Aragog, dinner=Poke]
 
 ### Supported topics:
 
-DataFakerGenerator can generate data for the following topics (with properties):
+DataFakerGenerator can generate data for the topics listed below (with their properties). The list
+covers the common topics; it is not exhaustive — datafaker ships many more. For the complete,
+version-specific set see the [datafaker providers documentation](https://www.datafaker.net/documentation/providers/).
+Any `topic`/`property` shown here is verified against the bundled datafaker version by
+`DataFakerDocTopicsIntegrationTest`.
 
 ### Topic: address
 
@@ -362,8 +366,6 @@ DataFakerGenerator can generate data for the following topics (with properties):
 |---|---|
 | state | String |
 | country | String |
-| lastName | String |
-| firstName | String |
 | streetName | String |
 | zipCode | String |
 | stateAbbr | String |
@@ -479,7 +481,6 @@ DataFakerGenerator can generate data for the following topics (with properties):
 
 | Property name | Type |
 |---|---|
-| creditCardNumber | String |
 | creditCardType | String |
 | creditCardExpiry | String |
 
@@ -524,7 +525,6 @@ DataFakerGenerator can generate data for the following topics (with properties):
 
 | Property name | Type |
 |---|---|
-| color | String |
 | department | String |
 | material | String |
 | price | String |
@@ -557,7 +557,7 @@ DataFakerGenerator can generate data for the following topics (with properties):
 | countryCode2 | String |
 | countryCode3 | String |
 
-### Topic: crypto
+### Topic: hashing
 
 | Property name | Type |
 |---|---|
@@ -737,7 +737,7 @@ DataFakerGenerator can generate data for the following topics (with properties):
 | character | String |
 | quote | String |
 | planet | String |
-| specie | String |
+| species | String |
 | starship | String |
 | marvinQuote | String |
 
@@ -783,7 +783,6 @@ DataFakerGenerator can generate data for the following topics (with properties):
 | ipV6Cidr | String |
 | slug | String |
 | uuid | String |
-| avatar | String |
 | emailAddress | String |
 | safeEmailAddress | String |
 | domainSuffix | String |
@@ -791,7 +790,7 @@ DataFakerGenerator can generate data for the following topics (with properties):
 | privateIpV4Address | String |
 | publicIpV4Address | String |
 | ipV6Address | String |
-| userAgentAny | String |
+| userAgent | String |
 
 ### Topic: job
 
@@ -876,7 +875,6 @@ DataFakerGenerator can generate data for the following topics (with properties):
 | firstName | String |
 | title | String |
 | username | String |
-| bloodGroup | String |
 | nameWithMiddle | String |
 
 ### Topic: nation
@@ -1014,7 +1012,6 @@ DataFakerGenerator can generate data for the following topics (with properties):
 |---|---|
 | location | String |
 | character | String |
-| specie | String |
 | villain | String |
 
 ### Topic: stock
