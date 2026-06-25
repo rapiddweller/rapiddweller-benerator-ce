@@ -45,6 +45,8 @@ public class AddressGenerator extends CompositeGenerator<Address> implements Non
 
   private VarLengthStringGenerator localPhoneNumberGenerator;
   private String dataset;
+  private String stateFilter;
+  private String cityFilter;
   private CityGenerator cityGenerator;
   private StreetNameGenerator streetNameGenerator;
   private CompanyNameGenerator companyNameGen;
@@ -72,6 +74,20 @@ public class AddressGenerator extends CompositeGenerator<Address> implements Non
     this.dataset = dataset;
   }
 
+  /** Restricts generation to a single state of the dataset, matched against the state id ("FL")
+   *  or full name ("Florida"), case-insensitively. Named {@code stateFilter} rather than
+   *  {@code state} because {@code state} is the generator's reserved lifecycle property. */
+  public void setStateFilter(String stateFilter) {
+    this.stateFilter = stateFilter;
+  }
+
+  /** Restricts generation to a single city, matched against the city name ("Orlando"),
+   *  case-insensitively. Combine with {@link #setStateFilter(String)} to disambiguate a city name
+   *  that occurs in several states. */
+  public void setCityFilter(String cityFilter) {
+    this.cityFilter = cityFilter;
+  }
+
   // Generator interface ---------------------------------------------------------------------------------------------
 
   @Override
@@ -80,6 +96,11 @@ public class AddressGenerator extends CompositeGenerator<Address> implements Non
     try {
       initMembers(context);
     } catch (Exception e) {
+      // A state/city filter must surface its error, not be masked by the country fallback below
+      // (which exists only to recover from missing country data for an unfiltered request).
+      if (stateFilter != null || cityFilter != null) {
+        throw e;
+      }
       logger.error("Error initializing members", e);
       Country fallBackCountry = Country.getFallback();
       if (!fallBackCountry.getIsoCode().equals(this.dataset)) {
@@ -127,7 +148,10 @@ public class AddressGenerator extends CompositeGenerator<Address> implements Non
   // private helpers -------------------------------------------------------------------------------------------------
 
   private void initMembers(GeneratorContext context) {
-    cityGenerator = registerAndInitComponent(new CityGenerator(dataset), context);
+    CityGenerator cityGen = new CityGenerator(dataset);
+    cityGen.setStateFilter(stateFilter);
+    cityGen.setCityFilter(cityFilter);
+    cityGenerator = registerAndInitComponent(cityGen, context);
     streetNameGenerator = registerAndInitComponent(new StreetNameGenerator(dataset), context);
     localPhoneNumberGenerator = registerAndInitComponent(
         BeneratorFactory.getInstance().createVarLengthStringGenerator("[0-9]", 10, 10, 1, null), context);

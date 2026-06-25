@@ -33,6 +33,7 @@ import com.rapiddweller.benerator.dataset.AbstractDatasetGenerator;
 import com.rapiddweller.benerator.dataset.Dataset;
 import com.rapiddweller.benerator.distribution.FeatureWeight;
 import com.rapiddweller.benerator.distribution.IndividualWeight;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sample.IndividualWeightSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 
@@ -46,12 +47,25 @@ public class CityGenerator extends AbstractDatasetGenerator<City>
 
   private static final String REGION = "/com/rapiddweller/dataset/region";
 
+  /** Optional filter: only generate cities of this state (matched against the state id or name). */
+  private String stateFilter;
+  /** Optional filter: only generate cities with this name. */
+  private String cityFilter;
+
   public CityGenerator() {
     this(null);
   }
 
   public CityGenerator(String dataset) {
     super(City.class, REGION, dataset, true);
+  }
+
+  public void setStateFilter(String state) {
+    this.stateFilter = trimToNull(state);
+  }
+
+  public void setCityFilter(String city) {
+    this.cityFilter = trimToNull(city);
   }
 
   @Override
@@ -86,11 +100,44 @@ public class CityGenerator extends AbstractDatasetGenerator<City>
     Country country = Country.getInstance(dataset.getName());
     country.checkCities();
     for (State state : country.getStates()) {
+      if (!stateMatches(state)) {
+        continue;
+      }
       for (City city : state.getCities()) {
-        generator.addValue(city);
+        if (cityMatches(city)) {
+          generator.addValue(city);
+        }
       }
     }
+    if (hasFilter() && generator.getVariety() == 0) {
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "No cities match the address filter in dataset '" + dataset.getName() + "'"
+              + (stateFilter != null ? ", state='" + stateFilter + "'" : "")
+              + (cityFilter != null ? ", city='" + cityFilter + "'" : ""));
+    }
     return (generator.getVariety() > 0 ? generator : null);
+  }
+
+  private boolean hasFilter() {
+    return stateFilter != null || cityFilter != null;
+  }
+
+  private boolean stateMatches(State state) {
+    return stateFilter == null
+        || stateFilter.equalsIgnoreCase(state.getId())
+        || stateFilter.equalsIgnoreCase(state.getName());
+  }
+
+  private boolean cityMatches(City city) {
+    return cityFilter == null || cityFilter.equalsIgnoreCase(city.getName());
+  }
+
+  private static String trimToNull(String s) {
+    if (s == null) {
+      return null;
+    }
+    String t = s.trim();
+    return t.isEmpty() ? null : t;
   }
 
   @Override

@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.factory.InstanceGeneratorFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.InstanceDescriptor;
@@ -134,6 +135,67 @@ public class AddressGeneratorTest extends GeneratorClassTest {
   @Test
   public void testDEDescriptorMapping() {
     checkDescriptorMapping(Country.GERMANY);
+  }
+
+  // state / city filtering --------------------------------------------------------------------------------------------
+
+  /** state="FL" restricts generation to Florida addresses (matched by state id). */
+  @Test
+  public void testStateFilter() {
+    AddressGenerator generator = new AddressGenerator("US");
+    generator.setStateFilter("FL");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Address address = generator.generate();
+      assertEquals("FL", address.getCity().getState().getId());
+    }
+  }
+
+  /** The state filter also accepts the full state name, case-insensitively. */
+  @Test
+  public void testStateFilterByName() {
+    AddressGenerator generator = new AddressGenerator("US");
+    generator.setStateFilter("florida");
+    generator.init(context);
+    for (int i = 0; i < 50; i++) {
+      assertEquals("FL", generator.generate().getCity().getState().getId());
+    }
+  }
+
+  /** state + city yields correlated city/state/zip for that one city (Orlando, FL). */
+  @Test
+  public void testStateAndCityFilter() {
+    AddressGenerator generator = new AddressGenerator("US");
+    generator.setStateFilter("FL");
+    generator.setCityFilter("orlando");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Address address = generator.generate();
+      assertEquals("FL", address.getCity().getState().getId());
+      assertEquals("ORLANDO", address.getCity().getName().toUpperCase());
+      assertNotNull(address.getPostalCode());
+    }
+  }
+
+  /** A city name occurring in several states (Orlando exists in FL and WV) stays cross-state when no
+   *  state is given -- documenting that state+city is how you pin a specific one. */
+  @Test
+  public void testCityFilterIsCrossStateWithoutState() {
+    AddressGenerator generator = new AddressGenerator("US");
+    generator.setCityFilter("orlando");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Address address = generator.generate();
+      assertEquals("ORLANDO", address.getCity().getName().toUpperCase());
+    }
+  }
+
+  /** An unknown state is a configuration error, surfaced clearly rather than silently falling back. */
+  @Test(expected = ConfigurationError.class)
+  public void testUnknownStateFilterFails() {
+    AddressGenerator generator = new AddressGenerator("US");
+    generator.setStateFilter("XX");
+    generator.init(context);
   }
 
   // helper ----------------------------------------------------------------------------------------------------------
