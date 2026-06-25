@@ -679,17 +679,17 @@
                     <execution>
                         <phase>validate</phase>
                         <goals>
-                            <goal>create</goal>
+                            <!-- create-timestamp produces the build number purely from the clock and
+                                 never touches the SCM. The 'create' goal queries git, which fails in CI
+                                 containers with "detected dubious ownership" (the checkout is owned by a
+                                 user other than the build); a timestamp is all we need here. -->
+                            <goal>create-timestamp</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <doCheck>false</doCheck>
-                    <doUpdate>false</doUpdate>
-                    <format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
-                    <items>
-                        <item>timestamp</item>
-                    </items>
+                    <timestampFormat>yyyy-MM-dd HH:mm:ss</timestampFormat>
+                    <timestampPropertyName>buildNumber</timestampPropertyName>
                 </configuration>
             </plugin>
 
