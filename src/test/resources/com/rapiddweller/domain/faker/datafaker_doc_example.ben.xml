@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <!-- Mirrors the faker-domain example in doc/domains.md and broadens it across several
+         topics, locales and an explicit type, so the documented usage cannot silently break
+         again (see issue #454: docs referenced the removed FakerGenerator class). -->
+
+    <import domains="faker"/>
+    <memstore id="mem"/>
+
+    <setting name="count" value="20"/>
+
+    <generate type="faker_person" count="{count}" consumer="mem">
+        <attribute name="name" generator="new DataFakerGenerator('name','fullName')" locale="en_US"/>
+        <attribute name="harryPotter" generator="new DataFakerGenerator('harryPotter','character')" locale="en"/>
+        <attribute name="dinner" type="string" generator="new DataFakerGenerator('food','dish')" locale="de_CH"/>
+        <attribute name="author" generator="new DataFakerGenerator('book','author')" locale="en_US"/>
+        <attribute name="city" generator="new DataFakerGenerator('address','city')" locale="de_DE"/>
+        <attribute name="color" generator="new DataFakerGenerator('color','name')" locale="en"/>
+    </generate>
+
+    <echo>Check that the documented faker usage produced the expected number of rows</echo>
+
+    <iterate type="faker_person" source="mem" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+
+    <if test="faker_person.counter != 20">
+        <error>Expected 20 faker_person rows, faker generation is broken</error>
+    </if>
+</setup>

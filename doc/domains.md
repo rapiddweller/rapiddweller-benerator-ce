@@ -320,24 +320,25 @@ Provides classes specific for the United States of America:
 
 ## faker domain
 
-The faker package provides the Generator class with library base on Java Faker (as well as Perl's Data::Faker library)
+The faker package provides a generator class backed by the [DataFaker](https://www.datafaker.net/) library
+(the actively maintained successor to java-faker).
 
-* **FakerGenerator** : Generates data for many topics such as book, food, music... 
+* **DataFakerGenerator** : Generates data for many topics such as book, food, music... 
 
 Because this Generator has many topics, each topic has many properties, you have to choose topic and property and put it into 
-the 'generator' as parameters (like this `generator="new FakerGenerator('topic'','property')"`).
+the 'generator' as parameters (like this `generator="new DataFakerGenerator('topic','property')"`).
 
 Some topics have different data which base on the locale, you can change it by manual setting 'locale'.
 
-You can use the FakerGenerator like this:
+You can use the DataFakerGenerator like this:
 
 ```xml
 <import domains="faker"/>
 
 <generate type="data" count="5" consumer="ConsoleExporter">
-    <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="en_US"/>
-    <attribute name="HarryPotter" generator="new FakerGenerator('harryPotter','character')" locale="en"/>
-    <attribute name="dinner" type="string" generator="new FakerGenerator('food','dish')" locale="de_CH"/>
+    <attribute name="name" generator="new DataFakerGenerator('name','fullName')" locale="en_US"/>
+    <attribute name="HarryPotter" generator="new DataFakerGenerator('harryPotter','character')" locale="en"/>
+    <attribute name="dinner" type="string" generator="new DataFakerGenerator('food','dish')" locale="de_CH"/>
 </generate>
 ```
 
@@ -353,7 +354,7 @@ data[name=Nakita Schamberger, HarryPotter=Aragog, dinner=Poke]
 
 ### Supported topics:
 
-FakerGenerator can generate data for the following topics (with properties):
+DataFakerGenerator can generate data for the following topics (with properties):
 
 ### Topic: address
 
