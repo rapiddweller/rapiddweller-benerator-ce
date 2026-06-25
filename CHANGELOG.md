@@ -34,8 +34,9 @@ after the OSSRH shutdown. It also corrects the faker domain documentation and re
 - Fixed handling of a null quota (#463).
 
 ### Dependency Updates
-- rd-lib-common 2.1.0-jdk-11 (#474), log4j 2.26.0 (#473), mysql-connector-j 9.7.0 (#480),
-  mssql-jdbc (#471), and patched vulnerable DB drivers and libraries (#465).
+- rd-lib-common 2.1.0-jdk-11 (#474) and rd-lib-jdbacl 1.1.18-jdk-11 (aligned to common 2.1.0 and the
+  same DB driver versions), log4j 2.26.0 (#473), mysql-connector-j 9.7.0 (#480), mssql-jdbc (#471),
+  and patched vulnerable DB drivers and libraries (#465).
 - Build plugins: maven-site-plugin 3.22.0 (#479), buildnumber-maven-plugin 3.3.0 (#470),
   maven-surefire and surefire-report plugins (#472, #469).
 
