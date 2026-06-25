@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <!-- Regression guard for issue #454: the old java-faker class FakerGenerator was removed in the
+         datafaker migration. Using it (as the docs previously did) must fail loudly rather than be
+         silently accepted, so the documentation cannot drift back to the wrong class name. -->
+
+    <import domains="faker"/>
+    <memstore id="mem"/>
+
+    <generate type="faker_person" count="5" consumer="mem">
+        <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="en_US"/>
+    </generate>
+</setup>

@@ -320,24 +320,25 @@ Provides classes specific for the United States of America:
 
 ## faker domain
 
-The faker package provides the Generator class with library base on Java Faker (as well as Perl's Data::Faker library)
+The faker package provides a generator class backed by the [DataFaker](https://www.datafaker.net/) library
+(the actively maintained successor to java-faker).
 
-* **FakerGenerator** : Generates data for many topics such as book, food, music... 
+* **DataFakerGenerator** : Generates data for many topics such as book, food, music... 
 
 Because this Generator has many topics, each topic has many properties, you have to choose topic and property and put it into 
-the 'generator' as parameters (like this `generator="new FakerGenerator('topic'','property')"`).
+the 'generator' as parameters (like this `generator="new DataFakerGenerator('topic','property')"`).
 
 Some topics have different data which base on the locale, you can change it by manual setting 'locale'.
 
-You can use the FakerGenerator like this:
+You can use the DataFakerGenerator like this:
 
 ```xml
 <import domains="faker"/>
 
 <generate type="data" count="5" consumer="ConsoleExporter">
-    <attribute name="name" generator="new FakerGenerator('name','fullName')" locale="en_US"/>
-    <attribute name="HarryPotter" generator="new FakerGenerator('harryPotter','character')" locale="en"/>
-    <attribute name="dinner" type="string" generator="new FakerGenerator('food','dish')" locale="de_CH"/>
+    <attribute name="name" generator="new DataFakerGenerator('name','fullName')" locale="en_US"/>
+    <attribute name="HarryPotter" generator="new DataFakerGenerator('harryPotter','character')" locale="en"/>
+    <attribute name="dinner" type="string" generator="new DataFakerGenerator('food','dish')" locale="de_CH"/>
 </generate>
 ```
 
@@ -353,7 +354,11 @@ data[name=Nakita Schamberger, HarryPotter=Aragog, dinner=Poke]
 
 ### Supported topics:
 
-FakerGenerator can generate data for the following topics (with properties):
+DataFakerGenerator can generate data for the topics listed below (with their properties). The list
+covers the common topics; it is not exhaustive — datafaker ships many more. For the complete,
+version-specific set see the [datafaker providers documentation](https://www.datafaker.net/documentation/providers/).
+Any `topic`/`property` shown here is verified against the bundled datafaker version by
+`DataFakerDocTopicsIntegrationTest`.
 
 ### Topic: address
 
@@ -361,8 +366,6 @@ FakerGenerator can generate data for the following topics (with properties):
 |---|---|
 | state | String |
 | country | String |
-| lastName | String |
-| firstName | String |
 | streetName | String |
 | zipCode | String |
 | stateAbbr | String |
@@ -478,7 +481,6 @@ FakerGenerator can generate data for the following topics (with properties):
 
 | Property name | Type |
 |---|---|
-| creditCardNumber | String |
 | creditCardType | String |
 | creditCardExpiry | String |
 
@@ -523,7 +525,6 @@ FakerGenerator can generate data for the following topics (with properties):
 
 | Property name | Type |
 |---|---|
-| color | String |
 | department | String |
 | material | String |
 | price | String |
@@ -556,7 +557,7 @@ FakerGenerator can generate data for the following topics (with properties):
 | countryCode2 | String |
 | countryCode3 | String |
 
-### Topic: crypto
+### Topic: hashing
 
 | Property name | Type |
 |---|---|
@@ -736,7 +737,7 @@ FakerGenerator can generate data for the following topics (with properties):
 | character | String |
 | quote | String |
 | planet | String |
-| specie | String |
+| species | String |
 | starship | String |
 | marvinQuote | String |
 
@@ -782,7 +783,6 @@ FakerGenerator can generate data for the following topics (with properties):
 | ipV6Cidr | String |
 | slug | String |
 | uuid | String |
-| avatar | String |
 | emailAddress | String |
 | safeEmailAddress | String |
 | domainSuffix | String |
@@ -790,7 +790,7 @@ FakerGenerator can generate data for the following topics (with properties):
 | privateIpV4Address | String |
 | publicIpV4Address | String |
 | ipV6Address | String |
-| userAgentAny | String |
+| userAgent | String |
 
 ### Topic: job
 
@@ -875,7 +875,6 @@ FakerGenerator can generate data for the following topics (with properties):
 | firstName | String |
 | title | String |
 | username | String |
-| bloodGroup | String |
 | nameWithMiddle | String |
 
 ### Topic: nation
@@ -1013,7 +1012,6 @@ FakerGenerator can generate data for the following topics (with properties):
 |---|---|
 | location | String |
 | character | String |
-| specie | String |
 | villain | String |
 
 ### Topic: stock
