@@ -2,6 +2,45 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 3.3.0
+
+### Overview
+This release adds geographic address filtering, pulls in the rapiddweller library updates — including a
+dependency-ordering fix for complex database schemas — and modernises the build and release pipeline
+after the OSSRH shutdown. It also corrects the faker domain documentation and refreshes dependencies.
+
+### New Features
+- **Address state/city filtering**: `AddressGenerator` accepts `stateFilter` and `cityFilter` to
+  generate correlated addresses for a single state or city (matched by state id or name, and city
+  name), instead of over-generating the whole country and trimming afterwards. Works for every
+  supported country, e.g. US (`FL`/`Orlando`), Germany (`BY`/`München`) and France (numeric region
+  ids, `11`/`Paris`) (#481).
+
+### Improvements
+- Clearer GraalVM multi-threading error messages.
+- Extended the scripting demo to show using Java classes from JS functions.
+- Migrated Maven publishing from the retired OSSRH to the Central Portal (#468); pinned
+  maven-gpg-plugin to 3.1.0 and added a fail-fast signing-key check (#466).
+- Bumped GitHub Actions off deprecated Node 16/20 runners (#464).
+
+### Bug Fixes
+- Fixed `Incomplete nodes left` when initialising a database adapter against a complex schema
+  (DependencyModel stranded incomplete nodes in a single post-processing pass), via rd-lib-common
+  2.1.0 (#474).
+- Corrected the faker domain documentation: the generator class is `DataFakerGenerator`, not the
+  removed `FakerGenerator`, and the topic/property tables now match the bundled datafaker (#454, #475).
+- Fixed a CI build failure caused by the buildnumber plugin querying git inside the build container
+  ("detected dubious ownership") (#482).
+- Fixed handling of a null quota (#463).
+
+### Dependency Updates
+- rd-lib-common 2.1.0-jdk-11 (#474), log4j 2.26.0 (#473), mysql-connector-j 9.7.0 (#480),
+  mssql-jdbc (#471), and patched vulnerable DB drivers and libraries (#465).
+- Build plugins: maven-site-plugin 3.22.0 (#479), buildnumber-maven-plugin 3.3.0 (#470),
+  maven-surefire and surefire-report plugins (#472, #469).
+
+---
+
 ## 3.2.1
 
 ### Overview
