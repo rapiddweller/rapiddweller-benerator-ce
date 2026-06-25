@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="FR" defaultLocale="fr_FR" defaultSeparator="|">
+
+    <!-- AddressGenerator state/city filtering for France: correlated Paris, Île-de-France addresses.
+         French state ids are numeric region codes ("11" = Île-de-France). Guarded by
+         AddressGeneratorIntegrationTest. -->
+
+    <import domains="address"/>
+
+    <bean id="parisAddresses" class="AddressGenerator">
+        <property name="dataset" value="FR"/>
+        <property name="stateFilter" value="Île-de-France"/>
+        <property name="cityFilter" value="Paris"/>
+    </bean>
+
+    <generate type="address" count="10" consumer="mem">
+        <variable name="addr" generator="parisAddresses"/>
+        <attribute name="city" script="addr.city.name"/>
+        <attribute name="state" script="addr.city.state.id"/>
+        <attribute name="zip" script="addr.postalCode"/>
+    </generate>
+</setup>

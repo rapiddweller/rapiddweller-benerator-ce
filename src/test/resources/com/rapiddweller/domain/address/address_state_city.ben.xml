@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setup xmlns="https://www.benerator.de/schema/3.0.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/3.0.0 https://www.benerator.de/schema/benerator-3.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US" defaultSeparator="|">
+
+    <!-- The documented AddressGenerator state/city example (doc/domains.md, Address domain).
+         Generates correlated Orlando, FL addresses. Guarded by AddressGeneratorIntegrationTest. -->
+
+    <import domains="address"/>
+
+    <bean id="orlandoAddresses" class="AddressGenerator">
+        <property name="dataset" value="US"/>
+        <property name="stateFilter" value="FL"/>
+        <property name="cityFilter" value="Orlando"/>
+    </bean>
+
+    <generate type="address" count="10" consumer="mem">
+        <variable name="addr" generator="orlandoAddresses"/>
+        <attribute name="city" script="addr.city.name"/>
+        <attribute name="state" script="addr.city.state.id"/>
+        <attribute name="zip" script="addr.postalCode"/>
+    </generate>
+</setup>

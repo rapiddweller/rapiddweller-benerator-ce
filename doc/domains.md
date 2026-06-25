@@ -193,6 +193,48 @@ The generated Address objects have the following data fields:
 
 * **organization** and **department**: Names of an organization and a department.
 
+### Restricting addresses to a state or city
+
+By default `AddressGenerator` draws cities from the whole country, weighted by population. To focus on
+a region, set the `stateFilter` and/or `cityFilter` properties — the city/ZIP/area-code stay
+correlated, so you get realistic local addresses without generating the whole country and filtering
+afterwards.
+
+Matching is case-insensitive: `stateFilter` accepts the state id (`FL`) or the full name (`Florida`),
+and `cityFilter` matches the city name (`Orlando`). A city name can occur in several states (there is
+an `Orlando` in both `FL` and `WV`), so combine `stateFilter` and `cityFilter` to pin one. An unknown
+state or city fails fast with a clear configuration error instead of silently generating something
+else.
+
+This works for every supported country, using that country's own state ids and names — e.g. Germany
+(`stateFilter="BY"` or `"Bayern"`) or France, whose state ids are numeric region codes
+(`stateFilter="11"` or `"Île-de-France"`).
+
+> The properties are named `stateFilter`/`cityFilter` (not `state`/`city`) because `state` is the
+> generator's reserved lifecycle property and would be silently ignored.
+
+```xml
+<import domains="address"/>
+
+<bean id="floridaAddresses" class="AddressGenerator">
+    <property name="dataset" value="US"/>
+    <property name="stateFilter" value="FL"/>
+</bean>
+
+<bean id="orlandoAddresses" class="AddressGenerator">
+    <property name="dataset" value="US"/>
+    <property name="stateFilter" value="FL"/>
+    <property name="cityFilter" value="Orlando"/>
+</bean>
+
+<generate type="address" count="5" consumer="ConsoleExporter">
+    <variable name="addr" generator="orlandoAddresses"/>
+    <attribute name="city" script="addr.city.name"/>
+    <attribute name="state" script="addr.city.state.id"/>
+    <attribute name="zip" script="addr.postalCode"/>
+</generate>
+```
+
 
 ## net domain
 
