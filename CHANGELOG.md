@@ -5,23 +5,19 @@
 ## 3.3.0
 
 ### Overview
-This release adds geographic address filtering, pulls in the rapiddweller library updates — including a
-dependency-ordering fix for complex database schemas — and modernises the build and release pipeline
-after the OSSRH shutdown. It also corrects the faker domain documentation and refreshes dependencies.
-
-### New Features
-- **Address state/city filtering**: `AddressGenerator` accepts `stateFilter` and `cityFilter` to
-  generate correlated addresses for a single state or city (matched by state id or name, and city
-  name), instead of over-generating the whole country and trimming afterwards. Works for every
-  supported country, e.g. US (`FL`/`Orlando`), Germany (`BY`/`München`) and France (numeric region
-  ids, `11`/`Paris`) (#481).
+A maintenance and hardening release. It modernises the build and release pipeline after the OSSRH
+shutdown, refreshes dependencies for security, pulls in the rapiddweller library updates (including a
+dependency-ordering fix for complex database schemas), and corrects documentation.
 
 ### Improvements
-- Clearer GraalVM multi-threading error messages.
-- Extended the scripting demo to show using Java classes from JS functions.
 - Migrated Maven publishing from the retired OSSRH to the Central Portal (#468); pinned
   maven-gpg-plugin to 3.1.0 and added a fail-fast signing-key check (#466).
 - Bumped GitHub Actions off deprecated Node 16/20 runners (#464).
+- Clearer GraalVM multi-threading error messages.
+- Extended the scripting demo to show using Java classes from JS functions.
+- Address generation can be restricted to a region or city directly via `AddressGenerator`'s
+  `stateFilter`/`cityFilter`, instead of over-generating the whole country and trimming afterwards
+  (#481).
 
 ### Bug Fixes
 - Fixed `Incomplete nodes left` when initialising a database adapter against a complex schema
