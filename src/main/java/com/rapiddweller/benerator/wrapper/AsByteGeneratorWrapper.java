@@ -53,7 +53,8 @@ public class AsByteGeneratorWrapper<E extends Number> extends GeneratorWrapper<E
     if (tmp == null) {
       return null;
     }
-    return wrapper.wrap(tmp.unwrap().byteValue());
+    E feed = tmp.unwrap();
+    return wrapper.wrap(feed != null ? feed.byteValue() : null);
   }
 
 }

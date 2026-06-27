@@ -207,11 +207,16 @@ public class Address {
 
   @Override
   public String toString() {
-    AddressFormat format = AddressFormat.getInstance(country.getIsoCode());
-    if (format == null) {
-      format = AddressFormat.DE;
+    try {
+      AddressFormat format = (country != null ? AddressFormat.getInstance(country.getIsoCode()) : null);
+      if (format == null) {
+        format = AddressFormat.DE;
+      }
+      return format.format(this);
+    } catch (Exception e) {
+      // never let toString() fail on a partially populated address (e.g. no country/city set)
+      return street + " " + houseNumber + ", " + postalCode + " " + city;
     }
-    return format.format(this);
   }
 
   @Override

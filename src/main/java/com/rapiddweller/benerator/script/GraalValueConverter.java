@@ -99,11 +99,9 @@ public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
   }
 
   private static Object handleLongValue(Value value) {
-    long longValue = value.asLong();
-    if (longValue > Integer.MAX_VALUE || longValue < Integer.MIN_VALUE) {
-      throw new RuntimeException("Value exceeds int limits: " + longValue);
-    }
-    return (int) longValue;
+    // reached only when the value does not fit in int (the dispatch checks fitsInInt first),
+    // so keep the full long value instead of truncating it to int / rejecting it
+    return value.asLong();
   }
 
   private static Object[] getArrayFromValue(Value val, Map<Value, Object> referenceMap, int depth) throws ConversionException {

@@ -63,7 +63,7 @@ public class AsBigIntegerGeneratorWrapper<E extends Number> extends GeneratorWra
       return null;
     }
     E feed = tmp.unwrap();
-    return wrapper.wrap(BigInteger.valueOf(feed.longValue()));
+    return wrapper.wrap(feed != null ? BigInteger.valueOf(feed.longValue()) : null);
   }
 
 }

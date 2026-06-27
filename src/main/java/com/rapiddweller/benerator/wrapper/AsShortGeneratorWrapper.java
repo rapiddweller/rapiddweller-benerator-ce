@@ -61,7 +61,7 @@ public class AsShortGeneratorWrapper<E extends Number> extends GeneratorWrapper<
       return null;
     }
     E feed = tmp.unwrap();
-    return wrapper.wrap(feed.shortValue());
+    return wrapper.wrap(feed != null ? feed.shortValue() : null);
   }
 
 }

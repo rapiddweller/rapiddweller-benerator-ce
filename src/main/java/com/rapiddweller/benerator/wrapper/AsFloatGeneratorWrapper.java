@@ -60,7 +60,8 @@ public class AsFloatGeneratorWrapper<E extends Number> extends GeneratorWrapper<
     if (tmp == null) {
       return null;
     }
-    return wrapper.wrap(tmp.unwrap().floatValue());
+    E feed = tmp.unwrap();
+    return wrapper.wrap(feed != null ? feed.floatValue() : null);
   }
 
 }

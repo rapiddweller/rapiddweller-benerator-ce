@@ -59,7 +59,8 @@ public class AsDoubleGeneratorWrapper<E extends Number> extends GeneratorWrapper
     if (number == null) {
       return null;
     }
-    return wrapper.wrap(number.unwrap().doubleValue());
+    E feed = number.unwrap();
+    return wrapper.wrap(feed != null ? feed.doubleValue() : null);
   }
 
 }

@@ -1,58 +1,34 @@
-/*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, is permitted under the terms of the
- * GNU General Public License.
- *
- * For redistributing this software or a derivative work under a license other
- * than the GPL-compatible Free Software License as defined by the Free
- * Software Foundation or approved by OSI, you must first obtain a commercial
- * license to this software product from rapiddweller GmbH & Volker Bergmann.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * WITHOUT A WARRANTY OF ANY KIND. ALL EXPRESS OR IMPLIED CONDITIONS,
- * REPRESENTATIONS AND WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE
- * HEREBY EXCLUDED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
-
+/* (c) Copyright 2024 by rapiddweller GmbH & Volker Bergmann. All rights reserved. */
 package com.rapiddweller.benerator.wrapper;
 
-import com.rapiddweller.benerator.ConstantTestGenerator;
+import com.rapiddweller.benerator.SequenceTestGenerator;
+import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
-import static com.rapiddweller.benerator.util.GeneratorUtil.close;
-import static com.rapiddweller.benerator.util.GeneratorUtil.init;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-/**
- * Tests the {@link MessageGenerator}.<br/><br/>
- * Created: 28.07.2011 18:25:12
- *
- * @author Volker Bergmann
- * @since 0.7.0
- */
-public class MessageGeneratorTest {
+/** Tests {@link MessageGenerator}: formats a MessageFormat pattern from source generators, and
+ *  reports unavailability (not NPE) once a source is exhausted. */
+public class MessageGeneratorTest extends GeneratorTest {
 
-  /**
-   * Test.
-   */
   @Test
-  public void test() {
-    MessageGenerator generator = new MessageGenerator("Hello {0}{1}",
-        new ConstantTestGenerator<>("World"),
-        new ConstantTestGenerator<>("!"));
-    init(generator);
-    assertEquals("Hello World!", generator.generate());
-    close(generator);
+  public void testFormatsPatternFromSources() {
+    MessageGenerator g = new MessageGenerator(
+        "Hi {0} #{1}", new SequenceTestGenerator<>("Bob"), new SequenceTestGenerator<>(7));
+    g.init(context);
+    ProductWrapper<String> w = g.generate(new ProductWrapper<>());
+    assertNotNull(w);
+    assertEquals("Hi Bob #7", w.unwrap());
   }
 
+  /** Regression: once the source is exhausted the generator must return unavailability, not NPE. */
+  @Test
+  public void testReturnsUnavailableWhenSourceExhausts() {
+    MessageGenerator g = new MessageGenerator("X{0}", new SequenceTestGenerator<>(1));
+    g.init(context);
+    assertEquals("X1", g.generate(new ProductWrapper<>()).unwrap());
+    assertNull(g.generate(new ProductWrapper<>()));
+  }
 }
