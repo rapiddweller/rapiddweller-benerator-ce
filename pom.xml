@@ -120,6 +120,10 @@
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-merged-test-coverage-report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!-- Exclude structurally non-unit-testable code from the coverage metric: the Swing GUI
+             wizard, the CLI entry points, UI helpers and the code-generation templates. Including
+             them (all ~0% covered) understates the coverage of the testable codebase. -->
+        <sonar.coverage.exclusions>**/benerator/gui/**,**/benerator/main/**,**/ui/**,**/template/xmlanon/**</sonar.coverage.exclusions>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <build_number>${buildNumber}</build_number>
