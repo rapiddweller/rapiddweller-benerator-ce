@@ -58,6 +58,8 @@ public class XMLSchemaDescriptorProviderTest {
   private static final String NESTING_TEST_FILE = BASE + "nesting-test.xsd";
   private static final String ANNOTATION_TEST_FILE = BASE + "annotation-test.xsd";
   private static final String CHOICE_TEST_FILE = BASE + "choice-test.xsd";
+  private static final String CARDINALITY_TEST_FILE = BASE + "cardinality-test.xsd";
+  private static final String ENUM_TEST_FILE = BASE + "enum-test.xsd";
 
   @Test
   public void testSimpleTypeElement() {
@@ -167,6 +169,42 @@ public class XMLSchemaDescriptorProviderTest {
       assertEquals(2, ((Number) choiceXYZ.getMaxCount().evaluate(null)).intValue());
       AlternativeGroupDescriptor choiceXYZType = (AlternativeGroupDescriptor) choiceXYZ.getTypeDescriptor();
       assertEquals(3, choiceXYZType.getComponents().size());
+    } finally {
+      IOUtil.close(provider);
+    }
+  }
+
+  /** XSD cardinality annotation (ben:part minCount/maxCount) must map to the component's counts. */
+  @Test
+  public void testCardinality() {
+    BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(CARDINALITY_TEST_FILE));
+    XMLSchemaDescriptorProvider provider = new XMLSchemaDescriptorProvider(CARDINALITY_TEST_FILE, context);
+    try {
+      ComplexTypeDescriptor outer = (ComplexTypeDescriptor) provider.getTypeDescriptor("outer");
+      assertNotNull(outer);
+      ComponentDescriptor inner = outer.getComponent("inner");
+      assertNotNull(inner);
+      assertEquals(3, ((Number) inner.getMinCount().evaluate(null)).intValue());
+      assertEquals(5, ((Number) inner.getMaxCount().evaluate(null)).intValue());
+    } finally {
+      IOUtil.close(provider);
+    }
+  }
+
+  /** XSD enumeration restriction must become the attribute's value set. */
+  @Test
+  public void testEnumeration() {
+    BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(ENUM_TEST_FILE));
+    XMLSchemaDescriptorProvider provider = new XMLSchemaDescriptorProvider(ENUM_TEST_FILE, context);
+    try {
+      ComplexTypeDescriptor address = (ComplexTypeDescriptor) provider.getTypeDescriptor("address");
+      assertNotNull(address);
+      ComponentDescriptor box = address.getComponent("box");
+      assertNotNull(box);
+      SimpleTypeDescriptor boxType = (SimpleTypeDescriptor) box.getTypeDescriptor();
+      assertNotNull(boxType);
+      assertNotNull(boxType.getValues());
+      assertTrue(boxType.getValues().contains("0203"));
     } finally {
       IOUtil.close(provider);
     }
