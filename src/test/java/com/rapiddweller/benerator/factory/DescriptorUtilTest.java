@@ -57,7 +57,10 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -353,4 +356,39 @@ public class DescriptorUtilTest extends ModelTest {
     assertEquals(expectedValue, ((WeightFunction) distribution).value(0), 0);
   }
 
+  // metadata helper tests ------------------------------------------------------------------------------------------
+
+  @Test
+  public void testGetMaxLength() {
+    SimpleTypeDescriptor type = new SimpleTypeDescriptor("t", testDescriptorProvider);
+    // unset -> default
+    assertEquals(Integer.valueOf(99), DescriptorUtil.getMaxLength(type, 99));
+    // explicit value wins over default
+    type.setMaxLength(7);
+    assertEquals(Integer.valueOf(7), DescriptorUtil.getMaxLength(type, 99));
+    // inherited from the parent type (exercises the parent-walk loop)
+    SimpleTypeDescriptor child = new SimpleTypeDescriptor("child", testDescriptorProvider, type);
+    assertEquals(Integer.valueOf(7), DescriptorUtil.getMaxLength(child, 99));
+  }
+
+  @Test
+  public void testApplyValues() {
+    SimpleTypeDescriptor type = new SimpleTypeDescriptor("t", testDescriptorProvider);
+    DescriptorUtil.applyValues(new LinkedHashSet<>(Arrays.asList("a", "b")), type);
+    assertEquals("a,b", type.getValues());
+    // empty set leaves the descriptor untouched
+    SimpleTypeDescriptor untouched = new SimpleTypeDescriptor("u", testDescriptorProvider);
+    DescriptorUtil.applyValues(Collections.emptySet(), untouched);
+    assertNull(untouched.getValues());
+  }
+
+  @Test
+  public void testDeriveType() {
+    TypeDescriptor fromSimple = DescriptorUtil.deriveType("cs", new SimpleTypeDescriptor("ps", testDescriptorProvider));
+    assertTrue(fromSimple instanceof SimpleTypeDescriptor);
+    assertEquals("cs", fromSimple.getName());
+    TypeDescriptor fromComplex = DescriptorUtil.deriveType("cc", createComplexType("pc"));
+    assertTrue(fromComplex instanceof ComplexTypeDescriptor);
+    assertEquals("cc", fromComplex.getName());
+  }
 }
