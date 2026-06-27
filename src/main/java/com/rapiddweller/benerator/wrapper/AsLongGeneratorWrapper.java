@@ -60,7 +60,7 @@ public class AsLongGeneratorWrapper<E extends Number> extends GeneratorWrapper<E
       return null;
     }
     E feed = tmp.unwrap();
-    return wrapper.wrap(feed.longValue());
+    return wrapper.wrap(feed != null ? feed.longValue() : null);
   }
 
 }
