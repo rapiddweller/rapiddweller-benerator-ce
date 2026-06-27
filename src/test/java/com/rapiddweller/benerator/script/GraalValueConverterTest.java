@@ -1,73 +1,38 @@
+/* (c) Copyright 2024 by rapiddweller GmbH & Volker Bergmann. All rights reserved. */
+
 package com.rapiddweller.benerator.script;
 
-import com.rapiddweller.benerator.test.Person;
-import org.graalvm.polyglot.Value;
-import org.junit.Assert;
+import org.graalvm.polyglot.Context;
 import org.junit.Test;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
+/**
+ * Tests {@link GraalValueConverter} along the use case "turn the result of an evaluated JS
+ * expression into a plain Java object" (numbers, strings, booleans, arrays).
+ *
+ * @author rapiddweller
+ */
 public class GraalValueConverterTest {
 
-  Person person = new Person();
-  byte[] bytes = "djfljsdlkfjsd".getBytes();
-  String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
-  Date myDate = new Date();
-  HashMap<String, Object> capitalCities = new HashMap<>();
-  HashSet<String> carsHash = new HashSet<String>();
-
-
   @Test
-  public void testConstructor() {
-    GraalValueConverter actualGraalValueConverter = new GraalValueConverter();
-    Class<?> expectedSourceType = Value.class;
-    assertSame(expectedSourceType, actualGraalValueConverter.getSourceType());
-    assertTrue(actualGraalValueConverter.isThreadSafe());
-    assertTrue(actualGraalValueConverter.isParallelizable());
-    Class<?> expectedTargetType = Object.class;
-    assertSame(expectedTargetType, actualGraalValueConverter.getTargetType());
+  public void testConvertsJsScalarsAndArrays() {
+    try (Context ctx = Context.create("js")) {
+      assertEquals(Integer.valueOf(42), GraalValueConverter.value2JavaConverter(ctx.eval("js", "40 + 2")));
+      assertEquals("hello", GraalValueConverter.value2JavaConverter(ctx.eval("js", "'hel' + 'lo'")));
+      assertEquals(Boolean.TRUE, GraalValueConverter.value2JavaConverter(ctx.eval("js", "1 === 1")));
+      assertEquals(Boolean.FALSE, GraalValueConverter.value2JavaConverter(ctx.eval("js", "1 === 2")));
+      assertArrayEquals(new Object[]{1, 2, 3},
+          (Object[]) GraalValueConverter.value2JavaConverter(ctx.eval("js", "[1, 2, 3]")));
+    }
   }
 
   @Test
-  public void testConverter() {
-    capitalCities.put("Germany", "Berlin");
-    capitalCities.put("Norway", "Oslo");
-    capitalCities.put("USA", "Washington DC");
-
-    carsHash.add("Volvo");
-    carsHash.add("BMW");
-    carsHash.add("Ford");
-    carsHash.add("Mazda");
-
-    capitalCities.put("Cars", carsHash);
-
-    Value i = Value.asValue(18218312);
-    Value f = Value.asValue(1.8218312);
-    Value s = Value.asValue("djfljsdlkfjsd");
-    Value p = Value.asValue(person);
-    Value b = Value.asValue(true);
-    Value by = Value.asValue(bytes);
-    Value array = Value.asValue(cars);
-    Value date = Value.asValue(myDate);
-    Value hash = Value.asValue(capitalCities);
-    Value hashSet = Value.asValue(carsHash);
-
-    GraalValueConverter actualGraalValueConverter = new GraalValueConverter();
-    Assert.assertEquals("djfljsdlkfjsd", actualGraalValueConverter.convert(s));
-    Assert.assertEquals(person, actualGraalValueConverter.convert(p));
-    Assert.assertEquals(18218312, actualGraalValueConverter.convert(i));
-    Assert.assertEquals(1.8218312, actualGraalValueConverter.convert(f));
-    Assert.assertEquals(true, actualGraalValueConverter.convert(b));
-    Assert.assertEquals(bytes, actualGraalValueConverter.convert(by));
-    Assert.assertEquals(cars, actualGraalValueConverter.convert(array));
-    Assert.assertEquals(myDate, actualGraalValueConverter.convert(date));
-    Assert.assertEquals(capitalCities, actualGraalValueConverter.convert(hash));
-    Assert.assertEquals(carsHash, actualGraalValueConverter.convert(hashSet));
+  public void testConverterInstanceDelegatesToStaticConversion() {
+    try (Context ctx = Context.create("js")) {
+      GraalValueConverter converter = new GraalValueConverter();
+      assertEquals(Integer.valueOf(7), converter.convert(ctx.eval("js", "3 + 4")));
+    }
   }
 }
-
