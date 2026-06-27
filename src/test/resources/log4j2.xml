@@ -13,28 +13,28 @@
 
     <Loggers>
         <!-- Special loggers -->
-        <Logger name="com.rapiddweller.JDBC" level="info"/>
-        <Logger name="com.rapiddweller.SQL" level="info"/>
-        <Logger name="com.rapiddweller.COMMENT" level="info"/>
-        <Logger name="com.rapiddweller.CONFIG" level="info"/>
-        <Logger name="com.rapiddweller.benerator.STATE" level="info"/>
+        <Logger name="com.rapiddweller.JDBC" level="warn"/>
+        <Logger name="com.rapiddweller.SQL" level="warn"/>
+        <Logger name="com.rapiddweller.COMMENT" level="warn"/>
+        <Logger name="com.rapiddweller.CONFIG" level="warn"/>
+        <Logger name="com.rapiddweller.benerator.STATE" level="warn"/>
 
         <!-- general loggers -->
         <Logger name="com.rapiddweller.apache" level="warn"/>
-        <Logger name="com.rapiddweller.shop" level="info"/>
-        <Logger name="com.rapiddweller" level="info"/>
-        <Logger name="com.rapiddweller.platform.xml" level="info"/>
-        <Logger name="com.rapiddweller.common.converter" level="info"/>
-        <Logger name="com.rapiddweller.platform.db" level="info"/>
-        <Logger name="com.rapiddweller.model" level="info"/>
-        <Logger name="com.rapiddweller.dataset" level="info"/>
-        <Logger name="com.rapiddweller.common" level="info"/>
-        <Logger name="com.rapiddweller.benerator" level="info"/>
-        <Logger name="com.rapiddweller.domain" level="info"/>
+        <Logger name="com.rapiddweller.shop" level="warn"/>
+        <Logger name="com.rapiddweller" level="warn"/>
+        <Logger name="com.rapiddweller.platform.xml" level="warn"/>
+        <Logger name="com.rapiddweller.common.converter" level="warn"/>
+        <Logger name="com.rapiddweller.platform.db" level="warn"/>
+        <Logger name="com.rapiddweller.model" level="warn"/>
+        <Logger name="com.rapiddweller.dataset" level="warn"/>
+        <Logger name="com.rapiddweller.common" level="warn"/>
+        <Logger name="com.rapiddweller.benerator" level="warn"/>
+        <Logger name="com.rapiddweller.domain" level="warn"/>
 
         <!-- Root setup -->
 
-        <Root level="info">
+        <Root level="warn">
             <appender-ref ref="console"/>
         </Root>
 
