@@ -146,13 +146,15 @@ public class MessageGenerator extends ValidatingGenerator<String> implements Non
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
   protected ProductWrapper<String> doGenerate(ProductWrapper<String> wrapper) {
-    Object[] values = (Object[]) helper.generate((ProductWrapper) getSourceWrapper()).unwrap();
-    //changed  from Object[] to  Object
+    ProductWrapper<?> sourceWrapper = helper.generate((ProductWrapper) getSourceWrapper());
+    if (sourceWrapper == null) {
+      return null; // sources exhausted -> report unavailability instead of NPE-ing on unwrap()
+    }
+    Object[] values = (Object[]) sourceWrapper.unwrap();
     if (values == null) {
       return null;
-    } else {
-      return wrapper.wrap(MessageFormat.format(pattern, values));
     }
+    return wrapper.wrap(MessageFormat.format(pattern, values));
   }
 
   /** @see Generator#reset() */
