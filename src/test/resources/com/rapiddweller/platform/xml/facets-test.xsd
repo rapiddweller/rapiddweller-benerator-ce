@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="facets-test.xsd" xmlns="facets-test.xsd"
+           elementFormDefault="qualified">
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="score">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:minInclusive value="1"/>
+                            <xs:maxInclusive value="100"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="ratio">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:minExclusive value="0"/>
+                            <xs:maxExclusive value="10"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="code">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:length value="5"/>
+                            <xs:pattern value="[A-Z]{5}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="active" type="xs:boolean" default="true"/>
+            <xs:attribute name="version" type="xs:string" fixed="v1"/>
+            <xs:attribute name="legacy" type="xs:string" use="prohibited"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

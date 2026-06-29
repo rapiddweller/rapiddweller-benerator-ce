@@ -42,6 +42,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -60,6 +61,8 @@ public class XMLSchemaDescriptorProviderTest {
   private static final String CHOICE_TEST_FILE = BASE + "choice-test.xsd";
   private static final String CARDINALITY_TEST_FILE = BASE + "cardinality-test.xsd";
   private static final String ENUM_TEST_FILE = BASE + "enum-test.xsd";
+  private static final String FACETS_TEST_FILE = BASE + "facets-test.xsd";
+  private static final String REF_TEST_FILE = BASE + "ref-test.xsd";
 
   @Test
   public void testSimpleTypeElement() {
@@ -210,7 +213,68 @@ public class XMLSchemaDescriptorProviderTest {
     }
   }
 
+  /** XSD restriction facets (min/maxInclusive, min/maxExclusive, length, pattern) and
+   *  attribute settings (required, default, fixed, prohibited) must map onto the descriptors. */
+  @Test
+  public void testFacetsAndAttributes() {
+    BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(FACETS_TEST_FILE));
+    XMLSchemaDescriptorProvider provider = new XMLSchemaDescriptorProvider(FACETS_TEST_FILE, context);
+    try {
+      ComplexTypeDescriptor root = (ComplexTypeDescriptor) provider.getTypeDescriptor("root");
+      assertNotNull(root);
+      // 3 sequence elements + 4 attributes
+      assertEquals(7, root.getComponents().size());
+
+      // inclusive range facets
+      SimpleTypeDescriptor score = simpleContentOf(root, "score");
+      assertEquals("1", score.getMin());
+      assertEquals("100", score.getMax());
+      // exclusive range facets
+      SimpleTypeDescriptor ratio = simpleContentOf(root, "ratio");
+      assertEquals("0", ratio.getMin());
+      assertEquals("10", ratio.getMax());
+      // length + pattern facets
+      SimpleTypeDescriptor code = simpleContentOf(root, "code");
+      assertEquals(Integer.valueOf(5), code.getMaxLength());
+      assertEquals("[A-Z]{5}", code.getPattern());
+
+      // required attribute -> not nullable
+      assertEquals(Boolean.FALSE, root.getComponent("id").isNullable());
+      // default and fixed values map onto the attribute's value set
+      assertEquals("true", ((SimpleTypeDescriptor) root.getComponent("active").getLocalType(false)).getValues());
+      assertEquals("v1", ((SimpleTypeDescriptor) root.getComponent("version").getLocalType(false)).getValues());
+    } finally {
+      IOUtil.close(provider);
+    }
+  }
+
+  /** Element references, unbounded cardinality and key/keyref declarations must be parsed. */
+  @Test
+  public void testElementRefAndKeys() {
+    BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(REF_TEST_FILE));
+    XMLSchemaDescriptorProvider provider = new XMLSchemaDescriptorProvider(REF_TEST_FILE, context);
+    try {
+      ComplexTypeDescriptor catalog = (ComplexTypeDescriptor) provider.getTypeDescriptor("catalog");
+      assertNotNull(catalog);
+      // the referenced element appears as a component
+      assertNotNull(catalog.getComponent("color"));
+      // maxOccurs="unbounded" -> unbounded max count (evaluates to null)
+      ComponentDescriptor item = catalog.getComponent("item");
+      assertNotNull(item);
+      assertNull(item.getMaxCount().evaluate(null));
+      // nillable="false" -> not nullable
+      assertEquals(Boolean.FALSE, item.isNullable());
+    } finally {
+      IOUtil.close(provider);
+    }
+  }
+
   // helpers ---------------------------------------------------------------------------------------------------------
+
+  private static SimpleTypeDescriptor simpleContentOf(ComplexTypeDescriptor owner, String name) {
+    ComplexTypeDescriptor componentType = (ComplexTypeDescriptor) owner.getComponent(name).getTypeDescriptor();
+    return (SimpleTypeDescriptor) componentType.getComponent(ComplexTypeDescriptor.__SIMPLE_CONTENT).getTypeDescriptor();
+  }
 
   private static void assertComplexComponentWithSimpleContent(String name, ComplexTypeDescriptor rootDescriptor) {
     ComponentDescriptor stComponent = rootDescriptor.getComponent(name);
