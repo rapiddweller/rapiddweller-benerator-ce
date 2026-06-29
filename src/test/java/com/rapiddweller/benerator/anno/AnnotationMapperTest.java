@@ -29,7 +29,9 @@ package com.rapiddweller.benerator.anno;
 import com.rapiddweller.benerator.distribution.sequence.StepSequence;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.benerator.factory.CoverageGeneratorFactory;
 import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
+import com.rapiddweller.benerator.factory.SerialGeneratorFactory;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
@@ -41,16 +43,27 @@ import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link AnnotationMapper}.<br/><br/>
@@ -328,6 +341,173 @@ public class AnnotationMapperTest {
     }
   }
 
+
+  // benerator parameter annotations ---------------------------------------------------------------------------------
+
+  @Test
+  public void testGranularity() throws Exception {
+    checkMethod("granularityMethod", int.class, "int", "granularity", "2");
+  }
+
+  public void granularityMethod(@Granularity(2) int x) {
+  }
+
+  @Test
+  public void testDecimalGranularity() throws Exception {
+    checkMethod("decimalGranularityMethod", double.class, "double", "granularity", "0.5");
+  }
+
+  public void decimalGranularityMethod(@DecimalGranularity("0.5") double x) {
+  }
+
+  @Test
+  public void testSizeDistribution() throws Exception {
+    checkMethod("sizeDistributionMethod", String.class, "string", "lengthDistribution", "cumulated");
+  }
+
+  public void sizeDistributionMethod(@SizeDistribution("cumulated") String x) {
+  }
+
+  @Test
+  public void testOffset() throws Exception {
+    checkMethod("offsetMethod", int.class, "int", "offset", 3);
+  }
+
+  public void offsetMethod(@Offset(3) int x) {
+  }
+
+  @Test
+  public void testMinMaxDate() throws Exception {
+    checkMethod("minMaxDateMethod", Date.class, "date", "min", "2020-01-01", "max", "2020-12-31");
+  }
+
+  public void minMaxDateMethod(@MinDate("2020-01-01") @MaxDate("2020-12-31") Date d) {
+  }
+
+  // bean validation parameter annotations ---------------------------------------------------------------------------
+
+  @Test
+  public void testMinMax() throws Exception {
+    checkMethod("minMaxMethod", int.class, "int", "min", "5", "max", "9");
+  }
+
+  public void minMaxMethod(@Min(5) @Max(9) int x) {
+  }
+
+  @Test
+  public void testDecimalMinMax() throws Exception {
+    checkMethod("decimalMinMaxMethod", double.class, "double", "min", "1.5", "max", "9.5");
+  }
+
+  public void decimalMinMaxMethod(@DecimalMin("1.5") @DecimalMax("9.5") double x) {
+  }
+
+  @Test
+  public void testDigits() throws Exception {
+    checkMethod("digitsMethod", double.class, "double", "granularity", "0.01");
+  }
+
+  public void digitsMethod(@Digits(integer = 5, fraction = 2) double x) {
+  }
+
+  @Test
+  public void testNotNull() throws Exception {
+    checkMethod("notNullMethod", String.class, "string", "nullQuota", 0.);
+  }
+
+  public void notNullMethod(@NotNull String x) {
+  }
+
+  @Test
+  public void testNull() throws Exception {
+    checkMethod("nullableMethod", String.class, "string", "nullQuota", 1.);
+  }
+
+  public void nullableMethod(@Null String x) {
+  }
+
+  @Test
+  public void testAssertTrue() throws Exception {
+    checkMethod("assertTrueMethod", boolean.class, "boolean", "trueQuota", 1.);
+  }
+
+  public void assertTrueMethod(@AssertTrue boolean x) {
+  }
+
+  @Test
+  public void testAssertFalse() throws Exception {
+    checkMethod("assertFalseMethod", boolean.class, "boolean", "trueQuota", 0.);
+  }
+
+  public void assertFalseMethod(@AssertFalse boolean x) {
+  }
+
+  /** @Past / @Future map to date bounds derived from the current day; just assert the mapping runs. */
+  @Test
+  public void testPast() throws Exception {
+    checkMethod("pastMethod", Date.class, "date");
+  }
+
+  public void pastMethod(@Past Date d) {
+  }
+
+  @Test
+  public void testFuture() throws Exception {
+    checkMethod("futureMethod", Date.class, "date");
+  }
+
+  public void futureMethod(@Future Date d) {
+  }
+
+  // generator factory selection -------------------------------------------------------------------------------------
+
+  @Test
+  public void testCoverageFactory() throws Exception {
+    Method m = getClass().getDeclaredMethod("coverageMethod", int.class);
+    com.rapiddweller.benerator.Generator<Object[]> g = annotationMapper.createAndInitMethodParamsGenerator(m, context);
+    assertNotNull(g);
+    assertEquals(CoverageGeneratorFactory.class, context.getGeneratorFactory().getClass());
+  }
+
+  @Coverage
+  public void coverageMethod(int x) {
+  }
+
+  @Test
+  public void testSerialFactory() throws Exception {
+    Method m = getClass().getDeclaredMethod("serialMethod", int.class);
+    com.rapiddweller.benerator.Generator<Object[]> g = annotationMapper.createAndInitMethodParamsGenerator(m, context);
+    assertNotNull(g);
+    assertEquals(SerialGeneratorFactory.class, context.getGeneratorFactory().getClass());
+  }
+
+  @Serial
+  public void serialMethod(int x) {
+  }
+
+  /** @InvocationCount must wrap the generator so it yields a bounded number of products. */
+  @Test
+  public void testInvocationCount() throws Exception {
+    Method m = getClass().getDeclaredMethod("invocationCountMethod", int.class);
+    com.rapiddweller.benerator.Generator<Object[]> g = annotationMapper.createAndInitMethodParamsGenerator(m, context);
+    assertNotNull(g);
+  }
+
+  @InvocationCount(2)
+  public void invocationCountMethod(int x) {
+  }
+
+  // field attribute generators --------------------------------------------------------------------------------------
+
+  /** A field without @Source yields no attribute generator. */
+  @Test
+  public void testAttributeWithoutSource() throws Exception {
+    Field f = getClass().getDeclaredField("plainField");
+    assertNull(annotationMapper.createAndInitAttributeGenerator(f, context));
+  }
+
+  @SuppressWarnings("unused")
+  private String plainField;
 
   // helper methods --------------------------------------------------------------------------------------------------
 
