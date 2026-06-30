@@ -30,10 +30,10 @@
 
 DATAMIMIC is rapiddweller's own platform, carrying the model-driven test-data approach forward on a modern stack. Moving gives you:
 
-- **Deterministic, reproducible output.** Same seed, same data, every run and every machine, with a per-output content hash you can use as audit evidence.
+- **Deterministic, reproducible output.** The same model and seed produce the same data, reproducible across machines, with a per-output content hash you can use as audit evidence.
 - **A familiar approach, modern foundation.** If you have worked with model-driven generation, DATAMIMIC will feel familiar: XML descriptors and first-class Python, so you can bring your own Python as generators, converters, and validators.
 - **Active development and regular releases**, not maintenance-only.
-- **Modern integration.** REST API and a built-in scheduler for CI/CD, an MCP server for AI-agent workflows, and connectors for PostgreSQL, Oracle, MongoDB, Apache Kafka, and flat files.
+- **Install and run in CI.** `pip install datamimic_ce` and drive it from the CLI — it slots into Jenkins, GitLab CI, or any Python pipeline, the same place your Benerator step runs today. CE connects to PostgreSQL, Oracle, MySQL, MS SQL Server, SQLite, and MongoDB, plus CSV/JSON/XML files, and ships an MCP server so agentic workflows can use it as a deterministic data-generation tool. Streaming targets (Apache Kafka, RabbitMQ) are in DATAMIMIC EE; a REST API and scheduler for server-driven pipelines are in DATAMIMIC Platform.
 - **On-premise and air-gapped deployment**, no telemetry and no call-home, for regulated environments.
 
 Get started:
@@ -46,16 +46,18 @@ Get started:
 
 ## Coming from Benerator
 
-DATAMIMIC is rapiddweller's own platform with its own DSL, but it shares the model-driven approach, so you do not start from zero. Migration scripts carry much of an existing Benerator setup across; some parts are designed differently and need rework, and we are happy to help with those. This table maps familiar concepts to how DATAMIMIC approaches them:
+DATAMIMIC Community Edition is the direct successor to Benerator's model-driven engine. The descriptor approach carries over; the runtime and the extension language change. You install it with `pip install datamimic_ce` and drive it from the CLI, so it slots into the same place in your pipeline where the Benerator shell or Maven step runs today. Migration scripts convert much of an existing descriptor; the parts that were redesigned need a manual pass, and we are happy to help with those.
 
-| Concept (familiar from Benerator) | DATAMIMIC's approach (independently designed) |
+| Benerator CE | DATAMIMIC CE |
 |---|---|
-| Model-driven generation in XML | Model-driven XML descriptors, plus first-class Python |
-| Descriptor structure (setup, generate, iterate, variable, attribute, id, reference) | A similar, independently designed structure; for example, Benerator's `attribute` corresponds to DATAMIMIC's `key`. Familiar, not identical |
-| Anonymization and masking | Privacy-safe synthetic generation and value-keyed pseudonymization |
-| Java or JavaScript extensions | Python generators, converters, and validators |
-| CI integration (Jenkins, GitLab) | REST API plus built-in scheduler for CI/CD |
-| Databases, files, XML | PostgreSQL, Oracle, MongoDB, Kafka, CSV / JSON / XML |
+| Model-driven generation in XML | Same approach: model-driven XML descriptors. |
+| Descriptor structure (`setup`, `generate`, `iterate`, `variable`, `attribute`, `id`, `reference`) | Similar structure, some elements renamed — Benerator's `attribute` is DATAMIMIC's `key`. A compatibility mode aliases common Benerator elements (e.g. `iterate`→`generate`, `id`→`key`) so most descriptors run with minimal changes; unsupported elements are reported in the log instead of failing the run. |
+| Custom logic in Java or JavaScript | Python generators, converters, and validators. Existing Java/JS extensions must be rewritten in Python — DATAMIMIC provides Converter and Generator interfaces to implement against. |
+| Anonymizing / masking existing data | Deterministic generation with value-keyed pseudonymization converters — the same input maps to the same token across runs (referentially consistent, reproducible from the seed). |
+| Runs as a CLI / Maven step in Jenkins or GitLab CI | `pip install datamimic_ce`, then the `datamimic` CLI as a pipeline step — same model, no server required. |
+| Databases via JDBC, any driver (Oracle, DB2, MySQL, PostgreSQL, H2, …); files: CSV, fixed-width, XML, Excel, DbUnit | Oracle, MS SQL Server, PostgreSQL, MySQL, SQLite, MongoDB; files: CSV, JSON, XML. The major relational engines plus MongoDB (document); Benerator's any-JDBC reach is broader on exotic drivers. |
+
+**Streaming targets (Apache Kafka, RabbitMQ) are in DATAMIMIC EE**; a REST API and scheduler for server-driven pipelines are in DATAMIMIC Platform. CE covers the relational, MongoDB, and file targets above, runs from the CLI in any pipeline, and ships an MCP server for agentic workflows. As a platform partner we solve your test-data challenges — if a system you need isn't supported yet, contact us.
 
 **We offer support with the migration.** Migration scripts handle much of the conversion; the team helps with the parts that need rework and with integrating DATAMIMIC into your systems and pipelines. Get in touch at support@rapiddweller.com or via https://datamimic.io.
 
