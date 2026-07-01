@@ -5,7 +5,7 @@
         <attribute name="balance" script="1000.0"/>
         <attribute name="years" script="0"/>
         <while test="balance &lt; 2000">
-            <attribute name="balance" script="balance * 1.1"/>
+            <attribute name="balance" script="balance * rate"/>
             <attribute name="years" script="years + 1"/>
         </while>
     </generate>

@@ -348,8 +348,9 @@ public class DescriptorConverter {
   }
 
   /**
-   * Benerator {@code <setting name value>} / {@code <property name value>} -&gt; DATAMIMIC
-   * {@code <variable name constant>} (or {@code script} when the value is a {@code {expression}}).
+   * Benerator {@code <setting name value>} / {@code <property name value>} -&gt; DATAMIMIC {@code <variable>}.
+   * A {@code {expression}} or a numeric literal becomes {@code script=} (so it evaluates to a number, not
+   * the string "1.1"); everything else stays a string {@code constant=}.
    */
   private void convertSettingAttributes(Element src, Element out, String path) {
     Map<String, String> attrs = attributes(src);
@@ -361,6 +362,8 @@ public class DescriptorConverter {
       report.add(path, "attribute", "<" + local(src) + "> without a value (source/ref form) - review");
     } else if (value.startsWith("{") && value.endsWith("}")) {
       out.setAttribute("script", value.substring(1, value.length() - 1));
+    } else if (value.matches("-?\\d+(\\.\\d+)?")) {
+      out.setAttribute("script", value); // numeric literal -> evaluated to a number, not a string
     } else {
       out.setAttribute("constant", value);
     }
