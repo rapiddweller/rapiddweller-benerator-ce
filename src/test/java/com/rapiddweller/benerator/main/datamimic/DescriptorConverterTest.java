@@ -48,13 +48,16 @@ public class DescriptorConverterTest {
         intKey = "int".equals(k.getAttribute("type"));
       }
       if ("double_001".equals(k.getAttribute("name"))) {
-        // Benerator double + min/max/granularity -> DATAMIMIC float + folded FloatGenerator.
+        // Benerator double + min/max/granularity -> DATAMIMIC float with NATIVE min/max/granularity attrs.
         floatGenKey = "float".equals(k.getAttribute("type"))
-            && k.getAttribute("generator").equals("FloatGenerator(min=0.0, max=10.0, granularity=0.01)");
+            && k.getAttribute("min").equals("0.0")
+            && k.getAttribute("max").equals("10.0")
+            && k.getAttribute("granularity").equals("0.01")
+            && k.getAttribute("generator").isEmpty();
       }
     }
     assertTrue("int type mapped", intKey);
-    assertTrue("numeric range folded into FloatGenerator", floatGenKey);
+    assertTrue("numeric range passes through as native min/max/granularity", floatGenKey);
 
     String rep = report.format();
     assertTrue("unmapped maxLength flagged", rep.contains("maxLength"));

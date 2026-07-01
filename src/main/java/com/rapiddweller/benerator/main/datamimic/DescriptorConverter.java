@@ -168,8 +168,14 @@ public class DescriptorConverter {
     Map<String, String> attrs = attributes(src);
     String mappedType = mapType(attrs.get("type"), tag, path);
 
-    // Benerator min/max/granularity have no native DATAMIMIC field attrs -> fold into a numeric generator.
-    boolean numericRange = (attrs.containsKey("min") || attrs.containsKey("max"))
+    // min/max/granularity are native DATAMIMIC <key> attrs now, so they pass through untouched. Only fold
+    // into a numeric generator when a non-random distribution must ride along (native range has no
+    // 'distribution' arg, so IntegerGenerator(distribution=...) is the only way to carry it).
+    String distribution = attrs.get("distribution");
+    boolean foldDistribution = distribution != null
+        && VocabularyMap.KNOWN_DISTRIBUTIONS.contains(distribution) && !distribution.equals("random");
+    boolean numericRange = foldDistribution
+        && (attrs.containsKey("min") || attrs.containsKey("max"))
         && mappedType != null && (VocabularyMap.INTEGER_TYPES.contains(mappedType)
         || VocabularyMap.FLOAT_TYPES.contains(mappedType))
         && !attrs.containsKey("generator");
