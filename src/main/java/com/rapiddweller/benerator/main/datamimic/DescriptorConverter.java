@@ -339,7 +339,22 @@ public class DescriptorConverter {
         out.setAttribute(keep, attrs.get(keep));
       }
     }
-    // DATAMIMIC requires 'dbms' - derive it from the JDBC driver or url; Benerator has no such attribute.
+    // Split an inline JDBC URL into DATAMIMIC host/port/database/dbms (only when not already given).
+    EnvironmentMigrator.Coordinates c = EnvironmentMigrator.parseJdbcUrl(attrs.get("url"));
+    if (c != null) {
+      if (c.host != null && !attrs.containsKey("host")) {
+        out.setAttribute("host", c.host);
+      }
+      if (c.port != null && !attrs.containsKey("port")) {
+        out.setAttribute("port", c.port);
+      }
+      if (c.database != null && !attrs.containsKey("database")) {
+        out.setAttribute("database", c.database);
+      }
+      out.setAttribute("dbms", c.dbms);
+      return;
+    }
+    // No parseable URL: derive dbms from the driver/url, else flag for manual attention.
     String dbms = deriveDbms(attrs.get("driver"), attrs.get("url"));
     if (dbms != null) {
       out.setAttribute("dbms", dbms);
@@ -347,7 +362,8 @@ public class DescriptorConverter {
       report.add(path, "database", "database '" + attrs.get("id") + "' -> set dbms manually (could not derive from driver/url)");
     }
     if (attrs.containsKey("url") && !attrs.containsKey("host")) {
-      report.add(path, "database", "database '" + attrs.get("id") + "' url -> set host/port/database or use environment=");
+      report.add(path, "database", "database '" + attrs.get("id")
+          + "' url '" + attrs.get("url") + "' -> Java-embedded DB (h2/hsqldb): migrate to postgres/sqlite manually");
     }
   }
 

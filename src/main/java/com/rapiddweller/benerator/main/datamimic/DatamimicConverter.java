@@ -6,7 +6,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -66,13 +68,55 @@ public final class DatamimicConverter {
       }
     }
 
+    // Migrate DB environment files (JDBC URL -> DATAMIMIC host/port/database/dbms) so a DB-backed
+    // converted descriptor has coordinates to connect with.
+    int envMigrated = 0;
+    if (Files.isDirectory(input)) {
+      List<Path> envFiles;
+      try (Stream<Path> s = Files.walk(input)) {
+        envFiles = s.filter(p -> p.getFileName().toString().endsWith(".env.properties")).sorted()
+            .collect(java.util.stream.Collectors.toList());
+      }
+      for (Path envIn : envFiles) {
+        Path rel = input.relativize(envIn);
+        Map<String, String> migrated = EnvironmentMigrator.migrate(readProps(envIn), report, rel.toString());
+        Path envOut = outDir.resolve(rel);
+        Files.createDirectories(envOut.getParent());
+        writeProps(envOut, migrated);
+        envMigrated++;
+        System.out.println("  [ENV]  " + rel);
+      }
+    }
+
     if (args.length >= 3) {
       Files.writeString(Path.of(args[2]), report.format());
     }
-    System.out.printf("Converted %d/%d descriptor(s); %d flagged item(s) for manual review.%n",
-        ok, inputs.size(), report.items().size());
+    System.out.printf("Converted %d/%d descriptor(s), migrated %d env file(s); %d flagged item(s).%n",
+        ok, inputs.size(), envMigrated, report.items().size());
     if (failed > 0) {
       System.out.printf("%d descriptor(s) could not be converted (see stderr).%n", failed);
     }
+  }
+
+  /** Read a .properties file into an insertion-ordered map (key = first '='; '#'/'!' and blanks skipped). */
+  private static Map<String, String> readProps(Path file) throws Exception {
+    Map<String, String> props = new LinkedHashMap<>();
+    for (String line : Files.readAllLines(file)) {
+      String trimmed = line.trim();
+      if (trimmed.isEmpty() || trimmed.startsWith("#") || trimmed.startsWith("!")) {
+        continue;
+      }
+      int eq = trimmed.indexOf('=');
+      if (eq > 0) {
+        props.put(trimmed.substring(0, eq).trim(), trimmed.substring(eq + 1).trim());
+      }
+    }
+    return props;
+  }
+
+  private static void writeProps(Path file, Map<String, String> props) throws Exception {
+    StringBuilder sb = new StringBuilder("# Migrated from Benerator by DatamimicConverter\n");
+    props.forEach((k, v) -> sb.append(k).append('=').append(v).append('\n'));
+    Files.writeString(file, sb.toString());
   }
 }
