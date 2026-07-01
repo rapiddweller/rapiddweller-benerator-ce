@@ -127,4 +127,14 @@ public final class VocabularyMap {
   /** Benerator converter -&gt; DATAMIMIC converter name. */
   public static final Map<String, String> CONVERTER_RENAME = Map.of(
       "CaseConverter", "UpperCase"); // Benerator CaseConverter defaults to upper-casing
+
+  /** Benerator hash converter -&gt; DATAMIMIC {@code Hash(algorithm, output_format)} full expression. */
+  public static final Map<String, String> CONVERTER_EXPANSION = Map.ofEntries(
+      Map.entry("SHA1Hash", "Hash('sha1','hex')"),
+      Map.entry("SHA1HashBase64", "Hash('sha1','base64')"),
+      Map.entry("SHA256Hash", "Hash('sha256','hex')"),
+      Map.entry("SHA256HashBase64", "Hash('sha256','base64')"),
+      Map.entry("SHA512Hash", "Hash('sha512','hex')"),
+      Map.entry("MD5Hash", "Hash('md5','hex')"),
+      Map.entry("MD5HashBase64", "Hash('md5','base64')"));
 }

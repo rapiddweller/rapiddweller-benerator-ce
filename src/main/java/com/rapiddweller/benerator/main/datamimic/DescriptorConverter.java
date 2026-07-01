@@ -364,6 +364,11 @@ public class DescriptorConverter {
     int paren = expr.indexOf('(');
     String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
     String args = paren >= 0 ? expr.substring(paren) : "";
+    // Benerator SHA*/MD5 hash converters expand to DATAMIMIC's parameterised Hash(algorithm, format).
+    String expansion = VocabularyMap.CONVERTER_EXPANSION.get(cls);
+    if (expansion != null) {
+      return expansion;
+    }
     String mapped = VocabularyMap.CONVERTER_RENAME.getOrDefault(cls, cls);
     if (!VocabularyMap.KNOWN_CONVERTERS.contains(mapped)) {
       report.add(path, "converter", "converter '" + value + "' not known to DATAMIMIC - verify/replace manually");
