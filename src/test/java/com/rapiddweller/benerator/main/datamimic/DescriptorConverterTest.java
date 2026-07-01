@@ -35,7 +35,7 @@ public class DescriptorConverterTest {
 
     Element gen = (Element) root.getElementsByTagName("generate").item(0);
     assertEquals("numbers", gen.getAttribute("name")); // Benerator type -> DATAMIMIC name
-    assertEquals("", gen.getAttribute("target"));      // consumer -> empty target
+    assertEquals("LogExporter", gen.getAttribute("target")); // consumer LoggingConsumer -> DATAMIMIC LogExporter
 
     NodeList keys = doc.getElementsByTagName("key");   // <attribute> -> <key>
     assertTrue("expected the 8 attributes as keys", keys.getLength() >= 8);
@@ -57,7 +57,6 @@ public class DescriptorConverterTest {
     assertTrue("numeric range folded into FloatGenerator", floatGenKey);
 
     String rep = report.format();
-    assertTrue("consumer flagged", rep.contains("consumer"));
     assertTrue("unmapped maxLength flagged", rep.contains("maxLength"));
   }
 

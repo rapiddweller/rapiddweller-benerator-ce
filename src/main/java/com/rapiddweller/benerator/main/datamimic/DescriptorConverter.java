@@ -78,6 +78,13 @@ public class DescriptorConverter {
       case "include":
         copyAttributes(el, result, "uri"); // DATAMIMIC include is uri-based
         break;
+      case "while":
+        convertWhileAttributes(el, result, path); // <while test> -> <while condition>
+        break;
+      case "setting":
+      case "property":
+        convertSettingAttributes(el, result, path); // name + value -> <variable> constant/script
+        break;
       case "comment":
       case "echo":
         break; // no attributes to map; text content is copied below
@@ -341,6 +348,39 @@ public class DescriptorConverter {
   }
 
   /**
+   * Benerator {@code <setting name value>} / {@code <property name value>} -&gt; DATAMIMIC
+   * {@code <variable name constant>} (or {@code script} when the value is a {@code {expression}}).
+   */
+  private void convertSettingAttributes(Element src, Element out, String path) {
+    Map<String, String> attrs = attributes(src);
+    if (attrs.containsKey("name")) {
+      out.setAttribute("name", attrs.get("name"));
+    }
+    String value = attrs.containsKey("value") ? attrs.get("value") : attrs.get("default");
+    if (value == null) {
+      report.add(path, "attribute", "<" + local(src) + "> without a value (source/ref form) - review");
+    } else if (value.startsWith("{") && value.endsWith("}")) {
+      out.setAttribute("script", value.substring(1, value.length() - 1));
+    } else {
+      out.setAttribute("constant", value);
+    }
+  }
+
+  /** Benerator {@code <while test>} -&gt; DATAMIMIC {@code <while condition>} (children convert normally). */
+  private void convertWhileAttributes(Element src, Element out, String path) {
+    Map<String, String> attrs = attributes(src);
+    String test = attrs.get("test");
+    if (test != null) {
+      out.setAttribute("condition", test);
+    } else {
+      report.add(path, "while", "<while> without a test condition - review");
+    }
+    if (attrs.containsKey("maxIterations")) {
+      out.setAttribute("maxIterations", attrs.get("maxIterations"));
+    }
+  }
+
+  /**
    * Benerator {@code <if test><then>..</then><else>..</else></if>} -&gt; DATAMIMIC
    * {@code <condition><if condition="..">..</if><else>..</else></condition>} (the {@code <then>}
    * wrapper is unwrapped; a bare child of {@code <if>} goes straight into the DATAMIMIC {@code <if>}).
@@ -395,31 +435,66 @@ public class DescriptorConverter {
     }
   }
 
-  /** DATAMIMIC {@code <execute>} runs a script file (uri); Benerator inline code is flagged. */
+  /**
+   * {@code <execute>} runs a script file (uri) or, in DATAMIMIC, inline code. Benerator sql -&gt; sql and
+   * shell -&gt; bash are emitted inline verbatim; js/ftl/ben have no DATAMIMIC language and are flagged.
+   */
   private Node convertExecuteNode(Document out, Element src, String path) {
     Map<String, String> attrs = attributes(src);
-    if (!attrs.containsKey("uri")) {
-      report.add(path, "execute", "inline <execute type='" + attrs.get("type") + "'> code -> move to a script file (uri) manually");
-      return out.createComment(" TODO(datamimic-migration): inline <execute> code - move to a script file and use uri= ");
+
+    // File-based execute: DATAMIMIC infers the language from the uri extension.
+    if (attrs.containsKey("uri")) {
+      Element ex = out.createElement("execute");
+      ex.setAttribute("uri", attrs.get("uri"));
+      if (attrs.containsKey("target")) {
+        ex.setAttribute("target", attrs.get("target"));
+      }
+      return ex;
     }
-    Element ex = out.createElement("execute");
-    ex.setAttribute("uri", attrs.get("uri"));
-    if (attrs.containsKey("target")) {
-      ex.setAttribute("target", attrs.get("target"));
+
+    // Inline code: DATAMIMIC supports <execute type="python|bash|sql">code</execute>.
+    String benType = attrs.get("type");
+    String dmType = benType == null ? null : VocabularyMap.EXECUTE_TYPE.get(benType);
+    if (dmType == null && benType == null && attrs.containsKey("target")) {
+      dmType = "sql"; // inline <execute target="db"> with no type is SQL against that store in Benerator
     }
-    if (attrs.containsKey("type")) {
-      report.add(path, "execute", "execute type='" + attrs.get("type") + "' dropped (DATAMIMIC infers from the script)");
+    if (dmType != null) {
+      Element ex = out.createElement("execute");
+      ex.setAttribute("type", dmType);
+      if (attrs.containsKey("target")) {
+        ex.setAttribute("target", attrs.get("target"));
+      }
+      ex.appendChild(out.createTextNode(src.getTextContent()));
+      return ex;
     }
-    return ex;
+    report.add(path, "execute", "inline <execute type='" + benType
+        + "'> - DATAMIMIC supports inline python/bash/sql; rewrite this snippet or use a .py file (uri=)");
+    return out.createComment(" TODO(datamimic-migration): inline <execute type='" + benType
+        + "'> - rewrite as python/bash/sql or move to a .py file ");
   }
 
-  /** A bare store/db id ("db", "mem") -> DATAMIMIC target=that id; exporters/expressions -> empty target. */
+  /**
+   * Benerator consumer -&gt; DATAMIMIC target: a known exporter maps by name (ConsoleExporter, CSV, ...),
+   * a bare store/db id ("db", "mem") passes through, and comma-separated consumers map element-wise.
+   * Unmappable entries (a bean id, a {@code db.updater()} expression) drop out; the caller flags an empty result.
+   */
   private static String consumerToTarget(String consumer) {
-    if (consumer.matches("[A-Za-z_][A-Za-z0-9_]*")
-        && !consumer.endsWith("Exporter") && !consumer.endsWith("Consumer")) {
-      return consumer;
+    java.util.List<String> targets = new java.util.ArrayList<>();
+    for (String raw : consumer.split(",")) {
+      String c = raw.trim();
+      if (c.isEmpty()) {
+        continue;
+      }
+      String mapped = VocabularyMap.CONSUMER_TARGET.get(c);
+      if (mapped != null) {
+        if (!mapped.isEmpty()) {
+          targets.add(mapped);
+        }
+      } else if (c.matches("[A-Za-z_][A-Za-z0-9_]*") && !c.endsWith("Exporter") && !c.endsWith("Consumer")) {
+        targets.add(c); // a bare store/db id
+      }
     }
-    return "";
+    return String.join(",", targets);
   }
 
   private static void copyAttributes(Element src, Element out, String... names) {

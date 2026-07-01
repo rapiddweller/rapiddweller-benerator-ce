@@ -23,13 +23,22 @@ public final class VocabularyMap {
       Map.entry("id", "id"),
       Map.entry("part", "nestedKey"),
       Map.entry("variable", "variable"),
+      Map.entry("setting", "variable"), // Benerator <setting name value> -> DATAMIMIC <variable name constant/script>
+      Map.entry("property", "variable"), // Benerator <property name value> -> DATAMIMIC <variable>
+
       Map.entry("reference", "reference"),
       Map.entry("database", "database"),
       Map.entry("memstore", "memstore"),
       Map.entry("execute", "execute"),
+      Map.entry("while", "while"), // Benerator <while test> -> DATAMIMIC <while condition>
       Map.entry("include", "include"),
       Map.entry("comment", "comment"),
       Map.entry("echo", "echo"));
+
+  /** Benerator inline &lt;execute type&gt; -&gt; DATAMIMIC inline &lt;execute type&gt;. Absent (js/ftl/ben) is flagged. */
+  public static final Map<String, String> EXECUTE_TYPE = Map.ofEntries(
+      Map.entry("sql", "sql"),
+      Map.entry("shell", "bash"));
 
   /** Benerator JDBC driver / url fragment -&gt; DATAMIMIC dbms. */
   public static final Map<String, String> DBMS = Map.ofEntries(
@@ -46,9 +55,20 @@ public final class VocabularyMap {
   /** Benerator elements that DATAMIMIC does not need - omitted from the output (not flagged as TODO). */
   public static final Set<String> DROP_ELEMENTS = Set.of("import");
 
+  /** Benerator consumer -&gt; DATAMIMIC target/exporter name (see CE exporters/exporter_util.py). */
+  public static final Map<String, String> CONSUMER_TARGET = Map.ofEntries(
+      Map.entry("ConsoleExporter", "ConsoleExporter"),
+      Map.entry("LogExporter", "LogExporter"),
+      Map.entry("LoggingConsumer", "LogExporter"),
+      Map.entry("CSVEntityExporter", "CSV"),
+      Map.entry("JSONEntityExporter", "JSON"),
+      Map.entry("XMLEntityExporter", "XML"),
+      Map.entry("NoConsumer", "")); // no output -> empty target (capture only)
+
   /** Benerator simple type -&gt; DATAMIMIC type. Absent types (date, entity, binary, ...) are flagged. */
   public static final Map<String, String> TYPE = Map.ofEntries(
       Map.entry("int", "int"),
+      Map.entry("integer", "int"),
       Map.entry("long", "int"),
       Map.entry("short", "int"),
       Map.entry("byte", "int"),
@@ -79,7 +99,8 @@ public final class VocabularyMap {
 
   /** Benerator generator name -&gt; DATAMIMIC generator name. Absent names are kept verbatim + reported. */
   public static final Map<String, String> GENERATOR_RENAME = Map.of(
-      "IncrementalIdGenerator", "IncrementGenerator");
+      "IncrementalIdGenerator", "IncrementGenerator",
+      "EMailAddressGenerator", "EmailAddressGenerator"); // Benerator casing -> DATAMIMIC casing
 
   /**
    * Generator names shared by both products (kept verbatim, no report). Verified against CE's
