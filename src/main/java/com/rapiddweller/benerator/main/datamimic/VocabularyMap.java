@@ -98,6 +98,23 @@ public final class VocabularyMap {
       "separator", "unique", "nullQuota", "converter", "minCount", "maxCount",
       "min", "max", "granularity", "minLength", "maxLength", "dataset", "locale", "cyclic");
 
+  /**
+   * Benerator composite generator -&gt; DATAMIMIC entity name (validated against CE's entity registry,
+   * {@code list_entity_specs()}). On a {@code <variable>} these become {@code entity="X"}; DATAMIMIC's
+   * tolerant field access then resolves Benerator's camelCase {@code x.givenName} to {@code given_name}.
+   * Not a suffix strip: {@code CreditCardNumberGenerator} -&gt; {@code CreditCard}.
+   */
+  public static final Map<String, String> GENERATOR_TO_ENTITY = Map.ofEntries(
+      Map.entry("PersonGenerator", "Person"),
+      Map.entry("AddressGenerator", "Address"),
+      Map.entry("CountryGenerator", "Country"),
+      Map.entry("CityGenerator", "City"),
+      Map.entry("CompanyGenerator", "Company"),
+      Map.entry("BankAccountGenerator", "BankAccount"),
+      Map.entry("BankGenerator", "Bank"),
+      Map.entry("CreditCardGenerator", "CreditCard"),
+      Map.entry("CreditCardNumberGenerator", "CreditCard"));
+
   /** Benerator generator name -&gt; DATAMIMIC generator name. Absent names are kept verbatim + reported. */
   public static final Map<String, String> GENERATOR_RENAME = Map.of(
       "IncrementalIdGenerator", "IncrementGenerator",

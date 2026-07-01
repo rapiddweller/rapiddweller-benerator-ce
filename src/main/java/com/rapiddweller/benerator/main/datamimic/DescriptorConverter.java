@@ -273,9 +273,22 @@ public class DescriptorConverter {
       }
       switch (key) {
         case "generator":
-          out.setAttribute("generator", foldDataset
-              ? foldDatasetIntoGenerator(mapGenerator(val, path), attrs.get("dataset"))
-              : mapGenerator(val, path));
+          String entity = tag.equals("variable") ? VocabularyMap.GENERATOR_TO_ENTITY.get(beneratorGeneratorClass(val)) : null;
+          if (entity != null) {
+            // Benerator composite generator on a <variable> -> DATAMIMIC entity; script field access is
+            // resolved camelCase->snake_case by DATAMIMIC, so <key script="x.givenName"> passes through.
+            out.setAttribute("entity", entity);
+            report.info(path, "generator", "<variable generator='" + beneratorGeneratorClass(val)
+                + "'> -> entity='" + entity + "'");
+            if (val.contains("(") || val.contains("{")) {
+              report.add(path, "generator", "generator '" + val
+                  + "' args -> port to entity modifiers (dataset/locale/ageMin/ageMax) manually");
+            }
+          } else {
+            out.setAttribute("generator", foldDataset
+                ? foldDatasetIntoGenerator(mapGenerator(val, path), attrs.get("dataset"))
+                : mapGenerator(val, path));
+          }
           break;
         case "distribution":
           if (tag.equals("variable") || tag.equals("part")) {
@@ -355,6 +368,15 @@ public class DescriptorConverter {
       args.append(", distribution='").append(dist).append("'");
     }
     return sb.append(args).append(")").toString();
+  }
+
+  /** The bare class name of a Benerator generator ("new PersonGenerator{...}" -&gt; "PersonGenerator"). */
+  private static String beneratorGeneratorClass(String generator) {
+    String g = generator.startsWith("new ") ? generator.substring(4).trim() : generator.trim();
+    int paren = g.indexOf('(');
+    int brace = g.indexOf('{');
+    int cut = paren < 0 ? brace : (brace < 0 ? paren : Math.min(paren, brace));
+    return (cut >= 0 ? g.substring(0, cut) : g).trim();
   }
 
   /** True when a bean spec like {@code "new IncrementGenerator(1000)"} names a generator DATAMIMIC knows. */
