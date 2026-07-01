@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +46,8 @@ public class DescriptorConverterTest {
     for (int i = 0; i < keys.getLength(); i++) {
       Element k = (Element) keys.item(i);
       if ("int_max_10".equals(k.getAttribute("name"))) {
-        intKey = "int".equals(k.getAttribute("type"));
+        // maxLength now passes through as a native DATAMIMIC attribute (no longer flagged as unmapped).
+        intKey = "int".equals(k.getAttribute("type")) && "10".equals(k.getAttribute("maxLength"));
       }
       if ("double_001".equals(k.getAttribute("name"))) {
         // Benerator double + min/max/granularity -> DATAMIMIC float with NATIVE min/max/granularity attrs.
@@ -60,7 +62,7 @@ public class DescriptorConverterTest {
     assertTrue("numeric range passes through as native min/max/granularity", floatGenKey);
 
     String rep = report.format();
-    assertTrue("unmapped maxLength flagged", rep.contains("maxLength"));
+    assertFalse("maxLength passes through natively, not flagged", rep.contains("maxLength"));
   }
 
   @Test

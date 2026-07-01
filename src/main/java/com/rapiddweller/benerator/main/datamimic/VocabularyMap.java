@@ -95,7 +95,7 @@ public final class VocabularyMap {
   public static final Set<String> FIELD_ATTR_KEEP = Set.of(
       "name", "pattern", "values", "constant", "script", "source", "selector",
       "separator", "unique", "nullQuota", "converter", "minCount", "maxCount",
-      "min", "max", "granularity", "dataset", "locale", "cyclic");
+      "min", "max", "granularity", "minLength", "maxLength", "dataset", "locale", "cyclic");
 
   /** Benerator generator name -&gt; DATAMIMIC generator name. Absent names are kept verbatim + reported. */
   public static final Map<String, String> GENERATOR_RENAME = Map.of(
