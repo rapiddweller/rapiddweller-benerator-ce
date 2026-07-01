@@ -84,6 +84,14 @@ jobs:
           done
           exit $fail
 
+      - name: GATE — dual execution structural compare (Benerator vs DATAMIMIC)
+        run: |
+          # Run the same descriptor in BOTH engines and assert the generated structure (fields + count)
+          # matches — the strongest migration check: the converted model produces the same shape of data.
+          bash scripts/datamimic_structural_compare.sh \
+            src/test/resources/com/rapiddweller/benerator/main/datamimic/compare_corpus/structural.ben.xml \
+            row "${GITHUB_WORKSPACE}/target/classes:$(cat cp.txt)"
+
       - name: INFO — run every converted demo through DATAMIMIC CE
         continue-on-error: true
         run: |
