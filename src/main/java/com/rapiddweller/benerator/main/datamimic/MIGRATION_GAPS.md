@@ -11,8 +11,21 @@ fixtures, not descriptors). No descriptor fails to produce output.
 
 The report is tiered: `report.add(...)` = genuinely needs manual work; `report.info(...)` = converted
 automatically, shown for transparency only (dropped `<import>`, a `<reference>` emitted as a `<key>`, a
-defaulted `sourceKey`, `nullable="true"`). Across the full demo suite: **445 need manual attention, 151
-informational** (down from a flat 612 that conflated the two).
+defaulted `sourceKey`, `nullable="true"`, an inlined generator `<bean>`). Across the full demo suite:
+**374 need manual attention, ~150 informational** (down from a flat 612 that conflated the two).
+
+The remaining 374 are the genuine hard tail, not cheap wins:
+- **Composite entity generators** (`PersonGenerator`/`AddressGenerator`/`CountryGenerator`/… ~57): the
+  classes exist in DATAMIMIC but are NOT DSL-registered and expose child *generators* (not a `generate()`
+  entity), so Benerator's `<variable generator="AddressGenerator"> … address.street` has no 1:1 target.
+  Exposing them is a DATAMIMIC product/modelling decision, not a converter fix.
+- **Assertions** (`<if><error>` 59 + `<evaluate assert>` 17): no DATAMIMIC equivalent (port to
+  `<execute type="python">raise …` or a test manually).
+- **`{ftl:…}` `{dbUrl}` placeholders** (~30): resolved at runtime from a `-Ddatabase=…`-selected properties
+  file, so the target env is ambiguous to the converter.
+- **`<reference>` modifiers** (distribution/cyclic/type/selector, 56): unsupported by DATAMIMIC references.
+- **Update/insert consumers** (`db.updater()`/`mongo.inserter()`, 45): DATAMIMIC target semantics differ.
+- **Structural** (`<value>` 11, class-based `<bean>`, `<meta-model>`, `<pre-parse-generate>`): no equivalent.
 
 ### Now mapped
 
