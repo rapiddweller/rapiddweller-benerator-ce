@@ -1,0 +1,7 @@
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <generate type="person" count="5" consumer="ConsoleExporter">
+        <attribute name="given" generator="GivenNameGenerator"/>
+        <attribute name="email" generator="EMailAddressGenerator"/>
+        <attribute name="age" type="int" min="18" max="80"/>
+    </generate>
+</setup>
