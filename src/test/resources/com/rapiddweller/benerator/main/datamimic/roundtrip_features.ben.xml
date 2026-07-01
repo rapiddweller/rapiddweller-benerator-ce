@@ -1,0 +1,12 @@
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <setting name="rate" value="1.1"/>
+    <execute type="shell">echo converter-roundtrip-ok</execute>
+    <generate type="account" count="2" consumer="ConsoleExporter">
+        <attribute name="balance" script="1000.0"/>
+        <attribute name="years" script="0"/>
+        <while test="balance &lt; 2000">
+            <attribute name="balance" script="balance * 1.1"/>
+            <attribute name="years" script="years + 1"/>
+        </while>
+    </generate>
+</setup>
