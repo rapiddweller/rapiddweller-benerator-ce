@@ -63,6 +63,11 @@ public class DescriptorConverter {
     if (tag.equals("execute")) {
       return convertExecuteNode(out, el, path); // uri-based; inline code is flagged
     }
+    if (tag.equals("evaluate")) { // Benerator <evaluate assert="..."> is a post-generation assertion
+      report.add(path, "evaluate", "<evaluate assert> has no DATAMIMIC equivalent - dropped "
+          + "(use <execute type='sql'> for a side effect, or verify the count in a test)");
+      return out.createComment(" TODO(datamimic-migration): <evaluate> assertion dropped - review ");
+    }
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
       report.add(path, "element", "<" + tag + "> has no DATAMIMIC equivalent - migrate manually");
@@ -79,6 +84,10 @@ public class DescriptorConverter {
         break;
       case "database":
         convertDatabaseAttributes(el, result, path);
+        break;
+      case "mongodb":
+        // DATAMIMIC <mongodb> takes the connection directly (no dbms); env keys are migrated separately.
+        copyAttributes(el, result, "id", "host", "port", "database", "environment", "system", "user", "password");
         break;
       case "memstore":
         copyAttributes(el, result, "id"); // DATAMIMIC memstore is just an id

@@ -28,6 +28,7 @@ public final class VocabularyMap {
 
       Map.entry("reference", "reference"),
       Map.entry("database", "database"),
+      Map.entry("mongodb", "mongodb"), // DATAMIMIC has a native <mongodb> store
       Map.entry("memstore", "memstore"),
       Map.entry("execute", "execute"),
       Map.entry("while", "while"), // Benerator <while test> -> DATAMIMIC <while condition>
