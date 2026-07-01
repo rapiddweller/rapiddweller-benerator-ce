@@ -26,8 +26,22 @@ public final class VocabularyMap {
       Map.entry("reference", "reference"),
       Map.entry("database", "database"),
       Map.entry("memstore", "memstore"),
+      Map.entry("execute", "execute"),
+      Map.entry("include", "include"),
       Map.entry("comment", "comment"),
       Map.entry("echo", "echo"));
+
+  /** Benerator JDBC driver / url fragment -&gt; DATAMIMIC dbms. */
+  public static final Map<String, String> DBMS = Map.ofEntries(
+      Map.entry("postgresql", "postgresql"),
+      Map.entry("mysql", "mysql"),
+      Map.entry("mariadb", "mysql"),
+      Map.entry("hsqldb", "hsqldb"),
+      Map.entry("h2", "h2"),
+      Map.entry("oracle", "oracle"),
+      Map.entry("sqlite", "sqlite"),
+      Map.entry("sqlserver", "mssql"),
+      Map.entry("mssql", "mssql"));
 
   /** Benerator elements that DATAMIMIC does not need - omitted from the output (not flagged as TODO). */
   public static final Set<String> DROP_ELEMENTS = Set.of("import");

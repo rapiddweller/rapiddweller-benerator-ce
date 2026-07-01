@@ -49,6 +49,12 @@ public class DescriptorConverter {
     if (tag.equals("reference")) {
       return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
     }
+    if (tag.equals("if")) {
+      return convertIfNode(out, el, path); // <if test><then>/<else> -> <condition><if condition>/<else>
+    }
+    if (tag.equals("execute")) {
+      return convertExecuteNode(out, el, path); // uri-based; inline code is flagged
+    }
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
       report.add(path, "element", "<" + tag + "> has no DATAMIMIC equivalent - migrate manually");
@@ -68,6 +74,9 @@ public class DescriptorConverter {
         break;
       case "memstore":
         copyAttributes(el, result, "id"); // DATAMIMIC memstore is just an id
+        break;
+      case "include":
+        copyAttributes(el, result, "uri"); // DATAMIMIC include is uri-based
         break;
       case "comment":
       case "echo":
@@ -298,14 +307,110 @@ public class DescriptorConverter {
 
   private void convertDatabaseAttributes(Element src, Element out, String path) {
     Map<String, String> attrs = attributes(src);
-    for (String keep : new String[] {"id", "schema", "environment", "user", "password"}) {
+    for (String keep : new String[] {"id", "host", "port", "database", "schema", "environment", "user", "password"}) {
       if (attrs.containsKey(keep)) {
         out.setAttribute(keep, attrs.get(keep));
       }
     }
-    // DATAMIMIC needs dbms + host/port/database (or environment); Benerator uses url/driver.
-    report.add(path, "database",
-        "database '" + attrs.get("id") + "' -> set dbms + connection (host/port/database or environment) manually");
+    // DATAMIMIC requires 'dbms' - derive it from the JDBC driver or url; Benerator has no such attribute.
+    String dbms = deriveDbms(attrs.get("driver"), attrs.get("url"));
+    if (dbms != null) {
+      out.setAttribute("dbms", dbms);
+    } else {
+      report.add(path, "database", "database '" + attrs.get("id") + "' -> set dbms manually (could not derive from driver/url)");
+    }
+    if (attrs.containsKey("url") && !attrs.containsKey("host")) {
+      report.add(path, "database", "database '" + attrs.get("id") + "' url -> set host/port/database or use environment=");
+    }
+  }
+
+  /** DATAMIMIC dbms from a Benerator JDBC driver class or url (e.g. jdbc:postgresql://... -&gt; postgresql). */
+  private static String deriveDbms(String driver, String url) {
+    for (String hay : new String[] {driver, url}) {
+      if (hay == null) {
+        continue;
+      }
+      String lower = hay.toLowerCase();
+      for (Map.Entry<String, String> e : VocabularyMap.DBMS.entrySet()) {
+        if (lower.contains(e.getKey())) {
+          return e.getValue();
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Benerator {@code <if test><then>..</then><else>..</else></if>} -&gt; DATAMIMIC
+   * {@code <condition><if condition="..">..</if><else>..</else></condition>} (the {@code <then>}
+   * wrapper is unwrapped; a bare child of {@code <if>} goes straight into the DATAMIMIC {@code <if>}).
+   */
+  private Node convertIfNode(Document out, Element src, String path) {
+    Element condition = out.createElement("condition");
+    Element ifEl = out.createElement("if");
+    String test = attributes(src).get("test");
+    if (test != null) {
+      ifEl.setAttribute("condition", test);
+    } else {
+      report.add(path, "if", "<if> without a test condition - review");
+    }
+    condition.appendChild(ifEl);
+
+    Element elseEl = null;
+    for (Node c = src.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.COMMENT_NODE) {
+        condition.appendChild(out.createComment(c.getNodeValue()));
+      } else if (c.getNodeType() == Node.ELEMENT_NODE) {
+        Element child = (Element) c;
+        String ctag = local(child);
+        if (ctag.equals("then")) {
+          appendConvertedChildren(out, child, ifEl, path + "/then");
+        } else if (ctag.equals("else")) {
+          elseEl = out.createElement("else");
+          appendConvertedChildren(out, child, elseEl, path + "/else");
+        } else {
+          Node conv = convertNode(out, child, path + "/" + ctag);
+          if (conv != null) {
+            ifEl.appendChild(conv);
+          }
+        }
+      }
+    }
+    if (elseEl != null) {
+      condition.appendChild(elseEl);
+    }
+    return condition;
+  }
+
+  private void appendConvertedChildren(Document out, Element parent, Element target, String path) {
+    for (Node c = parent.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE) {
+        Node conv = convertNode(out, (Element) c, path + "/" + local((Element) c));
+        if (conv != null) {
+          target.appendChild(conv);
+        }
+      } else if (c.getNodeType() == Node.COMMENT_NODE) {
+        target.appendChild(out.createComment(c.getNodeValue()));
+      }
+    }
+  }
+
+  /** DATAMIMIC {@code <execute>} runs a script file (uri); Benerator inline code is flagged. */
+  private Node convertExecuteNode(Document out, Element src, String path) {
+    Map<String, String> attrs = attributes(src);
+    if (!attrs.containsKey("uri")) {
+      report.add(path, "execute", "inline <execute type='" + attrs.get("type") + "'> code -> move to a script file (uri) manually");
+      return out.createComment(" TODO(datamimic-migration): inline <execute> code - move to a script file and use uri= ");
+    }
+    Element ex = out.createElement("execute");
+    ex.setAttribute("uri", attrs.get("uri"));
+    if (attrs.containsKey("target")) {
+      ex.setAttribute("target", attrs.get("target"));
+    }
+    if (attrs.containsKey("type")) {
+      report.add(path, "execute", "execute type='" + attrs.get("type") + "' dropped (DATAMIMIC infers from the script)");
+    }
+    return ex;
   }
 
   /** A bare store/db id ("db", "mem") -> DATAMIMIC target=that id; exporters/expressions -> empty target. */

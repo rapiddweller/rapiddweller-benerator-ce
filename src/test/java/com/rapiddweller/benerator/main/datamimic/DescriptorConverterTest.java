@@ -98,6 +98,40 @@ public class DescriptorConverterTest {
     assertTrue("dbms/connection flagged", report.format().contains("dbms"));
   }
 
+  @Test
+  public void convertsConditionsExecuteDatabaseInclude() throws Exception {
+    File in = new File("src/test/resources/com/rapiddweller/benerator/main/datamimic/phase_c.ben.xml");
+    File out = File.createTempFile("phasec", ".xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    // <database url=.. driver="org.postgresql.Driver"> -> dbms derived
+    Element db = first(doc, "database", "id", "db");
+    assertNotNull("database mapped", db);
+    assertEquals("postgresql", db.getAttribute("dbms"));
+
+    // <include uri> kept natively
+    assertEquals(1, doc.getElementsByTagName("include").getLength());
+
+    // <execute uri=.. type="sql"> -> <execute uri target> (type dropped, DATAMIMIC infers it)
+    Element ex = (Element) doc.getElementsByTagName("execute").item(0);
+    assertEquals("setup.sql", ex.getAttribute("uri"));
+    assertEquals("db", ex.getAttribute("target"));
+    assertEquals("", ex.getAttribute("type"));
+
+    // <if test><then>..</then><else>..</else></if> -> <condition><if condition>..</if><else>..</else></condition>
+    Element cond = (Element) doc.getElementsByTagName("condition").item(0);
+    assertNotNull("if -> condition wrapper", cond);
+    Element ifEl = (Element) cond.getElementsByTagName("if").item(0);
+    assertEquals("1 > 0", ifEl.getAttribute("condition")); // test -> condition
+    assertEquals("<then> wrapper unwrapped", 0, ifEl.getElementsByTagName("then").getLength());
+    assertEquals("<then> body inlined into <if>", 1, ifEl.getElementsByTagName("echo").getLength());
+    assertEquals("<else> preserved", 1, cond.getElementsByTagName("else").getLength());
+  }
+
   private static Element first(Document doc, String tag, String attr, String value) {
     NodeList nodes = doc.getElementsByTagName(tag);
     for (int i = 0; i < nodes.getLength(); i++) {

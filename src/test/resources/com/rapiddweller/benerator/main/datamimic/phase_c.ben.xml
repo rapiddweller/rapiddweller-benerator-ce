@@ -1,0 +1,9 @@
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <database id="db" url="jdbc:postgresql://localhost:5432/shop" driver="org.postgresql.Driver" schema="public"/>
+    <include uri="common.ben.xml"/>
+    <execute uri="setup.sql" target="db" type="sql"/>
+    <if test="1 &gt; 0">
+        <then><echo>yes</echo></then>
+        <else><echo>no</echo></else>
+    </if>
+</setup>
