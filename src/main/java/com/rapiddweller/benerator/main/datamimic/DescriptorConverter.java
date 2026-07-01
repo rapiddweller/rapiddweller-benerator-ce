@@ -23,6 +23,9 @@ import java.util.Map;
 public class DescriptorConverter {
 
   private final MigrationReport report;
+  /** {@code <bean id="X" spec="new Generator(...)">} definitions, so a {@code generator="X"} reference can
+   *  be resolved to the bean's actual generator expression instead of being flagged as unknown. */
+  private final Map<String, String> beanSpecs = new LinkedHashMap<>();
 
   public DescriptorConverter(MigrationReport report) {
     this.report = report;
@@ -32,11 +35,24 @@ public class DescriptorConverter {
     Document src = XMLUtil.parseWithLocators(input.getAbsolutePath());
     Document out = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     Element root = src.getDocumentElement();
+    scanBeans(root);
     Node converted = convertNode(out, root, "/" + local(root));
     if (converted != null) {
       out.appendChild(converted);
     }
     XMLUtil.saveDocument(out, output, "utf-8");
+  }
+
+  /** Record every {@code <bean id spec>} so generator references to it can be inlined. */
+  private void scanBeans(Element el) {
+    if (local(el).equals("bean") && el.hasAttribute("id") && el.hasAttribute("spec")) {
+      beanSpecs.put(el.getAttribute("id"), el.getAttribute("spec"));
+    }
+    for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE) {
+        scanBeans((Element) c);
+      }
+    }
   }
 
   /** @return the converted node (Element, or a TODO Comment when the source element is unmapped). */
@@ -48,6 +64,15 @@ public class DescriptorConverter {
     }
     if (tag.equals("consumer")) {
       return null; // a <consumer> element is folded into the parent <generate>'s target (see convertGenerateAttributes)
+    }
+    if (tag.equals("bean")) {
+      // A <bean spec="new Generator(...)"> is inlined at its generator="id" references, so the bean is gone.
+      if (isKnownGeneratorSpec(el.getAttribute("spec"))) {
+        report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> generator inlined into its references - removed");
+        return null;
+      }
+      report.add(path, "element", "<bean> has no DATAMIMIC equivalent - migrate manually");
+      return out.createComment(" TODO(datamimic-migration): <bean> not supported - migrate manually ");
     }
     if (tag.equals("reference")) {
       return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
@@ -332,9 +357,25 @@ public class DescriptorConverter {
     return sb.append(args).append(")").toString();
   }
 
+  /** True when a bean spec like {@code "new IncrementGenerator(1000)"} names a generator DATAMIMIC knows. */
+  private boolean isKnownGeneratorSpec(String spec) {
+    if (spec == null || spec.isEmpty()) {
+      return false;
+    }
+    String expr = spec.startsWith("new ") ? spec.substring(4).trim() : spec.trim();
+    int paren = expr.indexOf('(');
+    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
+    if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
+      return true;
+    }
+    return VocabularyMap.KNOWN_GENERATORS.contains(VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls));
+  }
+
   private String mapGenerator(String name, String path) {
+    // Resolve a <bean id="X" spec="..."> reference (generator="X") to the bean's own generator expression.
+    String resolved = beanSpecs.getOrDefault(name.trim(), name);
     // Strip Benerator's "new " instantiation prefix -> DATAMIMIC evaluates Class(args) directly.
-    String expr = name.startsWith("new ") ? name.substring(4).trim() : name.trim();
+    String expr = resolved.startsWith("new ") ? resolved.substring(4).trim() : resolved.trim();
     if (expr.contains("{")) { // Benerator's PersonGenerator{k='v'} property-brace form has no direct equivalent
       report.add(path, "generator", "generator '" + name + "' uses Benerator {k=v} syntax - rewrite as Class(k=v) manually");
       return expr;
