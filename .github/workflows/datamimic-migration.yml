@@ -1,8 +1,12 @@
 name: DATAMIMIC migration round-trip
 
-# Proves the Benerator -> DATAMIMIC migration pipeline end-to-end: convert a curated corpus of
-# self-contained Benerator descriptors, then run the converted output through the REAL DATAMIMIC CE
-# engine (development branch). A converter that emits parseable-but-broken DATAMIMIC fails here.
+# Proves the Benerator -> DATAMIMIC migration pipeline end-to-end: convert Benerator descriptors, then
+# run the converted output through the REAL DATAMIMIC CE engine (development branch). A converter that
+# emits parseable-but-broken DATAMIMIC is caught here.
+#
+#   GATE : a curated corpus of self-contained descriptors MUST convert and run.
+#   INFO : the whole demo suite is converted (every file echoed) and each is run through DATAMIMIC CE
+#          (most demos need a DB / external source, so this is reported, not gated).
 
 on:
   push:
@@ -29,15 +33,24 @@ jobs:
       - name: Build the converter
         run: mvn --batch-mode compile -Djacoco.skip=true
 
-      - name: Convert the round-trip corpus
+      - name: Resolve the converter classpath
         run: |
           mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
-          java -cp "target/classes:$(cat cp.txt)" \
-            com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+          echo "CONV_CP=target/classes:$(cat cp.txt)" >> "$GITHUB_ENV"
+
+      - name: Convert the curated round-trip corpus (gate input)
+        run: |
+          java -cp "$CONV_CP" com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
             src/test/resources/com/rapiddweller/benerator/main/datamimic/roundtrip_corpus \
-            converted migration-report.txt
-          echo "----- migration report -----"
-          cat migration-report.txt
+            converted-corpus
+
+      - name: Convert the WHOLE Benerator demo suite (visibility)
+        run: |
+          cp -r src/demo/resources/demo demos-tree
+          java -cp "$CONV_CP" com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+            demos-tree demos-tree demos-migration-report.txt
+          echo "----- demo-suite migration report (manual-attention items) -----"
+          cat demos-migration-report.txt
 
       - name: Checkout DATAMIMIC CE (development)
         uses: actions/checkout@v5
@@ -56,17 +69,35 @@ jobs:
       - name: Install DATAMIMIC CE
         run: pip install ./datamimic-ce
 
-      - name: Run every converted descriptor through DATAMIMIC CE
+      - name: GATE — run the curated corpus through DATAMIMIC CE
         run: |
           fail=0
-          for f in converted/*.datamimic.xml; do
+          for f in converted-corpus/*.datamimic.xml; do
             echo "::group::datamimic run $(basename "$f")"
-            if datamimic run "$f"; then
-              echo "OK: $f"
+            if timeout 120 datamimic run "$f"; then
+              echo "OK: $(basename "$f")"
             else
-              echo "FAIL: $f (converted output did not run in DATAMIMIC CE)"
+              echo "FAIL: $(basename "$f") — converted output did not run in DATAMIMIC CE"
               fail=1
             fi
             echo "::endgroup::"
           done
           exit $fail
+
+      - name: INFO — run every converted demo through DATAMIMIC CE
+        continue-on-error: true
+        run: |
+          ran=0; total=0
+          echo "Converted demo | runs standalone in DATAMIMIC CE?"
+          echo "---------------|----------------------------------"
+          for f in $(find demos-tree -name '*.datamimic.xml' | sort); do
+            total=$((total + 1))
+            rel="${f#demos-tree/}"
+            if timeout 60 datamimic run "$f" >/dev/null 2>&1; then
+              ran=$((ran + 1)); echo "$rel | yes"
+            else
+              echo "$rel | no (needs a DB / external source / manual migration)"
+            fi
+          done
+          echo ""
+          echo "Demos that convert AND run standalone: $ran / $total (the rest are DB/integration demos)."

@@ -46,6 +46,8 @@ public final class DatamimicConverter {
       inputs.add(input);
     }
 
+    inputs.sort(Path::compareTo);
+    System.out.println("Converting " + inputs.size() + " Benerator descriptor(s) from " + input + ":");
     MigrationReport report = new MigrationReport();
     int ok = 0;
     int failed = 0;
@@ -57,9 +59,10 @@ public final class DatamimicConverter {
       try {
         new DescriptorConverter(report).convert(in.toFile(), out.toFile());
         ok++;
+        System.out.println("  [OK]   " + rel + "  ->  " + outName);
       } catch (Exception e) {
         failed++;
-        System.err.println("convert FAILED: " + in + " -> " + e.getMessage());
+        System.out.println("  [FAIL] " + rel + "  ->  " + e.getMessage());
       }
     }
 

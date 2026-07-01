@@ -175,6 +175,10 @@ public class DescriptorConverter {
       out.setAttribute("type", mappedType);
     }
 
+    // A dataset-aware generator (AddressGenerator, ...) takes the dataset as a constructor arg; DATAMIMIC
+    // <key> has no 'dataset' attribute, so fold it into the generator call instead of keeping it.
+    boolean foldDataset = attrs.containsKey("generator") && attrs.containsKey("dataset");
+
     for (Map.Entry<String, String> a : attrs.entrySet()) {
       String key = a.getKey();
       String val = a.getValue();
@@ -185,9 +189,14 @@ public class DescriptorConverter {
           || key.equals("distribution"))) {
         continue; // folded into the generator
       }
+      if (key.equals("dataset") && foldDataset) {
+        continue; // folded into the generator call below
+      }
       switch (key) {
         case "generator":
-          out.setAttribute("generator", mapGenerator(val, path));
+          out.setAttribute("generator", foldDataset
+              ? foldDatasetIntoGenerator(mapGenerator(val, path), attrs.get("dataset"))
+              : mapGenerator(val, path));
           break;
         case "distribution":
           if (tag.equals("variable") || tag.equals("part")) {
@@ -205,6 +214,17 @@ public class DescriptorConverter {
           break;
       }
     }
+  }
+
+  /** Add {@code dataset='X'} to a generator string: {@code AddressGenerator} -&gt; {@code AddressGenerator(dataset='X')}. */
+  private static String foldDatasetIntoGenerator(String generator, String dataset) {
+    String arg = "dataset='" + dataset + "'";
+    if (!generator.contains("(")) {
+      return generator + "(" + arg + ")";
+    }
+    int close = generator.lastIndexOf(')');
+    String inner = generator.substring(generator.indexOf('(') + 1, close).trim();
+    return generator.substring(0, generator.indexOf('(') + 1) + (inner.isEmpty() ? arg : inner + ", " + arg) + ")";
   }
 
   private String mapType(String beneratorType, String tag, String path) {
