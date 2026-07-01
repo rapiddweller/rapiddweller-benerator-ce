@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -58,5 +59,53 @@ public class DescriptorConverterTest {
     String rep = report.format();
     assertTrue("consumer flagged", rep.contains("consumer"));
     assertTrue("unmapped maxLength flagged", rep.contains("maxLength"));
+  }
+
+  @Test
+  public void convertsShopReferencesAndSources() throws Exception {
+    File in = new File("src/demo/resources/demo/shop/shop-hsqlmem.ben.xml");
+    File out = File.createTempFile("shop", ".datamimic.xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    // <iterate source=.. consumer="db"> -> <generate source=.. target="db">
+    boolean iterateAsGenerate = false;
+    NodeList gens = doc.getElementsByTagName("generate");
+    for (int i = 0; i < gens.getLength(); i++) {
+      Element g = (Element) gens.item(i);
+      if ("shop.dbunit.xml".equals(g.getAttribute("source")) && "db".equals(g.getAttribute("target"))) {
+        iterateAsGenerate = true;
+      }
+    }
+    assertTrue("iterate source -> generate source with target=db", iterateAsGenerate);
+
+    // FK reference: Benerator targetType -> DATAMIMIC sourceType, with a defaulted sourceKey.
+    Element catRef = first(doc, "reference", "name", "category_id");
+    assertNotNull("category_id kept as <reference>", catRef);
+    assertEquals("db_category", catRef.getAttribute("sourceType"));
+    assertEquals("id", catRef.getAttribute("sourceKey"));
+
+    // constant reference is a fixed value -> emitted as <key>
+    Element roleKey = first(doc, "key", "name", "role_id");
+    assertNotNull("role_id constant reference -> <key>", roleKey);
+    assertEquals("customer", roleKey.getAttribute("constant"));
+
+    // <database> mapped structurally; the connection is flagged for manual setup.
+    assertNotNull("database element mapped", first(doc, "database", "id", "db"));
+    assertTrue("dbms/connection flagged", report.format().contains("dbms"));
+  }
+
+  private static Element first(Document doc, String tag, String attr, String value) {
+    NodeList nodes = doc.getElementsByTagName(tag);
+    for (int i = 0; i < nodes.getLength(); i++) {
+      Element e = (Element) nodes.item(i);
+      if (value.equals(e.getAttribute(attr))) {
+        return e;
+      }
+    }
+    return null;
   }
 }

@@ -46,6 +46,9 @@ public class DescriptorConverter {
       report.add(path, "dropped", "<" + tag + "> is not needed in DATAMIMIC (auto-discovered) - removed");
       return null;
     }
+    if (tag.equals("reference")) {
+      return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
+    }
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
       report.add(path, "element", "<" + tag + "> has no DATAMIMIC equivalent - migrate manually");
@@ -59,6 +62,12 @@ public class DescriptorConverter {
       case "generate":
       case "iterate":
         convertGenerateAttributes(el, result, path);
+        break;
+      case "database":
+        convertDatabaseAttributes(el, result, path);
+        break;
+      case "memstore":
+        copyAttributes(el, result, "id"); // DATAMIMIC memstore is just an id
         break;
       case "comment":
       case "echo":
@@ -111,9 +120,12 @@ public class DescriptorConverter {
           out.setAttribute("numProcess", val);
           break;
         case "consumer":
-          out.setAttribute("target", "");
+          String tgt = consumerToTarget(val);
+          out.setAttribute("target", tgt);
           targetSet = true;
-          report.add(path, "consumer", "consumer '" + val + "' -> configure a DATAMIMIC target/exporter manually");
+          if (tgt.isEmpty()) {
+            report.add(path, "consumer", "consumer '" + val + "' -> configure a DATAMIMIC target/exporter manually");
+          }
           break;
         case "source":
         case "selector":
@@ -230,6 +242,88 @@ public class DescriptorConverter {
       report.add(path, "generator", "generator '" + name + "' not known to DATAMIMIC - verify/replace manually");
     }
     return name;
+  }
+
+  /**
+   * A Benerator {@code <reference>} is used several ways: an FK by {@code targetType}, or a
+   * constant/script value. Only the FK maps to a DATAMIMIC {@code <reference>} (table + column);
+   * constant/script become a {@code <key>}; a selector-only reference is flagged for manual work.
+   */
+  private Node convertReferenceNode(Document out, Element src, String path) {
+    Map<String, String> attrs = attributes(src);
+    String name = attrs.get("name");
+
+    if (attrs.containsKey("constant") || (attrs.containsKey("script") && !attrs.containsKey("targetType"))) {
+      Element key = out.createElement("key");
+      if (name != null) {
+        key.setAttribute("name", name);
+      }
+      if (attrs.containsKey("constant")) {
+        key.setAttribute("constant", attrs.get("constant"));
+      }
+      if (attrs.containsKey("script")) {
+        key.setAttribute("script", attrs.get("script"));
+      }
+      report.add(path, "reference", "reference '" + name + "' is a constant/script value -> emitted as <key>");
+      return key;
+    }
+
+    if (!attrs.containsKey("targetType")) {
+      report.add(path, "reference",
+          "reference '" + name + "' has no targetType -> migrate manually (DATAMIMIC references a table/column)");
+      return out.createComment(
+          " TODO(datamimic-migration): <reference name=\"" + name + "\"> needs a table/column - migrate manually ");
+    }
+
+    Element ref = out.createElement("reference");
+    if (name != null) {
+      ref.setAttribute("name", name);
+    }
+    if (attrs.containsKey("source")) {
+      ref.setAttribute("source", attrs.get("source"));
+    }
+    ref.setAttribute("sourceType", attrs.get("targetType"));
+    ref.setAttribute("sourceKey", "id"); // Benerator infers the FK column; DATAMIMIC needs it explicit
+    report.add(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
+    if ("true".equals(attrs.get("unique"))) {
+      ref.setAttribute("unique", "true");
+    }
+    for (String drop : new String[] {"selector", "distribution", "cyclic", "type", "nullQuota", "mode", "offset"}) {
+      if (attrs.containsKey(drop)) {
+        report.add(path, "reference", "reference '" + name + "' '" + drop + "' not supported by DATAMIMIC reference - dropped");
+      }
+    }
+    return ref;
+  }
+
+  private void convertDatabaseAttributes(Element src, Element out, String path) {
+    Map<String, String> attrs = attributes(src);
+    for (String keep : new String[] {"id", "schema", "environment", "user", "password"}) {
+      if (attrs.containsKey(keep)) {
+        out.setAttribute(keep, attrs.get(keep));
+      }
+    }
+    // DATAMIMIC needs dbms + host/port/database (or environment); Benerator uses url/driver.
+    report.add(path, "database",
+        "database '" + attrs.get("id") + "' -> set dbms + connection (host/port/database or environment) manually");
+  }
+
+  /** A bare store/db id ("db", "mem") -> DATAMIMIC target=that id; exporters/expressions -> empty target. */
+  private static String consumerToTarget(String consumer) {
+    if (consumer.matches("[A-Za-z_][A-Za-z0-9_]*")
+        && !consumer.endsWith("Exporter") && !consumer.endsWith("Consumer")) {
+      return consumer;
+    }
+    return "";
+  }
+
+  private static void copyAttributes(Element src, Element out, String... names) {
+    Map<String, String> attrs = attributes(src);
+    for (String n : names) {
+      if (attrs.containsKey(n)) {
+        out.setAttribute(n, attrs.get(n));
+      }
+    }
   }
 
   /** Local attribute map, skipping XML namespace declarations and xsi:* schema hints. */

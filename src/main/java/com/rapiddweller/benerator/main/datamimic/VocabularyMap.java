@@ -23,6 +23,9 @@ public final class VocabularyMap {
       Map.entry("id", "id"),
       Map.entry("part", "nestedKey"),
       Map.entry("variable", "variable"),
+      Map.entry("reference", "reference"),
+      Map.entry("database", "database"),
+      Map.entry("memstore", "memstore"),
       Map.entry("comment", "comment"),
       Map.entry("echo", "echo"));
 
