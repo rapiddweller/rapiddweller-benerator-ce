@@ -50,6 +50,11 @@ public class DescriptorConverter {
       return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
     }
     if (tag.equals("if")) {
+      if (isSetupChild(path)) { // DATAMIMIC <condition> is per-<generate>; a setup-level <if><error> is an assertion
+        report.add(path, "condition", "setup-level <if>/<error> assertion has no DATAMIMIC equivalent - dropped "
+            + "(use <execute type='python'>raise ...</execute> to keep it)");
+        return out.createComment(" TODO(datamimic-migration): setup-level <if> assertion dropped - review ");
+      }
       return convertIfNode(out, el, path); // <if test><then>/<else> -> <condition><if condition>/<else>
     }
     if (tag.equals("execute")) {
@@ -205,6 +210,9 @@ public class DescriptorConverter {
             report.add(path, "attribute", "'distribution' on <" + tag + "> needs a numeric generator or source - dropped");
           }
           break;
+        case "converter":
+          out.setAttribute("converter", mapConverter(val, path));
+          break;
         default:
           if (VocabularyMap.FIELD_ATTR_KEEP.contains(key)) {
             out.setAttribute(key, val);
@@ -266,18 +274,56 @@ public class DescriptorConverter {
   }
 
   private String mapGenerator(String name, String path) {
-    String renamed = VocabularyMap.GENERATOR_RENAME.get(name);
-    if (renamed != null) {
-      return renamed;
+    // Strip Benerator's "new " instantiation prefix -> DATAMIMIC evaluates Class(args) directly.
+    String expr = name.startsWith("new ") ? name.substring(4).trim() : name.trim();
+    if (expr.contains("{")) { // Benerator's PersonGenerator{k='v'} property-brace form has no direct equivalent
+      report.add(path, "generator", "generator '" + name + "' uses Benerator {k=v} syntax - rewrite as Class(k=v) manually");
+      return expr;
     }
-    // constructor form like "new EANGenerator(true)" or "IncrementGenerator" - check the leading identifier.
-    String simple = name.startsWith("new ") ? name.substring(4).trim() : name;
-    int paren = simple.indexOf('(');
-    String cls = paren >= 0 ? simple.substring(0, paren).trim() : simple.trim();
-    if (!VocabularyMap.KNOWN_GENERATORS.contains(cls)) {
+    int paren = expr.indexOf('(');
+    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
+    String args = paren >= 0 ? expr.substring(paren) : "";
+    if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
+      return randomDoubleToFloat(args, path);
+    }
+    String mapped = VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls);
+    if (!VocabularyMap.KNOWN_GENERATORS.contains(mapped)) {
       report.add(path, "generator", "generator '" + name + "' not known to DATAMIMIC - verify/replace manually");
     }
-    return name;
+    return mapped + args;
+  }
+
+  /** True when {@code path} makes the element a direct child of a {@code <setup>} (e.g. "/setup/if"). */
+  private static boolean isSetupChild(String path) {
+    int slash = path.lastIndexOf('/');
+    return slash > 0 && path.substring(0, slash).endsWith("/setup");
+  }
+
+  /** Benerator converter -&gt; DATAMIMIC: strip "new ", rename (CaseConverter -&gt; UpperCase), flag the unknown. */
+  private String mapConverter(String value, String path) {
+    String expr = value.startsWith("new ") ? value.substring(4).trim() : value.trim();
+    int paren = expr.indexOf('(');
+    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
+    String args = paren >= 0 ? expr.substring(paren) : "";
+    String mapped = VocabularyMap.CONVERTER_RENAME.getOrDefault(cls, cls);
+    if (!VocabularyMap.KNOWN_CONVERTERS.contains(mapped)) {
+      report.add(path, "converter", "converter '" + value + "' not known to DATAMIMIC - verify/replace manually");
+    }
+    return mapped + args;
+  }
+
+  /** {@code new RandomDoubleGenerator(min, max, decimals)} -&gt; {@code FloatGenerator(min=, max=, granularity=)}. */
+  private String randomDoubleToFloat(String args, String path) {
+    String[] parts = args.replaceAll("^\\(|\\)$", "").split(",");
+    if (parts.length >= 2) {
+      String g = "FloatGenerator(min=" + parts[0].trim() + ", max=" + parts[1].trim();
+      if (parts.length >= 3) {
+        g += ", granularity=1e-" + parts[2].trim();
+      }
+      return g + ")";
+    }
+    report.add(path, "generator", "RandomDoubleGenerator args '" + args + "' - map to FloatGenerator manually");
+    return "FloatGenerator" + args;
   }
 
   /**

@@ -121,14 +121,10 @@ public class DescriptorConverterTest {
     assertEquals("db", ex.getAttribute("target"));
     assertEquals("", ex.getAttribute("type"));
 
-    // <if test><then>..</then><else>..</else></if> -> <condition><if condition>..</if><else>..</else></condition>
-    Element cond = (Element) doc.getElementsByTagName("condition").item(0);
-    assertNotNull("if -> condition wrapper", cond);
-    Element ifEl = (Element) cond.getElementsByTagName("if").item(0);
-    assertEquals("1 > 0", ifEl.getAttribute("condition")); // test -> condition
-    assertEquals("<then> wrapper unwrapped", 0, ifEl.getElementsByTagName("then").getLength());
-    assertEquals("<then> body inlined into <if>", 1, ifEl.getElementsByTagName("echo").getLength());
-    assertEquals("<else> preserved", 1, cond.getElementsByTagName("else").getLength());
+    // A setup-level <if> has no valid DATAMIMIC target (<condition> is only valid inside <generate>), so it
+    // is dropped (as a TODO comment) and flagged, rather than emitting a <condition> that would not parse.
+    assertEquals("no setup-level <condition> emitted", 0, doc.getElementsByTagName("condition").getLength());
+    assertTrue("setup-level <if> flagged", report.format().contains("setup-level <if>"));
   }
 
   private static Element first(Document doc, String tag, String attr, String value) {

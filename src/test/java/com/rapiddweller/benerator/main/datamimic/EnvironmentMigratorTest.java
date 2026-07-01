@@ -30,7 +30,9 @@ public class EnvironmentMigratorTest {
     assertEquals("sqlite", EnvironmentMigrator.parseJdbcUrl("jdbc:sqlite:/tmp/x.db").dbms);
     assertEquals("oracle", EnvironmentMigrator.parseJdbcUrl("jdbc:oracle:thin:@ora:1521:xe").dbms);
     assertEquals("mssql", EnvironmentMigrator.parseJdbcUrl("jdbc:sqlserver://mssql:1433;databaseName=app").dbms);
-    assertNull("h2 mem not translatable", EnvironmentMigrator.parseJdbcUrl("jdbc:h2:mem:testdb"));
-    assertNull("hsqldb mem not translatable", EnvironmentMigrator.parseJdbcUrl("jdbc:hsqldb:mem:benerator"));
+    // h2/hsqldb in-memory (Java-embedded) -> migrated to SQLite (DATAMIMIC's file/in-process store)
+    assertEquals("sqlite", EnvironmentMigrator.parseJdbcUrl("jdbc:h2:mem:testdb").dbms);
+    assertEquals("testdb", EnvironmentMigrator.parseJdbcUrl("jdbc:h2:mem:testdb").database);
+    assertEquals("sqlite", EnvironmentMigrator.parseJdbcUrl("jdbc:hsqldb:mem:benerator").dbms);
   }
 }

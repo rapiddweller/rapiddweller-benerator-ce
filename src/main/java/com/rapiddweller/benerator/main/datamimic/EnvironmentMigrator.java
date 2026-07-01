@@ -45,9 +45,10 @@ public final class EnvironmentMigrator {
       Pattern.compile("jdbc:oracle:\\w+:@(?://)?([^:/]+):(\\d+)[:/](.+)");
   // jdbc:sqlite:/path/to.db  or  jdbc:sqlite:file.db
   private static final Pattern SQLITE = Pattern.compile("jdbc:sqlite:(.+)");
-  // jdbc:h2:mem:name / jdbc:hsqldb:mem:name / jdbc:derby:memory:name  (in-process Java DB, no Python driver)
+  // jdbc:h2:mem:name / jdbc:hsqldb:mem:name / jdbc:derby:memory:name  (in-process Java DB) -> migrate to
+  // SQLite: DATAMIMIC has no Java-embedded-DB driver, but SQLite is an equivalent file/in-process store.
   private static final Pattern JAVA_MEM =
-      Pattern.compile("jdbc:(h2|hsqldb|derby):(?:mem|memory):.*", Pattern.CASE_INSENSITIVE);
+      Pattern.compile("jdbc:(?:h2|hsqldb|derby):(?:mem|memory):([^;,?]+).*", Pattern.CASE_INSENSITIVE);
 
   private static final Map<String, String> DEFAULT_PORT = Map.of(
       "postgresql", "5432", "mysql", "3306", "mariadb", "3306", "oracle", "1521", "mssql", "1433");
@@ -58,8 +59,8 @@ public final class EnvironmentMigrator {
       return null;
     }
     Matcher m;
-    if (JAVA_MEM.matcher(url).matches()) {
-      return null; // h2/hsqldb/derby in-memory: a Java-embedded DB, DATAMIMIC (Python) cannot connect
+    if ((m = JAVA_MEM.matcher(url)).matches()) {
+      return new Coordinates("sqlite", null, null, m.group(1)); // h2/hsqldb/derby mem -> SQLite store
     }
     if ((m = SQLITE.matcher(url)).matches()) {
       return new Coordinates("sqlite", null, null, m.group(1));

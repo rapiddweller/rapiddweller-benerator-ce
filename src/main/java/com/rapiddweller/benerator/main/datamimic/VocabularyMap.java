@@ -117,4 +117,13 @@ public final class VocabularyMap {
 
   /** Distribution names native to both products. */
   public static final Set<String> KNOWN_DISTRIBUTIONS = Set.of("random", "cumulated", "ordered");
+
+  /** Converters DATAMIMIC understands by name (see CE enums/converter_enums.py). */
+  public static final Set<String> KNOWN_CONVERTERS = Set.of(
+      "UpperCase", "LowerCase", "DateFormat", "Mask", "MiddleMask", "CutLength", "Append", "Hash",
+      "Timestamp2Date", "JavaHash", "Date2Timestamp", "RemoveNoneOrEmptyElement");
+
+  /** Benerator converter -&gt; DATAMIMIC converter name. */
+  public static final Map<String, String> CONVERTER_RENAME = Map.of(
+      "CaseConverter", "UpperCase"); // Benerator CaseConverter defaults to upper-casing
 }
