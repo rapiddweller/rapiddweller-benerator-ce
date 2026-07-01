@@ -71,16 +71,16 @@ public class DescriptorConverterTest {
     new DescriptorConverter(report).convert(in, out);
     Document doc = XMLUtil.parse(out.getAbsolutePath());
 
-    // <iterate source=.. consumer="db"> -> <generate source=.. target="db">
-    boolean iterateAsGenerate = false;
-    NodeList gens = doc.getElementsByTagName("generate");
-    for (int i = 0; i < gens.getLength(); i++) {
-      Element g = (Element) gens.item(i);
-      if ("shop.dbunit.xml".equals(g.getAttribute("source")) && "db".equals(g.getAttribute("target"))) {
-        iterateAsGenerate = true;
+    // <iterate source=.. consumer="db"> stays <iterate source=.. target="db"> (clarity kept)
+    boolean iterateKept = false;
+    NodeList iters = doc.getElementsByTagName("iterate");
+    for (int i = 0; i < iters.getLength(); i++) {
+      Element it = (Element) iters.item(i);
+      if ("shop.dbunit.xml".equals(it.getAttribute("source")) && "db".equals(it.getAttribute("target"))) {
+        iterateKept = true;
       }
     }
-    assertTrue("iterate source -> generate source with target=db", iterateAsGenerate);
+    assertTrue("iterate stays <iterate> with source + target=db", iterateKept);
 
     // FK reference: Benerator targetType -> DATAMIMIC sourceType, with a defaulted sourceKey.
     Element catRef = first(doc, "reference", "name", "category_id");

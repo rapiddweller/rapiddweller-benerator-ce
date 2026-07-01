@@ -18,7 +18,7 @@ public final class VocabularyMap {
   public static final Map<String, String> ELEMENT = Map.ofEntries(
       Map.entry("setup", "setup"),
       Map.entry("generate", "generate"),
-      Map.entry("iterate", "generate"),
+      Map.entry("iterate", "iterate"), // DATAMIMIC keeps <iterate> (iterate-over-source vs generate-new)
       Map.entry("attribute", "key"),
       Map.entry("id", "id"),
       Map.entry("part", "nestedKey"),
