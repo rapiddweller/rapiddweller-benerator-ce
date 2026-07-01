@@ -43,7 +43,7 @@ public class DescriptorConverter {
   private Node convertNode(Document out, Element el, String path) {
     String tag = local(el);
     if (VocabularyMap.DROP_ELEMENTS.contains(tag)) {
-      report.add(path, "dropped", "<" + tag + "> is not needed in DATAMIMIC (auto-discovered) - removed");
+      report.info(path, "dropped", "<" + tag + "> is not needed in DATAMIMIC (auto-discovered) - removed");
       return null;
     }
     if (tag.equals("consumer")) {
@@ -262,6 +262,13 @@ public class DescriptorConverter {
         case "converter":
           out.setAttribute("converter", mapConverter(val, path));
           break;
+        case "nullable":
+          // DATAMIMIC fields are non-null by default, so nullable="false" needs nothing; nullable="true"
+          // needs an explicit nullQuota to actually emit nulls.
+          if (!"false".equals(val)) {
+            report.info(path, "attribute", "nullable=\"true\" -> add nullQuota to emit nulls (DATAMIMIC defaults to non-null)");
+          }
+          break;
         default:
           if (VocabularyMap.FIELD_ATTR_KEEP.contains(key)) {
             out.setAttribute(key, val);
@@ -398,7 +405,7 @@ public class DescriptorConverter {
       if (attrs.containsKey("script")) {
         key.setAttribute("script", attrs.get("script"));
       }
-      report.add(path, "reference", "reference '" + name + "' is a constant/script value -> emitted as <key>");
+      report.info(path, "reference", "reference '" + name + "' is a constant/script value -> emitted as <key>");
       return key;
     }
 
@@ -418,7 +425,7 @@ public class DescriptorConverter {
     }
     ref.setAttribute("sourceType", attrs.get("targetType"));
     ref.setAttribute("sourceKey", "id"); // Benerator infers the FK column; DATAMIMIC needs it explicit
-    report.add(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
+    report.info(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
     if ("true".equals(attrs.get("unique"))) {
       ref.setAttribute("unique", "true");
     }

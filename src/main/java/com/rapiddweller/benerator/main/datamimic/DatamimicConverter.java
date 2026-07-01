@@ -91,8 +91,8 @@ public final class DatamimicConverter {
     if (args.length >= 3) {
       Files.writeString(Path.of(args[2]), report.format());
     }
-    System.out.printf("Converted %d/%d descriptor(s), migrated %d env file(s); %d flagged item(s).%n",
-        ok, inputs.size(), envMigrated, report.items().size());
+    System.out.printf("Converted %d/%d descriptor(s), migrated %d env file(s); %d item(s) need manual attention.%n",
+        ok, inputs.size(), envMigrated, report.attention().size());
     if (failed > 0) {
       System.out.printf("%d descriptor(s) could not be converted (see stderr).%n", failed);
     }

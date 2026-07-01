@@ -15,16 +15,18 @@ import java.util.List;
  */
 public class MigrationReport {
 
-  /** One thing that needs manual migration. */
+  /** One reported item. {@code info} items were converted automatically (FYI only); the rest need work. */
   public static final class Item {
     public final String location;
     public final String kind;
     public final String detail;
+    public final boolean info;
 
-    Item(String location, String kind, String detail) {
+    Item(String location, String kind, String detail, boolean info) {
       this.location = location;
       this.kind = kind;
       this.detail = detail;
+      this.info = info;
     }
 
     @Override
@@ -35,12 +37,23 @@ public class MigrationReport {
 
   private final List<Item> items = new ArrayList<>();
 
+  /** Record something that needs MANUAL migration (no automatic equivalent). */
   public void add(String location, String kind, String detail) {
-    items.add(new Item(location, kind, detail));
+    items.add(new Item(location, kind, detail, false));
+  }
+
+  /** Record an automatic/informational transformation (converted OK; shown for transparency, no action). */
+  public void info(String location, String kind, String detail) {
+    items.add(new Item(location, kind, detail, true));
   }
 
   public List<Item> items() {
     return items;
+  }
+
+  /** Only the items that genuinely need manual attention (excludes {@link #info} notes). */
+  public List<Item> attention() {
+    return items.stream().filter(it -> !it.info).toList();
   }
 
   public boolean isEmpty() {
@@ -48,13 +61,18 @@ public class MigrationReport {
   }
 
   public String format() {
-    if (items.isEmpty()) {
+    List<Item> attention = attention();
+    if (attention.isEmpty()) {
       return "Migration complete - no manual steps needed.";
     }
     StringBuilder sb = new StringBuilder("Migration report - ")
-        .append(items.size()).append(" item(s) need manual attention:\n");
-    for (Item it : items) {
+        .append(attention.size()).append(" item(s) need manual attention:\n");
+    for (Item it : attention) {
       sb.append(it).append('\n');
+    }
+    long infoCount = items.size() - attention.size();
+    if (infoCount > 0) {
+      sb.append("\n(").append(infoCount).append(" item(s) converted automatically - informational, no action)\n");
     }
     return sb.toString();
   }

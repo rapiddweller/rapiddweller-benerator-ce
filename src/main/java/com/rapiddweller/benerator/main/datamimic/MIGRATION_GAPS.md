@@ -9,6 +9,11 @@ for manual migration.
 **301 files · 296 convert · 5 throw** (the 5 are non-standalone / deliberately-malformed XML
 fixtures, not descriptors). No descriptor fails to produce output.
 
+The report is tiered: `report.add(...)` = genuinely needs manual work; `report.info(...)` = converted
+automatically, shown for transparency only (dropped `<import>`, a `<reference>` emitted as a `<key>`, a
+defaulted `sourceKey`, `nullable="true"`). Across the full demo suite: **445 need manual attention, 151
+informational** (down from a flat 612 that conflated the two).
+
 ### Now mapped
 
 | Benerator | → DATAMIMIC | flags closed |
