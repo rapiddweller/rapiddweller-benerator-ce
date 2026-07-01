@@ -206,7 +206,10 @@ public class DescriptorConverter {
 
   private void convertFieldAttributes(Element src, Element out, String tag, String path) {
     Map<String, String> attrs = attributes(src);
-    String mappedType = mapType(attrs.get("type"), tag, path);
+    // Does another attribute already produce the value? Then an unmapped type= is cosmetic, not a gap.
+    boolean hasMode = attrs.containsKey("script") || attrs.containsKey("source") || attrs.containsKey("values")
+        || attrs.containsKey("generator") || attrs.containsKey("constant") || attrs.containsKey("pattern");
+    String mappedType = mapType(attrs.get("type"), tag, hasMode, path);
 
     // min/max/granularity are native DATAMIMIC <key> attrs now, so they pass through untouched. Only fold
     // into a numeric generator when a non-random distribution must ride along (native range has no
@@ -281,19 +284,22 @@ public class DescriptorConverter {
     return generator.substring(0, generator.indexOf('(') + 1) + (inner.isEmpty() ? arg : inner + ", " + arg) + ")";
   }
 
-  private String mapType(String beneratorType, String tag, String path) {
+  private String mapType(String beneratorType, String tag, boolean hasMode, String path) {
     if (beneratorType == null) {
       return null;
     }
     String mapped = VocabularyMap.TYPE.get(beneratorType);
-    if (mapped == null) {
-      // e.g. entity/date/timestamp/binary/object - a source-backed variable simply drops it.
-      if (!(tag.equals("variable") && "entity".equals(beneratorType))) {
-        report.add(path, "type", "type '" + beneratorType + "' has no DATAMIMIC type - dropped");
-      }
-      return null;
+    if (mapped != null) {
+      return mapped;
     }
-    return mapped;
+    // Unmapped type (date/object/entity/binary/...). Not a gap when another mode provides the value: a
+    // <key type="date" script="person.birthDate"> generates from the script, and DATAMIMIC has no type
+    // coercion to lose - so drop the type silently. Only a bare unmapped type (no mode) is a real gap.
+    if (!hasMode && !(tag.equals("variable") && "entity".equals(beneratorType))) {
+      report.add(path, "type", "type '" + beneratorType + "' has no DATAMIMIC type and no generation mode - "
+          + "add min/max, a generator, or a source");
+    }
+    return null;
   }
 
   private String numericGenerator(String mappedType, Map<String, String> attrs) {
