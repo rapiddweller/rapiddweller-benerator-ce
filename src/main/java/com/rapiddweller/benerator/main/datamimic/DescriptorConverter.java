@@ -46,6 +46,9 @@ public class DescriptorConverter {
       report.add(path, "dropped", "<" + tag + "> is not needed in DATAMIMIC (auto-discovered) - removed");
       return null;
     }
+    if (tag.equals("consumer")) {
+      return null; // a <consumer> element is folded into the parent <generate>'s target (see convertGenerateAttributes)
+    }
     if (tag.equals("reference")) {
       return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
     }
@@ -160,8 +163,36 @@ public class DescriptorConverter {
       }
     }
     if (!targetSet) {
+      // no consumer= attribute: fold a nested <consumer class="X"> element into target instead
+      String childTarget = consumerFromChildElement(src, path);
+      if (childTarget != null) {
+        out.setAttribute("target", childTarget);
+        targetSet = true;
+      }
+    }
+    if (!targetSet) {
       out.setAttribute("target", ""); // DATAMIMIC generate needs a target; empty = capture only
     }
+  }
+
+  /** Map a nested {@code <consumer class="pkg.CSVEntityExporter">} to a DATAMIMIC target; null if none. */
+  private String consumerFromChildElement(Element generate, String path) {
+    for (Node c = generate.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() != Node.ELEMENT_NODE || !local((Element) c).equals("consumer")) {
+        continue;
+      }
+      Element cons = (Element) c;
+      String spec = cons.hasAttribute("class") ? cons.getAttribute("class") : cons.getAttribute("ref");
+      if (spec.isEmpty()) {
+        continue;
+      }
+      String tgt = consumerToTarget(spec.substring(spec.lastIndexOf('.') + 1)); // FQN -> simple exporter name
+      if (tgt.isEmpty()) {
+        report.add(path, "consumer", "<consumer class='" + spec + "'> -> configure a DATAMIMIC target manually");
+      }
+      return tgt;
+    }
+    return null;
   }
 
   private void convertFieldAttributes(Element src, Element out, String tag, String path) {
