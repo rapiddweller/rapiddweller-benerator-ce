@@ -458,10 +458,10 @@ public class DescriptorConverter {
           }
           break;
         case "script":
-          out.setAttribute("script", rewriteScript(val));
+          out.setAttribute("script", rewriteScript(val, enclosingScopeName(src)));
           break;
         case "selector":
-          out.setAttribute("selector", rewriteScript(val));
+          out.setAttribute("selector", rewriteScript(val, enclosingScopeName(src)));
           break;
         case "converter":
           out.setAttribute("converter", mapConverter(val, path));
@@ -617,12 +617,40 @@ public class DescriptorConverter {
    * scopes where a bare sibling name does not resolve).
    */
   static String rewriteScript(String expr) {
+    return rewriteScript(expr, null);
+  }
+
+  /**
+   * As {@link #rewriteScript(String)}, plus: a Benerator self-reference by the enclosing scope name
+   * ({@code <generate type="abc"> ... script="abc.j"}) becomes {@code this.j}, since DATAMIMIC exposes the
+   * current scope as {@code this} (a bare sibling name would not resolve inside a nested scope).
+   */
+  static String rewriteScript(String expr, String enclosingScope) {
     if (expr == null || expr.isEmpty()) {
       return expr;
     }
     String s = rewriteTernary(expr);
     s = s.replaceAll("\\.name\\(\\)", ""); // gender.name() -> gender (Java enum -> already a string)
+    if (enclosingScope != null && !enclosingScope.isEmpty()) {
+      // Self-reference by the enclosing scope's own name -> `this` (the current-scope alias).
+      s = s.replaceAll("\\b" + java.util.regex.Pattern.quote(enclosingScope) + "\\.", "this.");
+    }
     return s;
+  }
+
+  /** Benerator identity ({@code type}, else {@code name}) of the nearest enclosing generate/iterate/nestedKey. */
+  private static String enclosingScopeName(Element field) {
+    Node p = field.getParentNode();
+    while (p instanceof Element) {
+      String tag = local(p);
+      if (tag.equals("generate") || tag.equals("iterate") || tag.equals("part") || tag.equals("nestedKey")) {
+        Element e = (Element) p;
+        String type = e.getAttribute("type");
+        return !type.isEmpty() ? type : e.getAttribute("name");
+      }
+      p = p.getParentNode();
+    }
+    return null;
   }
 
   /**

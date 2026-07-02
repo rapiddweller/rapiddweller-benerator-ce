@@ -327,7 +327,10 @@ public class DescriptorConverterTest {
     // Java ternary -> Python ternary
     assertEquals("(1) if (TX.CARD == 'Y') else (0)", DescriptorConverter.rewriteScript("TX.CARD == 'Y' ? 1 : 0"));
     // this.field -> bare field (DATAMIMIC exposes siblings by name)
-    assertEquals("this.age + 1", DescriptorConverter.rewriteScript("this.age + 1")); // this.* left for DM native binding
+    assertEquals("this.age + 1", DescriptorConverter.rewriteScript("this.age + 1"));
+    // <generate type="abc"> self-reference abc.j -> this.j
+    assertEquals("this.j + 1", DescriptorConverter.rewriteScript("abc.j + 1", "abc"));
+    assertEquals("(1) if (this.card == 0) else (0)", DescriptorConverter.rewriteScript("TX.card == 0 ? 1 : 0", "TX"));
     // Java enum accessor dropped (gender is already a string in DATAMIMIC)
     assertEquals("person.gender", DescriptorConverter.rewriteScript("person.gender.name()"));
     // a lone ':' in a slice/dict is NOT a ternary
