@@ -172,15 +172,12 @@ public final class VocabularyMap {
       "NobilityTitleGenerator", "SequenceTableGenerator");
 
   /**
-   * Benerator DataFaker method -&gt; the equivalent Python Faker method (faker 33.x). Camel-cased or
-   * Java-datafaker-specific names that have a real Faker counterpart under a different name.
+   * Benerator DataFaker method -&gt; Python Faker method (faker 33.x), only where plain camel-to-snake
+   * ({@code fakerSnake}) does NOT already produce the right name (e.g. {@code getYear} -&gt; {@code year},
+   * not {@code get_year}). Names that just need snake_case are handled by the fallback, not listed here.
    */
   public static final Map<String, String> FAKER_METHOD_RENAME = Map.of(
-      "getYear", "year",
-      "fileName", "file_name",
-      "streetName", "street_name",
-      "firstName", "first_name",
-      "lastName", "last_name");
+      "getYear", "year");
 
   /**
    * Benerator DataFaker methods from Java-datafaker-only providers (fiction/sport/hobby/medical/commerce)
