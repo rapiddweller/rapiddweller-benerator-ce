@@ -3,10 +3,8 @@
 package com.rapiddweller.benerator.main.datamimic;
 
 import com.rapiddweller.common.xml.XMLUtil;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,30 +21,30 @@ import java.util.Map;
 public class DescriptorConverter {
 
   private final MigrationReport report;
-  /** {@code <bean id="X" spec="new Generator(...)">} definitions, so a {@code generator="X"} reference can
-   *  be resolved to the bean's actual generator expression instead of being flagged as unknown. */
-  private final Map<String, String> beanSpecs = new LinkedHashMap<>();
-  /** {@code <bean id="xml" class="...XMLEntityExporter">} -&gt; DATAMIMIC target ("XML"), so consumer="xml" resolves. */
-  private final Map<String, String> beanExporters = new LinkedHashMap<>();
-  /** Setup-time values collected from {@code <setting>} defaults and included {@code .properties} files,
-   *  so {@code {dbUrl}}/{@code {ftl:${var}}} placeholders resolve to concrete connection values. */
-  private final Map<String, String> settings = new LinkedHashMap<>();
+  private final ExpressionMapper expressions;
+  private final AssertionConverter assertions;
+  private final ReferenceConverter references;
+  private final ConsumerMapper consumers;
+  private SettingsResolver settings;
   /** {@code <mongodb id="X">} store ids, so an {@code <id generator="MongoDBObjectIdGenerator">} inside a
    *  generate that consumes to one of them can be dropped (MongoDB assigns _id on insert itself). */
   private final java.util.Set<String> mongoStoreIds = new java.util.LinkedHashSet<>();
-  private File sourceDir;
 
   public DescriptorConverter(MigrationReport report) {
     this.report = report;
+    this.expressions = new ExpressionMapper(report);
+    this.assertions = new AssertionConverter(report);
+    this.references = new ReferenceConverter(report);
+    this.consumers = new ConsumerMapper(report);
   }
 
   public void convert(File input, File output) throws Exception {
     Document src = XMLUtil.parseWithLocators(input.getAbsolutePath());
     Document out = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     Element root = src.getDocumentElement();
-    sourceDir = input.getAbsoluteFile().getParentFile();
+    settings = new SettingsResolver(input.getAbsoluteFile().getParentFile());
     scanBeans(root);
-    scanSettings(root);
+    settings.scanSettings(root);
     scanMongoStores(root);
     Node converted = convertNode(out, root, "/" + local(root));
     if (converted != null) {
@@ -77,17 +75,17 @@ public class DescriptorConverter {
     if (local(el).equals("bean") && el.hasAttribute("id")) {
       String id = el.getAttribute("id");
       if (el.hasAttribute("spec")) {
-        beanSpecs.put(id, el.getAttribute("spec"));
+        expressions.registerBeanSpec(id, el.getAttribute("spec"));
       }
       // A bean whose class/spec is an *EntityExporter (XMLEntityExporter, CSVEntityExporter, ...) is an
       // exporter definition; map its id to the DATAMIMIC target so consumer="id" resolves to it.
       String def = el.hasAttribute("class") ? el.getAttribute("class") : el.getAttribute("spec");
       if (def != null && !def.isEmpty()) {
-        String simple = beneratorGeneratorClass(def); // strips "new ", args, and the FQN below
+        String simple = ExpressionMapper.beneratorGeneratorClass(def); // strips "new ", args, and the FQN below
         simple = simple.substring(simple.lastIndexOf('.') + 1);
         String target = VocabularyMap.CONSUMER_TARGET.get(simple);
         if (target != null) {
-          beanExporters.put(id, target);
+          consumers.registerExporter(id, target);
         }
       }
     }
@@ -110,69 +108,6 @@ public class DescriptorConverter {
     }
   }
 
-  /**
-   * Collect setup-time values in document order, the way Benerator would see them at startup:
-   * {@code <setting name value|default>} entries, then any included {@code .properties} file (whose uri
-   * may itself use the settings, e.g. {@code {ftl:conf/${stage}.properties}}) overriding the defaults.
-   * This makes {@code <database url="{dbUrl}">} resolvable without a runtime.
-   */
-  private void scanSettings(Element el) {
-    String tag = local(el);
-    if ((tag.equals("setting") || tag.equals("property")) && el.hasAttribute("name")) {
-      String value = el.hasAttribute("value") ? el.getAttribute("value") : el.getAttribute("default");
-      if (!value.isEmpty() || el.hasAttribute("value")) {
-        settings.put(el.getAttribute("name"), value);
-      }
-    } else if (tag.equals("include") && el.hasAttribute("uri")) {
-      String uri = resolvePlaceholders(el.getAttribute("uri"));
-      if (uri.endsWith(".properties") && !uri.contains("{")) {
-        File f = new File(sourceDir, uri);
-        if (f.isFile()) {
-          try (java.io.Reader r = new java.io.FileReader(f)) {
-            java.util.Properties p = new java.util.Properties();
-            p.load(r);
-            p.stringPropertyNames().forEach(k -> settings.put(k, p.getProperty(k)));
-          } catch (java.io.IOException e) {
-            // unreadable include: leave placeholders unresolved, existing flags will fire
-          }
-        }
-      }
-    }
-    for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
-      if (c.getNodeType() == Node.ELEMENT_NODE) {
-        scanSettings((Element) c);
-      }
-    }
-  }
-
-  /**
-   * Resolve {@code {var}} and {@code {ftl:...${var}...}} placeholders from the collected settings.
-   * Anything unknown stays verbatim, so the existing "set manually" flags still fire.
-   */
-  private String resolvePlaceholders(String value) {
-    if (value == null || value.indexOf('{') < 0) {
-      return value;
-    }
-    String v = value;
-    if (v.startsWith("{ftl:") && v.endsWith("}")) {
-      v = v.substring(5, v.length() - 1).trim();
-    } else if (v.startsWith("{") && v.endsWith("}") && settings.containsKey(v.substring(1, v.length() - 1))) {
-      return settings.get(v.substring(1, v.length() - 1));
-    }
-    java.util.regex.Matcher m = java.util.regex.Pattern.compile("\\$\\{(\\w+)\\}").matcher(v);
-    StringBuilder sb = new StringBuilder();
-    while (m.find()) {
-      String rep = settings.get(m.group(1));
-      if (rep == null) {
-        return value; // unresolvable part: keep the original untouched
-      }
-      m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(rep));
-    }
-    m.appendTail(sb);
-    // A ${complex + expr} the \w+ pattern can't substitute must not leak out half-stripped.
-    return sb.indexOf("${") >= 0 ? value : sb.toString();
-  }
-
   /** @return the converted node (Element, or a TODO Comment when the source element is unmapped). */
   private Node convertNode(Document out, Element el, String path) {
     String tag = local(el);
@@ -185,14 +120,15 @@ public class DescriptorConverter {
     }
     if (tag.equals("bean")) {
       // A <bean spec="new Generator(...)"> is inlined at its generator="id" references, so the bean is gone.
-      if (isKnownGeneratorSpec(el.getAttribute("spec"))) {
+      if (expressions.isKnownGeneratorSpec(el.getAttribute("spec"))) {
         report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> generator inlined into its references - removed");
         return null;
       }
       // An exporter bean (<bean id="xml" class="XMLEntityExporter">) is folded into consumer/target - removed.
-      if (beanExporters.containsKey(el.getAttribute("id"))) {
+      String exporterTarget = consumers.exporterTarget(el.getAttribute("id"));
+      if (exporterTarget != null) {
         report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> exporter -> target='"
-            + beanExporters.get(el.getAttribute("id")) + "' - removed");
+            + exporterTarget + "' - removed");
         return null;
       }
       report.add(path, "element", "<bean> has no DATAMIMIC equivalent - migrate manually");
@@ -200,10 +136,10 @@ public class DescriptorConverter {
           + " see MIGRATION_PLAYBOOK.md#bean ");
     }
     if (tag.equals("reference")) {
-      return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
+      return references.convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
     }
     if (tag.equals("if")) {
-      Node assertion = errorOnlyIfToAssert(out, el, path); // <if test><error>MSG</error></if> is the assertion idiom
+      Node assertion = assertions.errorOnlyIfToAssert(out, el, path); // <if test><error>MSG</error></if> is the assertion idiom
       if (assertion != null) {
         return assertion;
       }
@@ -219,10 +155,10 @@ public class DescriptorConverter {
       return convertExecuteNode(out, el, path); // uri-based; inline code is flagged
     }
     if (tag.equals("evaluate")) { // Benerator <evaluate assert="..."> is a post-generation assertion
-      return convertEvaluateNode(out, el, path); // assert= -> <variable> + <assert>; no assert= is flagged
+      return assertions.convertEvaluateNode(out, el, path); // assert= -> <variable> + <assert>; no assert= is flagged
     }
     if ((tag.equals("attribute") || tag.equals("id")) && el.hasAttribute("generator")) {
-      String genClass = beneratorGeneratorClass(el.getAttribute("generator"));
+      String genClass = ExpressionMapper.beneratorGeneratorClass(el.getAttribute("generator"));
       // MongoDB assigns _id itself when the document has none, so a MongoDBObjectIdGenerator id on a
       // mongo-consumed <generate> carries no information - drop the field (verified: CE mongodb_client
       // insert() passes documents straight to insert_many, pymongo/Mongo fill in _id).
@@ -260,7 +196,7 @@ public class DescriptorConverter {
         // DATAMIMIC <mongodb> takes the connection directly (no dbms); env keys are migrated separately.
         copyAttributes(el, result, "id", "host", "port", "database", "environment", "system", "user", "password");
         for (Map.Entry<String, String> a : attributes(result).entrySet()) {
-          result.setAttribute(a.getKey(), resolvePlaceholders(a.getValue())); // {ftl:${mongoHost}} etc.
+          result.setAttribute(a.getKey(), settings.resolve(a.getValue())); // {ftl:${mongoHost}} etc.
         }
         break;
       case "memstore":
@@ -327,11 +263,11 @@ public class DescriptorConverter {
           out.setAttribute("numProcess", val);
           break;
         case "consumer":
-          String tgt = consumerToTarget(val);
+          String tgt = consumers.consumerToTarget(val);
           out.setAttribute("target", tgt);
           targetSet = true;
           if (tgt.isEmpty()) {
-            if (isNoConsumerOnly(val)) {
+            if (ConsumerMapper.isNoConsumerOnly(val)) {
               // NoConsumer deliberately produces no output; DATAMIMIC's empty target is the exact match.
               report.info(path, "consumer", "consumer 'NoConsumer' -> empty target (capture only)");
             } else {
@@ -352,7 +288,7 @@ public class DescriptorConverter {
     }
     if (!targetSet) {
       // no consumer= attribute: fold a nested <consumer class="X"> element into target instead
-      String childTarget = consumerFromChildElement(src, path);
+      String childTarget = consumers.consumerFromChildElement(src, path);
       if (childTarget != null) {
         out.setAttribute("target", childTarget);
         targetSet = true;
@@ -361,30 +297,6 @@ public class DescriptorConverter {
     if (!targetSet) {
       out.setAttribute("target", ""); // DATAMIMIC generate needs a target; empty = capture only
     }
-  }
-
-  /** Map a nested {@code <consumer class="pkg.CSVEntityExporter">} to a DATAMIMIC target; null if none. */
-  private String consumerFromChildElement(Element generate, String path) {
-    for (Node c = generate.getFirstChild(); c != null; c = c.getNextSibling()) {
-      if (c.getNodeType() != Node.ELEMENT_NODE || !local((Element) c).equals("consumer")) {
-        continue;
-      }
-      Element cons = (Element) c;
-      String spec = cons.hasAttribute("class") ? cons.getAttribute("class") : cons.getAttribute("ref");
-      if (spec.isEmpty()) {
-        continue;
-      }
-      String tgt = consumerToTarget(spec.substring(spec.lastIndexOf('.') + 1)); // FQN -> simple exporter name
-      if (tgt.isEmpty()) {
-        if (isNoConsumerOnly(spec.substring(spec.lastIndexOf('.') + 1))) {
-          report.info(path, "consumer", "consumer 'NoConsumer' -> empty target (capture only)");
-        } else {
-          report.add(path, "consumer", "<consumer class='" + spec + "'> -> configure a DATAMIMIC target manually");
-        }
-      }
-      return tgt;
-    }
-    return null;
   }
 
   private void convertFieldAttributes(Element src, Element out, String tag, String path) {
@@ -451,7 +363,7 @@ public class DescriptorConverter {
     // A composite generator on a <variable> becomes entity="X". Computed up front because it changes
     // how 'dataset' is handled: on an entity it is a native modifier attribute, not a constructor arg.
     String entityName = tag.equals("variable") && attrs.containsKey("generator")
-        ? VocabularyMap.GENERATOR_TO_ENTITY.get(beneratorGeneratorClass(attrs.get("generator"))) : null;
+        ? VocabularyMap.GENERATOR_TO_ENTITY.get(ExpressionMapper.beneratorGeneratorClass(attrs.get("generator"))) : null;
 
     // A dataset-aware generator (AddressGenerator, ...) takes the dataset as a constructor arg; DATAMIMIC
     // <key> has no 'dataset' attribute, so fold it into the generator call instead of keeping it.
@@ -478,8 +390,8 @@ public class DescriptorConverter {
             convertCompositeGenerator(val, entityName, out, path);
           } else {
             out.setAttribute("generator", foldDataset
-                ? foldDatasetIntoGenerator(mapGenerator(val, path), attrs.get("dataset"))
-                : mapGenerator(val, path));
+                ? ExpressionMapper.foldDatasetIntoGenerator(expressions.mapGenerator(val, path), attrs.get("dataset"))
+                : expressions.mapGenerator(val, path));
           }
           break;
         case "distribution":
@@ -490,13 +402,13 @@ public class DescriptorConverter {
           }
           break;
         case "script":
-          out.setAttribute("script", rewriteScript(val, enclosingScopeName(src)));
+          out.setAttribute("script", ExpressionMapper.rewriteScript(val, enclosingScopeName(src)));
           break;
         case "selector":
-          out.setAttribute("selector", rewriteScript(val, enclosingScopeName(src)));
+          out.setAttribute("selector", ExpressionMapper.rewriteScript(val, enclosingScopeName(src)));
           break;
         case "converter":
-          out.setAttribute("converter", mapConverter(val, path));
+          out.setAttribute("converter", expressions.mapConverter(val, path));
           break;
         case "nullable":
           // DATAMIMIC fields are non-null by default, so nullable="false" needs nothing; nullable="true"
@@ -514,11 +426,6 @@ public class DescriptorConverter {
           break;
       }
     }
-  }
-
-  /** Add {@code dataset='X'} to a generator string: {@code AddressGenerator} -&gt; {@code AddressGenerator(dataset='X')}. */
-  private static String foldDatasetIntoGenerator(String generator, String dataset) {
-    return ArgSplitter.appendArg(generator, "dataset='" + dataset + "'");
   }
 
   /**
@@ -542,9 +449,9 @@ public class DescriptorConverter {
       int eq = part.indexOf('=');
       String key = eq > 0 ? part.substring(0, eq).trim() : "";
       if (VocabularyMap.ENTITY_ARG_TO_ATTR.containsKey(key) || VocabularyMap.ENTITY_ARG_TO_CTOR_PARAM.containsKey(key)) {
-        args.put(key, unquote(part.substring(eq + 1).trim()));
+        args.put(key, ExpressionMapper.unquote(part.substring(eq + 1).trim()));
       } else {
-        report.add(path, "generator", "generator '" + beneratorGeneratorClass(spec) + "' arg '" + part
+        report.add(path, "generator", "generator '" + ExpressionMapper.beneratorGeneratorClass(spec) + "' arg '" + part
             + "' has no entity modifier equivalent - port manually");
       }
     }
@@ -554,14 +461,14 @@ public class DescriptorConverter {
     for (Map.Entry<String, String> arg : args.entrySet()) {
       String ctorParam = VocabularyMap.ENTITY_ARG_TO_CTOR_PARAM.get(arg.getKey());
       if (ctorForm && ctorParam != null) {
-        ctor.append(ctor.length() > 0 ? ", " : "").append(ctorParam).append("=").append(ctorValue(arg.getValue()));
+        ctor.append(ctor.length() > 0 ? ", " : "").append(ctorParam).append("=").append(ExpressionMapper.ctorValue(arg.getValue()));
       } else {
         out.setAttribute(VocabularyMap.ENTITY_ARG_TO_ATTR.get(arg.getKey()), arg.getValue());
       }
     }
     String entityExpr = ctorForm ? entity + "(" + ctor + ")" : entity;
     out.setAttribute("entity", entityExpr);
-    report.info(path, "generator", "<variable generator='" + beneratorGeneratorClass(spec)
+    report.info(path, "generator", "<variable generator='" + ExpressionMapper.beneratorGeneratorClass(spec)
         + "'> -> entity='" + entityExpr + "'");
   }
 
@@ -633,41 +540,12 @@ public class DescriptorConverter {
       if (mongoStoreIds.contains(spec)) {
         return true;
       }
-      java.util.regex.Matcher crud = CRUD_CONSUMER.matcher(spec);
+      java.util.regex.Matcher crud = ConsumerMapper.CRUD_CONSUMER.matcher(spec);
       if (crud.matches() && mongoStoreIds.contains(crud.group(1))) {
         return true;
       }
     }
     return false;
-  }
-
-  /**
-   * Rewrite a Benerator/Java script expression into the Python DATAMIMIC evaluates (context.py eval):
-   * the Java ternary {@code cond ? a : b} becomes {@code a if cond else b}, and a Java enum accessor
-   * {@code .name()} is dropped (DATAMIMIC's gender/enum-like fields are already strings). {@code this.field}
-   * is left untouched: DATAMIMIC binds {@code this} to the current content scope (essential in nested
-   * scopes where a bare sibling name does not resolve).
-   */
-  static String rewriteScript(String expr) {
-    return rewriteScript(expr, null);
-  }
-
-  /**
-   * As {@link #rewriteScript(String)}, plus: a Benerator self-reference by the enclosing scope name
-   * ({@code <generate type="abc"> ... script="abc.j"}) becomes {@code this.j}, since DATAMIMIC exposes the
-   * current scope as {@code this} (a bare sibling name would not resolve inside a nested scope).
-   */
-  static String rewriteScript(String expr, String enclosingScope) {
-    if (expr == null || expr.isEmpty()) {
-      return expr;
-    }
-    String s = rewriteTernary(expr);
-    s = s.replaceAll("\\.name\\(\\)", ""); // gender.name() -> gender (Java enum -> already a string)
-    if (enclosingScope != null && !enclosingScope.isEmpty()) {
-      // Self-reference by the enclosing scope's own name -> `this` (the current-scope alias).
-      s = s.replaceAll("\\b" + java.util.regex.Pattern.quote(enclosingScope) + "\\.", "this.");
-    }
-    return s;
   }
 
   /** True when the nearest enclosing {@code <generate>}/{@code <iterate>} reads from a {@code source}. */
@@ -696,91 +574,6 @@ public class DescriptorConverter {
       p = p.getParentNode();
     }
     return null;
-  }
-
-  /**
-   * Java ternary {@code cond ? a : b} -&gt; Python {@code (a) if (cond) else (b)}, honoring nesting and
-   * string literals, applied recursively to each part. Leaves the expression untouched when it has no
-   * top-level {@code ?} (so a lone {@code :} in a dict/slice is never mistaken for a ternary).
-   */
-  private static String rewriteTernary(String expr) {
-    int q = topLevelIndex(expr, '?');
-    if (q < 0) {
-      return expr;
-    }
-    int colon = matchingTernaryColon(expr, q + 1);
-    if (colon < 0) {
-      return expr; // unbalanced - not a ternary we can safely rewrite
-    }
-    String cond = expr.substring(0, q).trim();
-    String thenPart = expr.substring(q + 1, colon).trim();
-    String elsePart = expr.substring(colon + 1).trim();
-    return "(" + rewriteTernary(thenPart) + ") if (" + rewriteTernary(cond) + ") else (" + rewriteTernary(elsePart) + ")";
-  }
-
-  /** Index of the first {@code c} at paren/bracket depth 0 and outside quotes, or -1. */
-  private static int topLevelIndex(String s, char c) {
-    int depth = 0;
-    char quote = 0;
-    for (int i = 0; i < s.length(); i++) {
-      char ch = s.charAt(i);
-      if (quote != 0) {
-        if (ch == quote) {
-          quote = 0;
-        }
-      } else if (ch == '\'' || ch == '"') {
-        quote = ch;
-      } else if (ch == '(' || ch == '[' || ch == '{') {
-        depth++;
-      } else if (ch == ')' || ch == ']' || ch == '}') {
-        depth--;
-      } else if (ch == c && depth == 0) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  /** The {@code :} that closes the ternary opened at/after {@code from}, skipping nested {@code ? :} pairs. */
-  private static int matchingTernaryColon(String s, int from) {
-    int depth = 0;
-    int ternary = 0;
-    char quote = 0;
-    for (int i = from; i < s.length(); i++) {
-      char ch = s.charAt(i);
-      if (quote != 0) {
-        if (ch == quote) {
-          quote = 0;
-        }
-      } else if (ch == '\'' || ch == '"') {
-        quote = ch;
-      } else if (ch == '(' || ch == '[' || ch == '{') {
-        depth++;
-      } else if (ch == ')' || ch == ']' || ch == '}') {
-        depth--;
-      } else if (depth == 0 && ch == '?') {
-        ternary++;
-      } else if (depth == 0 && ch == ':') {
-        if (ternary == 0) {
-          return i;
-        }
-        ternary--;
-      }
-    }
-    return -1;
-  }
-
-  /** Strip one pair of surrounding quotes: {@code 'DE'} / {@code "DE"} -&gt; {@code DE}. */
-  private static String unquote(String s) {
-    if (s.length() >= 2 && (s.charAt(0) == '\'' || s.charAt(0) == '"') && s.charAt(s.length() - 1) == s.charAt(0)) {
-      return s.substring(1, s.length() - 1);
-    }
-    return s;
-  }
-
-  /** Constructor-arg rendering: numbers stay bare ({@code min_age=21}), strings get quoted ({@code dataset='DE'}). */
-  private static String ctorValue(String raw) {
-    return raw.matches("[-+]?\\d+(\\.\\d+)?([eE][-+]?\\d+)?") ? raw : "'" + raw + "'";
   }
 
   private String mapType(String beneratorType, String tag, boolean hasMode, String path) {
@@ -835,268 +628,15 @@ public class DescriptorConverter {
     }
   }
 
-  /**
-   * Benerator {@code DataFakerGenerator('provider','method')} names a Faker provider + method; DATAMIMIC's
-   * {@code DataFakerGenerator(method, locale='en_US')} calls {@code faker.<method>()} directly (no provider),
-   * so drop the provider and keep the method. A single arg is already the method.
-   */
-  private String mapDataFaker(String args, String path) {
-    java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
-    if (parts.isEmpty()) {
-      report.add(path, "generator", "DataFakerGenerator with no method arg - specify a Faker method");
-      return "DataFakerGenerator" + args;
-    }
-    // DATAMIMIC calls python faker.<method>() flat - the Benerator provider (first arg) is irrelevant,
-    // only the method (last arg) matters, in snake_case.
-    String method = unquote(parts.get(parts.size() - 1));
-    String mapped = VocabularyMap.FAKER_METHOD_RENAME.get(method);
-    if (mapped != null) {
-      return "DataFakerGenerator('" + mapped + "')";
-    }
-    if (VocabularyMap.FAKER_UNAVAILABLE_METHODS.contains(method)) {
-      // A Java-datafaker-only provider (massEffect, theExpanse, ...) with no Python Faker equivalent.
-      // Fall back to a generic word so the descriptor still RUNS; info (not a manual gap) points at the
-      // better fix (a DATAMIMIC entity like Product/MedicalProcedure, or a value list).
-      report.info(path, "generator", "DataFakerGenerator('" + method + "') has no Python Faker equivalent"
-          + " -> using faker.word(); replace with <variable entity=...> or a value list for domain data");
-      return "DataFakerGenerator('word')";
-    }
-    return "DataFakerGenerator('" + fakerSnake(method) + "')";
-  }
-
-  /** camelCase Faker method -&gt; snake_case ({@code streetName} -&gt; {@code street_name}). */
-  private static String fakerSnake(String method) {
-    return method.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase();
-  }
-
-  /** The bare class name of a Benerator generator ("new PersonGenerator{...}" -&gt; "PersonGenerator"). */
-  private static String beneratorGeneratorClass(String generator) {
-    String g = generator.startsWith("new ") ? generator.substring(4).trim() : generator.trim();
-    int cut = ArgSplitter.callStart(g);
-    return (cut >= 0 ? g.substring(0, cut) : g).trim();
-  }
-
-  /** True when a bean spec like {@code "new IncrementGenerator(1000)"} names a generator DATAMIMIC knows. */
-  private boolean isKnownGeneratorSpec(String spec) {
-    if (spec == null || spec.isEmpty()) {
-      return false;
-    }
-    String expr = spec.startsWith("new ") ? spec.substring(4).trim() : spec.trim();
-    int paren = ArgSplitter.callStart(expr);
-    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
-    if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
-      return true;
-    }
-    return VocabularyMap.KNOWN_GENERATORS.contains(VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls));
-  }
-
-  private String mapGenerator(String name, String path) {
-    // Resolve a <bean id="X" spec="..."> reference (generator="X") to the bean's own generator expression.
-    String resolved = beanSpecs.getOrDefault(name.trim(), name);
-    // Strip Benerator's "new " instantiation prefix -> DATAMIMIC evaluates Class(args) directly.
-    String expr = resolved.startsWith("new ") ? resolved.substring(4).trim() : resolved.trim();
-    if (expr.contains("{")) { // Benerator's PersonGenerator{k='v'} property-brace form has no direct equivalent
-      report.add(path, "generator", "generator '" + name + "' uses Benerator {k=v} syntax - rewrite as Class(k=v) manually");
-      return expr;
-    }
-    int paren = ArgSplitter.callStart(expr);
-    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
-    String args = paren >= 0 ? expr.substring(paren) : "";
-    if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
-      return randomDoubleToFloat(args, path);
-    }
-    if (cls.equals("DataFakerGenerator")) {
-      return mapDataFaker(args, path);
-    }
-    String mapped = VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls);
-    if (!VocabularyMap.KNOWN_GENERATORS.contains(mapped)) {
-      report.add(path, "generator", "generator '" + name + "' not known to DATAMIMIC - verify/replace manually");
-    }
-    return mapped + args;
-  }
-
   /** True when {@code path} makes the element a direct child of a {@code <setup>} (e.g. "/setup/if"). */
   private static boolean isSetupChild(String path) {
     int slash = path.lastIndexOf('/');
     return slash > 0 && path.substring(0, slash).endsWith("/setup");
   }
 
-  /** Benerator converter -&gt; DATAMIMIC: strip "new ", rename (CaseConverter -&gt; UpperCase), flag the unknown. */
-  private String mapConverter(String value, String path) {
-    String expr = value.startsWith("new ") ? value.substring(4).trim() : value.trim();
-    int paren = ArgSplitter.callStart(expr);
-    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
-    String args = paren >= 0 ? expr.substring(paren) : "";
-    // Benerator SHA*/MD5 hash converters expand to DATAMIMIC's parameterised Hash(algorithm, format).
-    String expansion = VocabularyMap.CONVERTER_EXPANSION.get(cls);
-    if (expansion != null) {
-      return expansion;
-    }
-    String mapped = VocabularyMap.CONVERTER_RENAME.getOrDefault(cls, cls);
-    if (!VocabularyMap.KNOWN_CONVERTERS.contains(mapped)) {
-      report.add(path, "converter", "converter '" + value + "' not known to DATAMIMIC - verify/replace manually");
-    }
-    return mapped + args;
-  }
-
-  /** {@code new RandomDoubleGenerator(min, max, decimals)} -&gt; {@code FloatGenerator(min=, max=, granularity=)}. */
-  private String randomDoubleToFloat(String args, String path) {
-    java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
-    if (parts.size() >= 2) {
-      String g = "FloatGenerator(min=" + parts.get(0) + ", max=" + parts.get(1);
-      if (parts.size() >= 3) {
-        g += ", granularity=1e-" + parts.get(2);
-      }
-      return g + ")";
-    }
-    report.add(path, "generator", "RandomDoubleGenerator args '" + args + "' - map to FloatGenerator manually");
-    return "FloatGenerator" + args;
-  }
-
-  /**
-   * A Benerator {@code <reference>} is used several ways: an FK by {@code targetType}, or a
-   * constant/script value. Only the FK maps to a DATAMIMIC {@code <reference>} (table + column);
-   * constant/script become a {@code <key>}; a selector-only reference is flagged for manual work.
-   */
-  private Node convertReferenceNode(Document out, Element src, String path) {
-    Map<String, String> attrs = attributes(src);
-    String name = attrs.get("name");
-
-    if (attrs.containsKey("constant") || (attrs.containsKey("script") && !attrs.containsKey("targetType"))) {
-      Element key = out.createElement("key");
-      if (name != null) {
-        key.setAttribute("name", name);
-      }
-      if (attrs.containsKey("constant")) {
-        key.setAttribute("constant", attrs.get("constant"));
-      }
-      if (attrs.containsKey("script")) {
-        key.setAttribute("script", rewriteScript(attrs.get("script")));
-      }
-      report.info(path, "reference", "reference '" + name + "' is a constant/script value -> emitted as <key>");
-      return key;
-    }
-
-    if (!attrs.containsKey("targetType")) {
-      // A selector-only reference whose select-list is one bare column maps losslessly: DATAMIMIC's
-      // <variable source selector> yields the query's row dicts, and a <key script="var.col"> picks the
-      // column (verified against CE's VariableModel: source/selector/cyclic/distribution are native).
-      Node selectorFragment = selectorReferenceToVariableFragment(out, attrs, path);
-      if (selectorFragment != null) {
-        return selectorFragment;
-      }
-      report.add(path, "reference",
-          "reference '" + name + "' has no targetType -> migrate manually (DATAMIMIC references a table/column)");
-      return out.createComment(
-          " TODO(datamimic-migration): <reference name=\"" + name + "\"> needs a table/column - migrate manually,"
-              + " see MIGRATION_PLAYBOOK.md#reference-selector-type ");
-    }
-
-    Element ref = out.createElement("reference");
-    if (name != null) {
-      ref.setAttribute("name", name);
-    }
-    if (attrs.containsKey("source")) {
-      ref.setAttribute("source", attrs.get("source"));
-    }
-    ref.setAttribute("sourceType", attrs.get("targetType"));
-    ref.setAttribute("sourceKey", "id"); // Benerator infers the FK column; DATAMIMIC needs it explicit
-    report.info(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
-    if ("true".equals(attrs.get("unique"))) {
-      ref.setAttribute("unique", "true");
-    }
-    // distribution (random/ordered/cumulated) and cyclic are native DATAMIMIC <reference> attributes now.
-    // A Benerator distribution expression ('new WeightedNumbers(...)') is still a gap -> flagged.
-    String distribution = attrs.get("distribution");
-    if (distribution != null) {
-      if (VocabularyMap.KNOWN_DISTRIBUTIONS.contains(distribution)) {
-        ref.setAttribute("distribution", distribution);
-      } else {
-        report.add(path, "reference", "reference '" + name + "' distribution '" + distribution
-            + "' not supported by DATAMIMIC reference - dropped");
-      }
-    }
-    if (attrs.containsKey("cyclic")) {
-      ref.setAttribute("cyclic", attrs.get("cyclic"));
-    }
-    // The FK column type comes from the referenced source column in DATAMIMIC, so dropping type= loses
-    // (almost) nothing - informational, not manual work.
-    if (attrs.containsKey("type")) {
-      report.info(path, "reference", "reference '" + name + "' 'type' - column type comes from the source - dropped");
-    }
-    for (String drop : new String[] {"selector", "nullQuota", "mode", "offset"}) {
-      if (attrs.containsKey(drop)) {
-        report.add(path, "reference", "reference '" + name + "' '" + drop + "' not supported by DATAMIMIC reference - dropped");
-      }
-    }
-    return ref;
-  }
-
-  /**
-   * {@code <reference name source selector="select COL from ..." [cyclic] [distribution]>} (no targetType)
-   * -&gt; {@code <variable name="_ref_<name>" source selector [cyclic] [distribution]/>} +
-   * {@code <key name script="_ref_<name>.<COL>"/>}. Only fires when the select-list is exactly one bare
-   * column name (no comma/parenthesis/alias/quote) so the script access is unambiguous; anything else
-   * returns null and keeps the honest flag.
-   */
-  private Node selectorReferenceToVariableFragment(Document out, Map<String, String> attrs, String path) {
-    String name = attrs.get("name");
-    String selector = attrs.get("selector");
-    String source = attrs.get("source");
-    if (name == null || selector == null || source == null) {
-      return null;
-    }
-    java.util.regex.Matcher m = SINGLE_COLUMN_SELECT.matcher(selector);
-    if (!m.matches()) {
-      return null;
-    }
-    String column = m.group(1);
-    String varName = "_ref_" + name;
-    Element variable = out.createElement("variable");
-    variable.setAttribute("name", varName);
-    variable.setAttribute("source", source);
-    variable.setAttribute("selector", selector);
-    if (attrs.containsKey("cyclic")) {
-      variable.setAttribute("cyclic", attrs.get("cyclic"));
-    }
-    String distribution = attrs.get("distribution");
-    if (distribution != null) {
-      if (VocabularyMap.KNOWN_DISTRIBUTIONS.contains(distribution)) {
-        variable.setAttribute("distribution", distribution);
-      } else {
-        report.add(path, "reference", "reference '" + name + "' distribution '" + distribution
-            + "' not supported by DATAMIMIC - dropped");
-      }
-    }
-    Element key = out.createElement("key");
-    key.setAttribute("name", name);
-    key.setAttribute("script", varName + "." + column);
-    if (attrs.containsKey("type")) {
-      report.info(path, "reference", "reference '" + name + "' 'type' - column type comes from the source - dropped");
-    }
-    for (Map.Entry<String, String> a : attrs.entrySet()) {
-      String k = a.getKey();
-      if (!k.equals("name") && !k.equals("source") && !k.equals("selector") && !k.equals("cyclic")
-          && !k.equals("distribution") && !k.equals("type")) {
-        report.add(path, "reference", "reference '" + name + "' '" + k
-            + "' not supported by DATAMIMIC reference - dropped");
-      }
-    }
-    report.info(path, "reference", "selector reference '" + name + "' -> <variable source/selector> + <key script='"
-        + varName + "." + column + "'>");
-    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
-    fragment.appendChild(variable);
-    fragment.appendChild(key);
-    return fragment;
-  }
-
-  /** {@code select COL from ...} with exactly one bare identifier in the select-list, case-insensitive. */
-  private static final java.util.regex.Pattern SINGLE_COLUMN_SELECT = java.util.regex.Pattern.compile(
-      "(?is)\\s*select\\s+([A-Za-z_][A-Za-z0-9_]*)\\s+from\\s+.+");
-
   private void convertDatabaseAttributes(Element src, Element out, String path) {
     Map<String, String> attrs = new LinkedHashMap<>(attributes(src));
-    attrs.replaceAll((k, v) -> resolvePlaceholders(v));
+    attrs.replaceAll((k, v) -> settings.resolve(v));
     if (!attrs.equals(attributes(src))) {
       report.info(path, "database", "database '" + attrs.get("id")
           + "' placeholders resolved from <setting> defaults / included .properties");
@@ -1171,7 +711,7 @@ public class DescriptorConverter {
     if (value == null) {
       report.add(path, "attribute", "<" + local(src) + "> without a value (source/ref form) - review");
     } else if (value.startsWith("{") && value.endsWith("}")) {
-      out.setAttribute("script", rewriteScript(value.substring(1, value.length() - 1)));
+      out.setAttribute("script", ExpressionMapper.rewriteScript(value.substring(1, value.length() - 1)));
     } else if (isNumeric(value)) {
       out.setAttribute("script", value); // numeric literal -> evaluated to a number, not a string
     } else {
@@ -1210,79 +750,6 @@ public class DescriptorConverter {
     if (attrs.containsKey("maxIterations")) {
       out.setAttribute("maxIterations", attrs.get("maxIterations"));
     }
-  }
-
-  /**
-   * The Benerator assertion idiom {@code <if test="X"><error>MSG</error></if>} (the {@code <if>} body is
-   * NOTHING but a single {@code <error>}) -&gt; DATAMIMIC {@code <assert condition="not (X)" message="MSG"/>}
-   * (an {@code <assert>} fails when its condition is NOT true, so the test is negated). {@code {ftl:...}}
-   * templating in the message is kept verbatim - same policy as all scripts. Returns null when the
-   * {@code <if>} is not this idiom (then/else bodies convert via {@link #convertIfNode} or stay flagged).
-   */
-  private Node errorOnlyIfToAssert(Document out, Element src, String path) {
-    Element error = null;
-    for (Node c = src.getFirstChild(); c != null; c = c.getNextSibling()) {
-      if (c.getNodeType() == Node.ELEMENT_NODE) {
-        if (error != null || !local((Element) c).equals("error")) {
-          return null; // body is not exactly one <error> -> not the assertion idiom
-        }
-        error = (Element) c;
-      }
-    }
-    if (error == null) {
-      return null;
-    }
-    Element assertEl = out.createElement("assert");
-    String test = attributes(src).get("test");
-    if (test != null) {
-      assertEl.setAttribute("condition", "not (" + test + ")");
-    } else {
-      report.add(path, "if", "<if> without a test condition - review");
-    }
-    String message = error.getTextContent().trim();
-    if (!message.isEmpty()) {
-      assertEl.setAttribute("message", message);
-    }
-    report.info(path, "assert", "assertion converted to <assert> - verify the expression evaluates in DATAMIMIC");
-    return assertEl;
-  }
-
-  /**
-   * Benerator {@code <evaluate assert="A" [target="db"]>BODY</evaluate>} -&gt; two DATAMIMIC elements
-   * (returned as a fragment that dissolves into the parent): a {@code <variable name="result">} that
-   * captures the body - {@code source=target selector=BODY} for SQL against a store, {@code script=BODY}
-   * otherwise - followed by {@code <assert condition="A"/>}. An {@code <evaluate>} without {@code assert}
-   * stays flagged (it is a side effect, not an assertion).
-   */
-  private Node convertEvaluateNode(Document out, Element src, String path) {
-    Map<String, String> attrs = attributes(src);
-    String assertion = attrs.get("assert");
-    if (assertion == null) {
-      report.add(path, "evaluate", "<evaluate> without assert has no DATAMIMIC equivalent - dropped "
-          + "(use <execute type='sql'> for a side effect, or verify the count in a test)");
-      return out.createComment(" TODO(datamimic-migration): <evaluate> dropped - review,"
-          + " see MIGRATION_PLAYBOOK.md#evaluate-without-assert ");
-    }
-    Element variable = out.createElement("variable");
-    variable.setAttribute("name", "result");
-    String body = src.getTextContent().trim();
-    String target = attrs.get("target");
-    if (target != null) {
-      variable.setAttribute("source", target);
-      variable.setAttribute("selector", body);
-      report.info(path, "assert", "assertion converted to <variable source> + <assert> - "
-          + "verify the expression evaluates in DATAMIMIC");
-    } else {
-      variable.setAttribute("script", body);
-      report.info(path, "assert", "assertion converted to <variable script> + <assert> - "
-          + "verify the script and condition evaluate in DATAMIMIC");
-    }
-    Element assertEl = out.createElement("assert");
-    assertEl.setAttribute("condition", assertion);
-    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
-    fragment.appendChild(variable);
-    fragment.appendChild(assertEl);
-    return fragment;
   }
 
   /**
@@ -1351,7 +818,7 @@ public class DescriptorConverter {
     // placeholder must be resolved to a concrete path first (else the extension - and the type - is lost).
     if (attrs.containsKey("uri")) {
       Element ex = out.createElement("execute");
-      String uri = resolvePlaceholders(attrs.get("uri"));
+      String uri = settings.resolve(attrs.get("uri"));
       ex.setAttribute("uri", uri);
       if (attrs.containsKey("target")) {
         ex.setAttribute("target", attrs.get("target"));
@@ -1384,60 +851,6 @@ public class DescriptorConverter {
         + "'> - rewrite as python/bash/sql or move to a .py file, see MIGRATION_PLAYBOOK.md#execute-js ");
   }
 
-  /** True when every comma-separated consumer entry is exactly {@code NoConsumer} (no output on purpose). */
-  private static boolean isNoConsumerOnly(String consumer) {
-    java.util.List<String> parts = ArgSplitter.splitTopLevel(consumer);
-    if (parts.isEmpty()) {
-      return false;
-    }
-    for (String p : parts) {
-      if (!p.equals("NoConsumer")) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /** A Benerator CRUD consumer expression: {@code db.updater()}, {@code mongo.inserter('coll')}, ... */
-  private static final java.util.regex.Pattern CRUD_CONSUMER = java.util.regex.Pattern.compile(
-      "([A-Za-z_][A-Za-z0-9_]*)\\.(" + String.join("|", VocabularyMap.CRUD_CONSUMER_OP.keySet()) + ")\\(.*\\)");
-
-  /**
-   * Benerator consumer -&gt; DATAMIMIC target: a known exporter maps by name (ConsoleExporter, CSV, ...),
-   * a bare store/db id ("db", "mem") passes through, a CRUD expression maps to DATAMIMIC's CRUD target
-   * suffix ({@code db.updater()} -&gt; {@code db.update}, {@code inserter} -&gt; the plain store = insert),
-   * and comma-separated consumers map element-wise. Unmappable entries (a bean id) drop out; the caller
-   * flags an empty result.
-   */
-  private String consumerToTarget(String consumer) {
-    java.util.List<String> targets = new java.util.ArrayList<>();
-    for (String c : ArgSplitter.splitTopLevel(consumer)) {
-      String mapped = VocabularyMap.CONSUMER_TARGET.get(c);
-      if (mapped == null) {
-        mapped = beanExporters.get(c); // consumer="xml" where <bean id="xml"> is an exporter
-      }
-      if (mapped == null && (c.startsWith("new ") || c.endsWith(")"))) {
-        // inline exporter: consumer="new XLSEntityExporter('out.xlsx')" -> strip "new "/args to the class name
-        String simple = beneratorGeneratorClass(c);
-        mapped = VocabularyMap.CONSUMER_TARGET.get(simple.substring(simple.lastIndexOf('.') + 1));
-      }
-      java.util.regex.Matcher crud = CRUD_CONSUMER.matcher(c);
-      if (mapped != null) {
-        if (!mapped.isEmpty()) {
-          targets.add(mapped);
-        }
-      } else if (crud.matches()) {
-        String store = crud.group(1);
-        // updater -> update, deleter -> delete, upserter -> upsert; inserter is DATAMIMIC's default (plain store)
-        String op = VocabularyMap.CRUD_CONSUMER_OP.get(crud.group(2));
-        targets.add(op.isEmpty() ? store : store + "." + op);
-      } else if (c.matches("[A-Za-z_][A-Za-z0-9_]*") && !c.endsWith("Exporter") && !c.endsWith("Consumer")) {
-        targets.add(c); // a bare store/db id
-      }
-    }
-    return String.join(",", targets);
-  }
-
   private static void copyAttributes(Element src, Element out, String... names) {
     Map<String, String> attrs = attributes(src);
     for (String n : names) {
@@ -1447,25 +860,12 @@ public class DescriptorConverter {
     }
   }
 
-  /** Local attribute map, skipping XML namespace declarations and xsi:* schema hints. */
+  /** Local attribute map, skipping XML namespace declarations and xsi:* schema hints (see {@link DomUtil}). */
   private static Map<String, String> attributes(Element el) {
-    Map<String, String> map = new LinkedHashMap<>();
-    NamedNodeMap attrs = el.getAttributes();
-    for (int i = 0; i < attrs.getLength(); i++) {
-      Attr a = (Attr) attrs.item(i);
-      String prefix = a.getPrefix();
-      String name = a.getLocalName() != null ? a.getLocalName() : a.getName();
-      String ns = a.getNamespaceURI();
-      if ("xmlns".equals(prefix) || "xmlns".equals(name)
-          || (ns != null && (ns.contains("XMLSchema-instance") || ns.contains("/2000/xmlns/")))) {
-        continue;
-      }
-      map.put(name, a.getValue());
-    }
-    return map;
+    return DomUtil.attributes(el);
   }
 
   private static String local(Node node) {
-    return node.getLocalName() != null ? node.getLocalName() : node.getNodeName();
+    return DomUtil.local(node);
   }
 }

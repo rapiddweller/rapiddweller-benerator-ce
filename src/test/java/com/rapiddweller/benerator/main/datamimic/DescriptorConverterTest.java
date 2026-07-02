@@ -325,21 +325,21 @@ public class DescriptorConverterTest {
   @Test
   public void rewritesJavaScriptIdiomsToPython() {
     // Java ternary -> Python ternary
-    assertEquals("(1) if (TX.CARD == 'Y') else (0)", DescriptorConverter.rewriteScript("TX.CARD == 'Y' ? 1 : 0"));
+    assertEquals("(1) if (TX.CARD == 'Y') else (0)", ExpressionMapper.rewriteScript("TX.CARD == 'Y' ? 1 : 0"));
     // this.field -> bare field (DATAMIMIC exposes siblings by name)
-    assertEquals("this.age + 1", DescriptorConverter.rewriteScript("this.age + 1"));
+    assertEquals("this.age + 1", ExpressionMapper.rewriteScript("this.age + 1"));
     // <generate type="abc"> self-reference abc.j -> this.j
-    assertEquals("this.j + 1", DescriptorConverter.rewriteScript("abc.j + 1", "abc"));
-    assertEquals("(1) if (this.card == 0) else (0)", DescriptorConverter.rewriteScript("TX.card == 0 ? 1 : 0", "TX"));
+    assertEquals("this.j + 1", ExpressionMapper.rewriteScript("abc.j + 1", "abc"));
+    assertEquals("(1) if (this.card == 0) else (0)", ExpressionMapper.rewriteScript("TX.card == 0 ? 1 : 0", "TX"));
     // Java enum accessor dropped (gender is already a string in DATAMIMIC)
-    assertEquals("person.gender", DescriptorConverter.rewriteScript("person.gender.name()"));
+    assertEquals("person.gender", ExpressionMapper.rewriteScript("person.gender.name()"));
     // a lone ':' in a slice/dict is NOT a ternary
-    assertEquals("d['a:b']", DescriptorConverter.rewriteScript("d['a:b']"));
+    assertEquals("d['a:b']", ExpressionMapper.rewriteScript("d['a:b']"));
     // no ternary -> untouched
-    assertEquals("a + b", DescriptorConverter.rewriteScript("a + b"));
+    assertEquals("a + b", ExpressionMapper.rewriteScript("a + b"));
     // nested ternary
     assertEquals("(1) if (x) else ((2) if (y) else (3))",
-        DescriptorConverter.rewriteScript("x ? 1 : y ? 2 : 3"));
+        ExpressionMapper.rewriteScript("x ? 1 : y ? 2 : 3"));
   }
 
   @Test

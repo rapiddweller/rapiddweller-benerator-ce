@@ -1,0 +1,259 @@
+/* (c) Copyright 2025 by rapiddweller GmbH. All rights reserved. */
+
+package com.rapiddweller.benerator.main.datamimic;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * Maps Benerator generator/converter/script expressions into their DATAMIMIC equivalents:
+ * generator renames + argument rewrites (DataFaker, RandomDouble), converter renames/expansions,
+ * and Java-script-to-Python rewriting (ternary, enum accessor, scope self-reference).
+ */
+class ExpressionMapper {
+
+  private final MigrationReport report;
+  /** {@code <bean id="X" spec="new Generator(...)">} definitions, so a {@code generator="X"} reference can
+   *  be resolved to the bean's actual generator expression instead of being flagged as unknown. */
+  private final Map<String, String> beanSpecs = new LinkedHashMap<>();
+
+  ExpressionMapper(MigrationReport report) {
+    this.report = report;
+  }
+
+  /** Record a {@code <bean id spec>} so generator references to it can be inlined. */
+  void registerBeanSpec(String id, String spec) {
+    beanSpecs.put(id, spec);
+  }
+
+  String mapGenerator(String name, String path) {
+    // Resolve a <bean id="X" spec="..."> reference (generator="X") to the bean's own generator expression.
+    String resolved = beanSpecs.getOrDefault(name.trim(), name);
+    // Strip Benerator's "new " instantiation prefix -> DATAMIMIC evaluates Class(args) directly.
+    String expr = resolved.startsWith("new ") ? resolved.substring(4).trim() : resolved.trim();
+    if (expr.contains("{")) { // Benerator's PersonGenerator{k='v'} property-brace form has no direct equivalent
+      report.add(path, "generator", "generator '" + name + "' uses Benerator {k=v} syntax - rewrite as Class(k=v) manually");
+      return expr;
+    }
+    int paren = ArgSplitter.callStart(expr);
+    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
+    String args = paren >= 0 ? expr.substring(paren) : "";
+    if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
+      return randomDoubleToFloat(args, path);
+    }
+    if (cls.equals("DataFakerGenerator")) {
+      return mapDataFaker(args, path);
+    }
+    String mapped = VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls);
+    if (!VocabularyMap.KNOWN_GENERATORS.contains(mapped)) {
+      report.add(path, "generator", "generator '" + name + "' not known to DATAMIMIC - verify/replace manually");
+    }
+    return mapped + args;
+  }
+
+  /** Benerator converter -&gt; DATAMIMIC: strip "new ", rename (CaseConverter -&gt; UpperCase), flag the unknown. */
+  String mapConverter(String value, String path) {
+    String expr = value.startsWith("new ") ? value.substring(4).trim() : value.trim();
+    int paren = ArgSplitter.callStart(expr);
+    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
+    String args = paren >= 0 ? expr.substring(paren) : "";
+    // Benerator SHA*/MD5 hash converters expand to DATAMIMIC's parameterised Hash(algorithm, format).
+    String expansion = VocabularyMap.CONVERTER_EXPANSION.get(cls);
+    if (expansion != null) {
+      return expansion;
+    }
+    String mapped = VocabularyMap.CONVERTER_RENAME.getOrDefault(cls, cls);
+    if (!VocabularyMap.KNOWN_CONVERTERS.contains(mapped)) {
+      report.add(path, "converter", "converter '" + value + "' not known to DATAMIMIC - verify/replace manually");
+    }
+    return mapped + args;
+  }
+
+  /**
+   * Benerator {@code DataFakerGenerator('provider','method')} names a Faker provider + method; DATAMIMIC's
+   * {@code DataFakerGenerator(method, locale='en_US')} calls {@code faker.<method>()} directly (no provider),
+   * so drop the provider and keep the method. A single arg is already the method.
+   */
+  private String mapDataFaker(String args, String path) {
+    java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
+    if (parts.isEmpty()) {
+      report.add(path, "generator", "DataFakerGenerator with no method arg - specify a Faker method");
+      return "DataFakerGenerator" + args;
+    }
+    // DATAMIMIC calls python faker.<method>() flat - the Benerator provider (first arg) is irrelevant,
+    // only the method (last arg) matters, in snake_case.
+    String method = unquote(parts.get(parts.size() - 1));
+    String mapped = VocabularyMap.FAKER_METHOD_RENAME.get(method);
+    if (mapped != null) {
+      return "DataFakerGenerator('" + mapped + "')";
+    }
+    if (VocabularyMap.FAKER_UNAVAILABLE_METHODS.contains(method)) {
+      // A Java-datafaker-only provider (massEffect, theExpanse, ...) with no Python Faker equivalent.
+      // Fall back to a generic word so the descriptor still RUNS; info (not a manual gap) points at the
+      // better fix (a DATAMIMIC entity like Product/MedicalProcedure, or a value list).
+      report.info(path, "generator", "DataFakerGenerator('" + method + "') has no Python Faker equivalent"
+          + " -> using faker.word(); replace with <variable entity=...> or a value list for domain data");
+      return "DataFakerGenerator('word')";
+    }
+    return "DataFakerGenerator('" + fakerSnake(method) + "')";
+  }
+
+  /** camelCase Faker method -&gt; snake_case ({@code streetName} -&gt; {@code street_name}). */
+  private static String fakerSnake(String method) {
+    return method.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase();
+  }
+
+  /** {@code new RandomDoubleGenerator(min, max, decimals)} -&gt; {@code FloatGenerator(min=, max=, granularity=)}. */
+  private String randomDoubleToFloat(String args, String path) {
+    java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
+    if (parts.size() >= 2) {
+      String g = "FloatGenerator(min=" + parts.get(0) + ", max=" + parts.get(1);
+      if (parts.size() >= 3) {
+        g += ", granularity=1e-" + parts.get(2);
+      }
+      return g + ")";
+    }
+    report.add(path, "generator", "RandomDoubleGenerator args '" + args + "' - map to FloatGenerator manually");
+    return "FloatGenerator" + args;
+  }
+
+  /** The bare class name of a Benerator generator ("new PersonGenerator{...}" -&gt; "PersonGenerator"). */
+  static String beneratorGeneratorClass(String generator) {
+    String g = generator.startsWith("new ") ? generator.substring(4).trim() : generator.trim();
+    int cut = ArgSplitter.callStart(g);
+    return (cut >= 0 ? g.substring(0, cut) : g).trim();
+  }
+
+  /** True when a bean spec like {@code "new IncrementGenerator(1000)"} names a generator DATAMIMIC knows. */
+  boolean isKnownGeneratorSpec(String spec) {
+    if (spec == null || spec.isEmpty()) {
+      return false;
+    }
+    String expr = spec.startsWith("new ") ? spec.substring(4).trim() : spec.trim();
+    int paren = ArgSplitter.callStart(expr);
+    String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
+    if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
+      return true;
+    }
+    return VocabularyMap.KNOWN_GENERATORS.contains(VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls));
+  }
+
+  /** Constructor-arg rendering: numbers stay bare ({@code min_age=21}), strings get quoted ({@code dataset='DE'}). */
+  static String ctorValue(String raw) {
+    return raw.matches("[-+]?\\d+(\\.\\d+)?([eE][-+]?\\d+)?") ? raw : "'" + raw + "'";
+  }
+
+  /** Strip one pair of surrounding quotes: {@code 'DE'} / {@code "DE"} -&gt; {@code DE}. */
+  static String unquote(String s) {
+    if (s.length() >= 2 && (s.charAt(0) == '\'' || s.charAt(0) == '"') && s.charAt(s.length() - 1) == s.charAt(0)) {
+      return s.substring(1, s.length() - 1);
+    }
+    return s;
+  }
+
+  /** Add {@code dataset='X'} to a generator string: {@code AddressGenerator} -&gt; {@code AddressGenerator(dataset='X')}. */
+  static String foldDatasetIntoGenerator(String generator, String dataset) {
+    return ArgSplitter.appendArg(generator, "dataset='" + dataset + "'");
+  }
+
+  /**
+   * Rewrite a Benerator/Java script expression into the Python DATAMIMIC evaluates (context.py eval):
+   * the Java ternary {@code cond ? a : b} becomes {@code a if cond else b}, and a Java enum accessor
+   * {@code .name()} is dropped (DATAMIMIC's gender/enum-like fields are already strings). {@code this.field}
+   * is left untouched: DATAMIMIC binds {@code this} to the current content scope (essential in nested
+   * scopes where a bare sibling name does not resolve).
+   */
+  static String rewriteScript(String expr) {
+    return rewriteScript(expr, null);
+  }
+
+  /**
+   * As {@link #rewriteScript(String)}, plus: a Benerator self-reference by the enclosing scope name
+   * ({@code <generate type="abc"> ... script="abc.j"}) becomes {@code this.j}, since DATAMIMIC exposes the
+   * current scope as {@code this} (a bare sibling name would not resolve inside a nested scope).
+   */
+  static String rewriteScript(String expr, String enclosingScope) {
+    if (expr == null || expr.isEmpty()) {
+      return expr;
+    }
+    String s = rewriteTernary(expr);
+    s = s.replaceAll("\\.name\\(\\)", ""); // gender.name() -> gender (Java enum -> already a string)
+    if (enclosingScope != null && !enclosingScope.isEmpty()) {
+      // Self-reference by the enclosing scope's own name -> `this` (the current-scope alias).
+      s = s.replaceAll("\\b" + java.util.regex.Pattern.quote(enclosingScope) + "\\.", "this.");
+    }
+    return s;
+  }
+
+  /**
+   * Java ternary {@code cond ? a : b} -&gt; Python {@code (a) if (cond) else (b)}, honoring nesting and
+   * string literals, applied recursively to each part. Leaves the expression untouched when it has no
+   * top-level {@code ?} (so a lone {@code :} in a dict/slice is never mistaken for a ternary).
+   */
+  private static String rewriteTernary(String expr) {
+    int q = topLevelIndex(expr, '?');
+    if (q < 0) {
+      return expr;
+    }
+    int colon = matchingTernaryColon(expr, q + 1);
+    if (colon < 0) {
+      return expr; // unbalanced - not a ternary we can safely rewrite
+    }
+    String cond = expr.substring(0, q).trim();
+    String thenPart = expr.substring(q + 1, colon).trim();
+    String elsePart = expr.substring(colon + 1).trim();
+    return "(" + rewriteTernary(thenPart) + ") if (" + rewriteTernary(cond) + ") else (" + rewriteTernary(elsePart) + ")";
+  }
+
+  /** Index of the first {@code c} at paren/bracket depth 0 and outside quotes, or -1. */
+  private static int topLevelIndex(String s, char c) {
+    int depth = 0;
+    char quote = 0;
+    for (int i = 0; i < s.length(); i++) {
+      char ch = s.charAt(i);
+      if (quote != 0) {
+        if (ch == quote) {
+          quote = 0;
+        }
+      } else if (ch == '\'' || ch == '"') {
+        quote = ch;
+      } else if (ch == '(' || ch == '[' || ch == '{') {
+        depth++;
+      } else if (ch == ')' || ch == ']' || ch == '}') {
+        depth--;
+      } else if (ch == c && depth == 0) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  /** The {@code :} that closes the ternary opened at/after {@code from}, skipping nested {@code ? :} pairs. */
+  private static int matchingTernaryColon(String s, int from) {
+    int depth = 0;
+    int ternary = 0;
+    char quote = 0;
+    for (int i = from; i < s.length(); i++) {
+      char ch = s.charAt(i);
+      if (quote != 0) {
+        if (ch == quote) {
+          quote = 0;
+        }
+      } else if (ch == '\'' || ch == '"') {
+        quote = ch;
+      } else if (ch == '(' || ch == '[' || ch == '{') {
+        depth++;
+      } else if (ch == ')' || ch == ']' || ch == '}') {
+        depth--;
+      } else if (depth == 0 && ch == '?') {
+        ternary++;
+      } else if (depth == 0 && ch == ':') {
+        if (ternary == 0) {
+          return i;
+        }
+        ternary--;
+      }
+    }
+    return -1;
+  }
+}
