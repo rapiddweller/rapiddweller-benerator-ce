@@ -29,6 +29,9 @@ public class DescriptorConverter {
   /** {@code <mongodb id="X">} store ids, so an {@code <id generator="MongoDBObjectIdGenerator">} inside a
    *  generate that consumes to one of them can be dropped (MongoDB assigns _id on insert itself). */
   private final java.util.Set<String> mongoStoreIds = new java.util.LinkedHashSet<>();
+  /** environment name -> (system prefix -> "db"|"mongo") collected from <database>/<mongodb> elements,
+   *  so the env-properties migration knows each system's type and the flat-format fallback prefix. */
+  private final Map<String, Map<String, String>> envSystems = new LinkedHashMap<>();
 
   public DescriptorConverter(MigrationReport report) {
     this.report = report;
@@ -96,16 +99,30 @@ public class DescriptorConverter {
     }
   }
 
-  /** Record every {@code <mongodb id>} so mongo-consumed {@code MongoDBObjectIdGenerator} ids can be dropped. */
+  /** Record every {@code <mongodb id>} so mongo-consumed {@code MongoDBObjectIdGenerator} ids can be dropped,
+   *  plus each store's environment binding for the env-properties migration. */
   private void scanMongoStores(Element el) {
-    if (local(el).equals("mongodb") && el.hasAttribute("id")) {
+    String tag = local(el);
+    if (tag.equals("mongodb") && el.hasAttribute("id")) {
       mongoStoreIds.add(el.getAttribute("id"));
+    }
+    if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("environment")) {
+      // DATAMIMIC resolves <system>.<systemType>.* from conf/<environment>.env.properties;
+      // system falls back to the element id when absent.
+      String system = el.hasAttribute("system") ? el.getAttribute("system") : el.getAttribute("id");
+      envSystems.computeIfAbsent(el.getAttribute("environment"), k -> new LinkedHashMap<>())
+          .put(system, tag.equals("mongodb") ? "mongo" : "db");
     }
     for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
       if (c.getNodeType() == Node.ELEMENT_NODE) {
         scanMongoStores((Element) c);
       }
     }
+  }
+
+  /** environment name -&gt; (system prefix -&gt; "db"|"mongo") from this descriptor (see scanMongoStores). */
+  Map<String, Map<String, String>> envSystems() {
+    return envSystems;
   }
 
   /** @return the converted node (Element, or a TODO Comment when the source element is unmapped). */

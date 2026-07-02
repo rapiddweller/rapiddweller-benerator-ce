@@ -89,6 +89,19 @@ public final class EnvironmentMigrator {
    * properties (insertion-ordered); untranslatable URLs (h2/hsqldb) are recorded in {@code report}.
    */
   public static Map<String, String> migrate(Map<String, String> benProps, MigrationReport report, String path) {
+    return migrate(benProps, report, path, java.util.Collections.emptyMap());
+  }
+
+  /**
+   * As {@link #migrate(Map, MigrationReport, String)}, additionally informed by the descriptors that
+   * reference this environment: {@code systems} maps each system prefix to {@code "mongo"} or {@code "db"}.
+   * Mongo systems get their key segment rewritten ({@code mongodb.db.host} -&gt; {@code mongodb.mongo.host},
+   * DATAMIMIC resolves {@code <system>.<systemType>.*}); Benerator's OLD flat format ({@code db_url=...}
+   * without a system prefix) is prefixed with the single db system bound to this environment.
+   */
+  public static Map<String, String> migrate(Map<String, String> benProps, MigrationReport report, String path,
+      Map<String, String> systems) {
+    benProps = normalizeFlatKeys(benProps, report, path, systems);
     Map<String, String> out = new LinkedHashMap<>();
     for (Map.Entry<String, String> e : benProps.entrySet()) {
       String key = e.getKey();
@@ -113,6 +126,10 @@ public final class EnvironmentMigrator {
         out.put(id + ".db.dbms", c.dbms);
       } else if (key.endsWith(".db.driver")) {
         // dropped: DATAMIMIC identifies the DB by dbms, not a JDBC driver class
+      } else if (key.endsWith(".db.catalog") || key.endsWith(".db.readOnly") || key.endsWith(".db.batch")
+          || key.endsWith(".db.quoteTableNames")) {
+        // dropped: Benerator-only connection knobs; DATAMIMIC would pass unknown keys to the engine and fail
+        report.info(path, "database", "env '" + key + "' dropped (Benerator-only connection option)");
       } else {
         out.put(key, val); // .db.user/.password/.schema and non-db keys pass through
       }
@@ -129,6 +146,55 @@ public final class EnvironmentMigrator {
     for (String schemaKey : sqliteSchemaKeys) {
       out.remove(schemaKey);
     }
+    // DATAMIMIC resolves <system>.<systemType>.* - a mongo system's keys use segment 'mongo', not 'db'
+    // (Benerator wrote mongodb.db.host; DATAMIMIC's <mongodb system="mongodb"> reads mongodb.mongo.host).
+    Map<String, String> renamed = new LinkedHashMap<>();
+    for (Map.Entry<String, String> e : out.entrySet()) {
+      String key = e.getKey();
+      int dbSeg = key.indexOf(".db.");
+      if (dbSeg > 0 && "mongo".equals(systems.get(key.substring(0, dbSeg)))) {
+        key = key.substring(0, dbSeg) + ".mongo." + key.substring(dbSeg + 4);
+      }
+      renamed.put(key, e.getValue());
+    }
+    return renamed;
+  }
+
+  /**
+   * Benerator's OLD env format has no system prefix ({@code db_url=jdbc:...}). DATAMIMIC always resolves
+   * {@code <system>.db.*} (system defaults to the database element's id), so flat keys are prefixed with
+   * the single db system the descriptors bind to this environment. Ambiguous/unbound stays flat + flagged.
+   */
+  private static Map<String, String> normalizeFlatKeys(Map<String, String> benProps, MigrationReport report,
+      String path, Map<String, String> systems) {
+    boolean hasFlat = false;
+    for (String key : benProps.keySet()) {
+      if (key.startsWith("db_")) {
+        hasFlat = true;
+        break;
+      }
+    }
+    if (!hasFlat) {
+      return benProps;
+    }
+    java.util.List<String> dbSystems = new java.util.ArrayList<>();
+    for (Map.Entry<String, String> s : systems.entrySet()) {
+      if ("db".equals(s.getValue())) {
+        dbSystems.add(s.getKey());
+      }
+    }
+    if (dbSystems.size() != 1) {
+      report.add(path, "database", "old flat env format (db_url=...) but " + dbSystems.size()
+          + " db systems bound to this environment - prefix the keys with '<system>.db.' manually");
+      return benProps;
+    }
+    String system = dbSystems.get(0);
+    Map<String, String> out = new LinkedHashMap<>();
+    for (Map.Entry<String, String> e : benProps.entrySet()) {
+      String key = e.getKey();
+      out.put(key.startsWith("db_") ? system + ".db." + key.substring(3) : key, e.getValue());
+    }
+    report.info(path, "database", "old flat env format normalized to system '" + system + "'");
     return out;
   }
 }

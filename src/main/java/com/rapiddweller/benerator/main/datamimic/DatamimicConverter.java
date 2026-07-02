@@ -59,6 +59,9 @@ public final class DatamimicConverter {
     Map<String, String> failures = new LinkedHashMap<>();
     int ok = 0;
     int failed = 0;
+    // environment name -> (system prefix -> "db"|"mongo"), merged across all descriptors so the
+    // env-properties migration knows each system's type and the flat-format fallback prefix.
+    Map<String, Map<String, String>> envSystems = new LinkedHashMap<>();
     for (Path in : inputs) {
       Path rel = Files.isDirectory(input) ? input.relativize(in) : in.getFileName();
       String outName = rel.toString().replaceFirst("\\.ben\\.xml$", ".datamimic.xml");
@@ -66,7 +69,11 @@ public final class DatamimicConverter {
       Files.createDirectories(out.getParent());
       int before = report.items().size();
       try {
-        new DescriptorConverter(report).convert(in.toFile(), out.toFile());
+        DescriptorConverter converter = new DescriptorConverter(report);
+        converter.convert(in.toFile(), out.toFile());
+        for (Map.Entry<String, Map<String, String>> e : converter.envSystems().entrySet()) {
+          envSystems.computeIfAbsent(e.getKey(), k -> new LinkedHashMap<>()).putAll(e.getValue());
+        }
         ok++;
         System.out.println("  [OK]   " + rel + "  ->  " + outName);
       } catch (Exception e) {
@@ -89,7 +96,10 @@ public final class DatamimicConverter {
       for (Path envIn : envFiles) {
         Path rel = input.relativize(envIn);
         int before = report.items().size();
-        Map<String, String> migrated = EnvironmentMigrator.migrate(readProps(envIn), report, rel.toString());
+        // <env>.env.properties -> the systems the descriptors bind to environment <env>
+        String envName = envIn.getFileName().toString().replaceFirst("\\.env\\.properties$", "");
+        Map<String, String> systems = envSystems.getOrDefault(envName, java.util.Collections.emptyMap());
+        Map<String, String> migrated = EnvironmentMigrator.migrate(readProps(envIn), report, rel.toString(), systems);
         Path envOut = outDir.resolve(rel);
         Files.createDirectories(envOut.getParent());
         writeProps(envOut, migrated);
