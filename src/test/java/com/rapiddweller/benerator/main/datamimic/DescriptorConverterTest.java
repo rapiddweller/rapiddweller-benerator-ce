@@ -135,6 +135,50 @@ public class DescriptorConverterTest {
     assertTrue("setup-level <if> flagged", report.format().contains("setup-level <if>"));
   }
 
+  @Test
+  public void convertsCompositeGeneratorBraceArgsToEntityModifiers() throws Exception {
+    // Real corpus case (csv demo): age bounds have dedicated entity attributes, the XML-level
+    // dataset/locale attrs pass through - no manual-rewrite flag left.
+    MigrationReport csvReport = new MigrationReport();
+    Document csvDoc = convert("src/demo/resources/demo/projects/csv/csv.ben.xml", csvReport);
+    Element person = first(csvDoc, "variable", "name", "person");
+    assertNotNull("person variable kept", person);
+    assertEquals("Person", person.getAttribute("entity"));
+    assertEquals("16", person.getAttribute("ageMin"));
+    assertEquals("122", person.getAttribute("ageMax"));
+    assertEquals("DE", person.getAttribute("dataset"));
+    assertEquals("de", person.getAttribute("locale"));
+    assertEquals("no generator attribute left", "", person.getAttribute("generator"));
+    String csvRep = csvReport.format();
+    assertFalse("brace syntax no longer flagged", csvRep.contains("{k=v}"));
+    assertFalse("no manual entity-modifier port left", csvRep.contains("port to entity modifiers"));
+
+    // Constructor-only args (quotas) switch the whole call to constructor form; unknown args are
+    // flagged individually while the rest still converts.
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/composite_generator.ben.xml", report);
+    Element quota = first(doc, "variable", "name", "quota_person");
+    assertNotNull(quota);
+    assertEquals("Person(min_age=18, max_age=80, dataset='US', female_quota=0.5)", quota.getAttribute("entity"));
+    assertEquals("", quota.getAttribute("ageMin")); // constructor form carries everything
+
+    Element odd = first(doc, "variable", "name", "odd_person");
+    assertNotNull(odd);
+    assertEquals("Person", odd.getAttribute("entity"));
+    assertEquals("21", odd.getAttribute("ageMin")); // mappable arg converted despite the unknown one
+    assertTrue("only the unknown arg is flagged",
+        report.attention().stream().anyMatch(it -> it.detail.contains("mysteryArg")));
+    assertTrue("no whole-call rewrite flag",
+        report.attention().stream().noneMatch(it -> it.detail.contains("minAgeYears")));
+  }
+
+  private static Document convert(String input, MigrationReport report) throws Exception {
+    File out = File.createTempFile("converted", ".datamimic.xml");
+    out.deleteOnExit();
+    new DescriptorConverter(report).convert(new File(input), out);
+    return XMLUtil.parse(out.getAbsolutePath());
+  }
+
   private static Element first(Document doc, String tag, String attr, String value) {
     NodeList nodes = doc.getElementsByTagName(tag);
     for (int i = 0; i < nodes.getLength(); i++) {

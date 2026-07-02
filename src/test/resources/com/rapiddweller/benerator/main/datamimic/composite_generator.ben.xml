@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Composite-generator brace args: quota params force constructor form; unknown args get flagged. -->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <generate type="people" count="10" consumer="ConsoleExporter">
+        <variable name="quota_person"
+                  generator="new PersonGenerator{minAgeYears='18', maxAgeYears='80', dataset='US', femaleQuota='0.5'}"/>
+        <variable name="odd_person"
+                  generator="new PersonGenerator{minAgeYears='21', mysteryArg='42'}"/>
+        <attribute name="name" script="quota_person.givenName"/>
+    </generate>
+</setup>

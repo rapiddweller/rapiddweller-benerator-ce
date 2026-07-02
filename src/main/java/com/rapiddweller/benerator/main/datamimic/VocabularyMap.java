@@ -115,6 +115,31 @@ public final class VocabularyMap {
       Map.entry("CreditCardGenerator", "CreditCard"),
       Map.entry("CreditCardNumberGenerator", "CreditCard"));
 
+  /**
+   * Composite-generator brace args (Benerator {@code PersonGenerator{minAgeYears='21'}}) that have a
+   * dedicated DATAMIMIC entity attribute on {@code <variable entity=...>} (ageMin/ageMax/dataset/locale).
+   */
+  public static final Map<String, String> ENTITY_ARG_TO_ATTR = Map.of(
+      "minAgeYears", "ageMin",
+      "maxAgeYears", "ageMax",
+      "dataset", "dataset",
+      "locale", "locale");
+
+  /**
+   * Composite-generator brace args -&gt; DATAMIMIC entity service constructor params (validated against
+   * CE's Person service signature). Used when at least one arg is constructor-only (the quotas), so the
+   * whole call becomes {@code entity="Person(min_age=21, female_quota=0.5)"}. {@code locale} is
+   * deliberately absent: the service constructor does not take it, so it stays a dedicated attribute.
+   */
+  public static final Map<String, String> ENTITY_ARG_TO_CTOR_PARAM = Map.of(
+      "minAgeYears", "min_age",
+      "maxAgeYears", "max_age",
+      "dataset", "dataset",
+      "femaleQuota", "female_quota",
+      "otherGenderQuota", "other_gender_quota",
+      "nobleQuota", "noble_quota",
+      "academicTitleQuota", "academic_title_quota");
+
   /** Benerator generator name -&gt; DATAMIMIC generator name. Absent names are kept verbatim + reported. */
   public static final Map<String, String> GENERATOR_RENAME = Map.of(
       "IncrementalIdGenerator", "IncrementGenerator",

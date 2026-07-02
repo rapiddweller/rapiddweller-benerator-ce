@@ -326,9 +326,14 @@ public class DescriptorConverter {
       out.setAttribute("type", mappedType);
     }
 
+    // A composite generator on a <variable> becomes entity="X". Computed up front because it changes
+    // how 'dataset' is handled: on an entity it is a native modifier attribute, not a constructor arg.
+    String entityName = tag.equals("variable") && attrs.containsKey("generator")
+        ? VocabularyMap.GENERATOR_TO_ENTITY.get(beneratorGeneratorClass(attrs.get("generator"))) : null;
+
     // A dataset-aware generator (AddressGenerator, ...) takes the dataset as a constructor arg; DATAMIMIC
     // <key> has no 'dataset' attribute, so fold it into the generator call instead of keeping it.
-    boolean foldDataset = attrs.containsKey("generator") && attrs.containsKey("dataset");
+    boolean foldDataset = attrs.containsKey("generator") && attrs.containsKey("dataset") && entityName == null;
 
     for (Map.Entry<String, String> a : attrs.entrySet()) {
       String key = a.getKey();
@@ -345,17 +350,10 @@ public class DescriptorConverter {
       }
       switch (key) {
         case "generator":
-          String entity = tag.equals("variable") ? VocabularyMap.GENERATOR_TO_ENTITY.get(beneratorGeneratorClass(val)) : null;
-          if (entity != null) {
+          if (entityName != null) {
             // Benerator composite generator on a <variable> -> DATAMIMIC entity; script field access is
             // resolved camelCase->snake_case by DATAMIMIC, so <key script="x.givenName"> passes through.
-            out.setAttribute("entity", entity);
-            report.info(path, "generator", "<variable generator='" + beneratorGeneratorClass(val)
-                + "'> -> entity='" + entity + "'");
-            if (val.contains("(") || val.contains("{")) {
-              report.add(path, "generator", "generator '" + val
-                  + "' args -> port to entity modifiers (dataset/locale/ageMin/ageMax) manually");
-            }
+            convertCompositeGenerator(val, entityName, out, path);
           } else {
             out.setAttribute("generator", foldDataset
                 ? foldDatasetIntoGenerator(mapGenerator(val, path), attrs.get("dataset"))
@@ -393,6 +391,63 @@ public class DescriptorConverter {
   /** Add {@code dataset='X'} to a generator string: {@code AddressGenerator} -&gt; {@code AddressGenerator(dataset='X')}. */
   private static String foldDatasetIntoGenerator(String generator, String dataset) {
     return ArgSplitter.appendArg(generator, "dataset='" + dataset + "'");
+  }
+
+  /**
+   * Composite generator on a {@code <variable>} -&gt; {@code entity="X"}, porting Benerator's brace args
+   * ({@code new PersonGenerator{minAgeYears='21', dataset='DE'}}) to DATAMIMIC entity modifiers:
+   * <ul>
+   *   <li>args with a dedicated attribute (age/dataset/locale) become {@code ageMin="21" dataset="DE"},</li>
+   *   <li>constructor-only args (the quotas) switch the whole call to constructor form,
+   *       {@code entity="Person(min_age=21, female_quota=0.5)"} - simpler than mixing both styles,</li>
+   *   <li>unknown args are flagged individually; everything mappable still converts.</li>
+   * </ul>
+   */
+  private void convertCompositeGenerator(String spec, String entity, Element out, String path) {
+    String expr = spec.startsWith("new ") ? spec.substring(4).trim() : spec.trim();
+    int call = ArgSplitter.callStart(expr);
+    // Args between the opening ( or { and its trailing close; quote-aware split, no indexOf heuristics.
+    String body = call < 0 ? "" : expr.substring(call + 1, expr.length() - (expr.endsWith(")") || expr.endsWith("}") ? 1 : 0));
+
+    Map<String, String> args = new LinkedHashMap<>(); // arg name -> unquoted value, source order kept
+    for (String part : ArgSplitter.splitTopLevel(body)) {
+      int eq = part.indexOf('=');
+      String key = eq > 0 ? part.substring(0, eq).trim() : "";
+      if (VocabularyMap.ENTITY_ARG_TO_ATTR.containsKey(key) || VocabularyMap.ENTITY_ARG_TO_CTOR_PARAM.containsKey(key)) {
+        args.put(key, unquote(part.substring(eq + 1).trim()));
+      } else {
+        report.add(path, "generator", "generator '" + beneratorGeneratorClass(spec) + "' arg '" + part
+            + "' has no entity modifier equivalent - port manually");
+      }
+    }
+
+    boolean ctorForm = args.keySet().stream().anyMatch(k -> !VocabularyMap.ENTITY_ARG_TO_ATTR.containsKey(k));
+    StringBuilder ctor = new StringBuilder();
+    for (Map.Entry<String, String> arg : args.entrySet()) {
+      String ctorParam = VocabularyMap.ENTITY_ARG_TO_CTOR_PARAM.get(arg.getKey());
+      if (ctorForm && ctorParam != null) {
+        ctor.append(ctor.length() > 0 ? ", " : "").append(ctorParam).append("=").append(ctorValue(arg.getValue()));
+      } else {
+        out.setAttribute(VocabularyMap.ENTITY_ARG_TO_ATTR.get(arg.getKey()), arg.getValue());
+      }
+    }
+    String entityExpr = ctorForm ? entity + "(" + ctor + ")" : entity;
+    out.setAttribute("entity", entityExpr);
+    report.info(path, "generator", "<variable generator='" + beneratorGeneratorClass(spec)
+        + "'> -> entity='" + entityExpr + "'");
+  }
+
+  /** Strip one pair of surrounding quotes: {@code 'DE'} / {@code "DE"} -&gt; {@code DE}. */
+  private static String unquote(String s) {
+    if (s.length() >= 2 && (s.charAt(0) == '\'' || s.charAt(0) == '"') && s.charAt(s.length() - 1) == s.charAt(0)) {
+      return s.substring(1, s.length() - 1);
+    }
+    return s;
+  }
+
+  /** Constructor-arg rendering: numbers stay bare ({@code min_age=21}), strings get quoted ({@code dataset='DE'}). */
+  private static String ctorValue(String raw) {
+    return raw.matches("[-+]?\\d+(\\.\\d+)?([eE][-+]?\\d+)?") ? raw : "'" + raw + "'";
   }
 
   private String mapType(String beneratorType, String tag, boolean hasMode, String path) {
