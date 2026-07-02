@@ -343,6 +343,20 @@ public class DescriptorConverterTest {
   }
 
   @Test
+  public void modelessAttributeOverSourceBecomesScriptOverlay() throws Exception {
+    // anon demo: <iterate source="persons.csv"> with <attribute name="familyName" converter="new CutLength(3)"/>
+    // overlays the source column -> <key name="familyName" script="familyName" converter="CutLength(3)"/>.
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/demo/resources/demo/anon/anon.ben.xml", report);
+    Element family = first(doc, "key", "name", "familyName");
+    assertNotNull(family);
+    assertEquals("familyName", family.getAttribute("script")); // reads the source column
+    assertEquals("CutLength(3)", family.getAttribute("converter")); // converter still applied
+    assertTrue("mode-less source attribute not flagged as a gap",
+        report.attention().stream().noneMatch(it -> it.detail.contains("familyName")));
+  }
+
+  @Test
   public void resolvesExporterBeanToTargetIncludingXls() throws Exception {
     // <bean id="xml" class="...XMLEntityExporter"> + consumer="xml" -> target="XML", bean removed.
     MigrationReport report = new MigrationReport();

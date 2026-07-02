@@ -410,6 +410,16 @@ public class DescriptorConverter {
       attrs = new LinkedHashMap<>(attrs);
       attrs.remove("type"); // consumed - do not let mapType flag it
     }
+    // A mode-less <attribute name="X"> inside a source-backed <generate>/<iterate> overlays the source
+    // column X - Benerator's anonymization/enrichment pattern. Read it via script="X" so a converter can
+    // transform it: <attribute name="familyName" converter="new CutLength(3)"/> over persons.csv becomes
+    // <key name="familyName" script="familyName" converter="CutLength(3)"/>.
+    if (!hasMode && attrs.containsKey("name") && enclosingHasSource(src)) {
+      out.setAttribute("script", attrs.get("name"));
+      report.info(path, "attribute", "<attribute name='" + attrs.get("name")
+          + "'> with no generator overlays the source column (script) - anonymization/enrichment");
+      hasMode = true;
+    }
     String mappedType = mapType(attrs.get("type"), tag, hasMode, path);
     // Benerator defaults an untyped min/max range to int, so <attribute min="1" max="27"> without a type
     // takes the same native-range/numericGenerator path as an explicit type="int" (integer literals only -
@@ -658,6 +668,19 @@ public class DescriptorConverter {
       s = s.replaceAll("\\b" + java.util.regex.Pattern.quote(enclosingScope) + "\\.", "this.");
     }
     return s;
+  }
+
+  /** True when the nearest enclosing {@code <generate>}/{@code <iterate>} reads from a {@code source}. */
+  private static boolean enclosingHasSource(Element field) {
+    Node p = field.getParentNode();
+    while (p instanceof Element) {
+      String tag = local(p);
+      if (tag.equals("generate") || tag.equals("iterate")) {
+        return ((Element) p).hasAttribute("source");
+      }
+      p = p.getParentNode();
+    }
+    return false;
   }
 
   /** Benerator identity ({@code type}, else {@code name}) of the nearest enclosing generate/iterate/nestedKey. */
