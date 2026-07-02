@@ -63,10 +63,54 @@ class ExpressionMapper {
       return expansion;
     }
     String mapped = VocabularyMap.CONVERTER_RENAME.getOrDefault(cls, cls);
+    if (mapped.equals("Substring")) {
+      // Benerator SubstringExtractor(from, 0) with a negative from means "to the end" -> Substring(from).
+      java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
+      if (parts.size() == 2 && parts.get(1).equals("0") && parts.get(0).startsWith("-")) {
+        args = "(" + parts.get(0) + ")";
+      }
+    }
     if (!VocabularyMap.KNOWN_CONVERTERS.contains(mapped)) {
       report.add(path, "converter", "converter '" + value + "' not known to DATAMIMIC - verify/replace manually");
     }
     return mapped + args;
+  }
+
+  /** The body of an {@code {ftl:...}} value, or null when the value is not FTL-templated. */
+  static String ftlBody(String value) {
+    if (value != null && value.startsWith("{ftl:") && value.endsWith("}")) {
+      return value.substring(5, value.length() - 1);
+    }
+    return null;
+  }
+
+  /**
+   * FTL text with only simple {@code ${var}} substitutions -&gt; a DATAMIMIC {@code string=} template
+   * ({@code ${count} orders} -&gt; {@code __count__ orders}). Null when the text uses real FTL
+   * expressions/directives (arithmetic, builtins, {@code <#if>}), which plain substitution cannot express.
+   */
+  static String ftlToStringTemplate(String text) {
+    if (text.contains("<#")) {
+      return null; // FTL directive - no plain-substitution equivalent
+    }
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("\\$\\{([^}]*)\\}").matcher(text);
+    StringBuilder sb = new StringBuilder();
+    while (m.find()) {
+      if (!m.group(1).matches("\\w+")) {
+        return null; // ${a + b} etc. - an expression, not a substitution
+      }
+      m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement("__" + m.group(1) + "__"));
+    }
+    m.appendTail(sb);
+    return sb.toString();
+  }
+
+  /**
+   * FTL text -&gt; a DATAMIMIC f-string body: {@code ${expr}} becomes {@code {expr}} (DATAMIMIC's
+   * {@code <echo>} and inline SQL evaluate {@code {...}} as python f-string fields).
+   */
+  static String ftlToFString(String text) {
+    return text.replaceAll("\\$\\{([^}]*)\\}", "{$1}");
   }
 
   /**

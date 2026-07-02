@@ -229,7 +229,15 @@ public class DescriptorConverter {
       } else if (child.getNodeType() == Node.COMMENT_NODE) {
         result.appendChild(out.createComment(child.getNodeValue()));
       } else if (child.getNodeType() == Node.TEXT_NODE && !child.getNodeValue().trim().isEmpty()) {
-        result.appendChild(out.createTextNode(child.getNodeValue()));
+        String text = child.getNodeValue();
+        if (tag.equals("echo")) {
+          // <echo>{ftl:X ${a}}</echo> -> X {a}: DATAMIMIC's echo evaluates {...} as f-string fields.
+          String ftl = ExpressionMapper.ftlBody(text.trim());
+          if (ftl != null) {
+            text = ExpressionMapper.ftlToFString(ftl);
+          }
+        }
+        result.appendChild(out.createTextNode(text));
       }
     }
     return result;
@@ -242,6 +250,11 @@ public class DescriptorConverter {
       } else {
         report.add(path, "attribute", "<setup> '" + a.getKey() + "' has no DATAMIMIC equivalent - dropped");
       }
+    }
+    // Benerator's default CSV separator is ',' while DATAMIMIC's is '|' - pin the Benerator default so
+    // comma-separated sources parse, unless the descriptor sets its own.
+    if (!out.hasAttribute("defaultSeparator")) {
+      out.setAttribute("defaultSeparator", ",");
     }
   }
 
@@ -708,9 +721,21 @@ public class DescriptorConverter {
       out.setAttribute("name", attrs.get("name"));
     }
     String value = attrs.containsKey("value") ? attrs.get("value") : attrs.get("default");
+    String ftl = ExpressionMapper.ftlBody(value);
     if (value == null) {
       report.add(path, "attribute", "<" + local(src) + "> without a value (source/ref form) - review");
+    } else if (ftl != null) {
+      // FTL text templating -> DATAMIMIC's native string= template (${var} -> __var__).
+      String template = ExpressionMapper.ftlToStringTemplate(ftl);
+      if (template != null) {
+        out.setAttribute("string", template);
+        report.info(path, "attribute", "FTL template -> <variable string=...> (__var__ substitution)");
+      } else {
+        report.add(path, "attribute", "<" + local(src) + "> uses an FTL expression/directive - "
+            + "rewrite as <variable string=...> or script= manually");
+      }
     } else if (value.startsWith("{") && value.endsWith("}")) {
+      // a plain {expr} script expression (non-FTL)
       out.setAttribute("script", ExpressionMapper.rewriteScript(value.substring(1, value.length() - 1)));
     } else if (isNumeric(value)) {
       out.setAttribute("script", value); // numeric literal -> evaluated to a number, not a string
@@ -842,7 +867,13 @@ public class DescriptorConverter {
       if (attrs.containsKey("target")) {
         ex.setAttribute("target", attrs.get("target"));
       }
-      ex.appendChild(out.createTextNode(src.getTextContent()));
+      String body = src.getTextContent();
+      if (dmType.equals("sql") && body.contains("${")) {
+        // FTL placeholders in inline SQL -> {var}: DATAMIMIC interpolates {...} f-string style.
+        body = ExpressionMapper.ftlToFString(body);
+        report.info(path, "execute", "FTL placeholders in inline SQL rewritten to {var} interpolation");
+      }
+      ex.appendChild(out.createTextNode(body));
       return ex;
     }
     report.add(path, "execute", "inline <execute type='" + benType
