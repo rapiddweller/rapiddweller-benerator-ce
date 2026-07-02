@@ -1,31 +1,35 @@
 # Benerator → DATAMIMIC converter — coverage & gaps
 
 Measured by `CorpusSweepTest`, which runs the converter over the whole Benerator demo + test corpus
-(`src/demo/resources/demo` + `src/test/resources/com/rapiddweller`) and tallies every construct flagged
-for manual migration.
+(`src/demo/resources/demo` + `src/test/resources/com/rapiddweller`), tallies every construct flagged
+for manual migration, and **gates the totals against `gap-baseline.properties`** (a regression fails
+the build; lowering the baseline is a deliberate commit). All numbers below come from the generated
+`target/gap-report.txt` — do not edit them by hand, re-run the sweep.
 
-## Coverage
+## Coverage (sweep of 2026-07-02)
 
 **301 files · 296 convert · 5 throw** (the 5 are non-standalone / deliberately-malformed XML
 fixtures, not descriptors). No descriptor fails to produce output.
 
 The report is tiered: `report.add(...)` = genuinely needs manual work; `report.info(...)` = converted
 automatically, shown for transparency only (dropped `<import>`, a `<reference>` emitted as a `<key>`, a
-defaulted `sourceKey`, `nullable="true"`, an inlined generator `<bean>`). Across the full demo suite:
-**374 need manual attention, ~150 informational** (down from a flat 612 that conflated the two).
+defaulted `sourceKey`, `nullable="true"`, an inlined generator `<bean>`, `<variable generator>` → entity).
+Across the full corpus: **593 need manual attention, 251 informational**.
 
-The remaining 374 are the genuine hard tail, not cheap wins:
-- **Composite entity generators** (`PersonGenerator`/`AddressGenerator`/`CountryGenerator`/… ~57): the
-  classes exist in DATAMIMIC but are NOT DSL-registered and expose child *generators* (not a `generate()`
-  entity), so Benerator's `<variable generator="AddressGenerator"> … address.street` has no 1:1 target.
-  Exposing them is a DATAMIMIC product/modelling decision, not a converter fix.
-- **Assertions** (`<if><error>` 59 + `<evaluate assert>` 17): no DATAMIMIC equivalent (port to
-  `<execute type="python">raise …` or a test manually).
-- **`{ftl:…}` `{dbUrl}` placeholders** (~30): resolved at runtime from a `-Ddatabase=…`-selected properties
-  file, so the target env is ambiguous to the converter.
-- **`<reference>` modifiers** (distribution/cyclic/type/selector, 56): unsupported by DATAMIMIC references.
-- **Update/insert consumers** (`db.updater()`/`mongo.inserter()`, 45): DATAMIMIC target semantics differ.
-- **Structural** (`<value>` 11, class-based `<bean>`, `<meta-model>`, `<pre-parse-generate>`): no equivalent.
+The 593, by report kind (top constructs in parentheses):
+- **attribute** 94 (`<attribute>` 43, `<part>` 20, `<setup>` 17): unmapped attributes on mapped elements.
+- **database** 75 (`'db'` 43 + schema/env variants): env-specific connection setup — flagged by design.
+- **reference** 73 (`order_id` 18, `category_id` 16, `customer_id` 16): FK references needing modifier
+  support (distribution/cyclic) or column verification.
+- **condition `<if>`** 71 + **`<evaluate assert>`** 34 = **105 assertions**: no DATAMIMIC equivalent yet
+  (planned: native `<assert>` in DATAMIMIC, then both map).
+- **element** 65 (`<bean>` 33, `<value>` 11, `<pre-parse-generate>` 8, `<transcodingTask>` 5): no equivalent.
+- **execute** 57 (`type='js'` 40, no-type 14): no JS engine in DATAMIMIC — rewrite python/sql/bash.
+- **generator** 55 (`new PersonGenerator{…}` 13, `MongoDBObjectIdGenerator` 9, `AddressGenerator` 9):
+  composite-generator args (planned: map to entity modifiers) + genuinely unsupported generators.
+- **consumer** 52 (`db.updater()` 13+2, `mongo.inserter/deleter` 7, `NoConsumer` 11, `MultiExporter` 7):
+  SQL update/upsert/delete planned in DATAMIMIC (Mongo dot-targets exist already).
+- **converter** 12, **type** 5: long tail.
 
 ### Now mapped
 
@@ -43,7 +47,7 @@ The remaining 374 are the genuine hard tail, not cheap wins:
 | `jdbc:h2/hsqldb:mem:` | SQLite (Python-connectable) | — |
 | `environment.env.properties` (JDBC URL) | `conf/environment.env.properties` (host/port/database/dbms) | — |
 
-Net over the session: `element` 178→82, and the DB-backed round-trip now runs against a real postgres.
+Net over the session: `element` 178→65, and the DB-backed round-trip now runs against a real postgres.
 
 ## Remaining gaps (prioritised)
 
@@ -55,14 +59,13 @@ Net over the session: `element` 178→82, and the DB-backed round-trip now runs 
   defaults `sourceKey="id"` and asks the user to verify the FK column. Not failures.
 
 ### B. Auto-mappable later (needs more converter work)
-- **`type="object"`** (132): a Benerator nested entity/object field → DATAMIMIC `<nestedKey>` or a nested
-  `<generate>`. Needs structural conversion (the field's own sub-`<attribute>`s become the nested body).
-- **`type="date"`** (63): DATAMIMIC has no `date` *type* but has `DateGenerator`/`DateTimeGenerator`.
-  Map `type="date"` (+ any `min`/`max`) → `generator="DateGenerator(...)"`.
-- **`{ftl:…}` / `{js:…}` placeholders**: Benerator FreeMarker/JS templating in attribute values (e.g.
-  `<mongodb host="{ftl:${mongoHost}}">`) — resolve from the demo's properties or flag.
-- **`type="integer"`-style aliases** and generator-name casing: extend `TYPE` / `GENERATOR_RENAME` as new
-  ones surface.
+- **`{ftl:…}` / `{js:…}` / `{dbUrl}` placeholders**: Benerator FreeMarker/JS templating in attribute values
+  (e.g. `<mongodb host="{ftl:${mongoHost}}">`) — resolve from the project's single env properties, flag
+  when ambiguous (`--env` CLI option planned).
+- **Composite-generator args** (`new PersonGenerator{minAgeYears=…}` 13): DATAMIMIC already accepts
+  `<variable entity="Person" ageMin=… ageMax=…>` and `entity="Person(min_age=…)"` — map the args.
+- **`type` flags** (5 left): `type="object"`/`type="date"` structural conversion is done; remaining are
+  odd aliases — extend `TYPE`/`GENERATOR_RENAME` as they surface.
 
 ### C. No DATAMIMIC equivalent (flag honestly — manual migration)
 - **`<bean>`** (50): Benerator instantiates a Java bean; DATAMIMIC has no bean layer. Manual.
