@@ -101,14 +101,16 @@ jobs:
           for f in $(find demos-tree -name '*.datamimic.xml' | sort); do
             total=$((total + 1))
             rel="${f#demos-tree/}"
-            if timeout 60 datamimic run "$f" >/dev/null 2>&1; then
+            if out=$(cd "$(dirname "$f")" && timeout 60 datamimic run "$(basename "$f")" 2>&1); then
               ran=$((ran + 1)); echo "$rel | yes"
             else
-              echo "$rel | no (needs a DB / external source / manual migration)"
+              # Show the REAL first error line — the old blanket 'needs a DB' label hid actual converter bugs.
+              err=$(echo "$out" | grep -m1 -oE 'ERROR.*|Error[: ].*' | cut -c1-180)
+              echo "$rel | no (${err:-timeout or non-zero exit without an ERROR line})"
             fi
           done
           echo ""
-          echo "Demos that convert AND run standalone: $ran / $total (the rest are DB/integration demos)."
+          echo "Demos that convert AND run standalone: $ran / $total."
 
   db-round-trip:
     name: DB round-trip — Benerator -> converter -> DATAMIMIC -> postgres

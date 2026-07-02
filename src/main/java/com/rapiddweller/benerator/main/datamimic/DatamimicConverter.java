@@ -99,6 +99,28 @@ public final class DatamimicConverter {
       }
     }
 
+    // Copy every non-descriptor resource (CSV/XLS sources, scripts, properties, schemas) alongside the
+    // converted XML - the descriptors reference them relatively, so without this no file-based
+    // descriptor can run from the output tree.
+    int resourcesCopied = 0;
+    if (Files.isDirectory(input)) {
+      List<Path> resources;
+      try (Stream<Path> s = Files.walk(input)) {
+        resources = s.filter(Files::isRegularFile)
+            .filter(p -> !p.toString().endsWith(".ben.xml"))
+            .filter(p -> !p.getFileName().toString().endsWith(".env.properties")) // migrated above
+            .sorted()
+            .collect(java.util.stream.Collectors.toList());
+      }
+      for (Path res : resources) {
+        Path dest = outDir.resolve(input.relativize(res));
+        Files.createDirectories(dest.getParent());
+        Files.copy(res, dest, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        resourcesCopied++;
+      }
+      System.out.println("  [RES]  copied " + resourcesCopied + " data/script resource(s)");
+    }
+
     if (args.length >= 3) {
       Files.writeString(Path.of(args[2]), report.format());
     }
