@@ -54,6 +54,8 @@ Net over the session: `element` 178→65, and the DB-backed round-trip now runs 
 
 ## Remaining gaps (prioritised)
 
+Per-construct manual-migration recipes (before/after snippets) live in [MIGRATION_PLAYBOOK.md](MIGRATION_PLAYBOOK.md).
+
 ### A. Expected — not real gaps (no action)
 - **`dropped <import>`** (106): Benerator `<import>` is auto-discovery in DATAMIMIC — intentionally removed.
 - **`database 'db'`** (24) / connection flags (42): the DB connection is environment-specific; flagged for

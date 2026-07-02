@@ -49,6 +49,23 @@ public class DescriptorConverter {
     XMLUtil.saveDocument(out, output, "utf-8");
   }
 
+  /** ", see MIGRATION_PLAYBOOK.md#..." for an unmapped element tag with a recipe; "" when there is none.
+   *  Comment text only - never changes what gets flagged. */
+  private static String elementPlaybookRef(String tag) {
+    switch (tag) {
+      case "value":
+        return ", see MIGRATION_PLAYBOOK.md#value";
+      case "pre-parse-generate":
+        return ", see MIGRATION_PLAYBOOK.md#pre-parse-generate";
+      case "transcodingTask":
+      case "transcode":
+      case "meta-model":
+        return ", see MIGRATION_PLAYBOOK.md#transcoding-meta-model";
+      default:
+        return "";
+    }
+  }
+
   /** Record every {@code <bean id spec>} so generator references to it can be inlined. */
   private void scanBeans(Element el) {
     if (local(el).equals("bean") && el.hasAttribute("id") && el.hasAttribute("spec")) {
@@ -141,7 +158,8 @@ public class DescriptorConverter {
         return null;
       }
       report.add(path, "element", "<bean> has no DATAMIMIC equivalent - migrate manually");
-      return out.createComment(" TODO(datamimic-migration): <bean> not supported - migrate manually ");
+      return out.createComment(" TODO(datamimic-migration): <bean> not supported - migrate manually,"
+          + " see MIGRATION_PLAYBOOK.md#bean ");
     }
     if (tag.equals("reference")) {
       return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
@@ -154,7 +172,8 @@ public class DescriptorConverter {
       if (isSetupChild(path)) { // DATAMIMIC <condition> is per-<generate>; a setup-level <if> has no home
         report.add(path, "condition", "setup-level <if>/<error> assertion has no DATAMIMIC equivalent - dropped "
             + "(use <execute type='python'>raise ...</execute> to keep it)");
-        return out.createComment(" TODO(datamimic-migration): setup-level <if> assertion dropped - review ");
+        return out.createComment(" TODO(datamimic-migration): setup-level <if> assertion dropped - review,"
+            + " see MIGRATION_PLAYBOOK.md#setup-if ");
       }
       return convertIfNode(out, el, path); // <if test><then>/<else> -> <condition><if condition>/<else>
     }
@@ -167,7 +186,8 @@ public class DescriptorConverter {
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
       report.add(path, "element", "<" + tag + "> has no DATAMIMIC equivalent - migrate manually");
-      return out.createComment(" TODO(datamimic-migration): <" + tag + "> not supported - migrate manually ");
+      return out.createComment(" TODO(datamimic-migration): <" + tag + "> not supported - migrate manually"
+          + elementPlaybookRef(tag) + " ");
     }
     Element result = out.createElement(target);
     switch (tag) {
@@ -602,7 +622,8 @@ public class DescriptorConverter {
       report.add(path, "reference",
           "reference '" + name + "' has no targetType -> migrate manually (DATAMIMIC references a table/column)");
       return out.createComment(
-          " TODO(datamimic-migration): <reference name=\"" + name + "\"> needs a table/column - migrate manually ");
+          " TODO(datamimic-migration): <reference name=\"" + name + "\"> needs a table/column - migrate manually,"
+              + " see MIGRATION_PLAYBOOK.md#reference-selector-type ");
     }
 
     Element ref = out.createElement("reference");
@@ -794,7 +815,8 @@ public class DescriptorConverter {
     if (assertion == null) {
       report.add(path, "evaluate", "<evaluate> without assert has no DATAMIMIC equivalent - dropped "
           + "(use <execute type='sql'> for a side effect, or verify the count in a test)");
-      return out.createComment(" TODO(datamimic-migration): <evaluate> dropped - review ");
+      return out.createComment(" TODO(datamimic-migration): <evaluate> dropped - review,"
+          + " see MIGRATION_PLAYBOOK.md#evaluate-without-assert ");
     }
     Element variable = out.createElement("variable");
     variable.setAttribute("name", "result");
@@ -908,7 +930,7 @@ public class DescriptorConverter {
     report.add(path, "execute", "inline <execute type='" + benType
         + "'> - DATAMIMIC supports inline python/bash/sql; rewrite this snippet or use a .py file (uri=)");
     return out.createComment(" TODO(datamimic-migration): inline <execute type='" + benType
-        + "'> - rewrite as python/bash/sql or move to a .py file ");
+        + "'> - rewrite as python/bash/sql or move to a .py file, see MIGRATION_PLAYBOOK.md#execute-js ");
   }
 
   /** A Benerator CRUD consumer expression: {@code db.updater()}, {@code mongo.inserter('coll')}, ... */
