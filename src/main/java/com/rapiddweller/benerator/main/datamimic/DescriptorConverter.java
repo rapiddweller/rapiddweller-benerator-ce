@@ -611,16 +611,16 @@ public class DescriptorConverter {
 
   /**
    * Rewrite a Benerator/Java script expression into the Python DATAMIMIC evaluates (context.py eval):
-   * the Java ternary {@code cond ? a : b} becomes {@code a if cond else b}; {@code this.field} (Benerator's
-   * current-entity ref) becomes the bare {@code field} (DATAMIMIC exposes sibling fields by name); and a
-   * Java enum accessor {@code .name()} is dropped (DATAMIMIC's gender/enum-like fields are already strings).
+   * the Java ternary {@code cond ? a : b} becomes {@code a if cond else b}, and a Java enum accessor
+   * {@code .name()} is dropped (DATAMIMIC's gender/enum-like fields are already strings). {@code this.field}
+   * is left untouched: DATAMIMIC binds {@code this} to the current content scope (essential in nested
+   * scopes where a bare sibling name does not resolve).
    */
   static String rewriteScript(String expr) {
     if (expr == null || expr.isEmpty()) {
       return expr;
     }
     String s = rewriteTernary(expr);
-    s = s.replaceAll("\\bthis\\.", ""); // this.age -> age
     s = s.replaceAll("\\.name\\(\\)", ""); // gender.name() -> gender (Java enum -> already a string)
     return s;
   }
