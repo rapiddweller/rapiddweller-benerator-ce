@@ -133,7 +133,7 @@ public final class DatamimicConverter {
     if (anyRow) {
       sb.append("| File | Manual work | Playbook |\n|---|---|---|\n");
       for (Map.Entry<String, List<MigrationReport.Item>> e : perFile.entrySet()) {
-        List<MigrationReport.Item> attention = e.getValue().stream().filter(it -> !it.info).toList();
+        List<MigrationReport.Item> attention = e.getValue().stream().filter(it -> !it.info).collect(java.util.stream.Collectors.toList());
         if (attention.isEmpty() && !failures.containsKey(e.getKey())) {
           continue;
         }

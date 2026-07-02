@@ -53,7 +53,7 @@ public class MigrationReport {
 
   /** Only the items that genuinely need manual attention (excludes {@link #info} notes). */
   public List<Item> attention() {
-    return items.stream().filter(it -> !it.info).toList();
+    return items.stream().filter(it -> !it.info).collect(java.util.stream.Collectors.toList());
   }
 
   public boolean isEmpty() {
