@@ -322,6 +322,23 @@ public class DescriptorConverterTest {
         report.attention().stream().noneMatch(it -> it.detail.contains("birth_date")));
   }
 
+  @Test
+  public void rewritesJavaScriptIdiomsToPython() {
+    // Java ternary -> Python ternary
+    assertEquals("(1) if (TX.CARD == 'Y') else (0)", DescriptorConverter.rewriteScript("TX.CARD == 'Y' ? 1 : 0"));
+    // this.field -> bare field (DATAMIMIC exposes siblings by name)
+    assertEquals("age + 1", DescriptorConverter.rewriteScript("this.age + 1"));
+    // Java enum accessor dropped (gender is already a string in DATAMIMIC)
+    assertEquals("person.gender", DescriptorConverter.rewriteScript("person.gender.name()"));
+    // a lone ':' in a slice/dict is NOT a ternary
+    assertEquals("d['a:b']", DescriptorConverter.rewriteScript("d['a:b']"));
+    // no ternary -> untouched
+    assertEquals("a + b", DescriptorConverter.rewriteScript("a + b"));
+    // nested ternary
+    assertEquals("(1) if (x) else ((2) if (y) else (3))",
+        DescriptorConverter.rewriteScript("x ? 1 : y ? 2 : 3"));
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();

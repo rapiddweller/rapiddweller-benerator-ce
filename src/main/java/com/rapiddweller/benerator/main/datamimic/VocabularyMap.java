@@ -169,6 +169,24 @@ public final class VocabularyMap {
       "AcademicTitleGenerator", "SectorGenerator", "DepartmentNameGenerator", "BirthdateGenerator",
       "NobilityTitleGenerator", "SequenceTableGenerator");
 
+  /**
+   * Benerator DataFaker method -&gt; the equivalent Python Faker method (faker 33.x). Camel-cased or
+   * Java-datafaker-specific names that have a real Faker counterpart under a different name.
+   */
+  public static final Map<String, String> FAKER_METHOD_RENAME = Map.of(
+      "getYear", "year",
+      "fileName", "file_name",
+      "streetName", "street_name",
+      "firstName", "first_name",
+      "lastName", "last_name");
+
+  /**
+   * Benerator DataFaker methods from Java-datafaker-only providers (fiction/sport/hobby/medical/commerce)
+   * with NO Python Faker equivalent - flagged so the user routes them to a DATAMIMIC entity or a value list.
+   */
+  public static final Set<String> FAKER_UNAVAILABLE_METHODS = Set.of(
+      "specie", "quotes", "coaches", "activity", "productName", "surgery", "people");
+
   /** Distribution names native to both products. */
   public static final Set<String> KNOWN_DISTRIBUTIONS = Set.of("random", "cumulated", "ordered");
 

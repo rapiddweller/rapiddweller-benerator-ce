@@ -457,6 +457,12 @@ public class DescriptorConverter {
             report.add(path, "attribute", "'distribution' on <" + tag + "> needs a numeric generator or source - dropped");
           }
           break;
+        case "script":
+          out.setAttribute("script", rewriteScript(val));
+          break;
+        case "selector":
+          out.setAttribute("selector", rewriteScript(val));
+          break;
         case "converter":
           out.setAttribute("converter", mapConverter(val, path));
           break;
@@ -603,6 +609,94 @@ public class DescriptorConverter {
     return false;
   }
 
+  /**
+   * Rewrite a Benerator/Java script expression into the Python DATAMIMIC evaluates (context.py eval):
+   * the Java ternary {@code cond ? a : b} becomes {@code a if cond else b}; {@code this.field} (Benerator's
+   * current-entity ref) becomes the bare {@code field} (DATAMIMIC exposes sibling fields by name); and a
+   * Java enum accessor {@code .name()} is dropped (DATAMIMIC's gender/enum-like fields are already strings).
+   */
+  static String rewriteScript(String expr) {
+    if (expr == null || expr.isEmpty()) {
+      return expr;
+    }
+    String s = rewriteTernary(expr);
+    s = s.replaceAll("\\bthis\\.", ""); // this.age -> age
+    s = s.replaceAll("\\.name\\(\\)", ""); // gender.name() -> gender (Java enum -> already a string)
+    return s;
+  }
+
+  /**
+   * Java ternary {@code cond ? a : b} -&gt; Python {@code (a) if (cond) else (b)}, honoring nesting and
+   * string literals, applied recursively to each part. Leaves the expression untouched when it has no
+   * top-level {@code ?} (so a lone {@code :} in a dict/slice is never mistaken for a ternary).
+   */
+  private static String rewriteTernary(String expr) {
+    int q = topLevelIndex(expr, '?');
+    if (q < 0) {
+      return expr;
+    }
+    int colon = matchingTernaryColon(expr, q + 1);
+    if (colon < 0) {
+      return expr; // unbalanced - not a ternary we can safely rewrite
+    }
+    String cond = expr.substring(0, q).trim();
+    String thenPart = expr.substring(q + 1, colon).trim();
+    String elsePart = expr.substring(colon + 1).trim();
+    return "(" + rewriteTernary(thenPart) + ") if (" + rewriteTernary(cond) + ") else (" + rewriteTernary(elsePart) + ")";
+  }
+
+  /** Index of the first {@code c} at paren/bracket depth 0 and outside quotes, or -1. */
+  private static int topLevelIndex(String s, char c) {
+    int depth = 0;
+    char quote = 0;
+    for (int i = 0; i < s.length(); i++) {
+      char ch = s.charAt(i);
+      if (quote != 0) {
+        if (ch == quote) {
+          quote = 0;
+        }
+      } else if (ch == '\'' || ch == '"') {
+        quote = ch;
+      } else if (ch == '(' || ch == '[' || ch == '{') {
+        depth++;
+      } else if (ch == ')' || ch == ']' || ch == '}') {
+        depth--;
+      } else if (ch == c && depth == 0) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  /** The {@code :} that closes the ternary opened at/after {@code from}, skipping nested {@code ? :} pairs. */
+  private static int matchingTernaryColon(String s, int from) {
+    int depth = 0;
+    int ternary = 0;
+    char quote = 0;
+    for (int i = from; i < s.length(); i++) {
+      char ch = s.charAt(i);
+      if (quote != 0) {
+        if (ch == quote) {
+          quote = 0;
+        }
+      } else if (ch == '\'' || ch == '"') {
+        quote = ch;
+      } else if (ch == '(' || ch == '[' || ch == '{') {
+        depth++;
+      } else if (ch == ')' || ch == ']' || ch == '}') {
+        depth--;
+      } else if (depth == 0 && ch == '?') {
+        ternary++;
+      } else if (depth == 0 && ch == ':') {
+        if (ternary == 0) {
+          return i;
+        }
+        ternary--;
+      }
+    }
+    return -1;
+  }
+
   /** Strip one pair of surrounding quotes: {@code 'DE'} / {@code "DE"} -&gt; {@code DE}. */
   private static String unquote(String s) {
     if (s.length() >= 2 && (s.charAt(0) == '\'' || s.charAt(0) == '"') && s.charAt(s.length() - 1) == s.charAt(0)) {
@@ -679,18 +773,27 @@ public class DescriptorConverter {
       report.add(path, "generator", "DataFakerGenerator with no method arg - specify a Faker method");
       return "DataFakerGenerator" + args;
     }
-    // Benerator names the provider method in camelCase (streetName); Python Faker uses snake_case
-    // (street_name). The method is the last arg; any leading arg is the provider, which Faker infers.
-    String method = parts.get(parts.size() - 1);
-    return "DataFakerGenerator(" + fakerMethodToSnakeCase(method) + ")";
+    // DATAMIMIC calls python faker.<method>() flat - the Benerator provider (first arg) is irrelevant,
+    // only the method (last arg) matters, in snake_case.
+    String method = unquote(parts.get(parts.size() - 1));
+    String mapped = VocabularyMap.FAKER_METHOD_RENAME.get(method);
+    if (mapped != null) {
+      return "DataFakerGenerator('" + mapped + "')";
+    }
+    if (VocabularyMap.FAKER_UNAVAILABLE_METHODS.contains(method)) {
+      // A Java-datafaker-only provider (massEffect, theExpanse, ...) with no Python Faker equivalent.
+      // Fall back to a generic word so the descriptor still RUNS; info (not a manual gap) points at the
+      // better fix (a DATAMIMIC entity like Product/MedicalProcedure, or a value list).
+      report.info(path, "generator", "DataFakerGenerator('" + method + "') has no Python Faker equivalent"
+          + " -> using faker.word(); replace with <variable entity=...> or a value list for domain data");
+      return "DataFakerGenerator('word')";
+    }
+    return "DataFakerGenerator('" + fakerSnake(method) + "')";
   }
 
-  /** {@code 'streetName'} -&gt; {@code 'street_name'}, preserving the surrounding quotes. */
-  private static String fakerMethodToSnakeCase(String quotedMethod) {
-    String q = quotedMethod.length() >= 2 ? quotedMethod.substring(1, quotedMethod.length() - 1) : quotedMethod;
-    String snake = q.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase();
-    char quote = quotedMethod.isEmpty() ? '\'' : quotedMethod.charAt(0);
-    return quote + snake + (quotedMethod.length() >= 2 ? String.valueOf(quotedMethod.charAt(quotedMethod.length() - 1)) : "'");
+  /** camelCase Faker method -&gt; snake_case ({@code streetName} -&gt; {@code street_name}). */
+  private static String fakerSnake(String method) {
+    return method.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase();
   }
 
   /** The bare class name of a Benerator generator ("new PersonGenerator{...}" -&gt; "PersonGenerator"). */
@@ -795,7 +898,7 @@ public class DescriptorConverter {
         key.setAttribute("constant", attrs.get("constant"));
       }
       if (attrs.containsKey("script")) {
-        key.setAttribute("script", attrs.get("script"));
+        key.setAttribute("script", rewriteScript(attrs.get("script")));
       }
       report.info(path, "reference", "reference '" + name + "' is a constant/script value -> emitted as <key>");
       return key;
@@ -995,7 +1098,7 @@ public class DescriptorConverter {
     if (value == null) {
       report.add(path, "attribute", "<" + local(src) + "> without a value (source/ref form) - review");
     } else if (value.startsWith("{") && value.endsWith("}")) {
-      out.setAttribute("script", value.substring(1, value.length() - 1));
+      out.setAttribute("script", rewriteScript(value.substring(1, value.length() - 1)));
     } else if (isNumeric(value)) {
       out.setAttribute("script", value); // numeric literal -> evaluated to a number, not a string
     } else {
