@@ -2,11 +2,15 @@
 
 package com.rapiddweller.benerator.main.datamimic;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -15,11 +19,15 @@ import java.util.stream.Stream;
 import org.junit.Test;
 
 /**
- * Sweeps the whole Benerator demo + test corpus through the converter and reports coverage: how many
- * descriptors convert, how many throw, and a frequency table of every construct flagged for manual
- * migration. Not an assertion test — a gap-analysis harness (run with -Dtest=CorpusSweepTest).
+ * Sweeps the whole Benerator demo + test corpus through the converter and gates coverage against the
+ * checked-in baseline (gap-baseline.properties): the number of descriptors that throw and the number of
+ * manual-attention findings must never rise. Lowering a number is a deliberate commit (test prints the
+ * hint). The full frequency tables land in target/gap-report.txt — MIGRATION_GAPS.md is updated from
+ * that file, never by hand.
  */
 public class CorpusSweepTest {
+
+  private static final String BASELINE_RESOURCE = "gap-baseline.properties";
 
   private static final String[] ROOTS = {
       "src/demo/resources/demo",
@@ -43,6 +51,8 @@ public class CorpusSweepTest {
 
     int ok = 0;
     int threw = 0;
+    int manual = 0;
+    int infos = 0;
     Map<String, AtomicInteger> byKind = new TreeMap<>();
     Map<String, AtomicInteger> byDetail = new TreeMap<>();
     Map<String, AtomicInteger> byException = new TreeMap<>();
@@ -55,8 +65,14 @@ public class CorpusSweepTest {
         new DescriptorConverter(report).convert(f.toFile(), out);
         ok++;
         for (MigrationReport.Item it : report.items()) {
-          byKind.computeIfAbsent(it.kind, k -> new AtomicInteger()).incrementAndGet();
-          byDetail.computeIfAbsent(it.kind + "\t" + token(it.detail), k -> new AtomicInteger())
+          if (it.info) {
+            infos++;
+          } else {
+            manual++;
+          }
+          String kind = (it.info ? "info:" : "") + it.kind;
+          byKind.computeIfAbsent(kind, k -> new AtomicInteger()).incrementAndGet();
+          byDetail.computeIfAbsent(kind + "\t" + token(it.detail), k -> new AtomicInteger())
               .incrementAndGet();
         }
       } catch (Exception | StackOverflowError e) {
@@ -68,22 +84,48 @@ public class CorpusSweepTest {
       }
     }
 
-    System.out.println("\n===== CONVERTER CORPUS SWEEP =====");
-    System.out.println("files: " + files.size() + " | converted: " + ok + " | threw: " + threw);
-    System.out.println("\n--- flagged for manual migration, by kind (count) ---");
+    StringBuilder rep = new StringBuilder();
+    rep.append("===== CONVERTER CORPUS SWEEP =====\n");
+    rep.append("files: ").append(files.size()).append(" | converted: ").append(ok)
+        .append(" | threw: ").append(threw)
+        .append(" | manual findings: ").append(manual)
+        .append(" | info findings: ").append(infos).append('\n');
+    rep.append("\n--- findings by kind (info:* = converted automatically, FYI) ---\n");
     byKind.entrySet().stream()
         .sorted((a, b) -> b.getValue().get() - a.getValue().get())
-        .forEach(e -> System.out.println("  " + e.getValue().get() + "\t" + e.getKey()));
-    System.out.println("\n--- top flagged constructs, by kind + name (count) ---");
+        .forEach(e -> rep.append("  ").append(e.getValue().get()).append('\t').append(e.getKey()).append('\n'));
+    rep.append("\n--- top findings, by kind + name ---\n");
     byDetail.entrySet().stream()
         .sorted((a, b) -> b.getValue().get() - a.getValue().get())
-        .limit(40)
-        .forEach(e -> System.out.println("  " + e.getValue().get() + "\t" + e.getKey()));
-    System.out.println("\n--- conversions that THREW (count) ---");
+        .limit(60)
+        .forEach(e -> rep.append("  ").append(e.getValue().get()).append('\t').append(e.getKey()).append('\n'));
+    rep.append("\n--- conversions that THREW ---\n");
     byException.entrySet().stream()
         .sorted((a, b) -> b.getValue().get() - a.getValue().get())
-        .forEach(e -> System.out.println("  " + e.getValue().get() + "\t" + e.getKey()));
-    System.out.println("===== END SWEEP =====\n");
+        .forEach(e -> rep.append("  ").append(e.getValue().get()).append('\t').append(e.getKey()).append('\n'));
+    rep.append("===== END SWEEP =====\n");
+    System.out.println("\n" + rep);
+    Files.createDirectories(Path.of("target"));
+    Files.writeString(Path.of("target/gap-report.txt"), rep);
+
+    Properties baseline = new Properties();
+    try (InputStream in = CorpusSweepTest.class.getResourceAsStream(BASELINE_RESOURCE)) {
+      assertTrue("Missing baseline resource " + BASELINE_RESOURCE
+          + " next to CorpusSweepTest — create it with:\nthrew=" + threw + "\nmanualFindings=" + manual,
+          in != null);
+      baseline.load(in);
+    }
+    int baseThrew = Integer.parseInt(baseline.getProperty("threw"));
+    int baseManual = Integer.parseInt(baseline.getProperty("manualFindings"));
+    if (threw < baseThrew || manual < baseManual) {
+      System.out.println("Baseline can be lowered to: threw=" + threw + ", manualFindings=" + manual
+          + " (edit " + BASELINE_RESOURCE + " in this commit).");
+    }
+    assertTrue("Converter regression: " + threw + " descriptors threw (baseline " + baseThrew
+        + "). See target/gap-report.txt.", threw <= baseThrew);
+    assertTrue("Converter regression: " + manual + " manual-attention findings (baseline " + baseManual
+        + "). Fix the mapping or consciously raise the baseline. See target/gap-report.txt.",
+        manual <= baseManual);
   }
 
   /** Pull the first &lt;tag&gt; or 'name' token out of a report detail so gaps aggregate by construct. */
