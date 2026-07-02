@@ -217,6 +217,16 @@ public class DescriptorConverter {
         break; // no attributes to map; text content is copied below
       default: // attribute / id / part / variable
         convertFieldAttributes(el, result, tag, path);
+        // A field that ends up with no generation mode at all (Benerator derives its type from DB
+        // metadata) would fail DATAMIMIC's parser and kill the whole file - flag it as a comment.
+        if ((tag.equals("attribute") || tag.equals("id"))
+            && result.getAttributes().getLength() == 1 && result.hasAttribute("name")) {
+          String fieldName = result.getAttribute("name");
+          report.add(path, "attribute", "<" + tag + " name='" + fieldName + "'> takes its type from DB "
+              + "metadata (Benerator introspection) - define type/generator manually");
+          return out.createComment(" TODO(datamimic-migration): <key name='" + fieldName
+              + "'> type came from DB metadata - define type/generator manually ");
+        }
         break;
     }
     // children (elements, text, comments) in source order
@@ -291,8 +301,15 @@ public class DescriptorConverter {
         case "source":
         case "selector":
         case "separator":
-        case "encoding":
           out.setAttribute(key, val);
+          break;
+        case "encoding":
+          // DATAMIMIC has no encoding attribute; it reads utf-8. Dropping the default is lossless.
+          if (val.replace("-", "").equalsIgnoreCase("utf8")) {
+            report.info(path, "attribute", "encoding='" + val + "' dropped (DATAMIMIC reads utf-8)");
+          } else {
+            report.add(path, "attribute", "encoding='" + val + "' - DATAMIMIC reads utf-8; re-encode the source file");
+          }
           break;
         default:
           report.add(path, "attribute", "<generate> '" + key + "' not mapped - dropped");
@@ -309,6 +326,21 @@ public class DescriptorConverter {
     }
     if (!targetSet) {
       out.setAttribute("target", ""); // DATAMIMIC generate needs a target; empty = capture only
+    }
+    if (!out.hasAttribute("name")) {
+      // Benerator allows a nameless <iterate source=...>; DATAMIMIC requires a name - derive it
+      // from the source filename so the descriptor parses.
+      String source = out.getAttribute("source");
+      String derived = source.isEmpty() ? "unnamed" : source.replaceAll(".*/", "").replaceAll("\\..*$", "")
+          .replaceAll("\\W", "_");
+      out.setAttribute("name", derived);
+      report.info(path, "attribute", "nameless iterate -> name='" + derived + "' derived from the source");
+    }
+    String src2 = out.getAttribute("source");
+    if (src2.endsWith(".dbunit.xml")) {
+      // A dbunit dataset holds MANY tables in one file; DATAMIMIC's xml source reads one record list.
+      report.add(path, "source", "dbunit dataset '" + src2 + "' - split into per-table sources manually "
+          + "(DATAMIMIC has no dbunit importer)");
     }
   }
 
