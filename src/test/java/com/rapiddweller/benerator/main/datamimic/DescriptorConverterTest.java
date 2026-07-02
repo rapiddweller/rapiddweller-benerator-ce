@@ -97,9 +97,12 @@ public class DescriptorConverterTest {
     assertNotNull("role_id constant reference -> <key>", roleKey);
     assertEquals("customer", roleKey.getAttribute("constant"));
 
-    // <database> mapped structurally; the connection is flagged for manual setup.
-    assertNotNull("database element mapped", first(doc, "database", "id", "db"));
-    assertTrue("dbms/connection flagged", report.format().contains("dbms"));
+    // <database url="{dbUrl}"> resolves via <setting stage default="dev"> + shop.dev.properties:
+    // jdbc:hsqldb:mem -> sqlite, no manual dbms flag left.
+    Element db = first(doc, "database", "id", "db");
+    assertNotNull("database element mapped", db);
+    assertEquals("sqlite", db.getAttribute("dbms"));
+    assertTrue("no manual dbms flag", report.attention().stream().noneMatch(it -> it.detail.contains("dbms")));
   }
 
   @Test
