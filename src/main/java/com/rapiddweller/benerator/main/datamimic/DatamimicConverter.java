@@ -7,8 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -51,6 +53,10 @@ public final class DatamimicConverter {
     inputs.sort(Path::compareTo);
     System.out.println("Converting " + inputs.size() + " Benerator descriptor(s) from " + input + ":");
     MigrationReport report = new MigrationReport();
+    // File -> its report items (a slice of the shared report, taken around each conversion), so the
+    // summary can attribute every finding to the descriptor it came from. Insertion order = batch order.
+    Map<String, List<MigrationReport.Item>> perFile = new LinkedHashMap<>();
+    Map<String, String> failures = new LinkedHashMap<>();
     int ok = 0;
     int failed = 0;
     for (Path in : inputs) {
@@ -58,14 +64,17 @@ public final class DatamimicConverter {
       String outName = rel.toString().replaceFirst("\\.ben\\.xml$", ".datamimic.xml");
       Path out = outDir.resolve(outName);
       Files.createDirectories(out.getParent());
+      int before = report.items().size();
       try {
         new DescriptorConverter(report).convert(in.toFile(), out.toFile());
         ok++;
         System.out.println("  [OK]   " + rel + "  ->  " + outName);
       } catch (Exception e) {
         failed++;
+        failures.put(rel.toString(), e.getMessage());
         System.out.println("  [FAIL] " + rel + "  ->  " + e.getMessage());
       }
+      perFile.put(rel.toString(), new ArrayList<>(report.items().subList(before, report.items().size())));
     }
 
     // Migrate DB environment files (JDBC URL -> DATAMIMIC host/port/database/dbms) so a DB-backed
@@ -79,22 +88,121 @@ public final class DatamimicConverter {
       }
       for (Path envIn : envFiles) {
         Path rel = input.relativize(envIn);
+        int before = report.items().size();
         Map<String, String> migrated = EnvironmentMigrator.migrate(readProps(envIn), report, rel.toString());
         Path envOut = outDir.resolve(rel);
         Files.createDirectories(envOut.getParent());
         writeProps(envOut, migrated);
         envMigrated++;
         System.out.println("  [ENV]  " + rel);
+        perFile.put(rel.toString(), new ArrayList<>(report.items().subList(before, report.items().size())));
       }
     }
 
     if (args.length >= 3) {
       Files.writeString(Path.of(args[2]), report.format());
     }
-    System.out.printf("Converted %d/%d descriptor(s), migrated %d env file(s); %d item(s) need manual attention.%n",
-        ok, inputs.size(), envMigrated, report.attention().size());
+    String summary = buildSummary(perFile, failures, inputs.size(), report);
+    System.out.println();
+    System.out.println(summary);
+    Files.writeString(outDir.resolve("migration-summary.md"), summary);
+    System.out.printf("Converted %d/%d descriptor(s), migrated %d env file(s); %d item(s) need manual attention"
+        + " (see migration-summary.md).%n", ok, inputs.size(), envMigrated, report.attention().size());
     if (failed > 0) {
       System.out.printf("%d descriptor(s) could not be converted (see stderr).%n", failed);
+    }
+  }
+
+  /**
+   * Action-oriented batch summary (stdout + {@code migration-summary.md}): how many descriptors convert
+   * clean, then one row per file with open points - its manual-work kinds (deduplicated, counted) and the
+   * matching MIGRATION_PLAYBOOK.md recipe links. info() findings appear only as a total.
+   */
+  private static String buildSummary(Map<String, List<MigrationReport.Item>> perFile,
+                                     Map<String, String> failures, int descriptorTotal, MigrationReport report) {
+    StringBuilder sb = new StringBuilder("# Migration summary\n\n");
+    long clean = perFile.entrySet().stream()
+        .filter(e -> e.getKey().endsWith(".ben.xml") && !failures.containsKey(e.getKey())
+            && e.getValue().stream().noneMatch(it -> !it.info))
+        .count();
+    sb.append("**").append(clean).append(" of ").append(descriptorTotal)
+        .append(" descriptors convert with no manual work.**\n\n");
+
+    boolean anyRow = failures.size() > 0
+        || perFile.values().stream().flatMap(List::stream).anyMatch(it -> !it.info);
+    if (anyRow) {
+      sb.append("| File | Manual work | Playbook |\n|---|---|---|\n");
+      for (Map.Entry<String, List<MigrationReport.Item>> e : perFile.entrySet()) {
+        List<MigrationReport.Item> attention = e.getValue().stream().filter(it -> !it.info).toList();
+        if (attention.isEmpty() && !failures.containsKey(e.getKey())) {
+          continue;
+        }
+        // kind -> count, deduplicated in first-seen order
+        Map<String, Integer> kinds = new LinkedHashMap<>();
+        Set<String> anchors = new LinkedHashSet<>();
+        for (MigrationReport.Item it : attention) {
+          kinds.merge(it.kind, 1, Integer::sum);
+          String anchor = playbookAnchor(it);
+          if (anchor != null) {
+            anchors.add(anchor);
+          }
+        }
+        StringBuilder work = new StringBuilder();
+        if (failures.containsKey(e.getKey())) {
+          work.append("FAILED: ").append(failures.get(e.getKey()));
+        }
+        kinds.forEach((kind, count) ->
+            work.append(work.length() > 0 ? ", " : "").append(kind).append(" x").append(count));
+        String links = anchors.stream()
+            .map(a -> "[" + a + "](MIGRATION_PLAYBOOK.md#" + a + ")")
+            .collect(java.util.stream.Collectors.joining(", "));
+        sb.append("| ").append(e.getKey()).append(" | ").append(work).append(" | ").append(links).append(" |\n");
+      }
+      sb.append('\n');
+    }
+    long infos = report.items().size() - report.attention().size();
+    if (infos > 0) {
+      sb.append(infos).append(" finding(s) were converted automatically (informational, no action).\n");
+    }
+    return sb.toString();
+  }
+
+  /** MIGRATION_PLAYBOOK.md anchor for a manual-work item's report kind; null when no recipe exists. */
+  private static String playbookAnchor(MigrationReport.Item item) {
+    switch (item.kind) {
+      case "execute":
+        return "execute-js";
+      case "condition":
+      case "if":
+        return "setup-if";
+      case "evaluate":
+        return "evaluate-without-assert";
+      case "consumer":
+        return "no-equivalent-consumer";
+      case "generator":
+        return "unknown-generators";
+      case "reference":
+        return "reference-selector-type";
+      case "element": // the flagged tag is the first <...> in the detail text
+        int lt = item.detail.indexOf('<');
+        int gt = item.detail.indexOf('>', lt);
+        String tag = lt >= 0 && gt > lt ? item.detail.substring(lt + 1, gt) : "";
+        switch (tag) {
+          case "bean":
+            return "bean";
+          case "value":
+            return "value";
+          case "pre-parse-generate":
+            return "pre-parse-generate";
+          case "transcodingTask":
+          case "transcode":
+          case "meta-model":
+            return "transcoding-meta-model";
+          default:
+            return null;
+        }
+      default: // attribute / database / type / converter / while - no dedicated playbook recipe
+        return null;
     }
   }
 
