@@ -288,6 +288,14 @@ public class DescriptorConverterTest {
     Element state = first(fakerDoc, "key", "name", "address_state");
     assertNotNull(state);
     assertEquals("DataFakerGenerator('state')", state.getAttribute("generator")); // provider dropped
+    Element zip = first(fakerDoc, "key", "name", "address_zipCode");
+    assertNotNull(zip);
+    assertEquals("renamed via FAKER_METHOD_RENAME (python has zipcode, not zip_code)",
+        "DataFakerGenerator('zipcode')", zip.getAttribute("generator"));
+    Element latLon = first(fakerDoc, "key", "name", "address_latLon");
+    assertNotNull(latLon);
+    assertEquals("no python equivalent -> word fallback (FAKER_UNAVAILABLE_METHODS)",
+        "DataFakerGenerator('word')", latLon.getAttribute("generator"));
 
     // (b) shop-h2: hsqldb-mem -> sqlite, so schema="PUBLIC" is dropped (SQLite has no schemas) and the
     // {ftl:${database}/...} execute uri resolves to a concrete path (extension -> type inferrable).
