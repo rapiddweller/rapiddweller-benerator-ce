@@ -639,6 +639,42 @@ public class DescriptorConverter {
     return sb.append(args).append(")").toString();
   }
 
+  /**
+   * SQLite has no schemas, so a Benerator {@code schema="PUBLIC"} (from h2/hsqldb) would make DATAMIMIC
+   * qualify every table as {@code PUBLIC.<t>} and fail with "no such table: PUBLIC.sqlite_master".
+   */
+  private void dropSchemaForSqlite(Element out, String dbms, String path) {
+    if ("sqlite".equals(dbms) && out.hasAttribute("schema")) {
+      out.removeAttribute("schema");
+      report.info(path, "database", "dropped schema= for SQLite (it has no schemas)");
+    }
+  }
+
+  /**
+   * Benerator {@code DataFakerGenerator('provider','method')} names a Faker provider + method; DATAMIMIC's
+   * {@code DataFakerGenerator(method, locale='en_US')} calls {@code faker.<method>()} directly (no provider),
+   * so drop the provider and keep the method. A single arg is already the method.
+   */
+  private String mapDataFaker(String args, String path) {
+    java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
+    if (parts.isEmpty()) {
+      report.add(path, "generator", "DataFakerGenerator with no method arg - specify a Faker method");
+      return "DataFakerGenerator" + args;
+    }
+    // Benerator names the provider method in camelCase (streetName); Python Faker uses snake_case
+    // (street_name). The method is the last arg; any leading arg is the provider, which Faker infers.
+    String method = parts.get(parts.size() - 1);
+    return "DataFakerGenerator(" + fakerMethodToSnakeCase(method) + ")";
+  }
+
+  /** {@code 'streetName'} -&gt; {@code 'street_name'}, preserving the surrounding quotes. */
+  private static String fakerMethodToSnakeCase(String quotedMethod) {
+    String q = quotedMethod.length() >= 2 ? quotedMethod.substring(1, quotedMethod.length() - 1) : quotedMethod;
+    String snake = q.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase();
+    char quote = quotedMethod.isEmpty() ? '\'' : quotedMethod.charAt(0);
+    return quote + snake + (quotedMethod.length() >= 2 ? String.valueOf(quotedMethod.charAt(quotedMethod.length() - 1)) : "'");
+  }
+
   /** The bare class name of a Benerator generator ("new PersonGenerator{...}" -&gt; "PersonGenerator"). */
   private static String beneratorGeneratorClass(String generator) {
     String g = generator.startsWith("new ") ? generator.substring(4).trim() : generator.trim();
@@ -674,6 +710,9 @@ public class DescriptorConverter {
     String args = paren >= 0 ? expr.substring(paren) : "";
     if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
       return randomDoubleToFloat(args, path);
+    }
+    if (cls.equals("DataFakerGenerator")) {
+      return mapDataFaker(args, path);
     }
     String mapped = VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls);
     if (!VocabularyMap.KNOWN_GENERATORS.contains(mapped)) {
@@ -886,12 +925,14 @@ public class DescriptorConverter {
         out.setAttribute("database", c.database);
       }
       out.setAttribute("dbms", c.dbms);
+      dropSchemaForSqlite(out, c.dbms, path);
       return;
     }
     // No parseable URL: derive dbms from the driver/url, else flag for manual attention.
     String dbms = deriveDbms(attrs.get("driver"), attrs.get("url"));
     if (dbms != null) {
       out.setAttribute("dbms", dbms);
+      dropSchemaForSqlite(out, dbms, path);
     } else if (attrs.containsKey("environment")) {
       // DATAMIMIC resolves environment=/system= from conf/<environment>.env.properties at runtime
       // (verified: CE parser_util.fulfill_credentials), so nothing needs to be set manually.
@@ -1112,12 +1153,18 @@ public class DescriptorConverter {
   private Node convertExecuteNode(Document out, Element src, String path) {
     Map<String, String> attrs = attributes(src);
 
-    // File-based execute: DATAMIMIC infers the language from the uri extension.
+    // File-based execute: DATAMIMIC infers the language from the uri extension, so a {ftl:${...}}
+    // placeholder must be resolved to a concrete path first (else the extension - and the type - is lost).
     if (attrs.containsKey("uri")) {
       Element ex = out.createElement("execute");
-      ex.setAttribute("uri", attrs.get("uri"));
+      String uri = resolvePlaceholders(attrs.get("uri"));
+      ex.setAttribute("uri", uri);
       if (attrs.containsKey("target")) {
         ex.setAttribute("target", attrs.get("target"));
+      }
+      if (uri.contains("{")) { // still-unresolved placeholder -> the extension/type cannot be inferred
+        report.info(path, "execute", "<execute uri='" + attrs.get("uri")
+            + "'> has an unresolved placeholder - set type= manually if DATAMIMIC cannot infer it");
       }
       return ex;
     }

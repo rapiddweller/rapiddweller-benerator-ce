@@ -280,6 +280,34 @@ public class DescriptorConverterTest {
         .noneMatch(it -> it.detail.contains("set dbms manually")));
   }
 
+  @Test
+  public void mapsDataFakerDropsSqliteSchemaAndResolvesExecuteUri() throws Exception {
+    // (a) DataFakerGenerator: Benerator (provider, camelCaseMethod) -> DATAMIMIC (snake_case method).
+    MigrationReport fakerReport = new MigrationReport();
+    Document fakerDoc = convert("src/demo/resources/demo/faker/datafaker_0to100.ben.xml", fakerReport);
+    Element state = first(fakerDoc, "key", "name", "address_state");
+    assertNotNull(state);
+    assertEquals("DataFakerGenerator('state')", state.getAttribute("generator")); // provider dropped
+
+    // (b) shop-h2: hsqldb-mem -> sqlite, so schema="PUBLIC" is dropped (SQLite has no schemas) and the
+    // {ftl:${database}/...} execute uri resolves to a concrete path (extension -> type inferrable).
+    MigrationReport shopReport = new MigrationReport();
+    Document shopDoc = convert("src/demo/resources/demo/shop/shop-h2.ben.xml", shopReport);
+    Element db = first(shopDoc, "database", "id", "db");
+    assertNotNull(db);
+    assertEquals("sqlite", db.getAttribute("dbms"));
+    assertEquals("no schema on sqlite", "", db.getAttribute("schema"));
+    NodeList execs = shopDoc.getElementsByTagName("execute");
+    boolean anyResolved = false;
+    for (int i = 0; i < execs.getLength(); i++) {
+      String uri = ((Element) execs.item(i)).getAttribute("uri");
+      if (uri.endsWith(".sql") && !uri.contains("{")) {
+        anyResolved = true;
+      }
+    }
+    assertTrue("execute uri placeholder resolved to a .sql path", anyResolved);
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();
