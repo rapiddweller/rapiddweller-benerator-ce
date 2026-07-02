@@ -97,6 +97,27 @@ public class DescriptorConverterTest {
     assertNotNull("role_id constant reference -> <key>", roleKey);
     assertEquals("customer", roleKey.getAttribute("constant"));
 
+    // untyped numeric range: <attribute min="1" max="27" distribution="cumulated"> defaults to int in
+    // Benerator -> type="int" + IntegerGenerator carrying the distribution; no 'distribution' flag left.
+    Element items = first(doc, "key", "name", "number_of_items");
+    assertNotNull("number_of_items mapped as <key>", items);
+    assertEquals("int", items.getAttribute("type"));
+    assertEquals("IntegerGenerator(min=1, max=27, distribution='cumulated')", items.getAttribute("generator"));
+    assertTrue("no 'distribution needs a numeric generator' flag left", report.attention().stream()
+        .noneMatch(it -> it.detail.contains("'distribution'")));
+
+    // selector reference with a single-column select-list -> <variable source/selector> + <key script>.
+    Element refVar = first(doc, "variable", "name", "_ref_order_id");
+    assertNotNull("selector reference emitted as <variable>", refVar);
+    assertEquals("db", refVar.getAttribute("source"));
+    assertTrue(refVar.getAttribute("selector").contains("db_order"));
+    assertEquals("true", refVar.getAttribute("cyclic"));
+    Element refKey = first(doc, "key", "name", "order_id");
+    assertNotNull("selector reference column picked via <key script>", refKey);
+    assertEquals("_ref_order_id.id", refKey.getAttribute("script"));
+    assertTrue("selector reference no longer flagged", report.attention().stream()
+        .noneMatch(it -> it.detail.contains("order_id")));
+
     // <database url="{dbUrl}"> resolves via <setting stage default="dev"> + shop.dev.properties:
     // jdbc:hsqldb:mem -> sqlite, no manual dbms flag left.
     Element db = first(doc, "database", "id", "db");
@@ -211,6 +232,52 @@ public class DescriptorConverterTest {
         report.attention().stream().anyMatch(it -> it.detail.contains("mysteryArg")));
     assertTrue("no whole-call rewrite flag",
         report.attention().stream().noneMatch(it -> it.detail.contains("minAgeYears")));
+  }
+
+  @Test
+  public void dropsMongoIdMapsCountryGeneratorAndNoConsumer() throws Exception {
+    // (a) mongodb-inserter: <generate consumer="mongo"> with <id generator="MongoDBObjectIdGenerator">
+    // -> field dropped (Mongo assigns _id on insert); scalar CountryGenerator -> Country entity fragment.
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/demo/resources/demo/db/mongodb-inserter.ben.xml", report);
+    assertEquals("_id dropped (Mongo assigns it on insert)", null, first(doc, "id", "name", "_id"));
+    assertEquals("_id not emitted as key either", null, first(doc, "key", "name", "_id"));
+    Element countryVar = first(doc, "variable", "name", "_country_country");
+    assertNotNull("CountryGenerator -> <variable entity='Country'>", countryVar);
+    assertEquals("Country", countryVar.getAttribute("entity"));
+    Element countryKey = first(doc, "key", "name", "country");
+    assertNotNull(countryKey);
+    assertEquals("_country_country.iso_code", countryKey.getAttribute("script"));
+    assertTrue("neither generator flagged for manual work", report.attention().stream()
+        .noneMatch(it -> it.detail.contains("MongoDBObjectIdGenerator") || it.detail.contains("CountryGenerator")));
+
+    // (b) NoConsumer maps to the empty target deliberately - informational, not a manual-work flag.
+    MigrationReport mongoReport = new MigrationReport();
+    Document mongoDoc = convert("src/demo/resources/demo/db/mongodb-ObjectId.ben.xml", mongoReport);
+    Element iterate = first(mongoDoc, "iterate", "name", "testben");
+    assertNotNull(iterate);
+    assertEquals("NoConsumer -> empty target", "", iterate.getAttribute("target"));
+    assertTrue("NoConsumer no longer flagged", mongoReport.attention().stream()
+        .noneMatch(it -> "consumer".equals(it.kind)));
+
+    // (c) reference type= is informational (the column type comes from the source in DATAMIMIC).
+    MigrationReport keyReport = new MigrationReport();
+    Document keyDoc = convert("src/demo/resources/demo/db/compositekey.ben.xml", keyReport);
+    Element playlistRef = first(keyDoc, "reference", "name", "PLAYLIST_ID");
+    assertNotNull(playlistRef);
+    assertEquals("playlist", playlistRef.getAttribute("sourceType"));
+    assertTrue("reference 'type' demoted to info", keyReport.attention().stream()
+        .noneMatch(it -> it.detail.contains("'type'")));
+
+    // (d) <database environment= system=>: DATAMIMIC resolves the connection at runtime - no dbms flag.
+    MigrationReport envReport = new MigrationReport();
+    Document envDoc = convert("src/demo/resources/demo/db/dbenv-new.ben.xml", envReport);
+    Element db = first(envDoc, "database", "id", "database");
+    assertNotNull(db);
+    assertEquals("database_new", db.getAttribute("environment"));
+    assertEquals("system passes through (selects the env properties prefix)", "target", db.getAttribute("system"));
+    assertTrue("no manual dbms flag for environment-resolved connections", envReport.attention().stream()
+        .noneMatch(it -> it.detail.contains("set dbms manually")));
   }
 
   private static Document convert(String input, MigrationReport report) throws Exception {

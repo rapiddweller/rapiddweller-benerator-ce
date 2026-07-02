@@ -29,6 +29,9 @@ public class DescriptorConverter {
   /** Setup-time values collected from {@code <setting>} defaults and included {@code .properties} files,
    *  so {@code {dbUrl}}/{@code {ftl:${var}}} placeholders resolve to concrete connection values. */
   private final Map<String, String> settings = new LinkedHashMap<>();
+  /** {@code <mongodb id="X">} store ids, so an {@code <id generator="MongoDBObjectIdGenerator">} inside a
+   *  generate that consumes to one of them can be dropped (MongoDB assigns _id on insert itself). */
+  private final java.util.Set<String> mongoStoreIds = new java.util.LinkedHashSet<>();
   private File sourceDir;
 
   public DescriptorConverter(MigrationReport report) {
@@ -42,6 +45,7 @@ public class DescriptorConverter {
     sourceDir = input.getAbsoluteFile().getParentFile();
     scanBeans(root);
     scanSettings(root);
+    scanMongoStores(root);
     Node converted = convertNode(out, root, "/" + local(root));
     if (converted != null) {
       out.appendChild(converted);
@@ -74,6 +78,18 @@ public class DescriptorConverter {
     for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
       if (c.getNodeType() == Node.ELEMENT_NODE) {
         scanBeans((Element) c);
+      }
+    }
+  }
+
+  /** Record every {@code <mongodb id>} so mongo-consumed {@code MongoDBObjectIdGenerator} ids can be dropped. */
+  private void scanMongoStores(Element el) {
+    if (local(el).equals("mongodb") && el.hasAttribute("id")) {
+      mongoStoreIds.add(el.getAttribute("id"));
+    }
+    for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE) {
+        scanMongoStores((Element) c);
       }
     }
   }
@@ -183,6 +199,23 @@ public class DescriptorConverter {
     if (tag.equals("evaluate")) { // Benerator <evaluate assert="..."> is a post-generation assertion
       return convertEvaluateNode(out, el, path); // assert= -> <variable> + <assert>; no assert= is flagged
     }
+    if ((tag.equals("attribute") || tag.equals("id")) && el.hasAttribute("generator")) {
+      String genClass = beneratorGeneratorClass(el.getAttribute("generator"));
+      // MongoDB assigns _id itself when the document has none, so a MongoDBObjectIdGenerator id on a
+      // mongo-consumed <generate> carries no information - drop the field (verified: CE mongodb_client
+      // insert() passes documents straight to insert_many, pymongo/Mongo fill in _id).
+      if (genClass.equals("MongoDBObjectIdGenerator") && enclosingTargetsMongoStore(el)) {
+        report.info(path, "generator", "MongoDB assigns _id on insert - field '"
+            + el.getAttribute("name") + "' dropped");
+        return null;
+      }
+      // Benerator's scalar CountryGenerator.toString() is the ISO code; DATAMIMIC's Country is an entity
+      // whose iso_code field carries it -> <variable entity="Country"> + <key script=".iso_code">.
+      Node countryFragment = countryGeneratorToEntityFragment(out, el, genClass, path);
+      if (countryFragment != null) {
+        return countryFragment;
+      }
+    }
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
       report.add(path, "element", "<" + tag + "> has no DATAMIMIC equivalent - migrate manually");
@@ -276,7 +309,12 @@ public class DescriptorConverter {
           out.setAttribute("target", tgt);
           targetSet = true;
           if (tgt.isEmpty()) {
-            report.add(path, "consumer", "consumer '" + val + "' -> configure a DATAMIMIC target/exporter manually");
+            if (isNoConsumerOnly(val)) {
+              // NoConsumer deliberately produces no output; DATAMIMIC's empty target is the exact match.
+              report.info(path, "consumer", "consumer 'NoConsumer' -> empty target (capture only)");
+            } else {
+              report.add(path, "consumer", "consumer '" + val + "' -> configure a DATAMIMIC target/exporter manually");
+            }
           }
           break;
         case "source":
@@ -316,7 +354,11 @@ public class DescriptorConverter {
       }
       String tgt = consumerToTarget(spec.substring(spec.lastIndexOf('.') + 1)); // FQN -> simple exporter name
       if (tgt.isEmpty()) {
-        report.add(path, "consumer", "<consumer class='" + spec + "'> -> configure a DATAMIMIC target manually");
+        if (isNoConsumerOnly(spec.substring(spec.lastIndexOf('.') + 1))) {
+          report.info(path, "consumer", "consumer 'NoConsumer' -> empty target (capture only)");
+        } else {
+          report.add(path, "consumer", "<consumer class='" + spec + "'> -> configure a DATAMIMIC target manually");
+        }
       }
       return tgt;
     }
@@ -329,6 +371,14 @@ public class DescriptorConverter {
     boolean hasMode = attrs.containsKey("script") || attrs.containsKey("source") || attrs.containsKey("values")
         || attrs.containsKey("generator") || attrs.containsKey("constant") || attrs.containsKey("pattern");
     String mappedType = mapType(attrs.get("type"), tag, hasMode, path);
+    // Benerator defaults an untyped min/max range to int, so <attribute min="1" max="27"> without a type
+    // takes the same native-range/numericGenerator path as an explicit type="int" (integer literals only -
+    // an untyped date or float bound keeps the existing behavior).
+    if (mappedType == null && !attrs.containsKey("type")
+        && (attrs.containsKey("min") || attrs.containsKey("max"))
+        && isIntegerLiteralOrAbsent(attrs.get("min")) && isIntegerLiteralOrAbsent(attrs.get("max"))) {
+      mappedType = "int";
+    }
 
     // min/max/granularity are native DATAMIMIC <key> attrs now, so they pass through untouched. Only fold
     // into a numeric generator when a non-random distribution must ride along (native range has no
@@ -457,6 +507,82 @@ public class DescriptorConverter {
     out.setAttribute("entity", entityExpr);
     report.info(path, "generator", "<variable generator='" + beneratorGeneratorClass(spec)
         + "'> -> entity='" + entityExpr + "'");
+  }
+
+  /**
+   * A bare scalar {@code <attribute generator="CountryGenerator">} (Benerator emits the ISO code) -&gt;
+   * {@code <variable name="_<name>_country" entity="Country"/>} + {@code <key name script="..._country.iso_code"/>}
+   * (iso_code verified against CE's Country schema in country_service.py). Only fires for the plain
+   * corpus shape (name/type/generator[/dataset], direct child of a generate/iterate, no generator args) -
+   * anything richer keeps the honest flag. Returns null when not applicable.
+   */
+  private Node countryGeneratorToEntityFragment(Document out, Element src, String genClass, String path) {
+    if (!genClass.equals("CountryGenerator") || !src.getAttribute("generator").trim().equals("CountryGenerator")) {
+      return null;
+    }
+    Node parent = src.getParentNode();
+    if (!(parent instanceof Element)
+        || !(local(parent).equals("generate") || local(parent).equals("iterate"))) {
+      return null; // a <variable> is only valid directly under <generate>/<iterate>
+    }
+    Map<String, String> attrs = attributes(src);
+    for (String key : attrs.keySet()) {
+      if (!key.equals("name") && !key.equals("type") && !key.equals("generator") && !key.equals("dataset")) {
+        return null; // unexpected extra attribute: keep the existing flagging instead of guessing
+      }
+    }
+    String name = attrs.get("name");
+    Element variable = out.createElement("variable");
+    variable.setAttribute("name", "_" + name + "_country");
+    variable.setAttribute("entity", "Country");
+    if (attrs.containsKey("dataset")) {
+      variable.setAttribute("dataset", attrs.get("dataset"));
+    }
+    Element key = out.createElement("key");
+    key.setAttribute("name", name);
+    key.setAttribute("script", "_" + name + "_country.iso_code");
+    report.info(path, "generator", "<" + local(src) + " generator='CountryGenerator'> -> <variable entity='Country'>"
+        + " + <key script='_" + name + "_country.iso_code'> (ISO code, as in Benerator)");
+    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
+    fragment.appendChild(variable);
+    fragment.appendChild(key);
+    return fragment;
+  }
+
+  /**
+   * True when the nearest enclosing {@code <generate>}/{@code <iterate>} consumes to a {@code <mongodb id>}
+   * store - via the consumer attribute or a nested {@code <consumer>} element, bare ({@code mongo}) or in
+   * CRUD form ({@code mongo.inserter('coll')}), possibly in a comma-separated combination.
+   */
+  private boolean enclosingTargetsMongoStore(Element field) {
+    Node p = field.getParentNode();
+    while (p instanceof Element && !local(p).equals("generate") && !local(p).equals("iterate")) {
+      p = p.getParentNode();
+    }
+    if (!(p instanceof Element)) {
+      return false;
+    }
+    Element gen = (Element) p;
+    java.util.List<String> specs = new java.util.ArrayList<>();
+    if (gen.hasAttribute("consumer")) {
+      specs.addAll(ArgSplitter.splitTopLevel(gen.getAttribute("consumer")));
+    }
+    for (Node c = gen.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE && local((Element) c).equals("consumer")) {
+        Element cons = (Element) c;
+        specs.add(cons.hasAttribute("ref") ? cons.getAttribute("ref") : cons.getAttribute("class"));
+      }
+    }
+    for (String spec : specs) {
+      if (mongoStoreIds.contains(spec)) {
+        return true;
+      }
+      java.util.regex.Matcher crud = CRUD_CONSUMER.matcher(spec);
+      if (crud.matches() && mongoStoreIds.contains(crud.group(1))) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** Strip one pair of surrounding quotes: {@code 'DE'} / {@code "DE"} -&gt; {@code DE}. */
@@ -619,6 +745,13 @@ public class DescriptorConverter {
     }
 
     if (!attrs.containsKey("targetType")) {
+      // A selector-only reference whose select-list is one bare column maps losslessly: DATAMIMIC's
+      // <variable source selector> yields the query's row dicts, and a <key script="var.col"> picks the
+      // column (verified against CE's VariableModel: source/selector/cyclic/distribution are native).
+      Node selectorFragment = selectorReferenceToVariableFragment(out, attrs, path);
+      if (selectorFragment != null) {
+        return selectorFragment;
+      }
       report.add(path, "reference",
           "reference '" + name + "' has no targetType -> migrate manually (DATAMIMIC references a table/column)");
       return out.createComment(
@@ -653,13 +786,80 @@ public class DescriptorConverter {
     if (attrs.containsKey("cyclic")) {
       ref.setAttribute("cyclic", attrs.get("cyclic"));
     }
-    for (String drop : new String[] {"selector", "type", "nullQuota", "mode", "offset"}) {
+    // The FK column type comes from the referenced source column in DATAMIMIC, so dropping type= loses
+    // (almost) nothing - informational, not manual work.
+    if (attrs.containsKey("type")) {
+      report.info(path, "reference", "reference '" + name + "' 'type' - column type comes from the source - dropped");
+    }
+    for (String drop : new String[] {"selector", "nullQuota", "mode", "offset"}) {
       if (attrs.containsKey(drop)) {
         report.add(path, "reference", "reference '" + name + "' '" + drop + "' not supported by DATAMIMIC reference - dropped");
       }
     }
     return ref;
   }
+
+  /**
+   * {@code <reference name source selector="select COL from ..." [cyclic] [distribution]>} (no targetType)
+   * -&gt; {@code <variable name="_ref_<name>" source selector [cyclic] [distribution]/>} +
+   * {@code <key name script="_ref_<name>.<COL>"/>}. Only fires when the select-list is exactly one bare
+   * column name (no comma/parenthesis/alias/quote) so the script access is unambiguous; anything else
+   * returns null and keeps the honest flag.
+   */
+  private Node selectorReferenceToVariableFragment(Document out, Map<String, String> attrs, String path) {
+    String name = attrs.get("name");
+    String selector = attrs.get("selector");
+    String source = attrs.get("source");
+    if (name == null || selector == null || source == null) {
+      return null;
+    }
+    java.util.regex.Matcher m = SINGLE_COLUMN_SELECT.matcher(selector);
+    if (!m.matches()) {
+      return null;
+    }
+    String column = m.group(1);
+    String varName = "_ref_" + name;
+    Element variable = out.createElement("variable");
+    variable.setAttribute("name", varName);
+    variable.setAttribute("source", source);
+    variable.setAttribute("selector", selector);
+    if (attrs.containsKey("cyclic")) {
+      variable.setAttribute("cyclic", attrs.get("cyclic"));
+    }
+    String distribution = attrs.get("distribution");
+    if (distribution != null) {
+      if (VocabularyMap.KNOWN_DISTRIBUTIONS.contains(distribution)) {
+        variable.setAttribute("distribution", distribution);
+      } else {
+        report.add(path, "reference", "reference '" + name + "' distribution '" + distribution
+            + "' not supported by DATAMIMIC - dropped");
+      }
+    }
+    Element key = out.createElement("key");
+    key.setAttribute("name", name);
+    key.setAttribute("script", varName + "." + column);
+    if (attrs.containsKey("type")) {
+      report.info(path, "reference", "reference '" + name + "' 'type' - column type comes from the source - dropped");
+    }
+    for (Map.Entry<String, String> a : attrs.entrySet()) {
+      String k = a.getKey();
+      if (!k.equals("name") && !k.equals("source") && !k.equals("selector") && !k.equals("cyclic")
+          && !k.equals("distribution") && !k.equals("type")) {
+        report.add(path, "reference", "reference '" + name + "' '" + k
+            + "' not supported by DATAMIMIC reference - dropped");
+      }
+    }
+    report.info(path, "reference", "selector reference '" + name + "' -> <variable source/selector> + <key script='"
+        + varName + "." + column + "'>");
+    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
+    fragment.appendChild(variable);
+    fragment.appendChild(key);
+    return fragment;
+  }
+
+  /** {@code select COL from ...} with exactly one bare identifier in the select-list, case-insensitive. */
+  private static final java.util.regex.Pattern SINGLE_COLUMN_SELECT = java.util.regex.Pattern.compile(
+      "(?is)\\s*select\\s+([A-Za-z_][A-Za-z0-9_]*)\\s+from\\s+.+");
 
   private void convertDatabaseAttributes(Element src, Element out, String path) {
     Map<String, String> attrs = new LinkedHashMap<>(attributes(src));
@@ -668,7 +868,7 @@ public class DescriptorConverter {
       report.info(path, "database", "database '" + attrs.get("id")
           + "' placeholders resolved from <setting> defaults / included .properties");
     }
-    for (String keep : new String[] {"id", "host", "port", "database", "schema", "environment", "user", "password"}) {
+    for (String keep : new String[] {"id", "host", "port", "database", "schema", "environment", "system", "user", "password"}) {
       if (attrs.containsKey(keep)) {
         out.setAttribute(keep, attrs.get(keep));
       }
@@ -692,6 +892,11 @@ public class DescriptorConverter {
     String dbms = deriveDbms(attrs.get("driver"), attrs.get("url"));
     if (dbms != null) {
       out.setAttribute("dbms", dbms);
+    } else if (attrs.containsKey("environment")) {
+      // DATAMIMIC resolves environment=/system= from conf/<environment>.env.properties at runtime
+      // (verified: CE parser_util.fulfill_credentials), so nothing needs to be set manually.
+      report.info(path, "database", "database '" + attrs.get("id")
+          + "' connection resolved from environment '" + attrs.get("environment") + "' at runtime");
     } else {
       report.add(path, "database", "database '" + attrs.get("id") + "' -> set dbms manually (could not derive from driver/url)");
     }
@@ -737,6 +942,11 @@ public class DescriptorConverter {
     } else {
       out.setAttribute("constant", value);
     }
+  }
+
+  /** True when the value is absent or a plain integer literal ({@code 27}, {@code -3}). */
+  private static boolean isIntegerLiteralOrAbsent(String s) {
+    return s == null || s.matches("[-+]?\\d+");
   }
 
   /** True for a numeric literal incl. scientific/signed forms ({@code 1e5}, {@code +5}) — parse, don't pattern-match. */
@@ -931,6 +1141,20 @@ public class DescriptorConverter {
         + "'> - DATAMIMIC supports inline python/bash/sql; rewrite this snippet or use a .py file (uri=)");
     return out.createComment(" TODO(datamimic-migration): inline <execute type='" + benType
         + "'> - rewrite as python/bash/sql or move to a .py file, see MIGRATION_PLAYBOOK.md#execute-js ");
+  }
+
+  /** True when every comma-separated consumer entry is exactly {@code NoConsumer} (no output on purpose). */
+  private static boolean isNoConsumerOnly(String consumer) {
+    java.util.List<String> parts = ArgSplitter.splitTopLevel(consumer);
+    if (parts.isEmpty()) {
+      return false;
+    }
+    for (String p : parts) {
+      if (!p.equals("NoConsumer")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /** A Benerator CRUD consumer expression: {@code db.updater()}, {@code mongo.inserter('coll')}, ... */
