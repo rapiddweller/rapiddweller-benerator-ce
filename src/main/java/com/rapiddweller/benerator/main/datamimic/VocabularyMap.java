@@ -178,14 +178,17 @@ public final class VocabularyMap {
    * not {@code get_year}). Names that just need snake_case are handled by the fallback, not listed here.
    */
   public static final Map<String, String> FAKER_METHOD_RENAME = Map.of(
-      "getYear", "year");
+      "getYear", "year",
+      "zipCode", "zipcode", // python faker has zipcode(), not zip_code()
+      "cityName", "city");
 
   /**
    * Benerator DataFaker methods from Java-datafaker-only providers (fiction/sport/hobby/medical/commerce)
    * with NO Python Faker equivalent - flagged so the user routes them to a DATAMIMIC entity or a value list.
    */
   public static final Set<String> FAKER_UNAVAILABLE_METHODS = Set.of(
-      "specie", "quotes", "coaches", "activity", "productName", "surgery", "people");
+      "specie", "quotes", "coaches", "players", "activity", "productName", "promotionCode",
+      "surgery", "people");
 
   /** Distribution names native to both products. */
   public static final Set<String> KNOWN_DISTRIBUTIONS = Set.of("random", "cumulated", "ordered");

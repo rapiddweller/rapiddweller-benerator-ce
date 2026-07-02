@@ -117,6 +117,18 @@ public final class EnvironmentMigrator {
         out.put(key, val); // .db.user/.password/.schema and non-db keys pass through
       }
     }
+    // SQLite has no schemas: an h2/hsqldb-mem env migrated to sqlite must not keep schema=PUBLIC
+    // (DATAMIMIC would qualify every table as PUBLIC.<t> and fail on PUBLIC.sqlite_master).
+    java.util.List<String> sqliteSchemaKeys = new java.util.ArrayList<>();
+    for (Map.Entry<String, String> e : out.entrySet()) {
+      if (e.getKey().endsWith(".db.dbms") && e.getValue().equals("sqlite")) {
+        String id = e.getKey().substring(0, e.getKey().length() - ".db.dbms".length());
+        sqliteSchemaKeys.add(id + ".db.schema");
+      }
+    }
+    for (String schemaKey : sqliteSchemaKeys) {
+      out.remove(schemaKey);
+    }
     return out;
   }
 }
