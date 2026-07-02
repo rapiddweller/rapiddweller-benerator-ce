@@ -147,7 +147,11 @@ public class DescriptorConverter {
       return convertReferenceNode(out, el, path); // may become <reference> or <key> (constant/script)
     }
     if (tag.equals("if")) {
-      if (isSetupChild(path)) { // DATAMIMIC <condition> is per-<generate>; a setup-level <if><error> is an assertion
+      Node assertion = errorOnlyIfToAssert(out, el, path); // <if test><error>MSG</error></if> is the assertion idiom
+      if (assertion != null) {
+        return assertion;
+      }
+      if (isSetupChild(path)) { // DATAMIMIC <condition> is per-<generate>; a setup-level <if> has no home
         report.add(path, "condition", "setup-level <if>/<error> assertion has no DATAMIMIC equivalent - dropped "
             + "(use <execute type='python'>raise ...</execute> to keep it)");
         return out.createComment(" TODO(datamimic-migration): setup-level <if> assertion dropped - review ");
@@ -158,9 +162,7 @@ public class DescriptorConverter {
       return convertExecuteNode(out, el, path); // uri-based; inline code is flagged
     }
     if (tag.equals("evaluate")) { // Benerator <evaluate assert="..."> is a post-generation assertion
-      report.add(path, "evaluate", "<evaluate assert> has no DATAMIMIC equivalent - dropped "
-          + "(use <execute type='sql'> for a side effect, or verify the count in a test)");
-      return out.createComment(" TODO(datamimic-migration): <evaluate> assertion dropped - review ");
+      return convertEvaluateNode(out, el, path); // assert= -> <variable> + <assert>; no assert= is flagged
     }
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
@@ -616,7 +618,21 @@ public class DescriptorConverter {
     if ("true".equals(attrs.get("unique"))) {
       ref.setAttribute("unique", "true");
     }
-    for (String drop : new String[] {"selector", "distribution", "cyclic", "type", "nullQuota", "mode", "offset"}) {
+    // distribution (random/ordered/cumulated) and cyclic are native DATAMIMIC <reference> attributes now.
+    // A Benerator distribution expression ('new WeightedNumbers(...)') is still a gap -> flagged.
+    String distribution = attrs.get("distribution");
+    if (distribution != null) {
+      if (VocabularyMap.KNOWN_DISTRIBUTIONS.contains(distribution)) {
+        ref.setAttribute("distribution", distribution);
+      } else {
+        report.add(path, "reference", "reference '" + name + "' distribution '" + distribution
+            + "' not supported by DATAMIMIC reference - dropped");
+      }
+    }
+    if (attrs.containsKey("cyclic")) {
+      ref.setAttribute("cyclic", attrs.get("cyclic"));
+    }
+    for (String drop : new String[] {"selector", "type", "nullQuota", "mode", "offset"}) {
       if (attrs.containsKey(drop)) {
         report.add(path, "reference", "reference '" + name + "' '" + drop + "' not supported by DATAMIMIC reference - dropped");
       }
@@ -731,6 +747,78 @@ public class DescriptorConverter {
   }
 
   /**
+   * The Benerator assertion idiom {@code <if test="X"><error>MSG</error></if>} (the {@code <if>} body is
+   * NOTHING but a single {@code <error>}) -&gt; DATAMIMIC {@code <assert condition="not (X)" message="MSG"/>}
+   * (an {@code <assert>} fails when its condition is NOT true, so the test is negated). {@code {ftl:...}}
+   * templating in the message is kept verbatim - same policy as all scripts. Returns null when the
+   * {@code <if>} is not this idiom (then/else bodies convert via {@link #convertIfNode} or stay flagged).
+   */
+  private Node errorOnlyIfToAssert(Document out, Element src, String path) {
+    Element error = null;
+    for (Node c = src.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE) {
+        if (error != null || !local((Element) c).equals("error")) {
+          return null; // body is not exactly one <error> -> not the assertion idiom
+        }
+        error = (Element) c;
+      }
+    }
+    if (error == null) {
+      return null;
+    }
+    Element assertEl = out.createElement("assert");
+    String test = attributes(src).get("test");
+    if (test != null) {
+      assertEl.setAttribute("condition", "not (" + test + ")");
+    } else {
+      report.add(path, "if", "<if> without a test condition - review");
+    }
+    String message = error.getTextContent().trim();
+    if (!message.isEmpty()) {
+      assertEl.setAttribute("message", message);
+    }
+    report.info(path, "assert", "assertion converted to <assert> - verify the expression evaluates in DATAMIMIC");
+    return assertEl;
+  }
+
+  /**
+   * Benerator {@code <evaluate assert="A" [target="db"]>BODY</evaluate>} -&gt; two DATAMIMIC elements
+   * (returned as a fragment that dissolves into the parent): a {@code <variable name="result">} that
+   * captures the body - {@code source=target selector=BODY} for SQL against a store, {@code script=BODY}
+   * otherwise - followed by {@code <assert condition="A"/>}. An {@code <evaluate>} without {@code assert}
+   * stays flagged (it is a side effect, not an assertion).
+   */
+  private Node convertEvaluateNode(Document out, Element src, String path) {
+    Map<String, String> attrs = attributes(src);
+    String assertion = attrs.get("assert");
+    if (assertion == null) {
+      report.add(path, "evaluate", "<evaluate> without assert has no DATAMIMIC equivalent - dropped "
+          + "(use <execute type='sql'> for a side effect, or verify the count in a test)");
+      return out.createComment(" TODO(datamimic-migration): <evaluate> dropped - review ");
+    }
+    Element variable = out.createElement("variable");
+    variable.setAttribute("name", "result");
+    String body = src.getTextContent().trim();
+    String target = attrs.get("target");
+    if (target != null) {
+      variable.setAttribute("source", target);
+      variable.setAttribute("selector", body);
+      report.info(path, "assert", "assertion converted to <variable source> + <assert> - "
+          + "verify the expression evaluates in DATAMIMIC");
+    } else {
+      variable.setAttribute("script", body);
+      report.info(path, "assert", "assertion converted to <variable script> + <assert> - "
+          + "verify the script and condition evaluate in DATAMIMIC");
+    }
+    Element assertEl = out.createElement("assert");
+    assertEl.setAttribute("condition", assertion);
+    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
+    fragment.appendChild(variable);
+    fragment.appendChild(assertEl);
+    return fragment;
+  }
+
+  /**
    * Benerator {@code <if test><then>..</then><else>..</else></if>} -&gt; DATAMIMIC
    * {@code <condition><if condition="..">..</if><else>..</else></condition>} (the {@code <then>}
    * wrapper is unwrapped; a bare child of {@code <if>} goes straight into the DATAMIMIC {@code <if>}).
@@ -823,19 +911,31 @@ public class DescriptorConverter {
         + "'> - rewrite as python/bash/sql or move to a .py file ");
   }
 
+  /** A Benerator CRUD consumer expression: {@code db.updater()}, {@code mongo.inserter('coll')}, ... */
+  private static final java.util.regex.Pattern CRUD_CONSUMER = java.util.regex.Pattern.compile(
+      "([A-Za-z_][A-Za-z0-9_]*)\\.(" + String.join("|", VocabularyMap.CRUD_CONSUMER_OP.keySet()) + ")\\(.*\\)");
+
   /**
    * Benerator consumer -&gt; DATAMIMIC target: a known exporter maps by name (ConsoleExporter, CSV, ...),
-   * a bare store/db id ("db", "mem") passes through, and comma-separated consumers map element-wise.
-   * Unmappable entries (a bean id, a {@code db.updater()} expression) drop out; the caller flags an empty result.
+   * a bare store/db id ("db", "mem") passes through, a CRUD expression maps to DATAMIMIC's CRUD target
+   * suffix ({@code db.updater()} -&gt; {@code db.update}, {@code inserter} -&gt; the plain store = insert),
+   * and comma-separated consumers map element-wise. Unmappable entries (a bean id) drop out; the caller
+   * flags an empty result.
    */
   private static String consumerToTarget(String consumer) {
     java.util.List<String> targets = new java.util.ArrayList<>();
     for (String c : ArgSplitter.splitTopLevel(consumer)) {
       String mapped = VocabularyMap.CONSUMER_TARGET.get(c);
+      java.util.regex.Matcher crud = CRUD_CONSUMER.matcher(c);
       if (mapped != null) {
         if (!mapped.isEmpty()) {
           targets.add(mapped);
         }
+      } else if (crud.matches()) {
+        String store = crud.group(1);
+        // updater -> update, deleter -> delete, upserter -> upsert; inserter is DATAMIMIC's default (plain store)
+        String op = VocabularyMap.CRUD_CONSUMER_OP.get(crud.group(2));
+        targets.add(op.isEmpty() ? store : store + "." + op);
       } else if (c.matches("[A-Za-z_][A-Za-z0-9_]*") && !c.endsWith("Exporter") && !c.endsWith("Consumer")) {
         targets.add(c); // a bare store/db id
       }

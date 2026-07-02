@@ -1,0 +1,13 @@
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <database id="db" url="jdbc:postgresql://localhost:5432/shop" driver="org.postgresql.Driver"/>
+    <generate type="db_order" count="10" consumer="db.updater()">
+        <reference name="category_id" targetType="db_category" source="db"
+                   distribution="cumulated" cyclic="true"/>
+    </generate>
+    <iterate type="products" source="mongo" consumer="mongo.inserter('insertedtable')"/>
+    <if test="db_order.counter != 10">
+        <error>{ftl: ${db_order.counter} items}</error>
+    </if>
+    <evaluate assert="result == 10" target="db">select count(*) from db_order</evaluate>
+    <evaluate assert="result == 10">mem.entityCount('db_order')</evaluate>
+</setup>

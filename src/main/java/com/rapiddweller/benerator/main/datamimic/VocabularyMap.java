@@ -66,6 +66,17 @@ public final class VocabularyMap {
       Map.entry("XMLEntityExporter", "XML"),
       Map.entry("NoConsumer", "")); // no output -> empty target (capture only)
 
+  /**
+   * Benerator CRUD consumer method -&gt; DATAMIMIC target suffix: {@code db.updater()} becomes target
+   * {@code db.update} (PK-based, SQL and mongodb). {@code inserter} maps to the empty suffix - a plain
+   * store target already means insert.
+   */
+  public static final Map<String, String> CRUD_CONSUMER_OP = Map.of(
+      "updater", "update",
+      "inserter", "",
+      "deleter", "delete",
+      "upserter", "upsert");
+
   /** Benerator simple type -&gt; DATAMIMIC type. Absent types (date, entity, binary, ...) are flagged. */
   public static final Map<String, String> TYPE = Map.ofEntries(
       Map.entry("int", "int"),

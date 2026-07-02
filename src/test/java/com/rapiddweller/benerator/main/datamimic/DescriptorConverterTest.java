@@ -136,6 +136,47 @@ public class DescriptorConverterTest {
   }
 
   @Test
+  public void convertsAssertionsReferencesAndCrudConsumers() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/assertions.ben.xml", report);
+
+    // (a) the assertion idiom <if test="X"><error>MSG</error></if> -> <assert condition="not (X)" message>
+    Element ifAssert = first(doc, "assert", "condition", "not (db_order.counter != 10)");
+    assertNotNull("if+error idiom converted to <assert>", ifAssert);
+    assertEquals("{ftl: ${db_order.counter} items}", ifAssert.getAttribute("message")); // ftl kept verbatim
+    assertFalse("error-only <if> no longer dropped", report.format().contains("setup-level <if>"));
+
+    // (b) <evaluate assert target="db">SQL</evaluate> -> <variable source selector> + <assert>
+    Element sqlVar = first(doc, "variable", "selector", "select count(*) from db_order");
+    assertNotNull("evaluate SQL body -> <variable selector>", sqlVar);
+    assertEquals("result", sqlVar.getAttribute("name"));
+    assertEquals("db", sqlVar.getAttribute("source"));
+    assertEquals("the <assert> follows its <variable>", "assert", nextElement(sqlVar).getTagName());
+    assertEquals("result == 10", nextElement(sqlVar).getAttribute("condition"));
+
+    // <evaluate assert>EXPR</evaluate> without target -> <variable script> + <assert>
+    Element scriptVar = first(doc, "variable", "script", "mem.entityCount('db_order')");
+    assertNotNull("evaluate script body -> <variable script>", scriptVar);
+    assertEquals("result", scriptVar.getAttribute("name"));
+    assertEquals("assert", nextElement(scriptVar).getTagName());
+    assertFalse("<evaluate assert> is converted, not flagged", report.format().contains("<evaluate"));
+
+    // (c) reference distribution/cyclic pass through as native DATAMIMIC attributes now
+    Element ref = first(doc, "reference", "name", "category_id");
+    assertNotNull(ref);
+    assertEquals("cumulated", ref.getAttribute("distribution"));
+    assertEquals("true", ref.getAttribute("cyclic"));
+    assertTrue("distribution/cyclic no longer flagged", report.attention().stream()
+        .noneMatch(it -> it.detail.contains("distribution") || it.detail.contains("cyclic")));
+
+    // (d) CRUD consumers -> DATAMIMIC CRUD targets (inserter = plain store: insert is the default)
+    assertEquals("db.update", first(doc, "generate", "name", "db_order").getAttribute("target"));
+    assertEquals("mongo", first(doc, "iterate", "name", "products").getAttribute("target"));
+    assertTrue("no consumer flag left", report.attention().stream()
+        .noneMatch(it -> "consumer".equals(it.kind)));
+  }
+
+  @Test
   public void convertsCompositeGeneratorBraceArgsToEntityModifiers() throws Exception {
     // Real corpus case (csv demo): age bounds have dedicated entity attributes, the XML-level
     // dataset/locale attrs pass through - no manual-rewrite flag left.
@@ -177,6 +218,15 @@ public class DescriptorConverterTest {
     out.deleteOnExit();
     new DescriptorConverter(report).convert(new File(input), out);
     return XMLUtil.parse(out.getAbsolutePath());
+  }
+
+  /** The next element sibling, skipping the whitespace text nodes of the re-parsed output. */
+  private static Element nextElement(Element el) {
+    org.w3c.dom.Node n = el.getNextSibling();
+    while (n != null && n.getNodeType() != org.w3c.dom.Node.ELEMENT_NODE) {
+      n = n.getNextSibling();
+    }
+    return (Element) n;
   }
 
   private static Element first(Document doc, String tag, String attr, String value) {
