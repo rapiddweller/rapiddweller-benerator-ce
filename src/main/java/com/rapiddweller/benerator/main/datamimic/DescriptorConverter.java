@@ -320,13 +320,7 @@ public class DescriptorConverter {
 
   /** Add {@code dataset='X'} to a generator string: {@code AddressGenerator} -&gt; {@code AddressGenerator(dataset='X')}. */
   private static String foldDatasetIntoGenerator(String generator, String dataset) {
-    String arg = "dataset='" + dataset + "'";
-    if (!generator.contains("(")) {
-      return generator + "(" + arg + ")";
-    }
-    int close = generator.lastIndexOf(')');
-    String inner = generator.substring(generator.indexOf('(') + 1, close).trim();
-    return generator.substring(0, generator.indexOf('(') + 1) + (inner.isEmpty() ? arg : inner + ", " + arg) + ")";
+    return ArgSplitter.appendArg(generator, "dataset='" + dataset + "'");
   }
 
   private String mapType(String beneratorType, String tag, boolean hasMode, String path) {
@@ -373,9 +367,7 @@ public class DescriptorConverter {
   /** The bare class name of a Benerator generator ("new PersonGenerator{...}" -&gt; "PersonGenerator"). */
   private static String beneratorGeneratorClass(String generator) {
     String g = generator.startsWith("new ") ? generator.substring(4).trim() : generator.trim();
-    int paren = g.indexOf('(');
-    int brace = g.indexOf('{');
-    int cut = paren < 0 ? brace : (brace < 0 ? paren : Math.min(paren, brace));
+    int cut = ArgSplitter.callStart(g);
     return (cut >= 0 ? g.substring(0, cut) : g).trim();
   }
 
@@ -385,7 +377,7 @@ public class DescriptorConverter {
       return false;
     }
     String expr = spec.startsWith("new ") ? spec.substring(4).trim() : spec.trim();
-    int paren = expr.indexOf('(');
+    int paren = ArgSplitter.callStart(expr);
     String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
     if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
       return true;
@@ -402,7 +394,7 @@ public class DescriptorConverter {
       report.add(path, "generator", "generator '" + name + "' uses Benerator {k=v} syntax - rewrite as Class(k=v) manually");
       return expr;
     }
-    int paren = expr.indexOf('(');
+    int paren = ArgSplitter.callStart(expr);
     String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
     String args = paren >= 0 ? expr.substring(paren) : "";
     if (cls.equals("RandomDoubleGenerator") || cls.equals("RandomFloatGenerator")) {
@@ -424,7 +416,7 @@ public class DescriptorConverter {
   /** Benerator converter -&gt; DATAMIMIC: strip "new ", rename (CaseConverter -&gt; UpperCase), flag the unknown. */
   private String mapConverter(String value, String path) {
     String expr = value.startsWith("new ") ? value.substring(4).trim() : value.trim();
-    int paren = expr.indexOf('(');
+    int paren = ArgSplitter.callStart(expr);
     String cls = (paren >= 0 ? expr.substring(0, paren) : expr).trim();
     String args = paren >= 0 ? expr.substring(paren) : "";
     // Benerator SHA*/MD5 hash converters expand to DATAMIMIC's parameterised Hash(algorithm, format).
@@ -441,11 +433,11 @@ public class DescriptorConverter {
 
   /** {@code new RandomDoubleGenerator(min, max, decimals)} -&gt; {@code FloatGenerator(min=, max=, granularity=)}. */
   private String randomDoubleToFloat(String args, String path) {
-    String[] parts = args.replaceAll("^\\(|\\)$", "").split(",");
-    if (parts.length >= 2) {
-      String g = "FloatGenerator(min=" + parts[0].trim() + ", max=" + parts[1].trim();
-      if (parts.length >= 3) {
-        g += ", granularity=1e-" + parts[2].trim();
+    java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
+    if (parts.size() >= 2) {
+      String g = "FloatGenerator(min=" + parts.get(0) + ", max=" + parts.get(1);
+      if (parts.size() >= 3) {
+        g += ", granularity=1e-" + parts.get(2);
       }
       return g + ")";
     }
@@ -571,10 +563,24 @@ public class DescriptorConverter {
       report.add(path, "attribute", "<" + local(src) + "> without a value (source/ref form) - review");
     } else if (value.startsWith("{") && value.endsWith("}")) {
       out.setAttribute("script", value.substring(1, value.length() - 1));
-    } else if (value.matches("-?\\d+(\\.\\d+)?")) {
+    } else if (isNumeric(value)) {
       out.setAttribute("script", value); // numeric literal -> evaluated to a number, not a string
     } else {
       out.setAttribute("constant", value);
+    }
+  }
+
+  /** True for a numeric literal incl. scientific/signed forms ({@code 1e5}, {@code +5}) — parse, don't pattern-match. */
+  private static boolean isNumeric(String s) {
+    char c = s.isEmpty() ? 0 : s.charAt(0);
+    if (!(Character.isDigit(c) || c == '-' || c == '+' || c == '.')) {
+      return false; // keeps parseDouble's "NaN"/"Infinity" words out
+    }
+    try {
+      Double.parseDouble(s);
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
     }
   }
 
@@ -692,11 +698,7 @@ public class DescriptorConverter {
    */
   private static String consumerToTarget(String consumer) {
     java.util.List<String> targets = new java.util.ArrayList<>();
-    for (String raw : consumer.split(",")) {
-      String c = raw.trim();
-      if (c.isEmpty()) {
-        continue;
-      }
+    for (String c : ArgSplitter.splitTopLevel(consumer)) {
       String mapped = VocabularyMap.CONSUMER_TARGET.get(c);
       if (mapped != null) {
         if (!mapped.isEmpty()) {
