@@ -308,6 +308,20 @@ public class DescriptorConverterTest {
     assertTrue("execute uri placeholder resolved to a .sql path", anyResolved);
   }
 
+  @Test
+  public void bareDateTypeBecomesDateTimeGenerator() throws Exception {
+    // <attribute name="birth_date" type="date"/> has no generation mode; Benerator's built-in date
+    // generator maps to DATAMIMIC's DateTimeGenerator (else an invalid mode-less <key> is emitted).
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/demo/resources/demo/file/create_xml.ben.xml", report);
+    Element birth = first(doc, "key", "name", "birth_date");
+    assertNotNull(birth);
+    assertEquals("DateTimeGenerator()", birth.getAttribute("generator"));
+    assertEquals("no leftover date type", "", birth.getAttribute("type"));
+    assertTrue("not flagged as a missing generation mode",
+        report.attention().stream().noneMatch(it -> it.detail.contains("birth_date")));
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();

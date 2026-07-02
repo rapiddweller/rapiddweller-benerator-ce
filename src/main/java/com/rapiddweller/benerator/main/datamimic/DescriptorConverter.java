@@ -370,6 +370,24 @@ public class DescriptorConverter {
     // Does another attribute already produce the value? Then an unmapped type= is cosmetic, not a gap.
     boolean hasMode = attrs.containsKey("script") || attrs.containsKey("source") || attrs.containsKey("values")
         || attrs.containsKey("generator") || attrs.containsKey("constant") || attrs.containsKey("pattern");
+    // Benerator gives type="date" a built-in default date generator; DATAMIMIC has no 'date' type but has
+    // DateTimeGenerator. A bare <attribute type="date"> (no other mode) becomes generator="DateTimeGenerator(...)"
+    // (honoring min/max) instead of an invalid mode-less <key>.
+    String benType = attrs.get("type");
+    if (!hasMode && ("date".equals(benType) || "datetime".equals(benType) || "timestamp".equals(benType))) {
+      StringBuilder g = new StringBuilder("DateTimeGenerator(");
+      if (attrs.containsKey("min")) {
+        g.append("min='").append(attrs.get("min")).append("'");
+      }
+      if (attrs.containsKey("max")) {
+        g.append(g.length() > "DateTimeGenerator(".length() ? ", " : "").append("max='").append(attrs.get("max")).append("'");
+      }
+      out.setAttribute("generator", g.append(")").toString());
+      report.info(path, "type", "type='" + benType + "' -> DateTimeGenerator (DATAMIMIC has no date type)");
+      hasMode = true;
+      attrs = new LinkedHashMap<>(attrs);
+      attrs.remove("type"); // consumed - do not let mapType flag it
+    }
     String mappedType = mapType(attrs.get("type"), tag, hasMode, path);
     // Benerator defaults an untyped min/max range to int, so <attribute min="1" max="27"> without a type
     // takes the same native-range/numericGenerator path as an explicit type="int" (integer literals only -
