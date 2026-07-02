@@ -92,7 +92,8 @@ public final class VocabularyMap {
       Map.entry("big_integer", "int"),
       Map.entry("string", "string"),
       Map.entry("boolean", "bool"),
-      Map.entry("bool", "bool"));
+      Map.entry("bool", "bool"),
+      Map.entry("binary", "binary")); // native since DM PR #170 (random bytes, minLength/maxLength)
 
   /** DATAMIMIC numeric types that use an IntegerGenerator for a min/max/granularity range. */
   public static final Set<String> INTEGER_TYPES = Set.of("int");
