@@ -152,7 +152,7 @@
         <scriptengine_freemarker.version>2.3.32</scriptengine_freemarker.version>
         <scriptengine_graalvm.version>22.3.1</scriptengine_graalvm.version>
         <test_junit.version>4.13.2</test_junit.version>
-        <dependency_javassist.version>3.29.2-GA</dependency_javassist.version>
+        <dependency_javassist.version>3.32.0-GA</dependency_javassist.version>
     </properties>
 
     <dependencies>
