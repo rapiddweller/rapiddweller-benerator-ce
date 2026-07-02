@@ -342,6 +342,31 @@ public class DescriptorConverterTest {
         DescriptorConverter.rewriteScript("x ? 1 : y ? 2 : 3"));
   }
 
+  @Test
+  public void resolvesExporterBeanToTargetIncludingXls() throws Exception {
+    // <bean id="xml" class="...XMLEntityExporter"> + consumer="xml" -> target="XML", bean removed.
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/demo/resources/demo/file/create_xml.ben.xml", report);
+    Element gen = first(doc, "generate", "name", "customers");
+    assertNotNull(gen);
+    assertEquals("XML", gen.getAttribute("target"));
+    assertEquals("exporter bean removed", 0, doc.getElementsByTagName("bean").getLength());
+    assertTrue("exporter bean not flagged as unsupported",
+        report.attention().stream().noneMatch(it -> it.detail.contains("<bean>")));
+
+    // Benerator XLSEntityExporter -> DATAMIMIC's new XLSX target.
+    MigrationReport xlsReport = new MigrationReport();
+    Document xlsDoc = convert("src/demo/resources/demo/file/create_xls.ben.xml", xlsReport);
+    boolean anyXlsx = false;
+    NodeList gens = xlsDoc.getElementsByTagName("generate");
+    for (int i = 0; i < gens.getLength(); i++) {
+      if ("XLSX".equals(((Element) gens.item(i)).getAttribute("target"))) {
+        anyXlsx = true;
+      }
+    }
+    assertTrue("XLSEntityExporter -> target=XLSX", anyXlsx);
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();

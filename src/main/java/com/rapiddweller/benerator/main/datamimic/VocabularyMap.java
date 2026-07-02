@@ -64,6 +64,8 @@ public final class VocabularyMap {
       Map.entry("CSVEntityExporter", "CSV"),
       Map.entry("JSONEntityExporter", "JSON"),
       Map.entry("XMLEntityExporter", "XML"),
+      Map.entry("XLSEntityExporter", "XLSX"),
+      Map.entry("XLSXEntityExporter", "XLSX"),
       Map.entry("NoConsumer", "")); // no output -> empty target (capture only)
 
   /**

@@ -26,6 +26,8 @@ public class DescriptorConverter {
   /** {@code <bean id="X" spec="new Generator(...)">} definitions, so a {@code generator="X"} reference can
    *  be resolved to the bean's actual generator expression instead of being flagged as unknown. */
   private final Map<String, String> beanSpecs = new LinkedHashMap<>();
+  /** {@code <bean id="xml" class="...XMLEntityExporter">} -&gt; DATAMIMIC target ("XML"), so consumer="xml" resolves. */
+  private final Map<String, String> beanExporters = new LinkedHashMap<>();
   /** Setup-time values collected from {@code <setting>} defaults and included {@code .properties} files,
    *  so {@code {dbUrl}}/{@code {ftl:${var}}} placeholders resolve to concrete connection values. */
   private final Map<String, String> settings = new LinkedHashMap<>();
@@ -72,8 +74,22 @@ public class DescriptorConverter {
 
   /** Record every {@code <bean id spec>} so generator references to it can be inlined. */
   private void scanBeans(Element el) {
-    if (local(el).equals("bean") && el.hasAttribute("id") && el.hasAttribute("spec")) {
-      beanSpecs.put(el.getAttribute("id"), el.getAttribute("spec"));
+    if (local(el).equals("bean") && el.hasAttribute("id")) {
+      String id = el.getAttribute("id");
+      if (el.hasAttribute("spec")) {
+        beanSpecs.put(id, el.getAttribute("spec"));
+      }
+      // A bean whose class/spec is an *EntityExporter (XMLEntityExporter, CSVEntityExporter, ...) is an
+      // exporter definition; map its id to the DATAMIMIC target so consumer="id" resolves to it.
+      String def = el.hasAttribute("class") ? el.getAttribute("class") : el.getAttribute("spec");
+      if (def != null && !def.isEmpty()) {
+        String simple = beneratorGeneratorClass(def); // strips "new ", args, and the FQN below
+        simple = simple.substring(simple.lastIndexOf('.') + 1);
+        String target = VocabularyMap.CONSUMER_TARGET.get(simple);
+        if (target != null) {
+          beanExporters.put(id, target);
+        }
+      }
     }
     for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
       if (c.getNodeType() == Node.ELEMENT_NODE) {
@@ -171,6 +187,12 @@ public class DescriptorConverter {
       // A <bean spec="new Generator(...)"> is inlined at its generator="id" references, so the bean is gone.
       if (isKnownGeneratorSpec(el.getAttribute("spec"))) {
         report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> generator inlined into its references - removed");
+        return null;
+      }
+      // An exporter bean (<bean id="xml" class="XMLEntityExporter">) is folded into consumer/target - removed.
+      if (beanExporters.containsKey(el.getAttribute("id"))) {
+        report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> exporter -> target='"
+            + beanExporters.get(el.getAttribute("id")) + "' - removed");
         return null;
       }
       report.add(path, "element", "<bean> has no DATAMIMIC equivalent - migrate manually");
@@ -1364,10 +1386,18 @@ public class DescriptorConverter {
    * and comma-separated consumers map element-wise. Unmappable entries (a bean id) drop out; the caller
    * flags an empty result.
    */
-  private static String consumerToTarget(String consumer) {
+  private String consumerToTarget(String consumer) {
     java.util.List<String> targets = new java.util.ArrayList<>();
     for (String c : ArgSplitter.splitTopLevel(consumer)) {
       String mapped = VocabularyMap.CONSUMER_TARGET.get(c);
+      if (mapped == null) {
+        mapped = beanExporters.get(c); // consumer="xml" where <bean id="xml"> is an exporter
+      }
+      if (mapped == null && (c.startsWith("new ") || c.endsWith(")"))) {
+        // inline exporter: consumer="new XLSEntityExporter('out.xlsx')" -> strip "new "/args to the class name
+        String simple = beneratorGeneratorClass(c);
+        mapped = VocabularyMap.CONSUMER_TARGET.get(simple.substring(simple.lastIndexOf('.') + 1));
+      }
       java.util.regex.Matcher crud = CRUD_CONSUMER.matcher(c);
       if (mapped != null) {
         if (!mapped.isEmpty()) {
