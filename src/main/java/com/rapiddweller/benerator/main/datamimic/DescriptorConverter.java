@@ -387,11 +387,16 @@ public class DescriptorConverter {
     if (local(src).equals("iterate") && storeIds.contains(src2) && src.hasAttribute("type")) {
       out.setAttribute("type", src.getAttribute("type"));
     }
-    // A CRUD consumer with a collection arg (mongo.inserter('out')) names the OUTPUT collection; DATAMIMIC's
-    // store exporter writes to the product name, so that arg becomes name (else it re-inserts into the source).
+    // A store CRUD consumer with a collection arg (mongo.inserter('out')) names the OUTPUT collection;
+    // DATAMIMIC's store exporter writes to the product name, so that arg becomes name (else it re-inserts
+    // into the source). Only store.<crudop>('coll') qualifies - NOT a Java exporter ctor like
+    // CSVEntityExporter('out.csv'), which must not rename the generate.
     java.util.regex.Matcher crudColl = CRUD_TARGET_COLLECTION.matcher(src.getAttribute("consumer"));
-    if (crudColl.find()) {
-      out.setAttribute("name", crudColl.group(1));
+    while (crudColl.find()) {
+      if (storeIds.contains(crudColl.group(1))) {
+        out.setAttribute("name", crudColl.group(3));
+        break;
+      }
     }
   }
 
@@ -443,9 +448,10 @@ public class DescriptorConverter {
     }
   }
 
-  /** A CRUD consumer's explicit target collection: {@code mongo.inserter('out')} -&gt; {@code out}. */
-  private static final java.util.regex.Pattern CRUD_TARGET_COLLECTION =
-      java.util.regex.Pattern.compile("\\.\\w+\\('([^']+)'\\)");
+  /** A store CRUD consumer's explicit target collection: {@code mongo.inserter('out')} -&gt; store 'mongo',
+   *  op 'inserter', collection 'out'. Restricted to the CRUD ops so a Java exporter ctor does not match. */
+  private static final java.util.regex.Pattern CRUD_TARGET_COLLECTION = java.util.regex.Pattern.compile(
+      "(\\w+)\\.(" + String.join("|", VocabularyMap.CRUD_CONSUMER_OP.keySet()) + ")\\('([^']+)'\\)");
 
   private void convertFieldAttributes(Element src, Element out, String tag, String path) {
     Map<String, String> attrs = attributes(src);
