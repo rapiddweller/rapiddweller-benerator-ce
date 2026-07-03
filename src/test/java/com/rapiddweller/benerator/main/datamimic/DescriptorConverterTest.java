@@ -75,16 +75,23 @@ public class DescriptorConverterTest {
     new DescriptorConverter(report).convert(in, out);
     Document doc = XMLUtil.parse(out.getAbsolutePath());
 
-    // <iterate source=.. consumer="db"> stays <iterate source=.. target="db"> (clarity kept)
-    boolean iterateKept = false;
+    // The multi-table dbunit dataset expands into one <iterate type=table source=table.json target=db>
+    // per table; no single shop.dbunit.xml iterate remains.
+    boolean dbunitLeft = false;
+    Element categorySeed = null;
     NodeList iters = doc.getElementsByTagName("iterate");
     for (int i = 0; i < iters.getLength(); i++) {
       Element it = (Element) iters.item(i);
-      if ("shop.dbunit.xml".equals(it.getAttribute("source")) && "db".equals(it.getAttribute("target"))) {
-        iterateKept = true;
+      if (it.getAttribute("source").endsWith(".dbunit.xml")) {
+        dbunitLeft = true;
+      }
+      if ("db_category".equals(it.getAttribute("type")) && "db".equals(it.getAttribute("target"))) {
+        categorySeed = it;
       }
     }
-    assertTrue("iterate stays <iterate> with source + target=db", iterateKept);
+    assertFalse("dbunit dataset is expanded, not left as a single iterate", dbunitLeft);
+    assertNotNull("dbunit seed table -> <iterate type='db_category' source=*.json>", categorySeed);
+    assertEquals("shop.db_category.json", categorySeed.getAttribute("source"));
 
     // FK reference: Benerator targetType -> DATAMIMIC sourceType, with a defaulted sourceKey.
     Element catRef = first(doc, "reference", "name", "category_id");

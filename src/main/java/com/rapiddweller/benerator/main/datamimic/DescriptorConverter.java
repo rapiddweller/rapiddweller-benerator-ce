@@ -10,6 +10,7 @@ import org.w3c.dom.Node;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +33,8 @@ public class DescriptorConverter {
   /** all store ids (&lt;database&gt;/&lt;mongodb&gt;), so an &lt;iterate type=coll source=store&gt; keeps its
    *  source collection/table in {@code type} (DATAMIMIC needs it to read from a store). */
   private final java.util.Set<String> storeIds = new java.util.LinkedHashSet<>();
+  private File descriptorDir;
+  private File outputDir;
   /** environment name -> (system prefix -> "db"|"mongo") collected from <database>/<mongodb> elements,
    *  so the env-properties migration knows each system's type and the flat-format fallback prefix. */
   private final Map<String, Map<String, String>> envSystems = new LinkedHashMap<>();
@@ -48,7 +51,9 @@ public class DescriptorConverter {
     Document src = XMLUtil.parseWithLocators(input.getAbsolutePath());
     Document out = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     Element root = src.getDocumentElement();
-    settings = new SettingsResolver(input.getAbsoluteFile().getParentFile());
+    descriptorDir = input.getAbsoluteFile().getParentFile();
+    outputDir = output.getAbsoluteFile().getParentFile();
+    settings = new SettingsResolver(descriptorDir);
     scanBeans(root);
     settings.scanSettings(root);
     scanMongoStores(root);
@@ -262,6 +267,13 @@ public class DescriptorConverter {
         }
         break;
     }
+    // A dbunit dataset source expands into one <iterate> per table (see expandDbunitDataset).
+    if (tag.equals("iterate")) {
+      Node dbunitFragment = expandDbunitDataset(out, el, result, path);
+      if (dbunitFragment != null) {
+        return dbunitFragment;
+      }
+    }
     // children (elements, text, comments) in source order
     for (Node child = el.getFirstChild(); child != null; child = child.getNextSibling()) {
       if (child.getNodeType() == Node.ELEMENT_NODE) {
@@ -381,10 +393,53 @@ public class DescriptorConverter {
     if (crudColl.find()) {
       out.setAttribute("name", crudColl.group(1));
     }
-    if (src2.endsWith(".dbunit.xml")) {
-      // A dbunit dataset holds MANY tables in one file; DATAMIMIC's xml source reads one record list.
-      report.add(path, "source", "dbunit dataset '" + src2 + "' - split into per-table sources manually "
-          + "(DATAMIMIC has no dbunit importer)");
+  }
+
+  /**
+   * A Benerator {@code <iterate source="X.dbunit.xml" consumer="db"/>} reads a multi-table dbunit
+   * dataset and inserts each row into its table. DATAMIMIC reads one record list per source, so this
+   * expands the single iterate into one {@code <iterate source="X.<table>.json" type="<table>">} per
+   * table (in the dataset's dependency order), writing the split rows as JSON next to the descriptor.
+   * Returns null when this is not a dbunit iterate or the dataset file cannot be located (then the
+   * caller keeps the single iterate and it is flagged).
+   */
+  private Node expandDbunitDataset(Document out, Element src, Element iterate, String path) {
+    String source = settings.resolve(src.getAttribute("source")); // resolve {ftl:${database}/...}
+    if (!source.endsWith(".dbunit.xml")) {
+      return null;
+    }
+    File dataset = new File(descriptorDir, source);
+    if (!dataset.isFile()) {
+      report.add(path, "source", "dbunit dataset '" + source + "' could not be located to split "
+          + "(dynamic path?) - split into per-table sources manually");
+      return null;
+    }
+    String dir = source.contains("/") ? source.substring(0, source.lastIndexOf('/') + 1) : "";
+    String base = source.substring(dir.length(), source.length() - ".dbunit.xml".length());
+    try {
+      Map<String, List<Map<String, String>>> tables = DbunitSplitter.split(dataset);
+      String target = iterate.getAttribute("target");
+      org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
+      for (Map.Entry<String, List<Map<String, String>>> table : tables.entrySet()) {
+        String jsonName = dir + base + "." + table.getKey() + ".json";
+        File jsonFile = new File(outputDir, jsonName);
+        jsonFile.getParentFile().mkdirs();
+        DbunitSplitter.writeTableJson(table.getValue(), jsonFile);
+        Element ti = out.createElement("iterate");
+        ti.setAttribute("name", table.getKey());
+        ti.setAttribute("type", table.getKey());
+        ti.setAttribute("source", jsonName);
+        if (!target.isEmpty()) {
+          ti.setAttribute("target", target);
+        }
+        fragment.appendChild(ti);
+      }
+      report.info(path, "source", "dbunit dataset '" + source + "' expanded into " + tables.size()
+          + " per-table <iterate> + JSON sources");
+      return fragment;
+    } catch (Exception e) {
+      report.add(path, "source", "dbunit dataset '" + source + "' could not be split: " + e.getMessage());
+      return null;
     }
   }
 
