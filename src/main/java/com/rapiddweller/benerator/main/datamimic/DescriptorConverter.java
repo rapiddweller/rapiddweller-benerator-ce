@@ -29,6 +29,9 @@ public class DescriptorConverter {
   /** {@code <mongodb id="X">} store ids, so an {@code <id generator="MongoDBObjectIdGenerator">} inside a
    *  generate that consumes to one of them can be dropped (MongoDB assigns _id on insert itself). */
   private final java.util.Set<String> mongoStoreIds = new java.util.LinkedHashSet<>();
+  /** all store ids (&lt;database&gt;/&lt;mongodb&gt;), so an &lt;iterate type=coll source=store&gt; keeps its
+   *  source collection/table in {@code type} (DATAMIMIC needs it to read from a store). */
+  private final java.util.Set<String> storeIds = new java.util.LinkedHashSet<>();
   /** environment name -> (system prefix -> "db"|"mongo") collected from <database>/<mongodb> elements,
    *  so the env-properties migration knows each system's type and the flat-format fallback prefix. */
   private final Map<String, Map<String, String>> envSystems = new LinkedHashMap<>();
@@ -105,6 +108,9 @@ public class DescriptorConverter {
     String tag = local(el);
     if (tag.equals("mongodb") && el.hasAttribute("id")) {
       mongoStoreIds.add(el.getAttribute("id"));
+    }
+    if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("id")) {
+      storeIds.add(el.getAttribute("id"));
     }
     if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("environment")) {
       // DATAMIMIC resolves <system>.<systemType>.* from conf/<environment>.env.properties;
@@ -236,6 +242,14 @@ public class DescriptorConverter {
         break; // no attributes to map; text content is copied below
       default: // attribute / id / part / variable
         convertFieldAttributes(el, result, tag, path);
+        // A Benerator <part> GENERATES a nested structure; DATAMIMIC's <nestedKey> needs type="dict"
+        // (or "list") to know it builds the structure - without it, DATAMIMIC assumes enrich-mode and
+        // looks the name up in the parent product (KeyError). List when the part repeats (count/source).
+        if (tag.equals("part") && !result.hasAttribute("type") && !result.hasAttribute("source")
+            && !result.hasAttribute("script")) {
+          boolean many = el.hasAttribute("count") || el.hasAttribute("source") || el.hasAttribute("minCount");
+          result.setAttribute("type", many ? "list" : "dict");
+        }
         // A field that ends up with no generation mode at all (Benerator derives its type from DB
         // metadata) would fail DATAMIMIC's parser and kill the whole file - flag it as a comment.
         if ((tag.equals("attribute") || tag.equals("id"))
@@ -356,12 +370,27 @@ public class DescriptorConverter {
       report.info(path, "attribute", "nameless iterate -> name='" + derived + "' derived from the source");
     }
     String src2 = out.getAttribute("source");
+    // A store-reading <iterate type="coll" source="store"> needs its SOURCE collection/table in type
+    // (DATAMIMIC reads a store by type/selector); the type->name mapping alone loses it.
+    if (local(src).equals("iterate") && storeIds.contains(src2) && src.hasAttribute("type")) {
+      out.setAttribute("type", src.getAttribute("type"));
+    }
+    // A CRUD consumer with a collection arg (mongo.inserter('out')) names the OUTPUT collection; DATAMIMIC's
+    // store exporter writes to the product name, so that arg becomes name (else it re-inserts into the source).
+    java.util.regex.Matcher crudColl = CRUD_TARGET_COLLECTION.matcher(src.getAttribute("consumer"));
+    if (crudColl.find()) {
+      out.setAttribute("name", crudColl.group(1));
+    }
     if (src2.endsWith(".dbunit.xml")) {
       // A dbunit dataset holds MANY tables in one file; DATAMIMIC's xml source reads one record list.
       report.add(path, "source", "dbunit dataset '" + src2 + "' - split into per-table sources manually "
           + "(DATAMIMIC has no dbunit importer)");
     }
   }
+
+  /** A CRUD consumer's explicit target collection: {@code mongo.inserter('out')} -&gt; {@code out}. */
+  private static final java.util.regex.Pattern CRUD_TARGET_COLLECTION =
+      java.util.regex.Pattern.compile("\\.\\w+\\('([^']+)'\\)");
 
   private void convertFieldAttributes(Element src, Element out, String tag, String path) {
     Map<String, String> attrs = attributes(src);

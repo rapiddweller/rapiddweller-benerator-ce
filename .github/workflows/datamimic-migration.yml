@@ -209,11 +209,11 @@ jobs:
           mvn --batch-mode compile -Djacoco.skip=true
           mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
 
-      - name: Convert the mongo round-trip corpus (descriptor + env)
+      - name: Convert the mongo round-trip corpus (real demo db/mongodb-inserter + env)
         run: |
           java -cp "target/classes:$(cat cp.txt)" \
             com.rapiddweller.benerator.main.datamimic.DatamimicConverter "$CORPUS" converted-mongo
-          echo "----- migrated env (segment .db. -> .mongo.) -----"; cat converted-mongo/conf/conf.env.properties
+          echo "----- migrated env (segment .db. -> .mongo.) -----"; cat converted-mongo/conf/environment.env.properties
 
       - name: Checkout DATAMIMIC CE (development)
         uses: actions/checkout@v5
@@ -232,15 +232,20 @@ jobs:
       - name: Install DATAMIMIC CE
         run: pip install ./datamimic-ce
 
-      - name: Run the converted descriptor against mongodb
-        run: datamimic run converted-mongo/products.datamimic.xml
+      - name: Run the converted real demo against mongodb
+        run: datamimic run converted-mongo/mongodb-inserter.datamimic.xml
 
       - name: Verify DATAMIMIC wrote the documents to the real mongo
+        # The real demo generates 1000 records into 'testben2', then iterates them back and re-inserts
+        # into 'insertedtable' - a genuine generate + store-read round-trip, not a toy case.
         # pymongo ships with DATAMIMIC CE, so no extra client install is needed on the runner.
         run: |
           python - <<'PY'
           from pymongo import MongoClient
-          n = MongoClient("mongodb://localhost:27017").testdb.products.count_documents({})
-          print(f"documents in testdb.products: {n}")
-          assert n == 20, f"expected 20 documents written by DATAMIMIC, got {n}"
+          db = MongoClient("mongodb://localhost:27017").testdb
+          gen = db.testben2.count_documents({})
+          reinserted = db.insertedtable.count_documents({})
+          print(f"testben2={gen}  insertedtable={reinserted}")
+          assert gen == 1000, f"expected 1000 generated docs, got {gen}"
+          assert reinserted == 1000, f"expected 1000 re-inserted docs, got {reinserted}"
           PY

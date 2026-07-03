@@ -1,7 +1,0 @@
-<setup xmlns="https://www.benerator.de/schema/3.0.0">
-    <mongodb id="db" environment="conf" system="db"/>
-    <generate type="products" count="20" consumer="db">
-        <attribute name="sku" pattern="[A-Z]{3}-[0-9]{4}"/>
-        <attribute name="price" type="int" min="1" max="9999"/>
-    </generate>
-</setup>
