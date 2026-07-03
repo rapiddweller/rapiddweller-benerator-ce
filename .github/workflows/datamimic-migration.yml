@@ -101,6 +101,9 @@ jobs:
           for f in $(find demos-tree -name '*.datamimic.xml' | sort); do
             total=$((total + 1))
             rel="${f#demos-tree/}"
+            # Isolate each run: sibling demos in the same dir reuse SQLite db names (source.sqlite),
+            # so a leftover file from a prior demo makes CREATE TABLE fail with "already exists".
+            rm -rf "$(dirname "$f")/db"
             if out=$(cd "$(dirname "$f")" && timeout 60 datamimic run "$(basename "$f")" 2>&1); then
               ran=$((ran + 1)); echo "$rel | yes"
             else
