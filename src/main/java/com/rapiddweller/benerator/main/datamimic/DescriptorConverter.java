@@ -548,12 +548,11 @@ public class DescriptorConverter {
    * anything richer keeps the honest flag. Returns null when not applicable.
    */
   private Node countryGeneratorToEntityFragment(Document out, Element src, String genClass, String path) {
-    if (!genClass.equals("CountryGenerator") || !src.getAttribute("generator").trim().equals("CountryGenerator")) {
+    // Only the bare CountryGenerator (no ctor args) maps cleanly; CountryGenerator(dataset=..) keeps flagging.
+    if (!genClass.equals("CountryGenerator") || ArgSplitter.callStart(src.getAttribute("generator")) >= 0) {
       return null;
     }
-    Node parent = src.getParentNode();
-    if (!(parent instanceof Element)
-        || !(local(parent).equals("generate") || local(parent).equals("iterate"))) {
+    if (!isGenerateOrIterate(src.getParentNode())) {
       return null; // a <variable> is only valid directly under <generate>/<iterate>
     }
     Map<String, String> attrs = attributes(src);
@@ -574,10 +573,7 @@ public class DescriptorConverter {
     key.setAttribute("script", "_" + name + "_country.iso_code");
     report.info(path, "generator", "<" + local(src) + " generator='CountryGenerator'> -> <variable entity='Country'>"
         + " + <key script='_" + name + "_country.iso_code'> (ISO code, as in Benerator)");
-    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
-    fragment.appendChild(variable);
-    fragment.appendChild(key);
-    return fragment;
+    return DomUtil.fragmentOf(out, variable, key);
   }
 
   /**
@@ -587,7 +583,7 @@ public class DescriptorConverter {
    */
   private boolean enclosingTargetsMongoStore(Element field) {
     Node p = field.getParentNode();
-    while (p instanceof Element && !local(p).equals("generate") && !local(p).equals("iterate")) {
+    while (p instanceof Element && !isGenerateOrIterate(p)) {
       p = p.getParentNode();
     }
     if (!(p instanceof Element)) {
@@ -620,8 +616,7 @@ public class DescriptorConverter {
   private static boolean enclosingHasSource(Element field) {
     Node p = field.getParentNode();
     while (p instanceof Element) {
-      String tag = local(p);
-      if (tag.equals("generate") || tag.equals("iterate")) {
+      if (isGenerateOrIterate(p)) {
         return ((Element) p).hasAttribute("source");
       }
       p = p.getParentNode();
@@ -694,6 +689,15 @@ public class DescriptorConverter {
       out.removeAttribute("schema");
       report.info(path, "database", "dropped schema= for SQLite (it has no schemas)");
     }
+  }
+
+  /** True when {@code n} is a Benerator data container - a {@code <generate>} or {@code <iterate>}. */
+  private static boolean isGenerateOrIterate(Node n) {
+    if (!(n instanceof Element)) {
+      return false;
+    }
+    String tag = local((Element) n);
+    return tag.equals("generate") || tag.equals("iterate");
   }
 
   /** True when {@code path} makes the element a direct child of a {@code <setup>} (e.g. "/setup/if"). */

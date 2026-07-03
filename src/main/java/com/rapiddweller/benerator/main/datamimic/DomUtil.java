@@ -3,6 +3,7 @@
 package com.rapiddweller.benerator.main.datamimic;
 
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -36,5 +37,14 @@ final class DomUtil {
 
   static String local(Node node) {
     return node.getLocalName() != null ? node.getLocalName() : node.getNodeName();
+  }
+
+  /** A DocumentFragment holding {@code children} in order - used to expand one source element into several. */
+  static Node fragmentOf(Document out, Node... children) {
+    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
+    for (Node child : children) {
+      fragment.appendChild(child);
+    }
+    return fragment;
   }
 }

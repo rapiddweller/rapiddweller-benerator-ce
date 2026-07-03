@@ -155,9 +155,6 @@ class ReferenceConverter {
     }
     report.info(path, "reference", "selector reference '" + name + "' -> <variable source/selector> + <key script='"
         + varName + "." + column + "'>");
-    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
-    fragment.appendChild(variable);
-    fragment.appendChild(key);
-    return fragment;
+    return DomUtil.fragmentOf(out, variable, key);
   }
 }

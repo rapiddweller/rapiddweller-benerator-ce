@@ -96,9 +96,6 @@ class AssertionConverter {
     }
     Element assertEl = out.createElement("assert");
     assertEl.setAttribute("condition", assertion);
-    org.w3c.dom.DocumentFragment fragment = out.createDocumentFragment();
-    fragment.appendChild(variable);
-    fragment.appendChild(assertEl);
-    return fragment;
+    return DomUtil.fragmentOf(out, variable, assertEl);
   }
 }
