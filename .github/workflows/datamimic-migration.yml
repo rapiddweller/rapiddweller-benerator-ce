@@ -180,3 +180,67 @@ jobs:
           n=$(PGPASSWORD=testpass psql -h localhost -U testuser -d testdb -tAc "SELECT count(*) FROM public.customers")
           echo "rows in postgres.public.customers: $n"
           [ "$n" -eq 20 ] || { echo "expected 20 rows written by DATAMIMIC"; exit 1; }
+
+  mongo-round-trip:
+    name: Mongo round-trip — Benerator -> converter -> DATAMIMIC -> mongodb
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping:1}).ok'"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      CORPUS: src/test/resources/com/rapiddweller/benerator/main/datamimic/mongo_roundtrip
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: |
+          mvn --batch-mode compile -Djacoco.skip=true
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+
+      - name: Convert the mongo round-trip corpus (descriptor + env)
+        run: |
+          java -cp "target/classes:$(cat cp.txt)" \
+            com.rapiddweller.benerator.main.datamimic.DatamimicConverter "$CORPUS" converted-mongo
+          echo "----- migrated env (segment .db. -> .mongo.) -----"; cat converted-mongo/conf/conf.env.properties
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: Run the converted descriptor against mongodb
+        run: datamimic run converted-mongo/products.datamimic.xml
+
+      - name: Verify DATAMIMIC wrote the documents to the real mongo
+        # pymongo ships with DATAMIMIC CE, so no extra client install is needed on the runner.
+        run: |
+          python - <<'PY'
+          from pymongo import MongoClient
+          n = MongoClient("mongodb://localhost:27017").testdb.products.count_documents({})
+          print(f"documents in testdb.products: {n}")
+          assert n == 20, f"expected 20 documents written by DATAMIMIC, got {n}"
+          PY
