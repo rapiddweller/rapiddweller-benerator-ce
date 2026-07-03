@@ -220,7 +220,9 @@ public class DescriptorConverter {
         copyAttributes(el, result, "id"); // DATAMIMIC memstore is just an id
         break;
       case "include":
-        copyAttributes(el, result, "uri"); // DATAMIMIC include is uri-based
+        // Benerator FTL include path {ftl:${var}/...} -> DATAMIMIC f-string {var}/... (dynamic include,
+        // resolved at runtime from <setting> values - same as EE's dynamic <include>).
+        result.setAttribute("uri", ftlUriToFString(el.getAttribute("uri")));
         break;
       case "while":
         convertWhileAttributes(el, result, path); // <while test> -> <while condition>
@@ -698,6 +700,16 @@ public class DescriptorConverter {
   private static boolean isSetupChild(String path) {
     int slash = path.lastIndexOf('/');
     return slash > 0 && path.substring(0, slash).endsWith("/setup");
+  }
+
+  /**
+   * Benerator FTL include path -&gt; DATAMIMIC dynamic-include f-string: {@code {ftl:${database}/x.properties}}
+   * becomes {@code {database}/x.properties}. DATAMIMIC resolves {@code {var}} against the setup context at
+   * runtime (see dynamic {@code <include>}). A non-FTL uri passes through unchanged.
+   */
+  private static String ftlUriToFString(String uri) {
+    String body = ExpressionMapper.ftlBody(uri);
+    return body == null ? uri : ExpressionMapper.ftlToFString(body);
   }
 
   private void convertDatabaseAttributes(Element src, Element out, String path) {
