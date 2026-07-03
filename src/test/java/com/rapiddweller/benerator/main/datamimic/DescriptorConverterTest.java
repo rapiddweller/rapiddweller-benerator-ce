@@ -162,10 +162,15 @@ public class DescriptorConverterTest {
     Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/assertions.ben.xml", report);
 
     // (a) the assertion idiom <if test="X"><error>MSG</error></if> -> <assert condition="not (X)" message>
-    Element ifAssert = first(doc, "assert", "condition", "not (db_order.counter != 10)");
+    Element ifAssert = first(doc, "assert", "condition", "not (expected_total != 10)");
     assertNotNull("if+error idiom converted to <assert>", ifAssert);
-    assertEquals("{ftl: ${db_order.counter} items}", ifAssert.getAttribute("message")); // ftl kept verbatim
+    assertEquals("{ftl: ${expected_total} items}", ifAssert.getAttribute("message")); // ftl kept verbatim
     assertFalse("error-only <if> no longer dropped", report.format().contains("setup-level <if>"));
+    // a Benerator runtime-counter check has no DATAMIMIC scope: flagged, no runtime-dead assert emitted
+    assertEquals("counter check not emitted as an assert", null,
+        first(doc, "assert", "condition", "not (db_order.counter != 10)"));
+    assertTrue("counter check flagged for manual verification", report.attention().stream()
+        .anyMatch(it -> it.detail.contains("runtime counter")));
 
     // (b) <evaluate assert target="db">SQL</evaluate> -> <variable source selector> + <assert>
     Element sqlVar = first(doc, "variable", "selector", "select count(*) from db_order");

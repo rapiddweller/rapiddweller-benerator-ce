@@ -480,7 +480,11 @@ public class DescriptorConverter {
           }
           break;
         default:
-          if (VocabularyMap.FIELD_ATTR_KEEP.contains(key)) {
+          if (key.equals("cyclic") && !tag.equals("variable")) {
+            // DATAMIMIC's cyclic lives on <variable>/<generate>/<reference>, not on <key>.
+            report.add(path, "attribute", "'cyclic' on <" + tag + "> is not supported by DATAMIMIC <key> - "
+                + "use a <variable source ... cyclic> + <key script> instead");
+          } else if (VocabularyMap.FIELD_ATTR_KEEP.contains(key)) {
             out.setAttribute(key, val);
           } else {
             report.add(path, "attribute", "<" + tag + "> '" + key + "' not mapped - dropped");

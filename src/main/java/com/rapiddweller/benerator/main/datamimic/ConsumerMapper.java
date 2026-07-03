@@ -46,6 +46,11 @@ class ConsumerMapper {
   String consumerToTarget(String consumer) {
     java.util.List<String> targets = new java.util.ArrayList<>();
     for (String c : ArgSplitter.splitTopLevel(consumer)) {
+      if (c.equals("Auto")) {
+        // Benerator's Auto consumer picks an exporter from context - no DATAMIMIC equivalent;
+        // skipping it makes the caller's empty-target flag fire (configure a target manually).
+        continue;
+      }
       String mapped = VocabularyMap.CONSUMER_TARGET.get(c);
       if (mapped == null) {
         mapped = beanExporters.get(c); // consumer="xml" where <bean id="xml"> is an exporter

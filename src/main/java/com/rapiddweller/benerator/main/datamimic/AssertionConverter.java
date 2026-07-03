@@ -40,8 +40,17 @@ class AssertionConverter {
     if (error == null) {
       return null;
     }
-    Element assertEl = out.createElement("assert");
     String test = DomUtil.attributes(src).get("test");
+    if (test != null && test.matches(".*\\b\\w+\\.counter\\b.*")) {
+      // Benerator's row-count check reads the generate's runtime counter after the run
+      // (X.counter) - that scope does not exist in DATAMIMIC; a converted <assert> would
+      // always fail. Flag it instead of emitting a runtime-dead assertion.
+      report.add(path, "assert", "row-count check '" + test + "' reads a Benerator runtime counter - "
+          + "verify the count in a test or via <execute type='sql'> instead");
+      return out.createComment(" TODO(datamimic-migration): row-count check '" + test
+          + "' has no DATAMIMIC runtime counter - verify externally ");
+    }
+    Element assertEl = out.createElement("assert");
     if (test != null) {
       assertEl.setAttribute("condition", "not (" + test + ")");
     } else {

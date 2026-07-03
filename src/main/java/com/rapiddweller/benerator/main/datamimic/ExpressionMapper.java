@@ -45,6 +45,11 @@ class ExpressionMapper {
       return mapDataFaker(args, path);
     }
     String mapped = VocabularyMap.GENERATOR_RENAME.getOrDefault(cls, cls);
+    if (mapped.equals("CompanyNameGenerator") && !args.isEmpty() && !args.equals("()")) {
+      // DATAMIMIC's CompanyNameGenerator takes no constructor args (no dataset variants).
+      report.info(path, "generator", "CompanyNameGenerator args " + args + " dropped (no DATAMIMIC equivalent)");
+      args = "";
+    }
     if (!VocabularyMap.KNOWN_GENERATORS.contains(mapped)) {
       report.add(path, "generator", "generator '" + name + "' not known to DATAMIMIC - verify/replace manually");
     }
