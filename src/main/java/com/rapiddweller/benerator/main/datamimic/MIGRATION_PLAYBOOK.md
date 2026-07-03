@@ -5,10 +5,20 @@ Manual-migration recipes for every construct the converter deliberately does not
 `migration-summary.md` written after a batch run link into the section anchors below — keep the
 headings stable.
 
-DATAMIMIC elements that DO exist and carry most of the load here: `<assert>`, `<condition>`/`<if>`
-inside `<generate>`, `<while condition maxIterations>`, `<variable source/selector>`,
-`<reference distribution/cyclic>`, `target="db.update/db.upsert/db.delete"`, `<memstore>`, and the
-CSV/JSON/XML/Console/Log exporters.
+DATAMIMIC elements that DO exist and carry most of the load here:
+
+- `<assert condition message>` — valid both at setup level (checked once) and inside `<generate>`
+  (per record). Replaces the `<if><error>` guard idiom and setup-level sanity checks.
+- `<condition>`/`<if>`/`<else-if>`/`<else>` and `<while condition maxIterations>` — inside `<generate>`.
+- `<variable source/selector>`, `<reference distribution="random|ordered|cumulated" cyclic>`.
+- Scope aliases in `script=`: `this.` (current record), `parent.`, `root.` — so a nested field can
+  reach the record it belongs to (essential where a bare sibling name does not resolve).
+- Targets: `target="db.update/db.upsert/db.delete"` (PK-based, SQL + MongoDB), `<memstore>`, and the
+  `CSV`, `JSON`, `XML`, **`XLSX`**, `TXT`, `ConsoleExporter`, `LogExporter` exporters.
+- `type="binary"` (random bytes, `minLength`/`maxLength`, `mimeType` for MIME-sniffable stubs),
+  the `Substring(start[, end])` converter, and `<execute script="...">` (run a dynamically
+  assembled statement — pairs with `<variable string="...__var__...">`).
+- Sources: `.csv`, `.json`, `.xml`, **`.xlsx`** all readable via `source=`.
 
 ## bean
 
@@ -43,26 +53,32 @@ position, full stdlib), as `type="sql"` when the JS only issued SQL through a st
 ## setup-if
 
 A setup-level `<if test>` with a non-`<error>` body is Benerator control flow outside any
-generation loop. (The `<if test><error>MSG</error></if>` assertion idiom converts automatically to
-`<assert>`.) DATAMIMIC's `<condition>`/`<if>` lives inside `<generate>` only. Either move the
-conditional into the `<generate>` it guards, or port a guard-style check to
-`<execute type="python">` with a `raise`, or drop it when it only picked an environment (use env
-properties for that).
+generation loop. Two idioms convert automatically: `<if test><error>MSG</error></if>` → `<assert>`,
+and a runtime-counter check `<if test="X.counter != N">` is flagged (DATAMIMIC has no post-run
+counter — verify the count in a test or with `<execute type="sql">select count(*)`). What remains:
+
+- A **guard / sanity check** → setup-level `<assert condition="..." message="..."/>` (it now works at
+  setup level, not only inside `<generate>`), or `<execute type="python">` with a `raise`.
+- A conditional that **branches generation** → move it inside the `<generate>` it guards, since
+  DATAMIMIC's `<condition>`/`<if>` lives there.
+- A conditional that only **picked an environment / scaled a count** → use env properties, or a
+  computed `count="{stage_multiplier * base}"` (count accepts a full expression).
 
 ```xml
-<!-- before -->
-<if test="stage == 'prod'"><setting name="count" value="1000000"/></if>
-<!-- after (inside the generate) -->
-<condition><if condition="stage == 'prod'">...</if></condition>
+<!-- before: a guard -->
+<if test="expected != actual"><error>mismatch</error></if>
+<!-- after -->
+<assert condition="expected == actual" message="mismatch"/>
 ```
 
 ## evaluate-without-assert
 
 `<evaluate>` with `assert=` converts automatically (`<variable>` + `<assert>`). Without `assert=`
 it either ran a statement for its side effect or bound a result (`id="x"`). Side effect → inline
-`<execute type="sql">` (or `python`). Result binding → `<variable name="x" source="db"
-selector="..."/>` for SQL, `<variable name="x" script="..."/>` otherwise. A pure verification query
-is often better ported into a test than into the descriptor.
+`<execute type="sql">` (or `python`); when the statement is **assembled from variables**, build it
+with `<variable string="...__var__...">` and run it via `<execute type="sql" script="that_var">`.
+Result binding → `<variable name="x" source="db" selector="..."/>` for SQL, `<variable name="x"
+script="..."/>` otherwise. A pure verification query is often better ported into a test.
 
 ```xml
 <!-- before -->
@@ -112,10 +128,10 @@ Consumers the converter cannot turn into a `target=`:
   and the converter already emits `target=""` (generate-and-capture-only — valid DATAMIMIC). The
   flag only asks you to confirm "no output" is intended; usually accept the output as-is.
 - `MultiExporter(a, b)` → DATAMIMIC targets are a comma list anyway: `target="CSV,ConsoleExporter"`.
-- `new XLSEntityExporter(...)` → no XLS exporter in DATAMIMIC CE: use `target="CSV"` and convert,
-  or write XLSX from `<execute type="python">` (openpyxl/pandas).
+- `new XLSEntityExporter(...)` / `XLSXEntityExporter` → mapped automatically to `target="XLSX"`
+  (DATAMIMIC CE has a native XLSX exporter). No manual work.
 - Any other inline `new SomeExporter(args)` Java instantiation → pick the closest declarative
-  exporter (CSV/JSON/XML) or drop the output.
+  exporter (CSV/JSON/XML/XLSX) or drop the output.
 
 ## unknown-generators
 
