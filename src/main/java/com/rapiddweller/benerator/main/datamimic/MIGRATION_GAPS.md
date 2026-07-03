@@ -6,7 +6,7 @@ for manual migration, and **gates the totals against `gap-baseline.properties`**
 the build; lowering the baseline is a deliberate commit). All numbers below come from the generated
 `target/gap-report.txt` — do not edit them by hand, re-run the sweep.
 
-## Coverage (sweep of 2026-07-02)
+## Coverage (sweep of 2026-07-03)
 
 **303 files · 298 convert · 5 throw** (the 5 are non-standalone / deliberately-malformed XML
 fixtures, not descriptors). No descriptor fails to produce output.
@@ -14,9 +14,11 @@ fixtures, not descriptors). No descriptor fails to produce output.
 The report is tiered: `report.add(...)` = genuinely needs manual work; `report.info(...)` = converted
 automatically, shown for transparency only (dropped `<import>`, a `<reference>` emitted as a `<key>`, a
 defaulted `sourceKey`, an assertion converted to `<assert>`, an inlined generator `<bean>`,
-`<variable generator>` → entity). Across the full corpus: **418 need manual attention, 346 informational**.
+`<variable generator>` → entity). Across the full corpus: **446 need manual attention, 1568 informational** (info grew with the
+corpus-driven faker vocabulary and honest reclassifications; manual now includes previously
+runtime-dead constructs like Benerator counter checks and dbunit sources, each with a recipe).
 
-The 418, by report kind (top constructs in parentheses):
+The 446, by report kind (top constructs in parentheses):
 - **attribute** 94 (`<attribute>` 43, `<part>` 20, `<setup>` 17): unmapped attributes on mapped elements.
 - **element** 65 (`<bean>` 33, `<value>` 11, `<pre-parse-generate>` 8, `<transcodingTask>` 5): no equivalent.
 - **execute** 57 (`type='js'` 40, no-type 14): no JS engine in DATAMIMIC — rewrite python/sql/bash.
