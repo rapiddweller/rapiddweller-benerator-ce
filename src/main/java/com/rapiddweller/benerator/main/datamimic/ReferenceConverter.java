@@ -19,9 +19,18 @@ class ReferenceConverter {
       "(?is)\\s*select\\s+([A-Za-z_][A-Za-z0-9_]*)\\s+from\\s+.+");
 
   private final MigrationReport report;
+  /** part entity name -> [collection, dotted document path] and the mongo store ids, set by the
+   *  DescriptorConverter's scan pass (empty when the descriptor has no mongo stores). */
+  private Map<String, String[]> mongoEntityPaths = java.util.Collections.emptyMap();
+  private java.util.Set<String> mongoStoreIds = java.util.Collections.emptySet();
 
   ReferenceConverter(MigrationReport report) {
     this.report = report;
+  }
+
+  void setMongoContext(Map<String, String[]> entityPaths, java.util.Set<String> storeIds) {
+    this.mongoEntityPaths = entityPaths;
+    this.mongoStoreIds = storeIds;
   }
 
   /**
@@ -70,9 +79,20 @@ class ReferenceConverter {
     if (attrs.containsKey("source")) {
       ref.setAttribute("source", attrs.get("source"));
     }
-    ref.setAttribute("sourceType", attrs.get("targetType"));
-    ref.setAttribute("sourceKey", "id"); // Benerator infers the FK column; DATAMIMIC needs it explicit
-    report.info(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
+    String targetType = attrs.get("targetType");
+    String[] entityPath = mongoStoreIds.contains(attrs.get("source")) ? mongoEntityPaths.get(targetType) : null;
+    if (entityPath != null) {
+      // The target entity is nested INSIDE a mongo collection document (a converted <part>):
+      // read the collection and descend by dotted sourceKey (DATAMIMIC unwinds lists on the way).
+      ref.setAttribute("sourceType", entityPath[0]);
+      ref.setAttribute("sourceKey", entityPath[1] + ".id");
+      report.info(path, "reference", "reference '" + name + "' targets nested '" + targetType
+          + "' -> collection '" + entityPath[0] + "', path '" + entityPath[1] + ".id'");
+    } else {
+      ref.setAttribute("sourceType", targetType);
+      ref.setAttribute("sourceKey", "id"); // Benerator infers the FK column; DATAMIMIC needs it explicit
+      report.info(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
+    }
     if ("true".equals(attrs.get("unique"))) {
       ref.setAttribute("unique", "true");
     }

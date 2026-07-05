@@ -461,6 +461,17 @@ public class DescriptorConverterTest {
     // positional access on a mongo find-projection variable -> column access on the row dict
     assertNotNull(first(doc, "key", "script", "product.ean_code"));
     assertNotNull(first(doc, "key", "script", "product.price * this.number_of_items"));
+
+    // a reference to an entity NESTED in a collection document reads the collection and descends
+    // by dotted sourceKey (Benerator mongo entity paths)
+    Element addr = first(doc, "reference", "name", "address_id");
+    assertNotNull(addr);
+    assertEquals("db_user", addr.getAttribute("sourceType"));
+    assertEquals("db_customer.db_address.id", addr.getAttribute("sourceKey"));
+    Element cust = first(doc, "reference", "name", "customer_id");
+    assertNotNull(cust);
+    assertEquals("db_user", cust.getAttribute("sourceType"));
+    assertEquals("db_customer.id", cust.getAttribute("sourceKey"));
   }
 
   private static Document convert(String input, MigrationReport report) throws Exception {

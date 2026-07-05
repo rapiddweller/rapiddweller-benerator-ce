@@ -92,6 +92,8 @@ public class DescriptorConverter {
     scanBeans(root);
     settings.scanSettings(root);
     scanMongoStores(root);
+    scanMongoEntityPaths(root);
+    references.setMongoContext(mongoEntityPaths, mongoStoreIds);
     scanDdlSchemas(root);
     Node converted = convertNode(out, root, "/" + local(root));
     if (converted != null) {
@@ -271,6 +273,41 @@ public class DescriptorConverter {
   }
 
   /** @return the converted node (Element, or a TODO Comment when the source element is unmapped). */
+  /** part entity name -> [collection, dotted path within the document] for every mongo-consumed
+   *  generate: a {@code <reference targetType>} to such an entity must read the COLLECTION and
+   *  descend into the document (Benerator's mongo entity paths do the same). */
+  private final Map<String, String[]> mongoEntityPaths = new LinkedHashMap<>();
+
+  private void scanMongoEntityPaths(Element el) {
+    if (local(el).equals("generate")) {
+      String consumer = el.getAttribute("consumer");
+      for (String id : mongoStoreIds) {
+        if (consumer.matches(".*\\b" + java.util.regex.Pattern.quote(id) + "\\b.*")) {
+          String collection = el.hasAttribute("type") ? el.getAttribute("type") : el.getAttribute("name");
+          collectPartPaths(el, collection, "");
+          break;
+        }
+      }
+    }
+    for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE) {
+        scanMongoEntityPaths((Element) c);
+      }
+    }
+  }
+
+  private void collectPartPaths(Element parent, String collection, String prefix) {
+    for (Node c = parent.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE && local((Element) c).equals("part")
+          && ((Element) c).hasAttribute("name")) {
+        String partName = ((Element) c).getAttribute("name");
+        String path = prefix.isEmpty() ? partName : prefix + "." + partName;
+        mongoEntityPaths.put(partName, new String[] {collection, path});
+        collectPartPaths((Element) c, collection, path);
+      }
+    }
+  }
+
   /** Parse the CREATE TABLE DDL of every {@code <execute uri="*.sql">} the descriptor runs, so missing
    *  NOT NULL columns can be filled in like Benerator's DB-metadata introspection would at runtime. */
   private void scanDdlSchemas(Element el) {
