@@ -1069,9 +1069,10 @@ public class DescriptorConverter {
     if (!integer && attrs.containsKey("granularity")) {
       args.append(", granularity=").append(attrs.get("granularity"));
     }
-    String dist = attrs.get("distribution");
-    if (dist != null && VocabularyMap.KNOWN_DISTRIBUTIONS.contains(dist) && !dist.equals("random")) {
-      args.append(", distribution='").append(dist).append("'");
+    // Numeric generators take the NumberDistribution ENUM, not a string (a string raises TypeError).
+    // Only 'cumulated' exists besides the uniform default.
+    if ("cumulated".equals(attrs.get("distribution"))) {
+      args.append(", distribution=NumberDistribution.CUMULATED");
     }
     return sb.append(args).append(")").toString();
   }

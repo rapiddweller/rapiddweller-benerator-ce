@@ -109,7 +109,7 @@ public class DescriptorConverterTest {
     Element items = first(doc, "key", "name", "number_of_items");
     assertNotNull("number_of_items mapped as <key>", items);
     assertEquals("int", items.getAttribute("type"));
-    assertEquals("IntegerGenerator(min=1, max=27, distribution='cumulated')", items.getAttribute("generator"));
+    assertEquals("IntegerGenerator(min=1, max=27, distribution=NumberDistribution.CUMULATED)", items.getAttribute("generator"));
     assertTrue("no 'distribution needs a numeric generator' flag left", report.attention().stream()
         .noneMatch(it -> it.detail.contains("'distribution'")));
 
