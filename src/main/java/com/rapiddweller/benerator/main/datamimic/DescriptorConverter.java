@@ -453,6 +453,12 @@ public class DescriptorConverter {
         copyAttributes(el, result, "id"); // DATAMIMIC memstore is just an id
         break;
       case "include":
+        // A Benerator XSD include only backs XML-editor validation; DATAMIMIC includes are
+        // .properties/.xml content and would reject it.
+        if (el.getAttribute("uri").endsWith(".xsd")) {
+          report.info(path, "include", "<include uri='" + el.getAttribute("uri") + "'> XML-schema include removed");
+          return null;
+        }
         // Benerator FTL include path {ftl:${var}/...} -> DATAMIMIC f-string {var}/... (dynamic include,
         // resolved at runtime from <setting> values - same as EE's dynamic <include>).
         result.setAttribute("uri", ftlUriToFString(el.getAttribute("uri")));

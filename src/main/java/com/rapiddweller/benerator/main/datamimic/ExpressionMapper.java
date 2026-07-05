@@ -53,7 +53,7 @@ class ExpressionMapper {
     if (!VocabularyMap.KNOWN_GENERATORS.contains(mapped)) {
       report.add(path, "generator", "generator '" + name + "' not known to DATAMIMIC - verify/replace manually");
     }
-    return mapped + args;
+    return mapped + javaLiteralsToPython(args);
   }
 
   /** Benerator converter -&gt; DATAMIMIC: strip "new ", rename (CaseConverter -&gt; UpperCase), flag the unknown. */
@@ -78,7 +78,43 @@ class ExpressionMapper {
     if (!VocabularyMap.KNOWN_CONVERTERS.contains(mapped)) {
       report.add(path, "converter", "converter '" + value + "' not known to DATAMIMIC - verify/replace manually");
     }
-    return mapped + args;
+    return mapped + javaLiteralsToPython(args);
+  }
+
+  /** Java/JS literals -&gt; python: bare {@code true}/{@code false}/{@code null} outside string
+   *  literals become {@code True}/{@code False}/{@code None} (DATAMIMIC evaluates args/scripts as python). */
+  static String javaLiteralsToPython(String s) {
+    StringBuilder sb = new StringBuilder();
+    char quote = 0;
+    for (int i = 0; i < s.length(); i++) {
+      char ch = s.charAt(i);
+      if (quote != 0) {
+        sb.append(ch);
+        if (ch == quote) {
+          quote = 0;
+        }
+        continue;
+      }
+      if (ch == '\'' || ch == '"') {
+        quote = ch;
+        sb.append(ch);
+        continue;
+      }
+      boolean wordStart = Character.isLetter(ch)
+          && (i == 0 || (!Character.isLetterOrDigit(s.charAt(i - 1)) && s.charAt(i - 1) != '_' && s.charAt(i - 1) != '.'));
+      if (wordStart) {
+        int j = i;
+        while (j < s.length() && (Character.isLetterOrDigit(s.charAt(j)) || s.charAt(j) == '_')) {
+          j++;
+        }
+        String word = s.substring(i, j);
+        sb.append(word.equals("true") ? "True" : word.equals("false") ? "False" : word.equals("null") ? "None" : word);
+        i = j - 1;
+        continue;
+      }
+      sb.append(ch);
+    }
+    return sb.toString();
   }
 
   /** The body of an {@code {ftl:...}} value, or null when the value is not FTL-templated. */
@@ -239,6 +275,9 @@ class ExpressionMapper {
 
   /** Add {@code dataset='X'} to a generator string: {@code AddressGenerator} -&gt; {@code AddressGenerator(dataset='X')}. */
   static String foldDatasetIntoGenerator(String generator, String dataset) {
+    if (generator.startsWith("CompanyNameGenerator")) {
+      return generator; // takes no constructor args in DATAMIMIC (no dataset variants)
+    }
     return ArgSplitter.appendArg(generator, "dataset='" + dataset + "'");
   }
 
@@ -263,6 +302,7 @@ class ExpressionMapper {
       return expr;
     }
     String s = rewriteTernary(expr);
+    s = javaLiteralsToPython(s); // true/false/null -> True/False/None
     s = s.replaceAll("\\.name\\(\\)", ""); // gender.name() -> gender (Java enum -> already a string)
     if (enclosingScope != null && !enclosingScope.isEmpty()) {
       // Self-reference by the enclosing scope's own name -> `this` (the current-scope alias).
