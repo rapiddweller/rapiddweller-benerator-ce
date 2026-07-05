@@ -416,6 +416,14 @@ public class DescriptorConverter {
         && ExpressionMapper.isDynamicSelector(el.getAttribute("selector"))) {
       return dynamicSelectorFieldFragment(out, el, path);
     }
+    // Schema priming for a schemaless store: <pre-parse-generate target="mongo"> and a mongo-consumed
+    // <meta-model> only pre-declare collection shapes - MongoDB creates collections on insert, so both
+    // are no-ops in DATAMIMIC.
+    if ((tag.equals("pre-parse-generate") && mongoStoreIds.contains(el.getAttribute("target")))
+        || (tag.equals("meta-model") && mongoStoreIds.contains(el.getAttribute("consumer")))) {
+      report.info(path, "element", "<" + tag + "> primes a MongoDB schema - schemaless in DATAMIMIC, removed");
+      return null;
+    }
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
       report.add(path, "element", "<" + tag + "> has no DATAMIMIC equivalent - migrate manually");
