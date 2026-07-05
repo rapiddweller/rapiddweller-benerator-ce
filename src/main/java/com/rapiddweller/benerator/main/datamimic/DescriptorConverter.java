@@ -697,12 +697,12 @@ public class DescriptorConverter {
       }
     }
     // A store-reading <iterate type="coll" source="store"> needs its SOURCE collection/table declared;
-    // the type->name mapping alone loses it. When the write target was renamed above, it must go into
-    // sourceEntity, NOT type: DATAMIMIC's write-side resolution is targetEntity -> type -> name, so a
-    // type would override the renamed name and re-insert into the source collection.
+    // the type->name mapping alone loses it. It must be sourceEntity, not type: DATAMIMIC rejects
+    // source+type+selector together, and on the write side (targetEntity -> type -> name) a type would
+    // override a CRUD-renamed name and re-insert into the source collection.
     if (local(src).equals("iterate") && storeIds.contains(src2) && src.hasAttribute("type")) {
-      String benType = src.getAttribute("type");
-      out.setAttribute(out.getAttribute("name").equals(benType) ? "type" : "sourceEntity", benType);
+      out.removeAttribute("type");
+      out.setAttribute("sourceEntity", src.getAttribute("type"));
     }
   }
 
