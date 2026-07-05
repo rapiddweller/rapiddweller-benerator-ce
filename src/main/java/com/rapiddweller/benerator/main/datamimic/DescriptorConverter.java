@@ -553,26 +553,27 @@ public class DescriptorConverter {
   }
 
   /** Benerator scripts inside a nested {@code <generate>} reference ENCLOSING records by name
-   *  ({@code db_user.id}); DATAMIMIC resolves outer records only via {@code root.<name>.<field>}.
-   *  The nearest scope's own name is already rewritten to {@code this} - prefix every ancestor
-   *  scope name above it with {@code root.}. */
+   *  ({@code db_user.id}). DATAMIMIC's content tree (verified: CE context.get_content_variables_products)
+   *  exposes the immediate parent as the {@code parent} alias, wraps intermediate ancestors under their
+   *  own names (which resolve natively) and FLATTENS the top-level record's fields (reachable as
+   *  {@code root.<field>}). Rewrite accordingly; the nearest scope's own name is already {@code this}. */
   private String rewriteOuterScopeRefs(String script, Element field) {
     if (script == null || script.isEmpty()) {
       return script;
     }
-    boolean nearest = true;
+    List<String> ancestors = new java.util.ArrayList<>(); // nearest first
     for (Node n = field.getParentNode(); n instanceof Element; n = n.getParentNode()) {
       Element e = (Element) n;
       if (local(e).equals("generate") || local(e).equals("iterate")) {
-        if (nearest) {
-          nearest = false;
-          continue;
-        }
-        String name = e.hasAttribute("type") ? e.getAttribute("type") : e.getAttribute("name");
-        if (!name.isEmpty()) {
-          script = script.replaceAll("\\b" + java.util.regex.Pattern.quote(name) + "\\.", "root." + name + ".");
-        }
+        ancestors.add(e.hasAttribute("type") ? e.getAttribute("type") : e.getAttribute("name"));
       }
+    }
+    if (ancestors.size() >= 2 && !ancestors.get(1).isEmpty()) { // immediate parent scope
+      script = script.replaceAll("\\b" + java.util.regex.Pattern.quote(ancestors.get(1)) + "\\.", "parent.");
+    }
+    String top = ancestors.isEmpty() ? "" : ancestors.get(ancestors.size() - 1);
+    if (ancestors.size() >= 3 && !top.isEmpty()) { // top-level record: fields are flattened
+      script = script.replaceAll("\\b" + java.util.regex.Pattern.quote(top) + "\\.", "root.");
     }
     return script;
   }
