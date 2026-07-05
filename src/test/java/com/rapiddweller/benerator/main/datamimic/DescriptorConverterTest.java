@@ -406,6 +406,47 @@ public class DescriptorConverterTest {
     assertTrue("XLSEntityExporter -> target=XLSX", anyXlsx);
   }
 
+  @Test
+  public void convertsDynamicSelectorAndPositionalRowAccess() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/demo/resources/demo/shop/shop-postgres.ben.xml", report);
+
+    // (a) dynamic selector {{ftl:select ... ${db_order.id}}} -> <variable iterationSelector> + <key script>
+    Element sel = first(doc, "variable", "name", "_total_price_sel");
+    assertNotNull("dynamic selector emitted as iterationSelector variable", sel);
+    String iterSel = sel.getAttribute("iterationSelector");
+    assertTrue("scope self-reference interpolated: " + iterSel, iterSel.contains("order_id = __this.id__"));
+    assertFalse("no FTL wrapper left: " + iterSel, iterSel.contains("ftl:") || iterSel.contains("${"));
+    Element unwrap = nextElement(sel);
+    assertEquals("key", unwrap.getTagName());
+    assertEquals("total_price", unwrap.getAttribute("name"));
+    assertTrue("unwraps the single-value row", unwrap.getAttribute("script").contains("_total_price_sel"));
+
+    // (b) positional access on a multi-column selector variable -> column access on the row dict
+    Element ean = first(doc, "key", "name", "product_ean_code");
+    assertNotNull(ean);
+    assertEquals("product.ean_code", ean.getAttribute("script"));
+    Element scripted = first(doc, "key", "script", "product.price * this.number_of_items");
+    assertNotNull("product[1] rewritten to product.price", scripted);
+
+    // (c) computed count over string settings gets int()-casts; a single-identifier count stays plain
+    Element orders = first(doc, "generate", "name", "db_order");
+    assertNotNull(orders);
+    assertEquals("{int(customer_count) * int(orders_per_customer)}", orders.getAttribute("count"));
+    Element users = first(doc, "generate", "name", "db_user");
+    assertNotNull(users);
+    assertEquals("{customer_count}", users.getAttribute("count"));
+
+    // (d) NOT NULL columns Benerator fills via DB metadata get filled from the executed DDL instead
+    Element manufacturer = first(doc, "key", "name", "manufacturer");
+    assertNotNull("db_product.manufacturer NOT NULL column filled from DDL", manufacturer);
+    assertEquals("string", manufacturer.getAttribute("type"));
+    assertEquals("30", manufacturer.getAttribute("maxLength"));
+    Element birthDate = first(doc, "key", "name", "birth_date");
+    assertNotNull("modeless birth_date resolved from DDL instead of flagged", birthDate);
+    assertTrue(birthDate.getAttribute("generator").startsWith("DateTimeGenerator"));
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();

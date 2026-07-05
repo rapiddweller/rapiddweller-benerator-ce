@@ -38,6 +38,41 @@ public class DescriptorConverter {
   /** environment name -> (system prefix -> "db"|"mongo") collected from <database>/<mongodb> elements,
    *  so the env-properties migration knows each system's type and the flat-format fallback prefix. */
   private final Map<String, Map<String, String>> envSystems = new LinkedHashMap<>();
+  /** table -> (column -> DDL info) parsed from the CREATE TABLE scripts the descriptor itself executes -
+   *  the convert-time stand-in for Benerator's runtime DB-metadata introspection. */
+  private final Map<String, Map<String, DdlColumn>> ddlColumns = new LinkedHashMap<>();
+
+  private static final class DdlColumn {
+    final String benType;
+    final boolean required; // NOT NULL and no default - the insert fails without a value
+    final String maxLength;
+
+    DdlColumn(String benType, boolean required, String maxLength) {
+      this.benType = benType;
+      this.required = required;
+      this.maxLength = maxLength;
+    }
+  }
+
+  private static final Map<String, String> DDL_TO_BEN_TYPE = new LinkedHashMap<>();
+
+  static {
+    for (String s : new String[] {"varchar", "char", "character", "character varying", "text"}) {
+      DDL_TO_BEN_TYPE.put(s, "string");
+    }
+    for (String s : new String[] {"int", "integer", "smallint", "bigint", "serial", "bigserial"}) {
+      DDL_TO_BEN_TYPE.put(s, "int");
+    }
+    DDL_TO_BEN_TYPE.put("decimal", "big_decimal");
+    DDL_TO_BEN_TYPE.put("numeric", "big_decimal");
+    DDL_TO_BEN_TYPE.put("date", "date");
+    DDL_TO_BEN_TYPE.put("timestamp", "timestamp");
+    DDL_TO_BEN_TYPE.put("boolean", "boolean");
+    DDL_TO_BEN_TYPE.put("bool", "boolean");
+    DDL_TO_BEN_TYPE.put("double", "double");
+    DDL_TO_BEN_TYPE.put("float", "double");
+    DDL_TO_BEN_TYPE.put("real", "double");
+  }
 
   public DescriptorConverter(MigrationReport report) {
     this.report = report;
@@ -57,11 +92,89 @@ public class DescriptorConverter {
     scanBeans(root);
     settings.scanSettings(root);
     scanMongoStores(root);
+    scanDdlSchemas(root);
     Node converted = convertNode(out, root, "/" + local(root));
     if (converted != null) {
       out.appendChild(converted);
+      if (converted instanceof Element) {
+        rewritePositionalRowAccess((Element) converted);
+      }
     }
     XMLUtil.saveDocument(out, output, "utf-8");
+  }
+
+  /** Benerator multi-column selector variables yield ARRAYS ({@code product[0]}); a DATAMIMIC row is a
+   *  dict accessed by column ({@code product.price}). Rewrites positional access in every script from
+   *  the variable's select-list. */
+  private void rewritePositionalRowAccess(Element root) {
+    // ponytail: variable names mapped globally, not per scope - split per <generate> if names ever collide
+    Map<String, List<String>> columns = new LinkedHashMap<>();
+    org.w3c.dom.NodeList vars = root.getElementsByTagName("variable");
+    for (int i = 0; i < vars.getLength(); i++) {
+      Element v = (Element) vars.item(i);
+      String sel = v.hasAttribute("selector") ? v.getAttribute("selector") : v.getAttribute("iterationSelector");
+      List<String> cols = selectListColumns(sel);
+      if (cols != null) {
+        columns.put(v.getAttribute("name"), cols);
+      }
+    }
+    if (columns.isEmpty()) {
+      return;
+    }
+    org.w3c.dom.NodeList all = root.getElementsByTagName("*");
+    for (int i = -1; i < all.getLength(); i++) {
+      Element e = i < 0 ? root : (Element) all.item(i);
+      if (!e.hasAttribute("script")) {
+        continue;
+      }
+      String script = e.getAttribute("script");
+      for (Map.Entry<String, List<String>> entry : columns.entrySet()) {
+        java.util.regex.Matcher m = java.util.regex.Pattern
+            .compile("\\b" + java.util.regex.Pattern.quote(entry.getKey()) + "\\[(\\d+)\\]").matcher(script);
+        StringBuilder sb = new StringBuilder();
+        while (m.find()) {
+          int idx = Integer.parseInt(m.group(1));
+          String replacement = idx < entry.getValue().size()
+              ? entry.getKey() + "." + entry.getValue().get(idx)
+              : m.group(); // out-of-range index: leave it, the runtime error is the honest signal
+          m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(replacement));
+        }
+        m.appendTail(sb);
+        script = sb.toString();
+      }
+      e.setAttribute("script", script);
+    }
+  }
+
+  /** The bare column names of a simple select-list, or null when any entry is not a plain column
+   *  (function call, {@code *}, quoted alias) - then positional access cannot be mapped safely. */
+  private static List<String> selectListColumns(String sql) {
+    if (sql == null || sql.isEmpty()) {
+      return null;
+    }
+    java.util.regex.Matcher m = java.util.regex.Pattern
+        .compile("(?is)^\\s*select\\s+(.+?)\\s+from\\s").matcher(sql);
+    if (!m.find()) {
+      return null;
+    }
+    String list = m.group(1);
+    if (list.contains("(") || list.contains("*")) {
+      return null;
+    }
+    List<String> cols = new java.util.ArrayList<>();
+    for (String part : list.split(",")) {
+      String[] words = part.trim().split("\\s+");
+      String col = words[words.length - 1]; // the alias when present, else the column itself
+      int dot = col.lastIndexOf('.');
+      if (dot >= 0) {
+        col = col.substring(dot + 1);
+      }
+      if (!col.matches("\\w+")) {
+        return null;
+      }
+      cols.add(col);
+    }
+    return cols;
   }
 
   /** ", see MIGRATION_PLAYBOOK.md#..." for an unmapped element tag with a recipe; "" when there is none.
@@ -137,6 +250,100 @@ public class DescriptorConverter {
   }
 
   /** @return the converted node (Element, or a TODO Comment when the source element is unmapped). */
+  /** Parse the CREATE TABLE DDL of every {@code <execute uri="*.sql">} the descriptor runs, so missing
+   *  NOT NULL columns can be filled in like Benerator's DB-metadata introspection would at runtime. */
+  private void scanDdlSchemas(Element el) {
+    if (local(el).equals("execute") && el.hasAttribute("uri")) {
+      String uri = settings.resolve(el.getAttribute("uri"));
+      File f = new File(descriptorDir, uri);
+      if (uri.endsWith(".sql") && f.isFile()) {
+        try {
+          parseDdl(new String(java.nio.file.Files.readAllBytes(f.toPath()), java.nio.charset.StandardCharsets.UTF_8));
+        } catch (java.io.IOException e) {
+          // unreadable DDL just means no introspection - the converter stays best-effort
+        }
+      }
+    }
+    for (Node child = el.getFirstChild(); child != null; child = child.getNextSibling()) {
+      if (child.getNodeType() == Node.ELEMENT_NODE) {
+        scanDdlSchemas((Element) child);
+      }
+    }
+  }
+
+  private void parseDdl(String sql) {
+    java.util.regex.Matcher t = java.util.regex.Pattern
+        .compile("(?is)create\\s+table\\s+(?:if\\s+not\\s+exists\\s+)?([\\w.]+)\\s*\\((.*?)\\)\\s*;").matcher(sql);
+    while (t.find()) {
+      String table = t.group(1).toLowerCase();
+      table = table.substring(table.lastIndexOf('.') + 1);
+      Map<String, DdlColumn> cols = ddlColumns.computeIfAbsent(table, k -> new LinkedHashMap<>());
+      for (String line : t.group(2).split("\\r?\\n")) {
+        line = line.trim().replaceAll(",\\s*$", "");
+        if (line.isEmpty() || line.startsWith("--")
+            || line.matches("(?i)(primary|constraint|unique|foreign|check|key)\\b.*")) {
+          continue;
+        }
+        java.util.regex.Matcher c = java.util.regex.Pattern
+            .compile("(?i)^(\\w+)\\s+([a-z]+(?:\\s+varying)?)\\s*(?:\\((\\d+)[^)]*\\))?").matcher(line);
+        if (!c.find()) {
+          continue;
+        }
+        String benType = DDL_TO_BEN_TYPE.get(c.group(2).toLowerCase().replaceAll("\\s+", " "));
+        if (benType == null) {
+          continue;
+        }
+        boolean required = line.matches("(?i).*\\bnot\\s+null\\b.*") && !line.matches("(?i).*\\bdefault\\b.*");
+        cols.put(c.group(1).toLowerCase(),
+            new DdlColumn(benType, required, "string".equals(benType) ? c.group(3) : null));
+      }
+    }
+  }
+
+  /** Benerator fills NOT NULL columns absent from the descriptor via DB metadata at runtime; DATAMIMIC
+   *  cannot, so synthesize a matching Benerator {@code <attribute>} for each and convert it normally. */
+  private void appendDdlRequiredColumns(Document out, Element src, Element result, String path) {
+    Map<String, DdlColumn> cols = ddlColumns.get(result.getAttribute("name").toLowerCase());
+    if (cols == null || !consumesToStore(src)) {
+      return;
+    }
+    java.util.Set<String> present = new java.util.LinkedHashSet<>();
+    for (Node child = result.getFirstChild(); child != null; child = child.getNextSibling()) {
+      if (child.getNodeType() == Node.ELEMENT_NODE && !local((Element) child).equals("variable")) {
+        present.add(((Element) child).getAttribute("name").toLowerCase());
+      }
+    }
+    for (Map.Entry<String, DdlColumn> col : cols.entrySet()) {
+      if (!col.getValue().required || present.contains(col.getKey())) {
+        continue;
+      }
+      Element benAttr = src.getOwnerDocument().createElement("attribute");
+      benAttr.setAttribute("name", col.getKey());
+      benAttr.setAttribute("type", col.getValue().benType);
+      if (col.getValue().maxLength != null) {
+        benAttr.setAttribute("maxLength", col.getValue().maxLength);
+      }
+      src.appendChild(benAttr); // parented, so enclosing-scope lookups during conversion work
+      Node converted = convertNode(out, benAttr, path + "/" + col.getKey());
+      if (converted != null) {
+        result.appendChild(converted);
+        report.info(path, "schema", "NOT NULL column '" + col.getKey() + "' (" + col.getValue().benType
+            + ") filled from the executed DDL - Benerator fills it via DB metadata at runtime");
+      }
+    }
+  }
+
+  /** True when the generate's consumer includes one of the scanned store ids (db/mongo). */
+  private boolean consumesToStore(Element el) {
+    String consumer = el.getAttribute("consumer");
+    for (String id : storeIds) {
+      if (consumer.matches(".*\\b" + java.util.regex.Pattern.quote(id) + "\\b.*")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private Node convertNode(Document out, Element el, String path) {
     String tag = local(el);
     if (VocabularyMap.DROP_ELEMENTS.contains(tag)) {
@@ -202,6 +409,13 @@ public class DescriptorConverter {
         return countryFragment;
       }
     }
+    // A dynamic-selector field (<attribute source="db" selector="{{ftl:select ... ${x}}}"/>) re-queries
+    // per record; DATAMIMIC's native form is <variable iterationSelector> (re-run each iteration) plus
+    // a <key script> unwrapping the single-value result row.
+    if ((tag.equals("attribute") || tag.equals("id")) && el.hasAttribute("source")
+        && ExpressionMapper.isDynamicSelector(el.getAttribute("selector"))) {
+      return dynamicSelectorFieldFragment(out, el, path);
+    }
     String target = VocabularyMap.ELEMENT.get(tag);
     if (target == null) {
       report.add(path, "element", "<" + tag + "> has no DATAMIMIC equivalent - migrate manually");
@@ -246,6 +460,7 @@ public class DescriptorConverter {
       case "echo":
         break; // no attributes to map; text content is copied below
       default: // attribute / id / part / variable
+        applyDdlTypeFallback(el, tag);
         convertFieldAttributes(el, result, tag, path);
         // A Benerator <part> GENERATES a nested structure; DATAMIMIC's <nestedKey> needs type="dict"
         // (or "list") to know it builds the structure - without it, DATAMIMIC assumes enrich-mode and
@@ -295,7 +510,75 @@ public class DescriptorConverter {
         result.appendChild(out.createTextNode(text));
       }
     }
+    if (tag.equals("generate")) {
+      appendDdlRequiredColumns(out, el, result, path);
+    }
     return result;
+  }
+
+  /** A bare {@code <attribute name>} whose type Benerator reads from DB metadata at runtime: resolve it
+   *  from the executed DDL when available, so the field converts normally instead of being flagged. */
+  private void applyDdlTypeFallback(Element el, String tag) {
+    if (!tag.equals("attribute") && !tag.equals("id")) {
+      return;
+    }
+    for (String key : attributes(el).keySet()) {
+      if (!key.equals("name") && !key.equals("nullable")) {
+        return; // already has a type or a generation mode
+      }
+    }
+    String scope = enclosingScopeName(el);
+    Map<String, DdlColumn> cols = scope == null ? null : ddlColumns.get(scope.toLowerCase());
+    DdlColumn col = cols == null ? null : cols.get(el.getAttribute("name").toLowerCase());
+    if (col != null) {
+      el.setAttribute("type", col.benType);
+      if (col.maxLength != null) {
+        el.setAttribute("maxLength", col.maxLength);
+      }
+    }
+  }
+
+  /** A computed count {@code {a * b}} with each bare identifier wrapped in {@code int(...)} - DATAMIMIC
+   *  settings from .properties are strings, and python string arithmetic throws. A single-identifier
+   *  count ({@code {counts}}) already works (the runtime int()-casts the final result) and stays as-is. */
+  private static String intCastCountExpression(String val) {
+    if (!val.startsWith("{") || !val.endsWith("}") || !val.matches(".*[+*/-].*")) {
+      return val;
+    }
+    String expr = val.substring(1, val.length() - 1);
+    // an identifier not part of an attribute access (x.y) and not a call (f(...))
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("(?<![\\w.])([A-Za-z_]\\w*)(?![\\w(.])").matcher(expr);
+    StringBuilder sb = new StringBuilder();
+    while (m.find()) {
+      String id = m.group(1);
+      boolean keyword = id.equals("if") || id.equals("else") || id.equals("and") || id.equals("or")
+          || id.equals("not") || id.equals("None") || id.equals("True") || id.equals("False");
+      m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(keyword ? id : "int(" + id + ")"));
+    }
+    m.appendTail(sb);
+    return "{" + sb + "}";
+  }
+
+  /** {@code <attribute name="x" source="db" selector="{{...${y}}}"/>} -> {@code <variable name="_x_sel"
+   *  source iterationSelector>} + {@code <key name="x" script>} taking the first row's first column. */
+  private Node dynamicSelectorFieldFragment(Document out, Element el, String path) {
+    String name = el.getAttribute("name");
+    String var = "_" + name + "_sel";
+    Element variable = out.createElement("variable");
+    variable.setAttribute("name", var);
+    variable.setAttribute("source", el.getAttribute("source"));
+    variable.setAttribute("iterationSelector",
+        ExpressionMapper.selectorToInterpolated(el.getAttribute("selector"), enclosingScopeName(el)));
+    Element key = out.createElement("key");
+    key.setAttribute("name", name);
+    // ponytail: first row, first column - the Benerator dynamic-selector idiom is a single-value subquery
+    key.setAttribute("script", "list(" + var + "[0].values())[0] if " + var + " else None");
+    org.w3c.dom.DocumentFragment frag = out.createDocumentFragment();
+    frag.appendChild(variable);
+    frag.appendChild(key);
+    report.info(path, "selector", "dynamic selector on '" + name
+        + "' -> <variable iterationSelector> + <key script>");
+    return frag;
   }
 
   private void convertSetupAttributes(Element src, Element out, String path) {
@@ -323,9 +606,13 @@ public class DescriptorConverter {
           out.setAttribute("name", val);
           break;
         case "name":
-        case "count":
         case "pageSize":
           out.setAttribute(key, val);
+          break;
+        case "count":
+          // DATAMIMIC settings from .properties are strings; a computed count like
+          // {customer_count * orders_per_customer} needs each identifier int()-cast or python throws.
+          out.setAttribute("count", intCastCountExpression(val));
           break;
         case "threads":
           out.setAttribute("numProcess", val);
@@ -344,9 +631,11 @@ public class DescriptorConverter {
           }
           break;
         case "source":
-        case "selector":
         case "separator":
           out.setAttribute(key, val);
+          break;
+        case "selector":
+          out.setAttribute("selector", ExpressionMapper.selectorToInterpolated(val, null));
           break;
         case "encoding":
           // DATAMIMIC has no encoding attribute; it reads utf-8. Dropping the default is lossless.
@@ -559,7 +848,7 @@ public class DescriptorConverter {
           out.setAttribute("script", ExpressionMapper.rewriteScript(val, enclosingScopeName(src)));
           break;
         case "selector":
-          out.setAttribute("selector", ExpressionMapper.rewriteScript(val, enclosingScopeName(src)));
+          out.setAttribute("selector", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
           break;
         case "converter":
           out.setAttribute("converter", expressions.mapConverter(val, path));

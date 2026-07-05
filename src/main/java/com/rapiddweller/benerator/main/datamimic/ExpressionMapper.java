@@ -118,6 +118,43 @@ class ExpressionMapper {
     return text.replaceAll("\\$\\{([^}]*)\\}", "{$1}");
   }
 
+  /** True for a Benerator DYNAMIC selector ({@code {{...}}}), re-evaluated per generated record. */
+  static boolean isDynamicSelector(String value) {
+    if (value == null) {
+      return false;
+    }
+    String s = value.trim();
+    return s.startsWith("{{") && s.endsWith("}}");
+  }
+
+  /**
+   * Benerator selector -&gt; DATAMIMIC selector interpolation: the {@code {{...}}}/{@code {ftl:...}}
+   * wrappers are stripped and each {@code ${expr}} becomes {@code __expr__} (DATAMIMIC's selector
+   * variable syntax, rewritten like a script so a self-reference by the enclosing scope name turns
+   * into {@code this}). A plain selector passes through unchanged.
+   */
+  static String selectorToInterpolated(String value, String enclosingScope) {
+    if (value == null || value.isEmpty()) {
+      return value;
+    }
+    String s = value.trim();
+    if (s.startsWith("{{") && s.endsWith("}}")) {
+      s = s.substring(1, s.length() - 1);
+    }
+    String ftl = ftlBody(s);
+    if (ftl != null) {
+      s = ftl;
+    }
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("\\$\\{([^}]*)\\}").matcher(s);
+    StringBuilder sb = new StringBuilder();
+    while (m.find()) {
+      m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(
+          "__" + rewriteScript(m.group(1), enclosingScope) + "__"));
+    }
+    m.appendTail(sb);
+    return sb.toString();
+  }
+
   /**
    * Benerator {@code DataFakerGenerator('provider','method')} names a Faker provider + method; DATAMIMIC's
    * {@code DataFakerGenerator(method, locale='en_US')} calls {@code faker.<method>()} directly (no provider),
