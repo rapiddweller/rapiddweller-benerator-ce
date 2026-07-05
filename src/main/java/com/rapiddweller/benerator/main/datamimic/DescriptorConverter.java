@@ -552,6 +552,31 @@ public class DescriptorConverter {
     }
   }
 
+  /** Benerator scripts inside a nested {@code <generate>} reference ENCLOSING records by name
+   *  ({@code db_user.id}); DATAMIMIC resolves outer records only via {@code root.<name>.<field>}.
+   *  The nearest scope's own name is already rewritten to {@code this} - prefix every ancestor
+   *  scope name above it with {@code root.}. */
+  private String rewriteOuterScopeRefs(String script, Element field) {
+    if (script == null || script.isEmpty()) {
+      return script;
+    }
+    boolean nearest = true;
+    for (Node n = field.getParentNode(); n instanceof Element; n = n.getParentNode()) {
+      Element e = (Element) n;
+      if (local(e).equals("generate") || local(e).equals("iterate")) {
+        if (nearest) {
+          nearest = false;
+          continue;
+        }
+        String name = e.hasAttribute("type") ? e.getAttribute("type") : e.getAttribute("name");
+        if (!name.isEmpty()) {
+          script = script.replaceAll("\\b" + java.util.regex.Pattern.quote(name) + "\\.", "root." + name + ".");
+        }
+      }
+    }
+    return script;
+  }
+
   /** A computed count {@code {a * b}} with each bare identifier wrapped in {@code int(...)} - DATAMIMIC
    *  settings from .properties are strings, and python string arithmetic throws. A single-identifier
    *  count ({@code {counts}}) already works (the runtime int()-casts the final result) and stays as-is. */
@@ -873,7 +898,8 @@ public class DescriptorConverter {
           }
           break;
         case "script":
-          out.setAttribute("script", ExpressionMapper.rewriteScript(val, enclosingScopeName(src)));
+          out.setAttribute("script",
+              rewriteOuterScopeRefs(ExpressionMapper.rewriteScript(val, enclosingScopeName(src)), src));
           break;
         case "selector":
           out.setAttribute("selector", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
