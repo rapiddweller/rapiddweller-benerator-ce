@@ -679,11 +679,6 @@ public class DescriptorConverter {
       report.info(path, "attribute", "nameless iterate -> name='" + derived + "' derived from the source");
     }
     String src2 = out.getAttribute("source");
-    // A store-reading <iterate type="coll" source="store"> needs its SOURCE collection/table in type
-    // (DATAMIMIC reads a store by type/selector); the type->name mapping alone loses it.
-    if (local(src).equals("iterate") && storeIds.contains(src2) && src.hasAttribute("type")) {
-      out.setAttribute("type", src.getAttribute("type"));
-    }
     // A store CRUD consumer with a collection arg (mongo.inserter('out')) names the OUTPUT collection;
     // DATAMIMIC's store exporter writes to the product name, so that arg becomes name (else it re-inserts
     // into the source). Only store.<crudop>('coll') qualifies - NOT a Java exporter ctor like
@@ -694,6 +689,14 @@ public class DescriptorConverter {
         out.setAttribute("name", crudColl.group(3));
         break;
       }
+    }
+    // A store-reading <iterate type="coll" source="store"> needs its SOURCE collection/table declared;
+    // the type->name mapping alone loses it. When the write target was renamed above, it must go into
+    // sourceEntity, NOT type: DATAMIMIC's write-side resolution is targetEntity -> type -> name, so a
+    // type would override the renamed name and re-insert into the source collection.
+    if (local(src).equals("iterate") && storeIds.contains(src2) && src.hasAttribute("type")) {
+      String benType = src.getAttribute("type");
+      out.setAttribute(out.getAttribute("name").equals(benType) ? "type" : "sourceEntity", benType);
     }
   }
 
@@ -1128,6 +1131,13 @@ public class DescriptorConverter {
         out.setAttribute("database", c.database);
       }
       out.setAttribute("dbms", c.dbms);
+      // Benerator ignores conf/environment.env.properties when the connection is inline; DATAMIMIC
+      // lets env keys matching '<system|id>.db.*' OVERRIDE the element (verified: CE parser_util
+      // fulfill_credentials). A sibling demo's env file (e.g. the shop's mongo env, system 'db')
+      // would silently redirect this store - point system at a name no env key can match.
+      if (!attrs.containsKey("environment") && !attrs.containsKey("system")) {
+        out.setAttribute("system", attrs.get("id") + "_inline");
+      }
       dropSchemaForSqlite(out, c.dbms, path);
       return;
     }

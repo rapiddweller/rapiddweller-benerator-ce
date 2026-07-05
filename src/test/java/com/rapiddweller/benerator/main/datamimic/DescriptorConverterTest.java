@@ -205,11 +205,13 @@ public class DescriptorConverterTest {
     // (d) CRUD consumers -> DATAMIMIC CRUD targets (inserter = plain store: insert is the default)
     assertEquals("db.update", first(doc, "generate", "name", "db_order").getAttribute("target"));
     // <iterate type="products" source="mongo" consumer="mongo.inserter('insertedtable')"/> reads the
-    // 'products' collection (type) and writes to 'insertedtable' (name from the inserter arg) - NOT back
-    // into the source. The store source keeps its collection in type.
+    // 'products' collection and writes to 'insertedtable' (name from the inserter arg) - NOT back into
+    // the source. The read collection must live in sourceEntity: DATAMIMIC's write-side resolution is
+    // targetEntity -> type -> name, so type="products" would override the renamed write target.
     Element mongoIterate = first(doc, "iterate", "name", "insertedtable");
     assertEquals("mongo", mongoIterate.getAttribute("target"));
-    assertEquals("products", mongoIterate.getAttribute("type"));
+    assertEquals("products", mongoIterate.getAttribute("sourceEntity"));
+    assertFalse("type would override the renamed write target", mongoIterate.hasAttribute("type"));
     assertTrue("no consumer flag left", report.attention().stream()
         .noneMatch(it -> "consumer".equals(it.kind)));
   }
