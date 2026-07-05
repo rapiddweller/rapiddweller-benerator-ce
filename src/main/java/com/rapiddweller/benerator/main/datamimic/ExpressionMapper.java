@@ -50,6 +50,12 @@ class ExpressionMapper {
       report.info(path, "generator", "CompanyNameGenerator args " + args + " dropped (no DATAMIMIC equivalent)");
       args = "";
     }
+    if (mapped.equals("EANGenerator") && args.matches("(?i)\\(\\s*(true|false)\\s*\\)")) {
+      // Benerator's boolean arg is the 'unique' flag; DATAMIMIC's EANGenerator(locale) has none -
+      // it would swallow the boolean as locale. Random EAN-13 collisions are statistically negligible.
+      report.info(path, "generator", "EANGenerator unique flag " + args + " dropped (no DATAMIMIC equivalent)");
+      args = "";
+    }
     if (!VocabularyMap.KNOWN_GENERATORS.contains(mapped)) {
       report.add(path, "generator", "generator '" + name + "' not known to DATAMIMIC - verify/replace manually");
     }

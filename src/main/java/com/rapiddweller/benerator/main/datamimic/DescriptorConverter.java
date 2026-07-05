@@ -761,6 +761,17 @@ public class DescriptorConverter {
 
   private void convertFieldAttributes(Element src, Element out, String tag, String path) {
     Map<String, String> attrs = attributes(src);
+    // dataset/locale are static config in DATAMIMIC (attribute values are not interpolated at runtime),
+    // so a Benerator dataset="{country}" must be resolved from the settings NOW or it stays literal.
+    for (String cfg : new String[] {"dataset", "locale"}) {
+      String resolved = attrs.containsKey(cfg) ? settings.resolve(attrs.get(cfg)) : null;
+      if (resolved != null && !resolved.equals(attrs.get(cfg))) {
+        attrs = new LinkedHashMap<>(attrs);
+        attrs.put(cfg, resolved);
+        report.info(path, "attribute", cfg + "='" + attributes(src).get(cfg) + "' resolved to '" + resolved
+            + "' at conversion (DATAMIMIC does not interpolate it at runtime)");
+      }
+    }
     // Does another attribute already produce the value? Then an unmapped type= is cosmetic, not a gap.
     boolean hasMode = attrs.containsKey("script") || attrs.containsKey("source") || attrs.containsKey("values")
         || attrs.containsKey("generator") || attrs.containsKey("constant") || attrs.containsKey("pattern");
