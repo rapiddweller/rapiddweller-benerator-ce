@@ -147,10 +147,26 @@ public class DescriptorConverter {
   }
 
   /** The bare column names of a simple select-list, or null when any entry is not a plain column
-   *  (function call, {@code *}, quoted alias) - then positional access cannot be mapped safely. */
+   *  (function call, {@code *}, quoted alias) - then positional access cannot be mapped safely.
+   *  A mongo find-selector names its columns in the projection ({@code {_id: 0, ean_code: 1, price: 1}}). */
   private static List<String> selectListColumns(String sql) {
     if (sql == null || sql.isEmpty()) {
       return null;
+    }
+    java.util.regex.Matcher mp = java.util.regex.Pattern
+        .compile("(?is)projection\\s*:\\s*\\{([^}]*)\\}").matcher(sql);
+    if (mp.find()) {
+      List<String> cols = new java.util.ArrayList<>();
+      for (String entry : mp.group(1).split(",")) {
+        String[] kv = entry.split(":");
+        if (kv.length != 2) {
+          return null;
+        }
+        if (kv[1].trim().equals("1")) {
+          cols.add(kv[0].trim().replaceAll("['\"]", ""));
+        }
+      }
+      return cols.isEmpty() ? null : cols;
     }
     java.util.regex.Matcher m = java.util.regex.Pattern
         .compile("(?is)^\\s*select\\s+(.+?)\\s+from\\s").matcher(sql);
@@ -230,11 +246,16 @@ public class DescriptorConverter {
     if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("id")) {
       storeIds.add(el.getAttribute("id"));
     }
-    if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("environment")) {
-      // DATAMIMIC resolves <system>.<systemType>.* from conf/<environment>.env.properties;
-      // system falls back to the element id when absent.
+    if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("id")
+        && !(tag.equals("database") && el.hasAttribute("url") && !el.hasAttribute("environment"))) {
+      // DATAMIMIC resolves <system>.<systemType>.* from conf/<environment>.env.properties; system
+      // falls back to the element id, the environment to 'environment' (a bare <mongodb id="db"/>
+      // reads conf/environment.env.properties - Benerator behaves the same). An INLINE-configured
+      // <database url=...> reads no env at runtime and must not claim the system name, or it would
+      // mistype a sibling demo's mongo env segment as 'db'.
+      String environment = el.hasAttribute("environment") ? el.getAttribute("environment") : "environment";
       String system = el.hasAttribute("system") ? el.getAttribute("system") : el.getAttribute("id");
-      envSystems.computeIfAbsent(el.getAttribute("environment"), k -> new LinkedHashMap<>())
+      envSystems.computeIfAbsent(environment, k -> new LinkedHashMap<>())
           .put(system, tag.equals("mongodb") ? "mongo" : "db");
     }
     for (Node c = el.getFirstChild(); c != null; c = c.getNextSibling()) {
@@ -564,7 +585,8 @@ public class DescriptorConverter {
     List<String> ancestors = new java.util.ArrayList<>(); // nearest first
     for (Node n = field.getParentNode(); n instanceof Element; n = n.getParentNode()) {
       Element e = (Element) n;
-      if (local(e).equals("generate") || local(e).equals("iterate")) {
+      // <part> becomes <nestedKey>, which opens a real runtime scope just like a nested generate.
+      if (local(e).equals("generate") || local(e).equals("iterate") || local(e).equals("part")) {
         ancestors.add(e.hasAttribute("type") ? e.getAttribute("type") : e.getAttribute("name"));
       }
     }

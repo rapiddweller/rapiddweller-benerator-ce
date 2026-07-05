@@ -365,3 +365,105 @@ jobs:
             $PSQL "SELECT count(*) FROM db_product WHERE ean_code NOT IN ('4004768406056','8006550301040','8076800195057','8000353006386','3068320018430','8076800000085','7610400071680')"
             exit 1
           fi
+
+  shop-mongo-round-trip:
+    name: Shop-Mongo round-trip — flagship shop demo -> converter -> DATAMIMIC -> mongodb
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7
+        # the demo's migrated env (conf/environment.env.properties) expects localhost:47017
+        ports: ["47017:27017"]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping:1}).ok'"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: |
+          mvn --batch-mode compile -Djacoco.skip=true
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+
+      - name: Convert the REAL shop demo (untouched)
+        run: |
+          java -cp "target/classes:$(cat cp.txt)" \
+            com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+            src/demo/resources/demo/shop converted-shop-mongo
+          echo "----- converted descriptor -----"
+          cat converted-shop-mongo/shop-mongodb.datamimic.xml
+
+      - name: Adapt the environment file to CI (env files are per-environment by design)
+        # The migrated env carries the local dev credentials; the CI mongo service is auth-less.
+        run: |
+          sed -i '/db.mongo.user=/d;/db.mongo.password=/d' converted-shop-mongo/conf/environment.env.properties
+          cat converted-shop-mongo/conf/environment.env.properties
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: Run the converted shop demo against mongodb
+        # The demo streams every doc to a ConsoleExporter for its own count checks - log to file.
+        run: |
+          cd converted-shop-mongo
+          datamimic run shop-mongodb.datamimic.xml > run.log 2>&1 \
+            || { echo "----- last 150 lines -----"; tail -n 150 run.log; exit 1; }
+          tail -n 20 run.log
+
+      - name: Upload the full run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shop-mongo-run-log
+          path: converted-shop-mongo/run.log
+
+      - name: Verify the collections (the demo's own expected counts + document shape)
+        run: |
+          python - <<'PY'
+          from pymongo import MongoClient
+          db = MongoClient("mongodb://localhost:47017").benerator
+          # the counts shop-mongodb.ben.xml asserts about itself
+          expected = {"db_product": 57, "db_user": 100, "db_order": 300, "db_order_item": 1500}
+          fail = False
+          for coll, want in expected.items():
+              got = db[coll].count_documents({})
+              print(f"{coll}: {got} docs (expected {want})")
+              fail |= got != want
+          # document shape: the references and nested parts must actually be populated
+          item = db.db_order_item.find_one({})
+          for field in ("order_id", "address_id", "product_ean_code", "total_price"):
+              ok = item is not None and item.get(field) is not None
+              print(f"db_order_item.{field}: {'ok' if ok else 'MISSING'}")
+              fail |= not ok
+          user = db.db_user.find_one({})
+          nested = bool(user and user.get("db_customer") and user["db_customer"][0].get("db_address"))
+          print(f"db_user.db_customer[0].db_address nested part: {'ok' if nested else 'MISSING'}")
+          fail |= not nested
+          # the update pass must have written real sums
+          updated = db.db_order.count_documents({"total_price": {"$gt": 0}})
+          print(f"db_order docs with total_price > 0 after the update pass: {updated}")
+          fail |= updated == 0
+          raise SystemExit(1 if fail else 0)
+          PY

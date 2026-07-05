@@ -449,6 +449,20 @@ public class DescriptorConverterTest {
     assertTrue(birthDate.getAttribute("generator").startsWith("DateTimeGenerator"));
   }
 
+  @Test
+  public void convertsShopMongodbScopesAndProjectionColumns() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/demo/resources/demo/shop/shop-mongodb.ben.xml", report);
+
+    // a <part> becomes <nestedKey>, a real runtime scope: the enclosing generate is reachable
+    // via the parent alias, not by its name
+    assertNotNull("db_user.id inside <part> -> parent.id", first(doc, "id", "script", "parent.id"));
+
+    // positional access on a mongo find-projection variable -> column access on the row dict
+    assertNotNull(first(doc, "key", "script", "product.ean_code"));
+    assertNotNull(first(doc, "key", "script", "product.price * this.number_of_items"));
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();
