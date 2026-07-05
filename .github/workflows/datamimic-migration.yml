@@ -333,7 +333,7 @@ jobs:
           tail -n 20 run.log
 
       - name: Upload the full run log
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: shop-run-log
@@ -343,12 +343,25 @@ jobs:
         # These are exactly the row counts the original shop-postgres.ben.xml asserts about itself
         # (base dbunit data + csv imports + generated rows at the development stage settings).
         run: |
+          PSQL="psql -h localhost -p 35432 -U benerator -d benerator -tAc"
+          export PGPASSWORD=benerator
+          fail=0
           check() {
-            n=$(PGPASSWORD=benerator psql -h localhost -p 35432 -U benerator -d benerator -tAc "SELECT count(*) FROM $1")
+            n=$($PSQL "SELECT count(*) FROM $1")
             echo "$1: $n rows (expected $2)"
-            [ "$n" -eq "$2" ]
+            [ "$n" -eq "$2" ] || fail=1
           }
           check db_product 57
           check db_user 104
           check db_order 301
           check db_order_item 1501
+          if [ "$fail" -ne 0 ]; then
+            echo "--- db_product forensics: which source lost rows? ---"
+            echo "dbunit EANs present (expect 3):"
+            $PSQL "SELECT ean_code, name FROM db_product WHERE ean_code IN ('4004768406056','8006550301040','8076800195057')"
+            echo "csv EANs present (expect 4):"
+            $PSQL "SELECT ean_code, name FROM db_product WHERE ean_code IN ('8000353006386','3068320018430','8076800000085','7610400071680')"
+            echo "generated rows (expect 50):"
+            $PSQL "SELECT count(*) FROM db_product WHERE ean_code NOT IN ('4004768406056','8006550301040','8076800195057','8000353006386','3068320018430','8076800000085','7610400071680')"
+            exit 1
+          fi
