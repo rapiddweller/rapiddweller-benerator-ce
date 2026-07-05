@@ -51,6 +51,8 @@ jobs:
             demos-tree demos-tree demos-migration-report.txt
           echo "----- demo-suite migration report (manual-attention items) -----"
           cat demos-migration-report.txt
+          # The per-file matrix (file x manual-work x playbook) as the run's summary page.
+          cat demos-tree/migration-summary.md >> "$GITHUB_STEP_SUMMARY" || true
 
       - name: Checkout DATAMIMIC CE (development)
         uses: actions/checkout@v5
@@ -114,6 +116,12 @@ jobs:
           done
           echo ""
           echo "Demos that convert AND run standalone: $ran / $total."
+          {
+            echo ""
+            echo "## Standalone run status"
+            echo ""
+            echo "**$ran / $total** converted demos also RUN standalone in DATAMIMIC CE (the rest need a DB or fixes - see the job log for each first error line)."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   db-round-trip:
     name: DB round-trip — Benerator -> converter -> DATAMIMIC -> postgres
@@ -233,7 +241,18 @@ jobs:
         run: pip install ./datamimic-ce
 
       - name: Run the converted real demo against mongodb
-        run: datamimic run converted-mongo/mongodb-inserter.datamimic.xml
+        # The demo itself streams 2x1000 documents to a ConsoleExporter - keep that out of the CI log.
+        run: |
+          datamimic run converted-mongo/mongodb-inserter.datamimic.xml > mongo-run.log 2>&1 \
+            || { echo "----- last 120 lines -----"; tail -n 120 mongo-run.log; exit 1; }
+          tail -n 15 mongo-run.log
+
+      - name: Upload the full run log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mongo-run-log
+          path: mongo-run.log
 
       - name: Verify DATAMIMIC wrote the documents to the real mongo
         # The real demo generates 1000 records into 'testben2', then iterates them back and re-inserts
@@ -249,3 +268,87 @@ jobs:
           assert gen == 1000, f"expected 1000 generated docs, got {gen}"
           assert reinserted == 1000, f"expected 1000 re-inserted docs, got {reinserted}"
           PY
+
+  shop-round-trip:
+    name: Shop round-trip — flagship shop demo -> converter -> DATAMIMIC -> postgres
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: benerator
+          POSTGRES_PASSWORD: benerator
+          POSTGRES_DB: benerator
+        # the demo's postgres/shop.postgres.properties expects localhost:35432 with these credentials
+        ports: ["35432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: |
+          mvn --batch-mode compile -Djacoco.skip=true
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+
+      - name: Convert the REAL shop demo (Benerator's flagship demo, untouched)
+        run: |
+          java -cp "target/classes:$(cat cp.txt)" \
+            com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+            src/demo/resources/demo/shop converted-shop
+          echo "----- converted descriptor -----"
+          cat converted-shop/shop-postgres.datamimic.xml
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: Run the converted shop demo against postgres
+        # The demo streams every row to a ConsoleExporter for its own count checks - log to file.
+        run: |
+          cd converted-shop
+          datamimic run shop-postgres.datamimic.xml > run.log 2>&1 \
+            || { echo "----- last 150 lines -----"; tail -n 150 run.log; exit 1; }
+          tail -n 20 run.log
+
+      - name: Upload the full run log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shop-run-log
+          path: converted-shop/run.log
+
+      - name: Verify the shop schema is populated (the demo's own expected counts)
+        # These are exactly the row counts the original shop-postgres.ben.xml asserts about itself
+        # (base dbunit data + csv imports + generated rows at the development stage settings).
+        run: |
+          check() {
+            n=$(PGPASSWORD=benerator psql -h localhost -p 35432 -U benerator -d benerator -tAc "SELECT count(*) FROM $1")
+            echo "$1: $n rows (expected $2)"
+            [ "$n" -eq "$2" ]
+          }
+          check db_product 57
+          check db_user 104
+          check db_order 301
+          check db_order_item 1501
