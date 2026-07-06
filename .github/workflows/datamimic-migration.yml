@@ -98,6 +98,7 @@ jobs:
         continue-on-error: true
         run: |
           ran=0; total=0
+          mkdir -p standalone-logs
           echo "Converted demo | runs standalone in DATAMIMIC CE?"
           echo "---------------|----------------------------------"
           for f in $(find demos-tree -name '*.datamimic.xml' | sort); do
@@ -109,8 +110,12 @@ jobs:
             if out=$(cd "$(dirname "$f")" && timeout 60 datamimic run "$(basename "$f")" 2>&1); then
               ran=$((ran + 1)); echo "$rel | yes"
             else
-              # Show the REAL first error line — the old blanket 'needs a DB' label hid actual converter bugs.
-              err=$(echo "$out" | grep -m1 -oE 'ERROR.*|Error[: ].*' | cut -c1-180)
+              # Keep the FULL output per failing demo as an artifact (the summary line truncates, but
+              # triage needs the whole traceback + the exact failing statement).
+              printf '%s\n' "$out" > "standalone-logs/${rel//\//__}.log"
+              # Summary line: the ValueError/RuntimeError message (last, most-specific frame), not the
+              # first ERROR log line — 300 chars so the real cause survives.
+              err=$(printf '%s\n' "$out" | grep -oE '(ValueError|RuntimeError|Error)[: ].*' | tail -1 | cut -c1-300)
               echo "$rel | no (${err:-timeout or non-zero exit without an ERROR line})"
             fi
           done
@@ -120,8 +125,17 @@ jobs:
             echo ""
             echo "## Standalone run status"
             echo ""
-            echo "**$ran / $total** converted demos also RUN standalone in DATAMIMIC CE (the rest need a DB or fixes - see the job log for each first error line)."
+            echo "**$ran / $total** converted demos also RUN standalone in DATAMIMIC CE. Many of the rest need a real DB or are embedded-DB dialect (h2/hsqldb/derby) the converter flags for manual migration; full per-demo logs are in the \`standalone-logs\` artifact."
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload per-demo standalone logs + converted tree
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-demo-logs
+          path: |
+            standalone-logs
+            demos-tree/**/*.datamimic.xml
 
   db-round-trip:
     name: DB round-trip — Benerator -> converter -> DATAMIMIC -> postgres
