@@ -481,6 +481,28 @@ public class DescriptorConverterTest {
     assertNoInterpolationInScript(doc);
   }
 
+  @Test
+  public void ftlScriptBecomesStringInterpolationAndPathsGoDescriptorRelative() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/demo/resources/demo/file/create_xml.ben.xml", report);
+
+    // script="{ftl: ${addr.postalCode} ${addr.city}}" is string interpolation, not a python
+    // expression -> emitted as string= with __var__ interpolation, NEVER as script= (AGENTS rule 7).
+    Element line2 = first(doc, "key", "name", "line2");
+    assertNotNull(line2);
+    assertTrue("FTL script -> string=: " + line2.getAttribute("string"),
+        line2.getAttribute("string").contains("__addr.postalCode__")
+            && line2.getAttribute("string").contains("__addr.city__"));
+    assertTrue("no leftover script= on the FTL field", line2.getAttribute("script").isEmpty());
+    assertNoInterpolationInScript(doc);
+
+    // A project-root-relative file source (demo/file/x.csv) is rewritten to the path that exists
+    // next to the descriptor (products.import.csv), since DATAMIMIC resolves relative to it.
+    Document io = convert("src/demo/resources/demo/file/csv_io.ben.xml", new MigrationReport());
+    Element it = first(io, "iterate", "source", "products.import.csv");
+    assertNotNull("demo/file/products.import.csv -> products.import.csv", it);
+  }
+
   /** Assert no {@code script="..."} attribute anywhere in the tree carries an {@code __name__}
    *  interpolation token — that idiom belongs in selector/string/pattern only. */
   private static void assertNoInterpolationInScript(Document doc) {

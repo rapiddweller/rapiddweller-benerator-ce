@@ -705,6 +705,25 @@ public class DescriptorConverter {
     return frag;
   }
 
+  /** Benerator resolves a file source/uri relative to the INVOCATION dir (project root), so demos
+   *  reference files as {@code demo/file/x.csv}; DATAMIMIC resolves relative to the DESCRIPTOR dir.
+   *  Rewrite such a path to the shortest suffix that actually exists next to the descriptor (verified
+   *  by the filesystem, so a store id / bean id / unresolvable path is left untouched). */
+  private String descriptorRelativePath(String pathValue) {
+    if (pathValue == null || pathValue.isEmpty() || pathValue.startsWith("{") || !pathValue.contains("/")
+        || new File(descriptorDir, pathValue).exists()) {
+      return pathValue; // already resolves, or is a store id / template / bare name
+    }
+    String[] parts = pathValue.split("/");
+    for (int i = 1; i < parts.length; i++) {
+      String candidate = String.join("/", java.util.Arrays.copyOfRange(parts, i, parts.length));
+      if (new File(descriptorDir, candidate).exists()) {
+        return candidate;
+      }
+    }
+    return pathValue; // could not locate next to the descriptor - leave as-is (honest failure)
+  }
+
   private void convertSetupAttributes(Element src, Element out, String path) {
     for (Map.Entry<String, String> a : attributes(src).entrySet()) {
       if (VocabularyMap.SETUP_ATTR_KEEP.contains(a.getKey())) {
@@ -755,6 +774,8 @@ public class DescriptorConverter {
           }
           break;
         case "source":
+          out.setAttribute("source", descriptorRelativePath(val));
+          break;
         case "separator":
           out.setAttribute(key, val);
           break;
@@ -983,8 +1004,18 @@ public class DescriptorConverter {
           }
           break;
         case "script":
-          out.setAttribute("script",
-              rewriteOuterScopeRefs(ExpressionMapper.rewriteScript(val, enclosingScopeName(src)), src));
+          // A Benerator FTL template in a script (script="{ftl:X ${a} ${b}}") is string interpolation,
+          // not a python expression - port it to DATAMIMIC's string= (__var__ interpolation), the ONLY
+          // place __name__ splicing is valid. Directive FTL (<#if>) has no string= equivalent - kept as
+          // script and flagged elsewhere.
+          String ftlScript = ExpressionMapper.ftlBody(val);
+          if (ftlScript != null && !ftlScript.contains("<#")) {
+            out.setAttribute("string", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
+            report.info(path, "script", "FTL template script -> string= interpolation");
+          } else {
+            out.setAttribute("script",
+                rewriteOuterScopeRefs(ExpressionMapper.rewriteScript(val, enclosingScopeName(src)), src));
+          }
           break;
         case "selector":
           out.setAttribute("selector", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
@@ -1438,7 +1469,7 @@ public class DescriptorConverter {
     // placeholder must be resolved to a concrete path first (else the extension - and the type - is lost).
     if (attrs.containsKey("uri")) {
       Element ex = out.createElement("execute");
-      String uri = settings.resolve(attrs.get("uri"));
+      String uri = descriptorRelativePath(settings.resolve(attrs.get("uri")));
       ex.setAttribute("uri", uri);
       if (attrs.containsKey("target")) {
         ex.setAttribute("target", attrs.get("target"));
