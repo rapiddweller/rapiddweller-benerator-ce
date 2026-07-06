@@ -130,21 +130,46 @@ public class DescriptorConverter {
         continue;
       }
       String script = e.getAttribute("script");
+      // A selector column comes from a DB/mongo query, where a schemaless store (mongo) or a CSV/dbunit
+      // import leaves numbers as STRINGS. Benerator's script engine coerces a string in arithmetic; python
+      // does not ("0.89" * 3 REPEATS the string). So when such a column feeds a numeric-typed <key>, wrap
+      // the access in the matching cast - float()/int() - so the arithmetic is numeric, as in Benerator.
+      String numericCast = numericCast(e.getAttribute("type"));
       for (Map.Entry<String, List<String>> entry : columns.entrySet()) {
         java.util.regex.Matcher m = java.util.regex.Pattern
             .compile("\\b" + java.util.regex.Pattern.quote(entry.getKey()) + "\\[(\\d+)\\]").matcher(script);
         StringBuilder sb = new StringBuilder();
         while (m.find()) {
           int idx = Integer.parseInt(m.group(1));
-          String replacement = idx < entry.getValue().size()
-              ? entry.getKey() + "." + entry.getValue().get(idx)
-              : m.group(); // out-of-range index: leave it, the runtime error is the honest signal
+          if (idx >= entry.getValue().size()) {
+            m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(m.group())); // out-of-range: leave it
+            continue;
+          }
+          String access = entry.getKey() + "." + entry.getValue().get(idx);
+          String replacement = numericCast == null ? access : numericCast + "(" + access + ")";
           m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(replacement));
         }
         m.appendTail(sb);
         script = sb.toString();
       }
       e.setAttribute("script", script);
+    }
+  }
+
+  /** The python numeric cast for a DATAMIMIC field type, or null for a non-numeric/absent type:
+   *  {@code float} for float/double/decimal, {@code int} for int/long/short. Used to coerce a
+   *  store-sourced (possibly string) selector column feeding a numeric-typed field. */
+  private static String numericCast(String type) {
+    if (type == null) {
+      return null;
+    }
+    switch (type) {
+      case "float": case "double": case "decimal": case "big_decimal":
+        return "float";
+      case "int": case "long": case "short": case "byte": case "integer":
+        return "int";
+      default:
+        return null;
     }
   }
 

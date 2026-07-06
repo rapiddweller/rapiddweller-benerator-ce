@@ -458,9 +458,11 @@ public class DescriptorConverterTest {
     // via the parent alias, not by its name
     assertNotNull("db_user.id inside <part> -> parent.id", first(doc, "id", "script", "parent.id"));
 
-    // positional access on a mongo find-projection variable -> column access on the row dict
+    // positional access on a mongo find-projection variable -> column access on the row dict.
+    // ean_code (untyped key) stays a bare access; price feeds a type="float" key, so the store-sourced
+    // (schemaless -> possibly string) value is float()-coerced - python str*int would repeat, not multiply.
     assertNotNull(first(doc, "key", "script", "product.ean_code"));
-    assertNotNull(first(doc, "key", "script", "product.price * this.number_of_items"));
+    assertNotNull(first(doc, "key", "script", "float(product.price) * this.number_of_items"));
 
     // a reference to an entity NESTED in a collection document reads the collection and descends
     // by dotted sourceKey (Benerator mongo entity paths)
