@@ -94,38 +94,55 @@ jobs:
             src/test/resources/com/rapiddweller/benerator/main/datamimic/compare_corpus/structural.ben.xml \
             row "${GITHUB_WORKSPACE}/target/classes:$(cat cp.txt)"
 
-      - name: INFO — run every converted demo through DATAMIMIC CE
+      - name: INFO — run every STANDALONE-capable converted demo through DATAMIMIC CE
         continue-on-error: true
         run: |
-          ran=0; total=0
+          # Classify every converted demo up front, so the standalone ratio is measured only against
+          # demos that CAN run without external infrastructure. A demo lands in exactly one bucket:
+          #   needs-db   : connects to an external DB SERVER (mongo / postgres / mysql / mssql / oracle)
+          #                -> real round-trip coverage is the gated db-/mongo-/shop-* jobs, NOT here.
+          #   dialect    : an embedded Java DB (h2/hsqldb/derby/firebird/db2/vertica) the converter maps
+          #                to sqlite but whose DDL stays dialect-specific -> manual migration, not runnable.
+          #   standalone : everything else (sqlite in-process, pure generate, file I/O) -> the real metric.
           mkdir -p standalone-logs
-          echo "Converted demo | runs standalone in DATAMIMIC CE?"
-          echo "---------------|----------------------------------"
+          ran=0; sacount=0; needsdb=0; dialect=0
+          : > needs-db.txt; : > dialect.txt; : > standalone-fail.txt
           for f in $(find demos-tree -name '*.datamimic.xml' | sort); do
-            total=$((total + 1))
             rel="${f#demos-tree/}"
+            if grep -qiE '<mongodb|dbms="(postgresql|mysql|mssql|oracle)"' "$f"; then
+              needsdb=$((needsdb + 1)); echo "$rel" >> needs-db.txt; continue
+            fi
+            if grep -qiE '<execute[^>]*uri="[^"]*(h2|hsql|derby|firebird|db2|vertica)[^"]*\.sql"' "$f"; then
+              dialect=$((dialect + 1)); echo "$rel" >> dialect.txt; continue
+            fi
+            sacount=$((sacount + 1))
             # Isolate each run: sibling demos in the same dir reuse SQLite db names (source.sqlite),
             # so a leftover file from a prior demo makes CREATE TABLE fail with "already exists".
             rm -rf "$(dirname "$f")/db"
             if out=$(cd "$(dirname "$f")" && timeout 60 datamimic run "$(basename "$f")" 2>&1); then
               ran=$((ran + 1)); echo "$rel | yes"
             else
-              # Keep the FULL output per failing demo as an artifact (the summary line truncates, but
-              # triage needs the whole traceback + the exact failing statement).
+              # Full per-demo output as an artifact; the summary keeps the last (most-specific) error.
               printf '%s\n' "$out" > "standalone-logs/${rel//\//__}.log"
-              # Summary line: the ValueError/RuntimeError message (last, most-specific frame), not the
-              # first ERROR log line — 300 chars so the real cause survives.
               err=$(printf '%s\n' "$out" | grep -oE '(ValueError|RuntimeError|Error)[: ].*' | tail -1 | cut -c1-300)
               echo "$rel | no (${err:-timeout or non-zero exit without an ERROR line})"
+              echo "$rel :: ${err}" >> standalone-fail.txt
             fi
           done
           echo ""
-          echo "Demos that convert AND run standalone: $ran / $total."
+          echo "STANDALONE-capable demos that run in DATAMIMIC CE: $ran / $sacount"
+          echo "Excluded — need an external DB (covered by the gated round-trip jobs): $needsdb"; cat needs-db.txt | sed 's/^/  - /'
+          echo "Excluded — embedded-DB dialect (manual migration, converter-flagged): $dialect"; cat dialect.txt | sed 's/^/  - /'
           {
             echo ""
             echo "## Standalone run status"
             echo ""
-            echo "**$ran / $total** converted demos also RUN standalone in DATAMIMIC CE. Many of the rest need a real DB or are embedded-DB dialect (h2/hsqldb/derby) the converter flags for manual migration; full per-demo logs are in the \`standalone-logs\` artifact."
+            echo "**$ran / $sacount** standalone-capable demos run in DATAMIMIC CE."
+            echo ""
+            echo "- **$needsdb** excluded: need an external DB server → real coverage is the \`DB round-trip\`, \`Mongo round-trip\`, \`Shop round-trip\` and \`Shop-Mongo round-trip\` jobs."
+            echo "- **$dialect** excluded: embedded-DB dialect (h2/hsqldb/derby/firebird) the converter flags for manual migration."
+            echo ""
+            echo "The remaining standalone failures (converter or DM CE gaps) are in \`standalone-fail.txt\` / the \`standalone-demo-logs\` artifact."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload per-demo standalone logs + converted tree
@@ -135,6 +152,9 @@ jobs:
           name: standalone-demo-logs
           path: |
             standalone-logs
+            standalone-fail.txt
+            needs-db.txt
+            dialect.txt
             demos-tree/**/*.datamimic.xml
 
   db-round-trip:
