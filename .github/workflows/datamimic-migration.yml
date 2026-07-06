@@ -1,0 +1,503 @@
+name: DATAMIMIC migration round-trip
+
+# Proves the Benerator -> DATAMIMIC migration pipeline end-to-end: convert Benerator descriptors, then
+# run the converted output through the REAL DATAMIMIC CE engine (development branch). A converter that
+# emits parseable-but-broken DATAMIMIC is caught here.
+#
+#   GATE : a curated corpus of self-contained descriptors MUST convert and run.
+#   INFO : the whole demo suite is converted (every file echoed) and each is run through DATAMIMIC CE
+#          (most demos need a DB / external source, so this is reported, not gated).
+
+on:
+  push:
+    branches: [development, release-prep, "feat/**", "fix/**"]
+    paths-ignore: ["**.md"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  round-trip:
+    name: convert demos and run them through DATAMIMIC CE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: mvn --batch-mode compile -Djacoco.skip=true
+
+      - name: Resolve the converter classpath
+        run: |
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+          echo "CONV_CP=target/classes:$(cat cp.txt)" >> "$GITHUB_ENV"
+
+      - name: Convert the curated round-trip corpus (gate input)
+        run: |
+          java -cp "$CONV_CP" com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+            src/test/resources/com/rapiddweller/benerator/main/datamimic/roundtrip_corpus \
+            converted-corpus
+
+      - name: Convert the WHOLE Benerator demo suite (visibility)
+        run: |
+          cp -r src/demo/resources/demo demos-tree
+          java -cp "$CONV_CP" com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+            demos-tree demos-tree demos-migration-report.txt
+          echo "----- demo-suite migration report (manual-attention items) -----"
+          cat demos-migration-report.txt
+          # The per-file matrix (file x manual-work x playbook) as the run's summary page.
+          cat demos-tree/migration-summary.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0 # setuptools_scm needs history/tags to derive the version
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }} # PAT only needed if the repo is private
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: GATE — run the curated corpus through DATAMIMIC CE
+        run: |
+          fail=0
+          for f in converted-corpus/*.datamimic.xml; do
+            echo "::group::datamimic run $(basename "$f")"
+            if timeout 120 datamimic run "$f"; then
+              echo "OK: $(basename "$f")"
+            else
+              echo "FAIL: $(basename "$f") — converted output did not run in DATAMIMIC CE"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done
+          exit $fail
+
+      - name: GATE — dual execution structural compare (Benerator vs DATAMIMIC)
+        run: |
+          # Run the same descriptor in BOTH engines and assert the generated structure (fields + count)
+          # matches — the strongest migration check: the converted model produces the same shape of data.
+          bash scripts/datamimic_structural_compare.sh \
+            src/test/resources/com/rapiddweller/benerator/main/datamimic/compare_corpus/structural.ben.xml \
+            row "${GITHUB_WORKSPACE}/target/classes:$(cat cp.txt)"
+
+      - name: INFO — run every STANDALONE-capable converted demo through DATAMIMIC CE
+        continue-on-error: true
+        run: |
+          # Classify every converted demo up front, so the standalone ratio is measured only against
+          # demos that CAN run without external infrastructure. A demo lands in exactly one bucket:
+          #   needs-db   : connects to an external DB SERVER (mongo / postgres / mysql / mssql / oracle)
+          #                -> real round-trip coverage is the gated db-/mongo-/shop-* jobs, NOT here.
+          #   dialect    : an embedded Java DB (h2/hsqldb/derby/firebird/db2/vertica) the converter maps
+          #                to sqlite but whose DDL stays dialect-specific -> manual migration, not runnable.
+          #   standalone : everything else (sqlite in-process, pure generate, file I/O) -> the real metric.
+          mkdir -p standalone-logs
+          ran=0; sacount=0; needsdb=0; dialect=0
+          : > needs-db.txt; : > dialect.txt; : > standalone-fail.txt
+          for f in $(find demos-tree -name '*.datamimic.xml' | sort); do
+            rel="${f#demos-tree/}"
+            if grep -qiE '<mongodb|dbms="(postgresql|mysql|mssql|oracle)"' "$f"; then
+              needsdb=$((needsdb + 1)); echo "$rel" >> needs-db.txt; continue
+            fi
+            if grep -qiE '<execute[^>]*uri="[^"]*(h2|hsql|derby|firebird|db2|vertica)[^"]*\.sql"' "$f"; then
+              dialect=$((dialect + 1)); echo "$rel" >> dialect.txt; continue
+            fi
+            sacount=$((sacount + 1))
+            # Isolate each run: sibling demos in the same dir reuse SQLite db names (source.sqlite),
+            # so a leftover file from a prior demo makes CREATE TABLE fail with "already exists".
+            rm -rf "$(dirname "$f")/db"
+            if out=$(cd "$(dirname "$f")" && timeout 60 datamimic run "$(basename "$f")" 2>&1); then
+              ran=$((ran + 1)); echo "$rel | yes"
+            else
+              # Full per-demo output as an artifact; the summary keeps the last (most-specific) error.
+              printf '%s\n' "$out" > "standalone-logs/${rel//\//__}.log"
+              err=$(printf '%s\n' "$out" | grep -oE '(ValueError|RuntimeError|Error)[: ].*' | tail -1 | cut -c1-300)
+              echo "$rel | no (${err:-timeout or non-zero exit without an ERROR line})"
+              echo "$rel :: ${err}" >> standalone-fail.txt
+            fi
+          done
+          echo ""
+          echo "STANDALONE-capable demos that run in DATAMIMIC CE: $ran / $sacount"
+          echo "Excluded — need an external DB (covered by the gated round-trip jobs): $needsdb"; cat needs-db.txt | sed 's/^/  - /'
+          echo "Excluded — embedded-DB dialect (manual migration, converter-flagged): $dialect"; cat dialect.txt | sed 's/^/  - /'
+          {
+            echo ""
+            echo "## Standalone run status"
+            echo ""
+            echo "**$ran / $sacount** standalone-capable demos run in DATAMIMIC CE."
+            echo ""
+            echo "- **$needsdb** excluded: need an external DB server → real coverage is the \`DB round-trip\`, \`Mongo round-trip\`, \`Shop round-trip\` and \`Shop-Mongo round-trip\` jobs."
+            echo "- **$dialect** excluded: embedded-DB dialect (h2/hsqldb/derby/firebird) the converter flags for manual migration."
+            echo ""
+            echo "The remaining standalone failures (converter or DM CE gaps) are in \`standalone-fail.txt\` / the \`standalone-demo-logs\` artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload per-demo standalone logs + converted tree
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-demo-logs
+          path: |
+            standalone-logs
+            standalone-fail.txt
+            needs-db.txt
+            dialect.txt
+            demos-tree/**/*.datamimic.xml
+
+  db-round-trip:
+    name: DB round-trip — Benerator -> converter -> DATAMIMIC -> postgres
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      CORPUS: src/test/resources/com/rapiddweller/benerator/main/datamimic/db_roundtrip
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: |
+          mvn --batch-mode compile -Djacoco.skip=true
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+
+      - name: Create the schema in postgres
+        run: PGPASSWORD=testpass psql -h localhost -U testuser -d testdb -f "$CORPUS/schema.sql"
+
+      - name: Convert the DB round-trip corpus (descriptor + env)
+        run: |
+          java -cp "target/classes:$(cat cp.txt)" \
+            com.rapiddweller.benerator.main.datamimic.DatamimicConverter "$CORPUS" converted-db
+          echo "----- migrated env -----"; cat converted-db/conf/environment.env.properties
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: Run the converted descriptor against postgres
+        run: datamimic run converted-db/customers.datamimic.xml
+
+      - name: Verify DATAMIMIC wrote the rows to the real DB
+        run: |
+          n=$(PGPASSWORD=testpass psql -h localhost -U testuser -d testdb -tAc "SELECT count(*) FROM public.customers")
+          echo "rows in postgres.public.customers: $n"
+          [ "$n" -eq 20 ] || { echo "expected 20 rows written by DATAMIMIC"; exit 1; }
+
+  mongo-round-trip:
+    name: Mongo round-trip — Benerator -> converter -> DATAMIMIC -> mongodb
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping:1}).ok'"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      CORPUS: src/test/resources/com/rapiddweller/benerator/main/datamimic/mongo_roundtrip
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: |
+          mvn --batch-mode compile -Djacoco.skip=true
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+
+      - name: Convert the mongo round-trip corpus (real demo db/mongodb-inserter + env)
+        run: |
+          java -cp "target/classes:$(cat cp.txt)" \
+            com.rapiddweller.benerator.main.datamimic.DatamimicConverter "$CORPUS" converted-mongo
+          echo "----- migrated env (segment .db. -> .mongo.) -----"; cat converted-mongo/conf/environment.env.properties
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: Run the converted real demo against mongodb
+        # The demo itself streams 2x1000 documents to a ConsoleExporter - keep that out of the CI log.
+        run: |
+          datamimic run converted-mongo/mongodb-inserter.datamimic.xml > mongo-run.log 2>&1 \
+            || { echo "----- last 120 lines -----"; tail -n 120 mongo-run.log; exit 1; }
+          tail -n 15 mongo-run.log
+
+      - name: Upload the full run log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mongo-run-log
+          path: mongo-run.log
+
+      - name: Verify DATAMIMIC wrote the documents to the real mongo
+        # The real demo generates 1000 records into 'testben2', then iterates them back and re-inserts
+        # into 'insertedtable' - a genuine generate + store-read round-trip, not a toy case.
+        # pymongo ships with DATAMIMIC CE, so no extra client install is needed on the runner.
+        run: |
+          python - <<'PY'
+          from pymongo import MongoClient
+          db = MongoClient("mongodb://localhost:27017").testdb
+          gen = db.testben2.count_documents({})
+          reinserted = db.insertedtable.count_documents({})
+          print(f"testben2={gen}  insertedtable={reinserted}")
+          assert gen == 1000, f"expected 1000 generated docs, got {gen}"
+          assert reinserted == 1000, f"expected 1000 re-inserted docs, got {reinserted}"
+          PY
+
+  shop-round-trip:
+    name: Shop round-trip — flagship shop demo -> converter -> DATAMIMIC -> postgres
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: benerator
+          POSTGRES_PASSWORD: benerator
+          POSTGRES_DB: benerator
+        # the demo's postgres/shop.postgres.properties expects localhost:35432 with these credentials
+        ports: ["35432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: |
+          mvn --batch-mode compile -Djacoco.skip=true
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+
+      - name: Convert the REAL shop demo (Benerator's flagship demo, untouched)
+        run: |
+          java -cp "target/classes:$(cat cp.txt)" \
+            com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+            src/demo/resources/demo/shop converted-shop
+          echo "----- converted descriptor -----"
+          cat converted-shop/shop-postgres.datamimic.xml
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: Run the converted shop demo against postgres
+        # The demo streams every row to a ConsoleExporter for its own count checks - log to file.
+        run: |
+          cd converted-shop
+          datamimic run shop-postgres.datamimic.xml > run.log 2>&1 \
+            || { echo "----- last 150 lines -----"; tail -n 150 run.log; exit 1; }
+          tail -n 20 run.log
+
+      - name: Upload the full run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shop-run-log
+          path: converted-shop/run.log
+
+      - name: Verify the shop schema is populated (the demo's own expected counts)
+        # These are exactly the row counts the original shop-postgres.ben.xml asserts about itself
+        # (base dbunit data + csv imports + generated rows at the development stage settings).
+        run: |
+          PSQL="psql -h localhost -p 35432 -U benerator -d benerator -tAc"
+          export PGPASSWORD=benerator
+          fail=0
+          check() {
+            n=$($PSQL "SELECT count(*) FROM $1")
+            echo "$1: $n rows (expected $2)"
+            [ "$n" -eq "$2" ] || fail=1
+          }
+          check db_product 57
+          check db_user 104
+          check db_order 301
+          check db_order_item 1501
+          if [ "$fail" -ne 0 ]; then
+            echo "--- db_product forensics: which source lost rows? ---"
+            echo "dbunit EANs present (expect 3):"
+            $PSQL "SELECT ean_code, name FROM db_product WHERE ean_code IN ('4004768406056','8006550301040','8076800195057')"
+            echo "csv EANs present (expect 4):"
+            $PSQL "SELECT ean_code, name FROM db_product WHERE ean_code IN ('8000353006386','3068320018430','8076800000085','7610400071680')"
+            echo "generated rows (expect 50):"
+            $PSQL "SELECT count(*) FROM db_product WHERE ean_code NOT IN ('4004768406056','8006550301040','8076800195057','8000353006386','3068320018430','8076800000085','7610400071680')"
+            exit 1
+          fi
+
+  shop-mongo-round-trip:
+    name: Shop-Mongo round-trip — flagship shop demo -> converter -> DATAMIMIC -> mongodb
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7
+        # the demo's migrated env (conf/environment.env.properties) expects localhost:47017
+        ports: ["47017:27017"]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping:1}).ok'"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout Benerator
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "11"
+          cache: "maven"
+
+      - name: Build the converter
+        run: |
+          mvn --batch-mode compile -Djacoco.skip=true
+          mvn --batch-mode dependency:build-classpath -Dmdep.outputFile=cp.txt -Djacoco.skip=true
+
+      - name: Convert the REAL shop demo (untouched)
+        run: |
+          java -cp "target/classes:$(cat cp.txt)" \
+            com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+            src/demo/resources/demo/shop converted-shop-mongo
+          echo "----- converted descriptor -----"
+          cat converted-shop-mongo/shop-mongodb.datamimic.xml
+
+      - name: Adapt the environment file to CI (env files are per-environment by design)
+        # The migrated env carries the local dev credentials; the CI mongo service is auth-less.
+        run: |
+          sed -i '/db.mongo.user=/d;/db.mongo.password=/d' converted-shop-mongo/conf/environment.env.properties
+          cat converted-shop-mongo/conf/environment.env.properties
+
+      - name: Checkout DATAMIMIC CE (development)
+        uses: actions/checkout@v5
+        with:
+          repository: rapiddweller/datamimic
+          ref: development
+          path: datamimic-ce
+          fetch-depth: 0
+          token: ${{ secrets.DATAMIMIC_REPO_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install DATAMIMIC CE
+        run: pip install ./datamimic-ce
+
+      - name: Run the converted shop demo against mongodb
+        # The demo streams every doc to a ConsoleExporter for its own count checks - log to file.
+        run: |
+          cd converted-shop-mongo
+          datamimic run shop-mongodb.datamimic.xml > run.log 2>&1 \
+            || { echo "----- last 150 lines -----"; tail -n 150 run.log; exit 1; }
+          tail -n 20 run.log
+
+      - name: Upload the full run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shop-mongo-run-log
+          path: converted-shop-mongo/run.log
+
+      - name: Verify the collections (the demo's own expected counts + document shape)
+        run: |
+          python - <<'PY'
+          from pymongo import MongoClient
+          db = MongoClient("mongodb://localhost:47017").benerator
+          # the counts shop-mongodb.ben.xml asserts about itself
+          expected = {"db_product": 57, "db_user": 100, "db_order": 300, "db_order_item": 1500}
+          fail = False
+          for coll, want in expected.items():
+              got = db[coll].count_documents({})
+              print(f"{coll}: {got} docs (expected {want})")
+              fail |= got != want
+          # document shape: the references and nested parts must actually be populated
+          item = db.db_order_item.find_one({})
+          for field in ("order_id", "address_id", "product_ean_code", "total_price"):
+              ok = item is not None and item.get(field) is not None
+              print(f"db_order_item.{field}: {'ok' if ok else 'MISSING'}")
+              fail |= not ok
+          user = db.db_user.find_one({})
+          nested = bool(user and user.get("db_customer") and user["db_customer"][0].get("db_address"))
+          print(f"db_user.db_customer[0].db_address nested part: {'ok' if nested else 'MISSING'}")
+          fail |= not nested
+          # the update pass must have written real sums
+          updated = db.db_order.count_documents({"total_price": {"$gt": 0}})
+          print(f"db_order docs with total_price > 0 after the update pass: {updated}")
+          fail |= updated == 0
+          raise SystemExit(1 if fail else 0)
+          PY

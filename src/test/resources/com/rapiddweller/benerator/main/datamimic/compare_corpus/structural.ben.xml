@@ -1,0 +1,8 @@
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <generate type="row" count="25" consumer="new com.rapiddweller.platform.csv.CSVEntityExporter('out.csv')">
+        <attribute name="idx" type="int" min="1" max="1000"/>
+        <attribute name="word" type="string" minLength="4" maxLength="8"/>
+        <attribute name="code" pattern="[A-Z]{3}[0-9]{2}"/>
+        <attribute name="flag" values="'yes','no'"/>
+    </generate>
+</setup>

@@ -1,0 +1,13 @@
+# Local DB for the migration round-trip (mirrors the CI postgres service):
+#   podman-compose -f podman-compose.yml up -d
+#   PGPASSWORD=testpass psql -h localhost -U testuser -d testdb -f schema.sql
+# then convert this corpus (env points at localhost:5432/testdb) and: datamimic run <converted>/customers.datamimic.xml
+services:
+  postgres:
+    image: docker.io/library/postgres:16
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
