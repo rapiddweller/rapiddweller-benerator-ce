@@ -472,6 +472,24 @@ public class DescriptorConverterTest {
     assertNotNull(cust);
     assertEquals("db_user", cust.getAttribute("sourceType"));
     assertEquals("db_customer.id", cust.getAttribute("sourceKey"));
+
+    // DATAMIMIC rule: __name__ interpolation is valid only in selector/iterationSelector/string/pattern,
+    // NEVER in script= (a script is evaluated as a Python expression, __x__ is not a name there). The
+    // aggregate write-back must interpolate via iterationSelector and merely READ the result in script.
+    assertNoInterpolationInScript(doc);
+  }
+
+  /** Assert no {@code script="..."} attribute anywhere in the tree carries an {@code __name__}
+   *  interpolation token — that idiom belongs in selector/string/pattern only. */
+  private static void assertNoInterpolationInScript(Document doc) {
+    NodeList all = doc.getElementsByTagName("*");
+    for (int i = 0; i < all.getLength(); i++) {
+      Element e = (Element) all.item(i);
+      if (e.hasAttribute("script")) {
+        assertFalse("script= must not carry __interpolation__: " + e.getAttribute("script"),
+            e.getAttribute("script").matches(".*__[A-Za-z]\\w*__.*"));
+      }
+    }
   }
 
   private static Document convert(String input, MigrationReport report) throws Exception {
