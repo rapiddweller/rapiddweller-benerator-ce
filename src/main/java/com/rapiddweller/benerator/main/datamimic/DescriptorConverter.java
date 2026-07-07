@@ -623,6 +623,13 @@ public class DescriptorConverter {
         && ExpressionMapper.isDynamicSelector(el.getAttribute("selector"))) {
       return dynamicSelectorFieldFragment(out, el, path);
     }
+    // mode="ignored" excludes the field from the generated output entirely - the DATAMIMIC
+    // equivalent is simply not declaring the key.
+    if ((tag.equals("attribute") || tag.equals("id")) && "ignored".equals(el.getAttribute("mode"))) {
+      report.info(path, "attribute", "<" + tag + " name='" + el.getAttribute("name")
+          + "' mode='ignored'> -> field omitted");
+      return null;
+    }
     // Schema priming for a schemaless store: <pre-parse-generate target="mongo"> and a mongo-consumed
     // <meta-model> only pre-declare collection shapes - MongoDB creates collections on insert, so both
     // are no-ops in DATAMIMIC.
@@ -1137,10 +1144,23 @@ public class DescriptorConverter {
             out.setAttribute("string", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
             report.info(path, "script", "FTL template script -> string= interpolation");
           } else {
-            out.setAttribute("script",
-                rewriteOuterScopeRefs(ExpressionMapper.rewriteScript(val, enclosingScopeName(src)), src));
+            String pyScript = rewriteOuterScopeRefs(
+                ExpressionMapper.rewriteScript(val, enclosingScopeName(src)), src);
+            // A Benerator map="'A'->'b',..." post-processes the script value; python's dict.get with the
+            // original value as its own fallback is the exact equivalent.
+            String mapDict = ExpressionMapper.mapAttributeToPythonDict(attrs.get("map"));
+            if (mapDict != null) {
+              pyScript = mapDict + ".get(" + pyScript + ", " + pyScript + ")";
+              report.info(path, "attribute", "map= value mapping folded into the script (dict.get)");
+            }
+            out.setAttribute("script", pyScript);
           }
           break;
+        case "map":
+          if (!attrs.containsKey("script") || ExpressionMapper.mapAttributeToPythonDict(val) == null) {
+            report.add(path, "attribute", "'map' without a script or with an unparseable mapping - dropped");
+          }
+          break; // folded into the script above
         case "selector":
           out.setAttribute("selector", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
           break;
