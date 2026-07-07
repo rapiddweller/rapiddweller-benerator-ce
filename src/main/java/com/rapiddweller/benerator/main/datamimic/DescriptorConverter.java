@@ -41,6 +41,9 @@ public class DescriptorConverter {
   /** table -> (column -> DDL info) parsed from the CREATE TABLE scripts the descriptor itself executes -
    *  the convert-time stand-in for Benerator's runtime DB-metadata introspection. */
   private final Map<String, Map<String, DdlColumn>> ddlColumns = new LinkedHashMap<>();
+  /** table (lowercased) -> its single-column PRIMARY KEY name (original case), from the executed DDL.
+   *  A {@code <reference targetType=...>} uses it as sourceKey instead of guessing "id". */
+  private final Map<String, String> ddlPrimaryKey = new LinkedHashMap<>();
 
   private static final class DdlColumn {
     final String benType;
@@ -93,7 +96,7 @@ public class DescriptorConverter {
     settings.scanSettings(root);
     scanMongoStores(root);
     scanMongoEntityPaths(root);
-    references.setMongoContext(mongoEntityPaths, mongoStoreIds);
+    references.setMongoContext(mongoEntityPaths, mongoStoreIds, ddlPrimaryKey);
     scanDdlSchemas(root);
     Node converted = convertNode(out, root, "/" + local(root));
     if (converted != null) {
@@ -238,11 +241,44 @@ public class DescriptorConverter {
   }
 
   /** Record every {@code <bean id spec>} so generator references to it can be inlined. */
+  /** bean id -> [uri, separator] for a CSVEntitySource bean, so an {@code <iterate source="id">}
+   *  resolves to a plain file source with its separator (DATAMIMIC has no source bean). */
+  private final Map<String, String[]> sourceBeans = new LinkedHashMap<>();
+  /** bean id -> [uri, column-spec] for a FixedWidthEntitySource bean. DATAMIMIC reads a self-describing
+   *  .fcw whose first line is {@code # name[width],...}; the spec is written into the file on reference. */
+  private final Map<String, String[]> fixedWidthSourceBeans = new LinkedHashMap<>();
+  /** Absolute paths of resource files the conversion itself wrote (e.g. a .fcw with an added spec
+   *  header) - the batch driver must NOT overwrite these with a verbatim copy of the input. */
+  private final java.util.Set<String> writtenResources = new java.util.LinkedHashSet<>();
+
+  java.util.Set<String> writtenResources() {
+    return writtenResources;
+  }
+
   private void scanBeans(Element el) {
     if (local(el).equals("bean") && el.hasAttribute("id")) {
       String id = el.getAttribute("id");
       if (el.hasAttribute("spec")) {
         expressions.registerBeanSpec(id, el.getAttribute("spec"));
+      }
+      // A CSVEntitySource bean is a file-source definition (uri + separator); DATAMIMIC reads a CSV
+      // by path directly, so record it and inline it at the source="id" references.
+      String cls = el.getAttribute("class");
+      if (cls.endsWith("CSVEntitySource")) {
+        Map<String, String> props = beanProperties(el);
+        if (props.containsKey("uri")) {
+          sourceBeans.put(id, new String[] {props.get("uri"), props.getOrDefault("separator", null)});
+        }
+      }
+      // A FixedWidthEntitySource bean: DATAMIMIC reads a self-describing .fcw (spec in a '# ...' header
+      // line); record the uri + the column spec (Benerator's 'properties' or 'columns') so the source
+      // is inlined and the .fcw gets that header written when it is referenced.
+      if (cls.endsWith("FixedWidthEntitySource")) {
+        Map<String, String> props = beanProperties(el);
+        String spec = props.containsKey("properties") ? props.get("properties") : props.get("columns");
+        if (props.containsKey("uri") && spec != null) {
+          fixedWidthSourceBeans.put(id, new String[] {props.get("uri"), spec});
+        }
       }
       // A bean whose class/spec is an *EntityExporter (XMLEntityExporter, CSVEntityExporter, ...) is an
       // exporter definition; map its id to the DATAMIMIC target so consumer="id" resolves to it.
@@ -261,6 +297,69 @@ public class DescriptorConverter {
         scanBeans((Element) c);
       }
     }
+  }
+
+  /** Set {@code source=} on {@code out}, resolving a CSVEntitySource / FixedWidthEntitySource bean id to
+   *  its file (+ separator / + a written .fcw spec header), else making the path descriptor-relative.
+   *  Shared by {@code <iterate>/<generate>} and {@code <variable>} source handling. */
+  private void resolveSourceOnto(Element out, String val, String path) {
+    if (sourceBeans.containsKey(val)) {
+      String[] sb = sourceBeans.get(val);
+      out.setAttribute("source", descriptorRelativePath(sb[0]));
+      if (sb[1] != null && !out.hasAttribute("separator")) {
+        out.setAttribute("separator", sb[1]);
+      }
+      report.info(path, "source", "CSVEntitySource bean '" + val + "' -> source '" + sb[0] + "'");
+    } else if (fixedWidthSourceBeans.containsKey(val)) {
+      String[] fb = fixedWidthSourceBeans.get(val);
+      String fcw = descriptorRelativePath(fb[0]);
+      writeFixedWidthHeader(fcw, fb[1], path);
+      out.setAttribute("source", fcw);
+      report.info(path, "source", "FixedWidthEntitySource bean '" + val + "' -> source '" + fcw + "'");
+    } else {
+      out.setAttribute("source", descriptorRelativePath(val));
+    }
+  }
+
+  /** Write a copy of the {@code .fcw} source next to the output descriptor with the column spec as its
+   *  {@code # name[width],...} first line - DATAMIMIC's fixed-width reader is self-describing and needs
+   *  that header. Idempotent: a file that already starts with {@code #} is left as-is. */
+  private void writeFixedWidthHeader(String fcwPath, String spec, String reportPath) {
+    try {
+      File src = new File(descriptorDir, fcwPath);
+      File dst = new File(outputDir, fcwPath);
+      if (!src.isFile()) {
+        report.add(reportPath, "source", "fixed-width file '" + fcwPath + "' not found to write its spec header");
+        return;
+      }
+      String content = new String(java.nio.file.Files.readAllBytes(src.toPath()), java.nio.charset.StandardCharsets.UTF_8);
+      if (content.startsWith("#")) {
+        return; // already self-describing
+      }
+      File parent = dst.getParentFile();
+      if (parent != null) {
+        parent.mkdirs();
+      }
+      java.nio.file.Files.write(dst.toPath(),
+          ("# " + spec + "\n" + content).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+      writtenResources.add(dst.getAbsolutePath());
+    } catch (java.io.IOException e) {
+      report.add(reportPath, "source", "could not write the fixed-width spec header into '" + fcwPath + "'");
+    }
+  }
+
+  /** The {@code <property name="X" value="Y"/>} children of a bean, as a name-&gt;value map. */
+  private static Map<String, String> beanProperties(Element bean) {
+    Map<String, String> props = new LinkedHashMap<>();
+    for (Node c = bean.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE && local((Element) c).equals("property")) {
+        Element p = (Element) c;
+        if (p.hasAttribute("name") && p.hasAttribute("value")) {
+          props.put(p.getAttribute("name"), p.getAttribute("value"));
+        }
+      }
+    }
+    return props;
   }
 
   /** Record every {@code <mongodb id>} so mongo-consumed {@code MongoDBObjectIdGenerator} ids can be dropped,
@@ -336,15 +435,21 @@ public class DescriptorConverter {
   /** Parse the CREATE TABLE DDL of every {@code <execute uri="*.sql">} the descriptor runs, so missing
    *  NOT NULL columns can be filled in like Benerator's DB-metadata introspection would at runtime. */
   private void scanDdlSchemas(Element el) {
-    if (local(el).equals("execute") && el.hasAttribute("uri")) {
-      String uri = settings.resolve(el.getAttribute("uri"));
-      File f = new File(descriptorDir, uri);
-      if (uri.endsWith(".sql") && f.isFile()) {
-        try {
-          parseDdl(new String(java.nio.file.Files.readAllBytes(f.toPath()), java.nio.charset.StandardCharsets.UTF_8));
-        } catch (java.io.IOException e) {
-          // unreadable DDL just means no introspection - the converter stays best-effort
+    if (local(el).equals("execute")) {
+      if (el.hasAttribute("uri")) {
+        String uri = settings.resolve(el.getAttribute("uri"));
+        File f = new File(descriptorDir, uri);
+        if (uri.endsWith(".sql") && f.isFile()) {
+          try {
+            parseDdl(new String(java.nio.file.Files.readAllBytes(f.toPath()), java.nio.charset.StandardCharsets.UTF_8));
+          } catch (java.io.IOException e) {
+            // unreadable DDL just means no introspection - the converter stays best-effort
+          }
         }
+      } else {
+        // Inline <execute target="db">CREATE TABLE ...</execute>: introspect the DDL from the text
+        // content too, so NOT NULL columns are filled the same as a file-based schema.
+        parseDdl(el.getTextContent());
       }
     }
     for (Node child = el.getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -356,19 +461,33 @@ public class DescriptorConverter {
 
   private void parseDdl(String sql) {
     java.util.regex.Matcher t = java.util.regex.Pattern
-        .compile("(?is)create\\s+table\\s+(?:if\\s+not\\s+exists\\s+)?([\\w.]+)\\s*\\((.*?)\\)\\s*;").matcher(sql);
+        .compile("(?is)create\\s+table\\s+(?:if\\s+not\\s+exists\\s+)?[\"`]?([\\w.]+)[\"`]?\\s*\\((.*?)\\)\\s*;").matcher(sql);
     while (t.find()) {
       String table = t.group(1).toLowerCase();
       table = table.substring(table.lastIndexOf('.') + 1);
       Map<String, DdlColumn> cols = ddlColumns.computeIfAbsent(table, k -> new LinkedHashMap<>());
+      // A single-column PRIMARY KEY (inline or as a table constraint) is the reference target column.
+      java.util.regex.Matcher pk = java.util.regex.Pattern
+          .compile("(?i)primary\\s+key\\s*\\(\\s*[\"`]?(\\w+)[\"`]?\\s*\\)").matcher(t.group(2));
+      if (pk.find()) {
+        ddlPrimaryKey.put(table, pk.group(1));
+      }
       for (String line : t.group(2).split("\\r?\\n")) {
         line = line.trim().replaceAll(",\\s*$", "");
         if (line.isEmpty() || line.startsWith("--")
             || line.matches("(?i)(primary|constraint|unique|foreign|check|key)\\b.*")) {
+          // an inline "<col> ... PRIMARY KEY" (not a separate constraint line) also names the PK
           continue;
         }
+        if (line.matches("(?i).*\\bprimary\\s+key\\b.*")) {
+          java.util.regex.Matcher inlinePk = java.util.regex.Pattern
+              .compile("(?i)^[\"`]?(\\w+)[\"`]?\\s").matcher(line);
+          if (inlinePk.find()) {
+            ddlPrimaryKey.put(table, inlinePk.group(1));
+          }
+        }
         java.util.regex.Matcher c = java.util.regex.Pattern
-            .compile("(?i)^(\\w+)\\s+([a-z]+(?:\\s+varying)?)\\s*(?:\\((\\d+)[^)]*\\))?").matcher(line);
+            .compile("(?i)^[\"`]?(\\w+)[\"`]?\\s+([a-z]+(?:\\s+varying)?)\\s*(?:\\((\\d+)[^)]*\\))?").matcher(line);
         if (!c.find()) {
           continue;
         }
@@ -447,6 +566,11 @@ public class DescriptorConverter {
       if (exporterTarget != null) {
         report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> exporter -> target='"
             + exporterTarget + "' - removed");
+        return null;
+      }
+      // A CSV/FixedWidth source bean is inlined at its source="id" references - removed.
+      if (sourceBeans.containsKey(el.getAttribute("id")) || fixedWidthSourceBeans.containsKey(el.getAttribute("id"))) {
+        report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> file source inlined - removed");
         return null;
       }
       report.add(path, "element", "<bean> has no DATAMIMIC equivalent - migrate manually");
@@ -774,7 +898,7 @@ public class DescriptorConverter {
           }
           break;
         case "source":
-          out.setAttribute("source", descriptorRelativePath(val));
+          resolveSourceOnto(out, val, path);
           break;
         case "separator":
           out.setAttribute(key, val);
@@ -1035,6 +1159,9 @@ public class DescriptorConverter {
             // DATAMIMIC's cyclic lives on <variable>/<generate>/<reference>, not on <key>.
             report.add(path, "attribute", "'cyclic' on <" + tag + "> is not supported by DATAMIMIC <key> - "
                 + "use a <variable source ... cyclic> + <key script> instead");
+          } else if (key.equals("source")) {
+            // <variable source="beanId"> resolves the CSV/FixedWidth source bean too, like <iterate source>.
+            resolveSourceOnto(out, val, path);
           } else if (VocabularyMap.FIELD_ATTR_KEEP.contains(key)) {
             out.setAttribute(key, val);
           } else {
@@ -1096,9 +1223,17 @@ public class DescriptorConverter {
    * corpus shape (name/type/generator[/dataset], direct child of a generate/iterate, no generator args) -
    * anything richer keeps the honest flag. Returns null when not applicable.
    */
+  /** Entity generators Benerator can use as a SCALAR attribute value -> [DATAMIMIC entity, the field
+   *  whose value is the scalar]. CountryGenerator's scalar is the ISO code; AddressGenerator's is the
+   *  city (the "cities" demo generates cities per region). */
+  private static final Map<String, String[]> SCALAR_ENTITY_FIELD = Map.of(
+      "CountryGenerator", new String[] {"Country", "iso_code"},
+      "AddressGenerator", new String[] {"Address", "city"});
+
   private Node countryGeneratorToEntityFragment(Document out, Element src, String genClass, String path) {
-    // Only the bare CountryGenerator (no ctor args) maps cleanly; CountryGenerator(dataset=..) keeps flagging.
-    if (!genClass.equals("CountryGenerator") || ArgSplitter.callStart(src.getAttribute("generator")) >= 0) {
+    String[] entityField = SCALAR_ENTITY_FIELD.get(genClass);
+    // Only the bare generator (no ctor args) maps cleanly; the dataset is an XML attribute, not an arg.
+    if (entityField == null || ArgSplitter.callStart(src.getAttribute("generator")) >= 0) {
       return null;
     }
     if (!isGenerateOrIterate(src.getParentNode())) {
@@ -1111,17 +1246,18 @@ public class DescriptorConverter {
       }
     }
     String name = attrs.get("name");
+    String varName = "_" + name + "_" + entityField[0].toLowerCase();
     Element variable = out.createElement("variable");
-    variable.setAttribute("name", "_" + name + "_country");
-    variable.setAttribute("entity", "Country");
+    variable.setAttribute("name", varName);
+    variable.setAttribute("entity", entityField[0]);
     if (attrs.containsKey("dataset")) {
       variable.setAttribute("dataset", attrs.get("dataset"));
     }
     Element key = out.createElement("key");
     key.setAttribute("name", name);
-    key.setAttribute("script", "_" + name + "_country.iso_code");
-    report.info(path, "generator", "<" + local(src) + " generator='CountryGenerator'> -> <variable entity='Country'>"
-        + " + <key script='_" + name + "_country.iso_code'> (ISO code, as in Benerator)");
+    key.setAttribute("script", varName + "." + entityField[1]);
+    report.info(path, "generator", "<" + local(src) + " generator='" + genClass + "'> -> <variable entity='"
+        + entityField[0] + "'> + <key script='" + varName + "." + entityField[1] + "'>");
     return DomUtil.fragmentOf(out, variable, key);
   }
 
@@ -1484,8 +1620,10 @@ public class DescriptorConverter {
     // Inline code: DATAMIMIC supports <execute type="python|bash|sql">code</execute>.
     String benType = attrs.get("type");
     String dmType = benType == null ? null : VocabularyMap.EXECUTE_TYPE.get(benType);
-    if (dmType == null && benType == null && attrs.containsKey("target")) {
-      dmType = "sql"; // inline <execute target="db"> with no type is SQL against that store in Benerator
+    if (dmType == null && benType == null) {
+      // Benerator's typeless inline <execute>: SQL when it targets a store, else script code. DATAMIMIC's
+      // scripting is python (e.g. `totalCount = mem.sumEntityColumn(...)`), so default a targetless one to python.
+      dmType = attrs.containsKey("target") ? "sql" : "python";
     }
     if (dmType != null) {
       Element ex = out.createElement("execute");

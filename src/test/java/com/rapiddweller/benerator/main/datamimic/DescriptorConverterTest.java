@@ -185,7 +185,9 @@ public class DescriptorConverterTest {
     assertEquals("result", sqlVar.getAttribute("name"));
     assertEquals("db", sqlVar.getAttribute("source"));
     assertEquals("the <assert> follows its <variable>", "assert", nextElement(sqlVar).getTagName());
-    assertEquals("result == 10", nextElement(sqlVar).getAttribute("condition"));
+    // a SQL <evaluate> yields a single result ROW (DotableDict); the condition unwraps its scalar cell
+    assertEquals("(list(result.to_dict().values())[0] if result else None) == 10",
+        nextElement(sqlVar).getAttribute("condition"));
 
     // <evaluate assert>EXPR</evaluate> without target -> <variable script> + <assert>
     Element scriptVar = first(doc, "variable", "script", "mem.entityCount('db_order')");
@@ -479,6 +481,87 @@ public class DescriptorConverterTest {
     // NEVER in script= (a script is evaluated as a Python expression, __x__ is not a name there). The
     // aggregate write-back must interpolate via iterationSelector and merely READ the result in script.
     assertNoInterpolationInScript(doc);
+  }
+
+  @Test
+  public void typelessInlineExecuteDefaultsToPythonOrSql() throws Exception {
+    // memstore: <execute>totalCount = mem.sumEntityColumn(...)</execute> (no type, no target) -> python
+    Document doc = convert("src/demo/resources/demo/memstore/memstore.ben.xml", new MigrationReport());
+    NodeList execs = doc.getElementsByTagName("execute");
+    boolean pythonExec = false;
+    boolean sqlExec = false;
+    for (int i = 0; i < execs.getLength(); i++) {
+      Element e = (Element) execs.item(i);
+      if ("python".equals(e.getAttribute("type")) && e.getTextContent().contains("mem.sumEntityColumn")) {
+        pythonExec = true;
+      }
+      if ("sql".equals(e.getAttribute("type")) && e.getTextContent().contains("CREATE TABLE")) {
+        sqlExec = true; // targeted inline execute stays SQL
+      }
+    }
+    assertTrue("typeless inline code -> type=python", pythonExec);
+    assertTrue("targeted inline execute -> type=sql", sqlExec);
+  }
+
+  @Test
+  public void fixedWidthSourceBeanAndExporterMap() throws Exception {
+    // read: FixedWidthEntitySource bean -> source=".fcw" (spec written into the file as its # header)
+    Document read = convert("src/demo/resources/demo/file/import_fixed_width.ben.xml", new MigrationReport());
+    Element it = first(read, "iterate", "source", "products.import.fcw");
+    assertNotNull("FixedWidthEntitySource bean -> .fcw source", it);
+    assertEquals("no leftover <bean>", 0, read.getElementsByTagName("bean").getLength());
+
+    // write: FixedWidthEntityExporter consumer -> target="FixedWidth(columns='...')"
+    Document write = convert("src/demo/resources/demo/file/create_fixed_width.ben.xml", new MigrationReport());
+    Element gen = first(write, "generate", "name", "transaction");
+    assertNotNull(gen);
+    assertTrue("FixedWidth target with columns: " + gen.getAttribute("target"),
+        gen.getAttribute("target").startsWith("FixedWidth(columns='id[8r0],ean_code[13]"));
+    // and the <variable source=fcwBean> resolves to the .fcw too
+    assertNotNull(first(write, "variable", "source", "products.import.fcw"));
+  }
+
+  @Test
+  public void addressGeneratorAsScalarBecomesEntityCityAndCsvSourceBeanInlines() throws Exception {
+    // simple/cities: <attribute generator="AddressGenerator" dataset="europe"> as a scalar -> a city
+    Document cities = convert("src/demo/resources/demo/simple/cities.ben.xml", new MigrationReport());
+    Element europeVar = first(cities, "variable", "name", "_europe_address");
+    assertNotNull(europeVar);
+    assertEquals("Address", europeVar.getAttribute("entity"));
+    assertEquals("europe", europeVar.getAttribute("dataset"));
+    assertEquals("_europe_address.city", first(cities, "key", "name", "europe").getAttribute("script"));
+
+    // file/csv_io: a CSVEntitySource bean is inlined at its source="id" (file + separator), bean dropped
+    Document io = convert("src/demo/resources/demo/file/csv_io.ben.xml", new MigrationReport());
+    Element it = first(io, "iterate", "source", "products.pipe.csv");
+    assertNotNull("CSVEntitySource bean -> file source", it);
+    assertEquals("|", it.getAttribute("separator"));
+    assertEquals("no leftover <bean>", 0, io.getElementsByTagName("bean").getLength());
+  }
+
+  @Test
+  public void inlineDdlFillsNotNullColumnsAndReferencesUseTheRealPrimaryKey() throws Exception {
+    // compositekey: the schema lives INLINE in <execute>, table names are quoted, and the PK is not "id".
+    Document doc = convert("src/demo/resources/demo/db/compositekey.ben.xml", new MigrationReport());
+
+    // NOT NULL "name" column, introspected from the inline (quoted) CREATE TABLE, is filled
+    Element playlist = first(doc, "generate", "name", "playlist");
+    assertNotNull(playlist);
+    Element nameKey = null;
+    NodeList keys = playlist.getElementsByTagName("key");
+    for (int i = 0; i < keys.getLength(); i++) {
+      if ("name".equals(((Element) keys.item(i)).getAttribute("name"))) {
+        nameKey = (Element) keys.item(i);
+      }
+    }
+    assertNotNull("inline-DDL NOT NULL column 'name' filled", nameKey);
+    assertEquals("string", nameKey.getAttribute("type"));
+
+    // a reference to playlist uses its real PK column (PLAYLIST_ID), not the "id" guess
+    Element ref = first(doc, "reference", "name", "PLAYLIST_ID");
+    assertNotNull(ref);
+    assertEquals("playlist", ref.getAttribute("sourceType"));
+    assertEquals("PLAYLIST_ID", ref.getAttribute("sourceKey"));
   }
 
   @Test

@@ -23,14 +23,20 @@ class ReferenceConverter {
    *  DescriptorConverter's scan pass (empty when the descriptor has no mongo stores). */
   private Map<String, String[]> mongoEntityPaths = java.util.Collections.emptyMap();
   private java.util.Set<String> mongoStoreIds = java.util.Collections.emptySet();
+  /** table (lowercased) -> its PRIMARY KEY column, from the executed DDL - the real FK target, used
+   *  as sourceKey instead of guessing "id". A live reference to the DescriptorConverter's map, so it
+   *  is populated by the DDL scan before any reference is converted. */
+  private Map<String, String> ddlPrimaryKey = java.util.Collections.emptyMap();
 
   ReferenceConverter(MigrationReport report) {
     this.report = report;
   }
 
-  void setMongoContext(Map<String, String[]> entityPaths, java.util.Set<String> storeIds) {
+  void setMongoContext(Map<String, String[]> entityPaths, java.util.Set<String> storeIds,
+      Map<String, String> ddlPrimaryKey) {
     this.mongoEntityPaths = entityPaths;
     this.mongoStoreIds = storeIds;
+    this.ddlPrimaryKey = ddlPrimaryKey;
   }
 
   /**
@@ -90,8 +96,16 @@ class ReferenceConverter {
           + "' -> collection '" + entityPath[0] + "', path '" + entityPath[1] + ".id'");
     } else {
       ref.setAttribute("sourceType", targetType);
-      ref.setAttribute("sourceKey", "id"); // Benerator infers the FK column; DATAMIMIC needs it explicit
-      report.info(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
+      // Benerator infers the FK column from DB metadata; DATAMIMIC needs it explicit. Use the target
+      // table's real PRIMARY KEY when the DDL was introspected, else fall back to "id".
+      String pk = ddlPrimaryKey.get(targetType.toLowerCase());
+      if (pk != null) {
+        ref.setAttribute("sourceKey", pk);
+        report.info(path, "reference", "reference '" + name + "' sourceKey=\"" + pk + "\" (target PK from DDL)");
+      } else {
+        ref.setAttribute("sourceKey", "id");
+        report.info(path, "reference", "reference '" + name + "' -> defaulted sourceKey=\"id\"; verify the FK column");
+      }
     }
     if ("true".equals(attrs.get("unique"))) {
       ref.setAttribute("unique", "true");
