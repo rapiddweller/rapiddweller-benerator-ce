@@ -1620,8 +1620,10 @@ public class DescriptorConverter {
     // Inline code: DATAMIMIC supports <execute type="python|bash|sql">code</execute>.
     String benType = attrs.get("type");
     String dmType = benType == null ? null : VocabularyMap.EXECUTE_TYPE.get(benType);
-    if (dmType == null && benType == null && attrs.containsKey("target")) {
-      dmType = "sql"; // inline <execute target="db"> with no type is SQL against that store in Benerator
+    if (dmType == null && benType == null) {
+      // Benerator's typeless inline <execute>: SQL when it targets a store, else script code. DATAMIMIC's
+      // scripting is python (e.g. `totalCount = mem.sumEntityColumn(...)`), so default a targetless one to python.
+      dmType = attrs.containsKey("target") ? "sql" : "python";
     }
     if (dmType != null) {
       Element ex = out.createElement("execute");

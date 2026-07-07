@@ -484,6 +484,26 @@ public class DescriptorConverterTest {
   }
 
   @Test
+  public void typelessInlineExecuteDefaultsToPythonOrSql() throws Exception {
+    // memstore: <execute>totalCount = mem.sumEntityColumn(...)</execute> (no type, no target) -> python
+    Document doc = convert("src/demo/resources/demo/memstore/memstore.ben.xml", new MigrationReport());
+    NodeList execs = doc.getElementsByTagName("execute");
+    boolean pythonExec = false;
+    boolean sqlExec = false;
+    for (int i = 0; i < execs.getLength(); i++) {
+      Element e = (Element) execs.item(i);
+      if ("python".equals(e.getAttribute("type")) && e.getTextContent().contains("mem.sumEntityColumn")) {
+        pythonExec = true;
+      }
+      if ("sql".equals(e.getAttribute("type")) && e.getTextContent().contains("CREATE TABLE")) {
+        sqlExec = true; // targeted inline execute stays SQL
+      }
+    }
+    assertTrue("typeless inline code -> type=python", pythonExec);
+    assertTrue("targeted inline execute -> type=sql", sqlExec);
+  }
+
+  @Test
   public void fixedWidthSourceBeanAndExporterMap() throws Exception {
     // read: FixedWidthEntitySource bean -> source=".fcw" (spec written into the file as its # header)
     Document read = convert("src/demo/resources/demo/file/import_fixed_width.ben.xml", new MigrationReport());
