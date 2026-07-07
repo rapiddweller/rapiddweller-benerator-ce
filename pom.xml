@@ -804,9 +804,9 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <!-- Pinned for reproducible builds. Without a version the plugin
                              floats to the newest release; 3.2.x also enforces "best practices"
-                             that ignore the gpg.passphrase supplied via settings.xml. 3.1.0
+                             that ignore the gpg.passphrase supplied via settings.xml. 3.2.8
                              keeps the classic settings.xml passphrase + imported-key CI setup. -->
-                        <version>3.1.0</version>
+                        <version>3.2.8</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
