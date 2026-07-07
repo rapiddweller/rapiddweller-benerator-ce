@@ -244,6 +244,16 @@ public class DescriptorConverter {
   /** bean id -> [uri, separator] for a CSVEntitySource bean, so an {@code <iterate source="id">}
    *  resolves to a plain file source with its separator (DATAMIMIC has no source bean). */
   private final Map<String, String[]> sourceBeans = new LinkedHashMap<>();
+  /** bean id -> [uri, column-spec] for a FixedWidthEntitySource bean. DATAMIMIC reads a self-describing
+   *  .fcw whose first line is {@code # name[width],...}; the spec is written into the file on reference. */
+  private final Map<String, String[]> fixedWidthSourceBeans = new LinkedHashMap<>();
+  /** Absolute paths of resource files the conversion itself wrote (e.g. a .fcw with an added spec
+   *  header) - the batch driver must NOT overwrite these with a verbatim copy of the input. */
+  private final java.util.Set<String> writtenResources = new java.util.LinkedHashSet<>();
+
+  java.util.Set<String> writtenResources() {
+    return writtenResources;
+  }
 
   private void scanBeans(Element el) {
     if (local(el).equals("bean") && el.hasAttribute("id")) {
@@ -258,6 +268,16 @@ public class DescriptorConverter {
         Map<String, String> props = beanProperties(el);
         if (props.containsKey("uri")) {
           sourceBeans.put(id, new String[] {props.get("uri"), props.getOrDefault("separator", null)});
+        }
+      }
+      // A FixedWidthEntitySource bean: DATAMIMIC reads a self-describing .fcw (spec in a '# ...' header
+      // line); record the uri + the column spec (Benerator's 'properties' or 'columns') so the source
+      // is inlined and the .fcw gets that header written when it is referenced.
+      if (cls.endsWith("FixedWidthEntitySource")) {
+        Map<String, String> props = beanProperties(el);
+        String spec = props.containsKey("properties") ? props.get("properties") : props.get("columns");
+        if (props.containsKey("uri") && spec != null) {
+          fixedWidthSourceBeans.put(id, new String[] {props.get("uri"), spec});
         }
       }
       // A bean whose class/spec is an *EntityExporter (XMLEntityExporter, CSVEntityExporter, ...) is an
@@ -276,6 +296,55 @@ public class DescriptorConverter {
       if (c.getNodeType() == Node.ELEMENT_NODE) {
         scanBeans((Element) c);
       }
+    }
+  }
+
+  /** Set {@code source=} on {@code out}, resolving a CSVEntitySource / FixedWidthEntitySource bean id to
+   *  its file (+ separator / + a written .fcw spec header), else making the path descriptor-relative.
+   *  Shared by {@code <iterate>/<generate>} and {@code <variable>} source handling. */
+  private void resolveSourceOnto(Element out, String val, String path) {
+    if (sourceBeans.containsKey(val)) {
+      String[] sb = sourceBeans.get(val);
+      out.setAttribute("source", descriptorRelativePath(sb[0]));
+      if (sb[1] != null && !out.hasAttribute("separator")) {
+        out.setAttribute("separator", sb[1]);
+      }
+      report.info(path, "source", "CSVEntitySource bean '" + val + "' -> source '" + sb[0] + "'");
+    } else if (fixedWidthSourceBeans.containsKey(val)) {
+      String[] fb = fixedWidthSourceBeans.get(val);
+      String fcw = descriptorRelativePath(fb[0]);
+      writeFixedWidthHeader(fcw, fb[1], path);
+      out.setAttribute("source", fcw);
+      report.info(path, "source", "FixedWidthEntitySource bean '" + val + "' -> source '" + fcw + "'");
+    } else {
+      out.setAttribute("source", descriptorRelativePath(val));
+    }
+  }
+
+  /** Write a copy of the {@code .fcw} source next to the output descriptor with the column spec as its
+   *  {@code # name[width],...} first line - DATAMIMIC's fixed-width reader is self-describing and needs
+   *  that header. Idempotent: a file that already starts with {@code #} is left as-is. */
+  private void writeFixedWidthHeader(String fcwPath, String spec, String reportPath) {
+    try {
+      File src = new File(descriptorDir, fcwPath);
+      File dst = new File(outputDir, fcwPath);
+      if (!src.isFile()) {
+        report.add(reportPath, "source", "fixed-width file '" + fcwPath + "' not found to write its spec header");
+        return;
+      }
+      String content = new String(java.nio.file.Files.readAllBytes(src.toPath()), java.nio.charset.StandardCharsets.UTF_8);
+      if (content.startsWith("#")) {
+        return; // already self-describing
+      }
+      File parent = dst.getParentFile();
+      if (parent != null) {
+        parent.mkdirs();
+      }
+      java.nio.file.Files.write(dst.toPath(),
+          ("# " + spec + "\n" + content).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+      writtenResources.add(dst.getAbsolutePath());
+    } catch (java.io.IOException e) {
+      report.add(reportPath, "source", "could not write the fixed-width spec header into '" + fcwPath + "'");
     }
   }
 
@@ -499,9 +568,9 @@ public class DescriptorConverter {
             + exporterTarget + "' - removed");
         return null;
       }
-      // A CSVEntitySource bean is inlined at its source="id" references (file + separator) - removed.
-      if (sourceBeans.containsKey(el.getAttribute("id"))) {
-        report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> CSV source inlined - removed");
+      // A CSV/FixedWidth source bean is inlined at its source="id" references - removed.
+      if (sourceBeans.containsKey(el.getAttribute("id")) || fixedWidthSourceBeans.containsKey(el.getAttribute("id"))) {
+        report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> file source inlined - removed");
         return null;
       }
       report.add(path, "element", "<bean> has no DATAMIMIC equivalent - migrate manually");
@@ -829,17 +898,7 @@ public class DescriptorConverter {
           }
           break;
         case "source":
-          if (sourceBeans.containsKey(val)) {
-            // <iterate source="csvBeanId"> -> the bean's file + separator (DATAMIMIC has no source bean)
-            String[] sb = sourceBeans.get(val);
-            out.setAttribute("source", descriptorRelativePath(sb[0]));
-            if (sb[1] != null && !out.hasAttribute("separator")) {
-              out.setAttribute("separator", sb[1]);
-            }
-            report.info(path, "source", "CSVEntitySource bean '" + val + "' -> source '" + sb[0] + "'");
-          } else {
-            out.setAttribute("source", descriptorRelativePath(val));
-          }
+          resolveSourceOnto(out, val, path);
           break;
         case "separator":
           out.setAttribute(key, val);
@@ -1100,6 +1159,9 @@ public class DescriptorConverter {
             // DATAMIMIC's cyclic lives on <variable>/<generate>/<reference>, not on <key>.
             report.add(path, "attribute", "'cyclic' on <" + tag + "> is not supported by DATAMIMIC <key> - "
                 + "use a <variable source ... cyclic> + <key script> instead");
+          } else if (key.equals("source")) {
+            // <variable source="beanId"> resolves the CSV/FixedWidth source bean too, like <iterate source>.
+            resolveSourceOnto(out, val, path);
           } else if (VocabularyMap.FIELD_ATTR_KEEP.contains(key)) {
             out.setAttribute(key, val);
           } else {

@@ -77,6 +77,19 @@ class ConsumerMapper {
     return String.join(",", targets);
   }
 
+  /** The value of a {@code <property name="X" value="Y"/>} child of a {@code <consumer>}, or null. */
+  private static String consumerProperty(Element consumer, String name) {
+    for (Node c = consumer.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE && DomUtil.local((Element) c).equals("property")) {
+        Element p = (Element) c;
+        if (name.equals(p.getAttribute("name")) && p.hasAttribute("value")) {
+          return p.getAttribute("value");
+        }
+      }
+    }
+    return null;
+  }
+
   /** Map a nested {@code <consumer class="pkg.CSVEntityExporter">} to a DATAMIMIC target; null if none. */
   String consumerFromChildElement(Element generate, String path) {
     for (Node c = generate.getFirstChild(); c != null; c = c.getNextSibling()) {
@@ -88,7 +101,18 @@ class ConsumerMapper {
       if (spec.isEmpty()) {
         continue;
       }
-      String tgt = consumerToTarget(spec.substring(spec.lastIndexOf('.') + 1)); // FQN -> simple exporter name
+      String simple = spec.substring(spec.lastIndexOf('.') + 1);
+      // FixedWidthEntityExporter needs the column spec, which DATAMIMIC carries IN the target:
+      // target="FixedWidth(columns='id[8r0],name[30]')" (the exporter cannot be self-describing).
+      if (simple.equals("FixedWidthEntityExporter")) {
+        String columns = consumerProperty(cons, "columns");
+        if (columns != null) {
+          return "FixedWidth(columns='" + columns + "')";
+        }
+        report.add(path, "consumer", "<consumer class='" + spec + "'> has no 'columns' - set the fixed-width spec manually");
+        return "";
+      }
+      String tgt = consumerToTarget(simple); // FQN -> simple exporter name
       if (tgt.isEmpty()) {
         if (isNoConsumerOnly(spec.substring(spec.lastIndexOf('.') + 1))) {
           report.info(path, "consumer", "consumer 'NoConsumer' -> empty target (capture only)");

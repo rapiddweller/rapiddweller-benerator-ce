@@ -484,6 +484,24 @@ public class DescriptorConverterTest {
   }
 
   @Test
+  public void fixedWidthSourceBeanAndExporterMap() throws Exception {
+    // read: FixedWidthEntitySource bean -> source=".fcw" (spec written into the file as its # header)
+    Document read = convert("src/demo/resources/demo/file/import_fixed_width.ben.xml", new MigrationReport());
+    Element it = first(read, "iterate", "source", "products.import.fcw");
+    assertNotNull("FixedWidthEntitySource bean -> .fcw source", it);
+    assertEquals("no leftover <bean>", 0, read.getElementsByTagName("bean").getLength());
+
+    // write: FixedWidthEntityExporter consumer -> target="FixedWidth(columns='...')"
+    Document write = convert("src/demo/resources/demo/file/create_fixed_width.ben.xml", new MigrationReport());
+    Element gen = first(write, "generate", "name", "transaction");
+    assertNotNull(gen);
+    assertTrue("FixedWidth target with columns: " + gen.getAttribute("target"),
+        gen.getAttribute("target").startsWith("FixedWidth(columns='id[8r0],ean_code[13]"));
+    // and the <variable source=fcwBean> resolves to the .fcw too
+    assertNotNull(first(write, "variable", "source", "products.import.fcw"));
+  }
+
+  @Test
   public void addressGeneratorAsScalarBecomesEntityCityAndCsvSourceBeanInlines() throws Exception {
     // simple/cities: <attribute generator="AddressGenerator" dataset="europe"> as a scalar -> a city
     Document cities = convert("src/demo/resources/demo/simple/cities.ben.xml", new MigrationReport());

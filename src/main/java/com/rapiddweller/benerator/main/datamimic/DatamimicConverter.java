@@ -62,6 +62,9 @@ public final class DatamimicConverter {
     // environment name -> (system prefix -> "db"|"mongo"), merged across all descriptors so the
     // env-properties migration knows each system's type and the flat-format fallback prefix.
     Map<String, Map<String, String>> envSystems = new LinkedHashMap<>();
+    // Resource files the conversion itself produced (e.g. a .fcw with an added spec header) -
+    // the verbatim resource copy below must skip these, not clobber them with the raw input.
+    java.util.Set<String> conversionWritten = new java.util.LinkedHashSet<>();
     for (Path in : inputs) {
       Path rel = Files.isDirectory(input) ? input.relativize(in) : in.getFileName();
       String outName = rel.toString().replaceFirst("\\.ben\\.xml$", ".datamimic.xml");
@@ -74,6 +77,7 @@ public final class DatamimicConverter {
         for (Map.Entry<String, Map<String, String>> e : converter.envSystems().entrySet()) {
           envSystems.computeIfAbsent(e.getKey(), k -> new LinkedHashMap<>()).putAll(e.getValue());
         }
+        conversionWritten.addAll(converter.writtenResources());
         ok++;
         System.out.println("  [OK]   " + rel + "  ->  " + outName);
       } catch (Exception e) {
@@ -124,6 +128,9 @@ public final class DatamimicConverter {
       }
       for (Path res : resources) {
         Path dest = outDir.resolve(input.relativize(res));
+        if (conversionWritten.contains(dest.toAbsolutePath().toString())) {
+          continue; // the conversion wrote a modified version (e.g. a .fcw with its spec header)
+        }
         Files.createDirectories(dest.getParent());
         Files.copy(res, dest, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         resourcesCopied++;
