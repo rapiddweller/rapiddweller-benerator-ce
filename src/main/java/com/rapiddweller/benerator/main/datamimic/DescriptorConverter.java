@@ -241,11 +241,24 @@ public class DescriptorConverter {
   }
 
   /** Record every {@code <bean id spec>} so generator references to it can be inlined. */
+  /** bean id -> [uri, separator] for a CSVEntitySource bean, so an {@code <iterate source="id">}
+   *  resolves to a plain file source with its separator (DATAMIMIC has no source bean). */
+  private final Map<String, String[]> sourceBeans = new LinkedHashMap<>();
+
   private void scanBeans(Element el) {
     if (local(el).equals("bean") && el.hasAttribute("id")) {
       String id = el.getAttribute("id");
       if (el.hasAttribute("spec")) {
         expressions.registerBeanSpec(id, el.getAttribute("spec"));
+      }
+      // A CSVEntitySource bean is a file-source definition (uri + separator); DATAMIMIC reads a CSV
+      // by path directly, so record it and inline it at the source="id" references.
+      String cls = el.getAttribute("class");
+      if (cls.endsWith("CSVEntitySource")) {
+        Map<String, String> props = beanProperties(el);
+        if (props.containsKey("uri")) {
+          sourceBeans.put(id, new String[] {props.get("uri"), props.getOrDefault("separator", null)});
+        }
       }
       // A bean whose class/spec is an *EntityExporter (XMLEntityExporter, CSVEntityExporter, ...) is an
       // exporter definition; map its id to the DATAMIMIC target so consumer="id" resolves to it.
@@ -264,6 +277,20 @@ public class DescriptorConverter {
         scanBeans((Element) c);
       }
     }
+  }
+
+  /** The {@code <property name="X" value="Y"/>} children of a bean, as a name-&gt;value map. */
+  private static Map<String, String> beanProperties(Element bean) {
+    Map<String, String> props = new LinkedHashMap<>();
+    for (Node c = bean.getFirstChild(); c != null; c = c.getNextSibling()) {
+      if (c.getNodeType() == Node.ELEMENT_NODE && local((Element) c).equals("property")) {
+        Element p = (Element) c;
+        if (p.hasAttribute("name") && p.hasAttribute("value")) {
+          props.put(p.getAttribute("name"), p.getAttribute("value"));
+        }
+      }
+    }
+    return props;
   }
 
   /** Record every {@code <mongodb id>} so mongo-consumed {@code MongoDBObjectIdGenerator} ids can be dropped,
@@ -470,6 +497,11 @@ public class DescriptorConverter {
       if (exporterTarget != null) {
         report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> exporter -> target='"
             + exporterTarget + "' - removed");
+        return null;
+      }
+      // A CSVEntitySource bean is inlined at its source="id" references (file + separator) - removed.
+      if (sourceBeans.containsKey(el.getAttribute("id"))) {
+        report.info(path, "bean", "<bean id='" + el.getAttribute("id") + "'> CSV source inlined - removed");
         return null;
       }
       report.add(path, "element", "<bean> has no DATAMIMIC equivalent - migrate manually");
@@ -797,7 +829,17 @@ public class DescriptorConverter {
           }
           break;
         case "source":
-          out.setAttribute("source", descriptorRelativePath(val));
+          if (sourceBeans.containsKey(val)) {
+            // <iterate source="csvBeanId"> -> the bean's file + separator (DATAMIMIC has no source bean)
+            String[] sb = sourceBeans.get(val);
+            out.setAttribute("source", descriptorRelativePath(sb[0]));
+            if (sb[1] != null && !out.hasAttribute("separator")) {
+              out.setAttribute("separator", sb[1]);
+            }
+            report.info(path, "source", "CSVEntitySource bean '" + val + "' -> source '" + sb[0] + "'");
+          } else {
+            out.setAttribute("source", descriptorRelativePath(val));
+          }
           break;
         case "separator":
           out.setAttribute(key, val);
