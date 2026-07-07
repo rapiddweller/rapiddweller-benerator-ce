@@ -185,7 +185,9 @@ public class DescriptorConverterTest {
     assertEquals("result", sqlVar.getAttribute("name"));
     assertEquals("db", sqlVar.getAttribute("source"));
     assertEquals("the <assert> follows its <variable>", "assert", nextElement(sqlVar).getTagName());
-    assertEquals("result == 10", nextElement(sqlVar).getAttribute("condition"));
+    // a SQL <evaluate> yields a single result ROW (DotableDict); the condition unwraps its scalar cell
+    assertEquals("(list(result.to_dict().values())[0] if result else None) == 10",
+        nextElement(sqlVar).getAttribute("condition"));
 
     // <evaluate assert>EXPR</evaluate> without target -> <variable script> + <assert>
     Element scriptVar = first(doc, "variable", "script", "mem.entityCount('db_order')");
@@ -479,6 +481,31 @@ public class DescriptorConverterTest {
     // NEVER in script= (a script is evaluated as a Python expression, __x__ is not a name there). The
     // aggregate write-back must interpolate via iterationSelector and merely READ the result in script.
     assertNoInterpolationInScript(doc);
+  }
+
+  @Test
+  public void inlineDdlFillsNotNullColumnsAndReferencesUseTheRealPrimaryKey() throws Exception {
+    // compositekey: the schema lives INLINE in <execute>, table names are quoted, and the PK is not "id".
+    Document doc = convert("src/demo/resources/demo/db/compositekey.ben.xml", new MigrationReport());
+
+    // NOT NULL "name" column, introspected from the inline (quoted) CREATE TABLE, is filled
+    Element playlist = first(doc, "generate", "name", "playlist");
+    assertNotNull(playlist);
+    Element nameKey = null;
+    NodeList keys = playlist.getElementsByTagName("key");
+    for (int i = 0; i < keys.getLength(); i++) {
+      if ("name".equals(((Element) keys.item(i)).getAttribute("name"))) {
+        nameKey = (Element) keys.item(i);
+      }
+    }
+    assertNotNull("inline-DDL NOT NULL column 'name' filled", nameKey);
+    assertEquals("string", nameKey.getAttribute("type"));
+
+    // a reference to playlist uses its real PK column (PLAYLIST_ID), not the "id" guess
+    Element ref = first(doc, "reference", "name", "PLAYLIST_ID");
+    assertNotNull(ref);
+    assertEquals("playlist", ref.getAttribute("sourceType"));
+    assertEquals("PLAYLIST_ID", ref.getAttribute("sourceKey"));
   }
 
   @Test

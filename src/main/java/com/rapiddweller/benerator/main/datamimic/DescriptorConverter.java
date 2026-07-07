@@ -41,6 +41,9 @@ public class DescriptorConverter {
   /** table -> (column -> DDL info) parsed from the CREATE TABLE scripts the descriptor itself executes -
    *  the convert-time stand-in for Benerator's runtime DB-metadata introspection. */
   private final Map<String, Map<String, DdlColumn>> ddlColumns = new LinkedHashMap<>();
+  /** table (lowercased) -> its single-column PRIMARY KEY name (original case), from the executed DDL.
+   *  A {@code <reference targetType=...>} uses it as sourceKey instead of guessing "id". */
+  private final Map<String, String> ddlPrimaryKey = new LinkedHashMap<>();
 
   private static final class DdlColumn {
     final String benType;
@@ -93,7 +96,7 @@ public class DescriptorConverter {
     settings.scanSettings(root);
     scanMongoStores(root);
     scanMongoEntityPaths(root);
-    references.setMongoContext(mongoEntityPaths, mongoStoreIds);
+    references.setMongoContext(mongoEntityPaths, mongoStoreIds, ddlPrimaryKey);
     scanDdlSchemas(root);
     Node converted = convertNode(out, root, "/" + local(root));
     if (converted != null) {
@@ -336,15 +339,21 @@ public class DescriptorConverter {
   /** Parse the CREATE TABLE DDL of every {@code <execute uri="*.sql">} the descriptor runs, so missing
    *  NOT NULL columns can be filled in like Benerator's DB-metadata introspection would at runtime. */
   private void scanDdlSchemas(Element el) {
-    if (local(el).equals("execute") && el.hasAttribute("uri")) {
-      String uri = settings.resolve(el.getAttribute("uri"));
-      File f = new File(descriptorDir, uri);
-      if (uri.endsWith(".sql") && f.isFile()) {
-        try {
-          parseDdl(new String(java.nio.file.Files.readAllBytes(f.toPath()), java.nio.charset.StandardCharsets.UTF_8));
-        } catch (java.io.IOException e) {
-          // unreadable DDL just means no introspection - the converter stays best-effort
+    if (local(el).equals("execute")) {
+      if (el.hasAttribute("uri")) {
+        String uri = settings.resolve(el.getAttribute("uri"));
+        File f = new File(descriptorDir, uri);
+        if (uri.endsWith(".sql") && f.isFile()) {
+          try {
+            parseDdl(new String(java.nio.file.Files.readAllBytes(f.toPath()), java.nio.charset.StandardCharsets.UTF_8));
+          } catch (java.io.IOException e) {
+            // unreadable DDL just means no introspection - the converter stays best-effort
+          }
         }
+      } else {
+        // Inline <execute target="db">CREATE TABLE ...</execute>: introspect the DDL from the text
+        // content too, so NOT NULL columns are filled the same as a file-based schema.
+        parseDdl(el.getTextContent());
       }
     }
     for (Node child = el.getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -356,19 +365,33 @@ public class DescriptorConverter {
 
   private void parseDdl(String sql) {
     java.util.regex.Matcher t = java.util.regex.Pattern
-        .compile("(?is)create\\s+table\\s+(?:if\\s+not\\s+exists\\s+)?([\\w.]+)\\s*\\((.*?)\\)\\s*;").matcher(sql);
+        .compile("(?is)create\\s+table\\s+(?:if\\s+not\\s+exists\\s+)?[\"`]?([\\w.]+)[\"`]?\\s*\\((.*?)\\)\\s*;").matcher(sql);
     while (t.find()) {
       String table = t.group(1).toLowerCase();
       table = table.substring(table.lastIndexOf('.') + 1);
       Map<String, DdlColumn> cols = ddlColumns.computeIfAbsent(table, k -> new LinkedHashMap<>());
+      // A single-column PRIMARY KEY (inline or as a table constraint) is the reference target column.
+      java.util.regex.Matcher pk = java.util.regex.Pattern
+          .compile("(?i)primary\\s+key\\s*\\(\\s*[\"`]?(\\w+)[\"`]?\\s*\\)").matcher(t.group(2));
+      if (pk.find()) {
+        ddlPrimaryKey.put(table, pk.group(1));
+      }
       for (String line : t.group(2).split("\\r?\\n")) {
         line = line.trim().replaceAll(",\\s*$", "");
         if (line.isEmpty() || line.startsWith("--")
             || line.matches("(?i)(primary|constraint|unique|foreign|check|key)\\b.*")) {
+          // an inline "<col> ... PRIMARY KEY" (not a separate constraint line) also names the PK
           continue;
         }
+        if (line.matches("(?i).*\\bprimary\\s+key\\b.*")) {
+          java.util.regex.Matcher inlinePk = java.util.regex.Pattern
+              .compile("(?i)^[\"`]?(\\w+)[\"`]?\\s").matcher(line);
+          if (inlinePk.find()) {
+            ddlPrimaryKey.put(table, inlinePk.group(1));
+          }
+        }
         java.util.regex.Matcher c = java.util.regex.Pattern
-            .compile("(?i)^(\\w+)\\s+([a-z]+(?:\\s+varying)?)\\s*(?:\\((\\d+)[^)]*\\))?").matcher(line);
+            .compile("(?i)^[\"`]?(\\w+)[\"`]?\\s+([a-z]+(?:\\s+varying)?)\\s*(?:\\((\\d+)[^)]*\\))?").matcher(line);
         if (!c.find()) {
           continue;
         }

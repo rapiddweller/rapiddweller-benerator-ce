@@ -87,8 +87,14 @@ class AssertionConverter {
     if (target != null) {
       variable.setAttribute("source", target);
       variable.setAttribute("selector", body);
-      report.info(path, "assert", "assertion converted to <variable source> + <assert> - "
-          + "verify the expression evaluates in DATAMIMIC");
+      // Benerator's <evaluate> returns the query's SCALAR value; a DATAMIMIC selector variable holds
+      // the query's single result ROW as a DotableDict ({'c': 20}), so 'result == 20' would compare a
+      // dict. Unwrap the single cell in the condition - .to_dict() first, since a DotableDict resolves
+      // .values as a KEY lookup, not the dict method (a scalar SQL query is the <evaluate assert> idiom).
+      assertion = assertion.replaceAll("\\bresult\\b",
+          "(list(result.to_dict().values())[0] if result else None)");
+      report.info(path, "assert", "assertion converted to <variable source> + <assert>; "
+          + "result unwrapped to the query's scalar value");
     } else {
       variable.setAttribute("script", body);
       report.info(path, "assert", "assertion converted to <variable script> + <assert> - "

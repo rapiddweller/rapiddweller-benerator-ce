@@ -284,6 +284,11 @@ class ExpressionMapper {
     if (generator.startsWith("CompanyNameGenerator")) {
       return generator; // takes no constructor args in DATAMIMIC (no dataset variants)
     }
+    if (generator.startsWith("DepartmentNameGenerator")) {
+      // DATAMIMIC's DepartmentNameGenerator is keyed by LOCALE (en/de), not a dataset country code;
+      // the Benerator dataset (e.g. "DE") maps to the locale.
+      return ArgSplitter.appendArg(generator, "locale='" + dataset.toLowerCase() + "'");
+    }
     return ArgSplitter.appendArg(generator, "dataset='" + dataset + "'");
   }
 
