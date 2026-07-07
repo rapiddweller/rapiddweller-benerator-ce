@@ -1161,9 +1161,17 @@ public class DescriptorConverter {
    * corpus shape (name/type/generator[/dataset], direct child of a generate/iterate, no generator args) -
    * anything richer keeps the honest flag. Returns null when not applicable.
    */
+  /** Entity generators Benerator can use as a SCALAR attribute value -> [DATAMIMIC entity, the field
+   *  whose value is the scalar]. CountryGenerator's scalar is the ISO code; AddressGenerator's is the
+   *  city (the "cities" demo generates cities per region). */
+  private static final Map<String, String[]> SCALAR_ENTITY_FIELD = Map.of(
+      "CountryGenerator", new String[] {"Country", "iso_code"},
+      "AddressGenerator", new String[] {"Address", "city"});
+
   private Node countryGeneratorToEntityFragment(Document out, Element src, String genClass, String path) {
-    // Only the bare CountryGenerator (no ctor args) maps cleanly; CountryGenerator(dataset=..) keeps flagging.
-    if (!genClass.equals("CountryGenerator") || ArgSplitter.callStart(src.getAttribute("generator")) >= 0) {
+    String[] entityField = SCALAR_ENTITY_FIELD.get(genClass);
+    // Only the bare generator (no ctor args) maps cleanly; the dataset is an XML attribute, not an arg.
+    if (entityField == null || ArgSplitter.callStart(src.getAttribute("generator")) >= 0) {
       return null;
     }
     if (!isGenerateOrIterate(src.getParentNode())) {
@@ -1176,17 +1184,18 @@ public class DescriptorConverter {
       }
     }
     String name = attrs.get("name");
+    String varName = "_" + name + "_" + entityField[0].toLowerCase();
     Element variable = out.createElement("variable");
-    variable.setAttribute("name", "_" + name + "_country");
-    variable.setAttribute("entity", "Country");
+    variable.setAttribute("name", varName);
+    variable.setAttribute("entity", entityField[0]);
     if (attrs.containsKey("dataset")) {
       variable.setAttribute("dataset", attrs.get("dataset"));
     }
     Element key = out.createElement("key");
     key.setAttribute("name", name);
-    key.setAttribute("script", "_" + name + "_country.iso_code");
-    report.info(path, "generator", "<" + local(src) + " generator='CountryGenerator'> -> <variable entity='Country'>"
-        + " + <key script='_" + name + "_country.iso_code'> (ISO code, as in Benerator)");
+    key.setAttribute("script", varName + "." + entityField[1]);
+    report.info(path, "generator", "<" + local(src) + " generator='" + genClass + "'> -> <variable entity='"
+        + entityField[0] + "'> + <key script='" + varName + "." + entityField[1] + "'>");
     return DomUtil.fragmentOf(out, variable, key);
   }
 

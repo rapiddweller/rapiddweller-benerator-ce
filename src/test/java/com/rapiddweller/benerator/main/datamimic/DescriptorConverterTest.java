@@ -484,6 +484,24 @@ public class DescriptorConverterTest {
   }
 
   @Test
+  public void addressGeneratorAsScalarBecomesEntityCityAndCsvSourceBeanInlines() throws Exception {
+    // simple/cities: <attribute generator="AddressGenerator" dataset="europe"> as a scalar -> a city
+    Document cities = convert("src/demo/resources/demo/simple/cities.ben.xml", new MigrationReport());
+    Element europeVar = first(cities, "variable", "name", "_europe_address");
+    assertNotNull(europeVar);
+    assertEquals("Address", europeVar.getAttribute("entity"));
+    assertEquals("europe", europeVar.getAttribute("dataset"));
+    assertEquals("_europe_address.city", first(cities, "key", "name", "europe").getAttribute("script"));
+
+    // file/csv_io: a CSVEntitySource bean is inlined at its source="id" (file + separator), bean dropped
+    Document io = convert("src/demo/resources/demo/file/csv_io.ben.xml", new MigrationReport());
+    Element it = first(io, "iterate", "source", "products.pipe.csv");
+    assertNotNull("CSVEntitySource bean -> file source", it);
+    assertEquals("|", it.getAttribute("separator"));
+    assertEquals("no leftover <bean>", 0, io.getElementsByTagName("bean").getLength());
+  }
+
+  @Test
   public void inlineDdlFillsNotNullColumnsAndReferencesUseTheRealPrimaryKey() throws Exception {
     // compositekey: the schema lives INLINE in <execute>, table names are quoted, and the PK is not "id".
     Document doc = convert("src/demo/resources/demo/db/compositekey.ben.xml", new MigrationReport());
