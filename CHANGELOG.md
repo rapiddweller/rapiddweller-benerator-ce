@@ -2,6 +2,42 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 4.0.0
+
+### Overview
+The migration release. Benerator 4.0.0 ships a built-in **Benerator → DATAMIMIC converter** that
+translates whole projects — descriptors, data files, SQL scripts, DbUnit datasets, and environment
+properties — into native DATAMIMIC descriptors, with a per-file report of everything that needs a
+manual decision. Benerator itself is unchanged and stays in maintenance mode; this release exists to
+give every Benerator project a tested, supported path onto rapiddweller's actively developed platform.
+
+### The converter (#501, #512, #518, #519)
+- **One command converts a whole project:**
+  `java -cp benerator.jar com.rapiddweller.benerator.main.datamimic.DatamimicConverter <project> <out> report.txt`.
+  See the README section "Migrate a project: step by step".
+- **Broad construct coverage:** generate/iterate nesting, references (including FKs resolved against
+  the target table's real primary key from the executed DDL), weighted and entity CSVs, fixed-width
+  files (read and write), DbUnit datasets (split into per-table JSON sources), dynamic FTL includes,
+  per-record SQL and MongoDB selectors, DB sequences (`DBSequenceGenerator` →
+  `SequenceTableGenerator(sequence=…)`), memstore scripting, and environment-properties migration
+  (JDBC URLs → host/port/database/dbms).
+- **Honest reporting instead of silent misconversion:** every construct without a faithful DATAMIMIC
+  equivalent is flagged in `migration-summary.md`, with recipes in `MIGRATION_PLAYBOOK.md`.
+- **Continuously verified:** CI converts the complete Benerator demo suite and runs it through the
+  real DATAMIMIC engine on every commit, including full round-trips against live PostgreSQL and
+  MongoDB — the flagship `shop` demo passes its own row-count assertions on both.
+- **Validated on production-scale input:** a real 42-descriptor project (3 schemas, DB sequences,
+  memstore, JS scripts) converts with roughly 93% of constructs handled automatically; the remainder
+  is reported for a manual pass.
+
+### Known migration limitations
+- Inline JavaScript (`<execute type="js">`, `{js:…}` scripts) must be rewritten in Python — DATAMIMIC
+  scripting is Python.
+- Columns typed only in the live database (Benerator's DB-metadata introspection) need explicit
+  `type=`/`generator=` unless the descriptor itself executes the DDL.
+- `<run-task>`, selector-only references without a `targetType`, and Benerator's
+  `ScriptedEntityExporter` (FTL-templated output) have no direct equivalent and are flagged.
+
 ## 3.3.0
 
 ### Overview
