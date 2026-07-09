@@ -38,10 +38,6 @@ give every Benerator project a tested, supported path onto rapiddweller's active
 - `<run-task>`, selector-only references without a `targetType`, and Benerator's
   `ScriptedEntityExporter` (FTL-templated output) have no direct equivalent and are flagged.
 
-### Documentation
-- README repositioned: two decades of Benerator engineering, the framework-to-platform relationship
-  with DATAMIMIC, and a four-step migration guide (#519).
-
 ## 3.3.0
 
 ### Overview
