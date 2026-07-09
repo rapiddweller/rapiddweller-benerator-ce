@@ -87,6 +87,26 @@ class ExpressionMapper {
     return mapped + javaLiteralsToPython(args);
   }
 
+  /** A Benerator {@code map="'A'->'b','C'->'d'"} value mapping -&gt; a python dict literal
+   *  ({@code {'A': 'b', 'C': 'd'}}), or null when the mapping does not parse. */
+  static String mapAttributeToPythonDict(String map) {
+    if (map == null || map.isEmpty()) {
+      return null;
+    }
+    StringBuilder dict = new StringBuilder("{");
+    for (String pair : ArgSplitter.splitTopLevel(map)) {
+      String[] kv = pair.split("->", 2);
+      if (kv.length != 2 || kv[0].trim().isEmpty() || kv[1].trim().isEmpty()) {
+        return null;
+      }
+      if (dict.length() > 1) {
+        dict.append(", ");
+      }
+      dict.append(kv[0].trim()).append(": ").append(kv[1].trim());
+    }
+    return dict.append("}").toString();
+  }
+
   /** Java/JS literals -&gt; python: bare {@code true}/{@code false}/{@code null} outside string
    *  literals become {@code True}/{@code False}/{@code None} (DATAMIMIC evaluates args/scripts as python). */
   static String javaLiteralsToPython(String s) {

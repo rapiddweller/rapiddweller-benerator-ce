@@ -157,7 +157,10 @@ public final class VocabularyMap {
   /** Benerator generator name -&gt; DATAMIMIC generator name. Absent names are kept verbatim + reported. */
   public static final Map<String, String> GENERATOR_RENAME = Map.of(
       "IncrementalIdGenerator", "IncrementGenerator",
-      "EMailAddressGenerator", "EmailAddressGenerator"); // Benerator casing -> DATAMIMIC casing
+      "EMailAddressGenerator", "EmailAddressGenerator", // Benerator casing -> DATAMIMIC casing
+      // a bare DateTimeGenerator (no value/min/max/random) IS current-mode in DATAMIMIC
+      "CurrentDateTimeGenerator", "DateTimeGenerator",
+      "CurrentDateGenerator", "DateTimeGenerator");
 
   /**
    * Generator names shared by both products (kept verbatim, no report). Verified against CE's

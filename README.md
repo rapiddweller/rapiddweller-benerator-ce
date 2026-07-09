@@ -59,7 +59,55 @@ DATAMIMIC Community Edition is the direct successor to Benerator's model-driven 
 
 **Streaming targets (Apache Kafka, RabbitMQ) are in DATAMIMIC EE**; a REST API and scheduler for server-driven pipelines are in DATAMIMIC Platform. CE covers the relational, MongoDB, and file targets above, runs from the CLI in any pipeline, and ships an MCP server for agentic workflows. As a platform partner we solve your test-data challenges — if a system you need isn't supported yet, contact us.
 
-**We offer support with the migration.** Migration scripts handle much of the conversion; the team helps with the parts that need rework and with integrating DATAMIMIC into your systems and pipelines. Get in touch at support@rapiddweller.com or via https://datamimic.io.
+### Migrate a project: step by step
+
+This release ships a **built-in converter** that translates Benerator descriptors into native DATAMIMIC
+descriptors — including your data files, SQL scripts, DbUnit datasets, environment properties, and a
+per-file report of everything that needs a manual decision.
+
+**1. Convert your project** (the whole directory — descriptors, CSVs, scripts, properties):
+
+```bash
+java -cp benerator.jar com.rapiddweller.benerator.main.datamimic.DatamimicConverter \
+     /path/to/your/benerator-project  /path/to/output  migration-report.txt
+```
+
+Every `*.ben.xml` becomes a `*.datamimic.xml`; data files and SQL scripts are carried over;
+DbUnit datasets are split into per-table JSON sources; `conf/*.env.properties` are migrated to
+DATAMIMIC's environment format (JDBC URLs become host/port/database/dbms).
+
+**2. Read `migration-summary.md`** in the output directory. It lists, per file, what converted
+automatically and what needs a manual pass, with a link into `MIGRATION_PLAYBOOK.md` for each
+recurring pattern (the playbook ships next to the converter sources). Typical manual items:
+
+- **JavaScript** (`<execute type="js">`, `{js:...}` scripts): DATAMIMIC scripting is Python — rewrite
+  the snippet (usually a few lines) or move it to a `.py` file referenced via `uri=`.
+- **DB-metadata columns**: Benerator fills `NOT NULL` columns it discovers in the live database. The
+  converter does the same **when the descriptor itself executes the DDL** (inline or `.sql` file);
+  columns known only to the live DB need an explicit `type=`/`generator=`.
+- **Exotic generators**: anything the converter flags as "not known to DATAMIMIC" — check the report;
+  most have a close DATAMIMIC equivalent.
+
+**3. Install DATAMIMIC and run the converted project:**
+
+```bash
+pip install datamimic_ce
+cd /path/to/output
+datamimic run your-main.datamimic.xml
+```
+
+**4. Verify against your database** — row counts and shape, e.g.
+`SELECT count(*) FROM your_table`. The converter keeps your model's semantics (references, weighted
+distributions, nested entities, per-record SQL/Mongo selectors), so the generated data should have
+the same structure and cardinalities as before.
+
+The converter is exercised in CI on every commit: the complete Benerator demo suite is converted and
+run through the real DATAMIMIC engine, including full round-trips against live PostgreSQL and MongoDB
+(the flagship `shop` demo passes its own row-count assertions on both).
+
+**We offer support with the migration.** The converter handles the bulk; the team helps with the parts
+that need rework and with integrating DATAMIMIC into your systems and pipelines. Get in touch at
+support@rapiddweller.com or via https://datamimic.io.
 
 Start with the DATAMIMIC repository and docs above. Where a concept does not map directly, open an issue in the DATAMIMIC repository.
 
