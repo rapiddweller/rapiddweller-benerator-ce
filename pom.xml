@@ -568,7 +568,11 @@
                         <exclude>**/*DataFakerDocTopicsIntegrationTest*.class</exclude>
                     </excludes>
                     <!--suppress UnresolvedMavenProperty -->
-                    <argLine>${surefire.jacoco.args}</argLine>
+                    <!-- add-opens: PGcustomtype defines classes via javassist, which reflects into
+                         ClassLoader.defineClass - permitted (with a warning) on JDK 11, denied on
+                         JDK 16+. The sonar job runs the tests on JDK 21, so the test JVM needs the
+                         open; the option is accepted (and harmless) on JDK 11 as well. -->
+                    <argLine>${surefire.jacoco.args} --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
             <plugin>
