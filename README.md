@@ -14,7 +14,7 @@
 [![Java 11](https://img.shields.io/badge/Java-11-blue.svg)](#still-on-benerator-existing-users)
 [![New projects: use DATAMIMIC](https://img.shields.io/badge/new%20projects-use%20DATAMIMIC-brightgreen.svg)](https://github.com/rapiddweller/datamimic)
 
-> **Two decades of test data engineering.** Benerator has generated test data for banks, insurers, and public-sector systems since 2006; thousands of teams started their model-driven test data work here. Benerator solved the first generation of enterprise test-data challenges. **DATAMIMIC** is what we built for today's: hybrid architectures, cloud environments, and AI-assisted workflows.
+> **Two decades of test data engineering.** Benerator has generated model-driven test data since 2006 — more than 50,000 downloads on SourceForge alone, plus nearly twenty years of releases on Maven Central, in production at banks, insurers, and public-sector systems. Benerator solved the first generation of enterprise test-data challenges. **DATAMIMIC** is what we built for today's: hybrid architectures, cloud environments, and AI-assisted workflows.
 >
 > Benerator CE stays free and open, and is maintained for bug fixes and security updates — existing projects keep working. New features land in DATAMIMIC, and this release ships a **converter** that translates Benerator projects into DATAMIMIC descriptors. This README shows what you gain and how to move; the team supports the migration.
 
