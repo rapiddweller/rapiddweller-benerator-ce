@@ -1,0 +1,11 @@
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+    <database id="hsms" url="jdbc:postgresql://localhost:5432/x" driver="org.postgresql.Driver" user="u" password="p"/>
+    <generate type="t_angebote" count="5" consumer="hsms">
+        <id name="id" generator="new DBSequenceGenerator('zsv.t_angebote_id_seq', hsms)"/>
+        <attribute name="status" source="data/status.wgt.csv" cyclic="true"/>
+        <attribute name="created" generator="CurrentDateTimeGenerator"/>
+        <attribute name="internal" mode="ignored"/>
+        <variable name="geschlecht" map="'MALE'-&gt;'m','FEMALE'-&gt;'w'" script="person.gender"/>
+    </generate>
+    <iterate type="t_angebote" source="hsms" offset="6" consumer="ConsoleExporter"/>
+</setup>

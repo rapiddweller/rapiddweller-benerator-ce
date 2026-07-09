@@ -793,6 +793,38 @@ public class DescriptorConverter {
     return script;
   }
 
+  /** Benerator {@code new DBSequenceGenerator('schema.seq'[, dbId])} -> DATAMIMIC
+   *  {@code generator="SequenceTableGenerator(sequence='schema.seq')"} plus the {@code database=}
+   *  attribute naming the store (explicit arg, else the setup's single database). True when handled. */
+  private boolean convertDbSequenceGenerator(String val, Element out, String path) {
+    String expr = val.startsWith("new ") ? val.substring(4).trim() : val.trim();
+    if (!expr.startsWith("DBSequenceGenerator")) {
+      return false;
+    }
+    List<String> args = ArgSplitter.splitTopLevel(expr.replaceAll("^DBSequenceGenerator\\(|\\)$", ""));
+    if (args.isEmpty()) {
+      return false;
+    }
+    String seq = args.get(0).trim().replaceAll("^['\"]|['\"]$", "");
+    String dbId = args.size() > 1 ? args.get(1).trim() : null;
+    if (dbId == null) {
+      // no explicit db arg: unambiguous only when the setup has exactly one relational store
+      List<String> dbIds = new java.util.ArrayList<>(storeIds);
+      dbIds.removeAll(mongoStoreIds);
+      if (dbIds.size() != 1) {
+        report.add(path, "generator", "DBSequenceGenerator('" + seq + "') names no database and the setup has "
+            + dbIds.size() + " - set database= manually");
+        return false;
+      }
+      dbId = dbIds.get(0);
+    }
+    out.setAttribute("generator", "SequenceTableGenerator(sequence='" + seq + "')");
+    out.setAttribute("database", dbId);
+    report.info(path, "generator", "DBSequenceGenerator -> SequenceTableGenerator(sequence='" + seq
+        + "') database='" + dbId + "'");
+    return true;
+  }
+
   /** A computed count {@code {a * b}} with each bare identifier wrapped in {@code int(...)} - DATAMIMIC
    *  settings from .properties are strings, and python string arithmetic throws. A single-identifier
    *  count ({@code {counts}}) already works (the runtime int()-casts the final result) and stays as-is. */
@@ -881,6 +913,7 @@ public class DescriptorConverter {
           break;
         case "name":
         case "pageSize":
+        case "offset": // skips the first N source rows - native in DATAMIMIC
           out.setAttribute(key, val);
           break;
         case "count":
@@ -1121,6 +1154,8 @@ public class DescriptorConverter {
             // Benerator composite generator on a <variable> -> DATAMIMIC entity; script field access is
             // resolved camelCase->snake_case by DATAMIMIC, so <key script="x.givenName"> passes through.
             convertCompositeGenerator(val, entityName, out, path);
+          } else if (convertDbSequenceGenerator(val, out, path)) {
+            break; // DBSequenceGenerator('seq', db) -> SequenceTableGenerator(sequence='seq') + database=
           } else {
             out.setAttribute("generator", foldDataset
                 ? ExpressionMapper.foldDatasetIntoGenerator(expressions.mapGenerator(val, path), attrs.get("dataset"))
@@ -1176,6 +1211,12 @@ public class DescriptorConverter {
           break;
         default:
           if (key.equals("cyclic") && !tag.equals("variable")) {
+            // A weighted-CSV key source samples with replacement in DATAMIMIC - it never runs out,
+            // so Benerator's cyclic flag is implicit there and simply drops.
+            if (String.valueOf(attrs.get("source")).endsWith(".wgt.csv")) {
+              report.info(path, "attribute", "'cyclic' on a .wgt.csv key source is implicit in DATAMIMIC - dropped");
+              break;
+            }
             // DATAMIMIC's cyclic lives on <variable>/<generate>/<reference>, not on <key>.
             report.add(path, "attribute", "'cyclic' on <" + tag + "> is not supported by DATAMIMIC <key> - "
                 + "use a <variable source ... cyclic> + <key script> instead");

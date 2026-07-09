@@ -599,6 +599,38 @@ public class DescriptorConverterTest {
     }
   }
 
+  @Test
+  public void realProjectIdioms_dbSequence_currentDatetime_modeIgnored_map_offset_wgtCyclic() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/round3.ben.xml", report);
+
+    // DBSequenceGenerator('seq', db) -> SequenceTableGenerator(sequence=...) + database=
+    Element id = first(doc, "id", "name", "id");
+    assertNotNull(id);
+    assertEquals("SequenceTableGenerator(sequence='zsv.t_angebote_id_seq')", id.getAttribute("generator"));
+    assertEquals("hsms", id.getAttribute("database"));
+
+    // CurrentDateTimeGenerator -> bare DateTimeGenerator (current mode)
+    assertEquals("DateTimeGenerator", first(doc, "key", "name", "created").getAttribute("generator"));
+
+    // mode="ignored" -> field omitted entirely
+    assertTrue("mode=ignored field omitted", first(doc, "key", "name", "internal") == null);
+
+    // map="'MALE'->'m',..." folded into the script as dict.get
+    Element g = first(doc, "variable", "name", "geschlecht");
+    assertNotNull(g);
+    assertEquals("{'MALE': 'm', 'FEMALE': 'w'}.get(person.gender, person.gender)", g.getAttribute("script"));
+
+    // offset= passes through natively; cyclic on a .wgt.csv key drops silently (implicit)
+    Element it = first(doc, "iterate", "offset", "6");
+    assertNotNull("offset passes through", it);
+    Element status = first(doc, "key", "name", "status");
+    assertNotNull(status);
+    assertTrue("cyclic dropped on wgt.csv key", status.getAttribute("cyclic").isEmpty());
+    assertTrue("no manual flag for the wgt.csv cyclic", report.attention().stream()
+        .noneMatch(i -> i.detail.contains("cyclic")));
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();
