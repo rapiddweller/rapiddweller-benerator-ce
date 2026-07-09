@@ -23,7 +23,6 @@
 ## Editions
 
 - **Benerator Community Edition (CE):** this repository. Maintained for bug fixes and security; open source (GPL v2 with exceptions). We are happy to help with issues and with migration to DATAMIMIC.
-- **Benerator Enterprise Edition (EE):** discontinued. No longer sold or supported.
 - **Need an enterprise platform?** That is DATAMIMIC. It comes as a free Community Edition and a commercial Platform (Enterprise) offered under a platform partnership. See https://datamimic.io.
 
 ---
@@ -158,7 +157,7 @@ Bug-fix and security contributions are welcome. New-feature work belongs in DATA
 
 ## License
 
-Benerator CE is dual-licensed: the **GNU General Public License v2 with exceptions** (open source) or a **commercial license**. See [license.txt](license.txt) for the full terms.
+Benerator CE is open source under the **GNU General Public License v2 with exceptions**. See [license.txt](license.txt) for the full terms.
 
 ## Contact
 

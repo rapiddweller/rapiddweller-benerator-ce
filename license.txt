@@ -1,8 +1,6 @@
     License
     =======
-    rapiddweller Benerator is released under a dual license,
-    1. GPL with exceptions
-    2. Commercial
+    rapiddweller Benerator is released under the GPL with exceptions.
 
 
 
@@ -32,20 +30,11 @@
     * Further distribution is unrestricted under GPL
     * The Test Code (C) can be further distributed within a firm, organization or concern,
       without this being regarded as distribution in the sense of Section 3 of the GNU General Public License.
-    * In the event that the Test Code (C) is commercially licensed to another party outside the firm, organization
-      or concern, a commercial license must be acquired.
 
     II Services
     -----------
     As regulated in the GNU General Public License, you may apply Benerator for the testing of any software - also
     as a component of a purchased test and consultation service.
-
-    Under GPL the following services and products are, however, restricted: in order to offer educational services,
-    product support or educational materials for Benerator, a commercial license must be acquired.
-
-    III Notes
-    ---------
-    There is no legal claim to obtain a commercial license.
 
 
 
