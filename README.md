@@ -4,7 +4,7 @@
        alt="Benerator">
 </p>
 
-<p align="center"><em>Benerator: model-driven test data generation. Now in maintenance mode.</em></p>
+<p align="center"><em>Benerator: model-driven test data generation since 2006.</em></p>
 
 # rapiddweller-benerator-ce
 
@@ -14,7 +14,9 @@
 [![Java 11](https://img.shields.io/badge/Java-11-blue.svg)](#still-on-benerator-existing-users)
 [![New projects: use DATAMIMIC](https://img.shields.io/badge/new%20projects-use%20DATAMIMIC-brightgreen.svg)](https://github.com/rapiddweller/datamimic)
 
-> **Maintenance mode.** Benerator CE is maintained for bug fixes and security updates only. No new features are planned, and it stays free and open. Existing projects keep working. For new projects, **DATAMIMIC**, rapiddweller's actively developed platform, is the recommended path. This README shows you what you gain and how to move, and the team offers support with the migration.
+> **Two decades of test data engineering.** Benerator has generated test data for banks, insurers, and public-sector systems since 2006; thousands of teams started their model-driven test data work here. Benerator solved the first generation of enterprise test-data challenges. **DATAMIMIC** is what we built for today's: hybrid architectures, cloud environments, and AI-assisted workflows.
+>
+> Benerator CE stays free and open, and is maintained for bug fixes and security updates — existing projects keep working. New features land in DATAMIMIC, and this release ships a **converter** that translates Benerator projects into DATAMIMIC descriptors. This README shows what you gain and how to move; the team supports the migration.
 
 ---
 
@@ -28,7 +30,12 @@
 
 ## Why move to DATAMIMIC
 
-DATAMIMIC is rapiddweller's own platform, carrying the model-driven test-data approach forward on a modern stack. Moving gives you:
+DATAMIMIC is not "Benerator in Python." The two are different kinds of product:
+
+- **Benerator is a framework** — a generation engine you script, embed, and drive yourself. That was the right shape for its era, and it is why it lasted twenty years.
+- **DATAMIMIC is a platform** — the same model-driven core, plus the layers enterprises now ask us for: deterministic contracts with audit evidence, auto-regressive ML generation, a UI and REST API (Platform), and governed deployment on-premise or air-gapped.
+
+Concretely, moving gives you:
 
 - **Deterministic, reproducible output.** The same model and seed produce the same data, reproducible across machines, with a per-output content hash you can use as audit evidence.
 - **A familiar approach, modern foundation.** If you have worked with model-driven generation, DATAMIMIC will feel familiar: XML descriptors and first-class Python, so you can bring your own Python as generators, converters, and validators.
@@ -125,9 +132,9 @@ Benerator CE keeps working, and we keep it safe:
 
 ---
 
-## About Benerator (historical)
+## About Benerator
 
-rapiddweller Benerator is a model-driven test data generation tool designed to:
+rapiddweller Benerator is a model-driven test data generation tool, in production use since 2006, designed to:
 
 - Generate data that satisfies complex validity and distribution constraints.
 - Anonymize production data for testing and demos.
