@@ -66,102 +66,11 @@ Benerator was tested with and provides examples for
 - Firebird
 
 
-## Benerator Editions
+## Editions
 
-Benerator comes in different editions which differ by feature set, scalability and performance:
+Benerator is available as the open-source **Community Edition (CE)** — this product. The former
+commercial editions (Enterprise, Professional and Light) have been discontinued.
 
-### Performance Comparison
-The results below show Benerator's generation and anonymization performance on a plain 
-MacBook Air (2020) with standard equipment and Azul Java Virtual Machine 
-(CE = Community Edition, EE = Enterprise Edition):
-
-| Benchmark | CE 1.1.2 | CE 3.0.0 | EE 3.0.0 / 1 Thread | EE 3.0.0 / 4 Threads | 
-| --- | ---: | ---: | ---: | ---: |
-| gen-string.ben.xml           |    37 |    58 |   336 | 1,095 |
-| gen-person-showcase.ben.xml  |    26 |   119 |   111 |   327 |
-| anon-person-showcase.ben.xml |    31 |   120 |   113 |   328 |
-| anon-person-regex.ben.xml    |   346 |   537 |   838 | 1,381 |
-| anon-person-hash.ben.xml     |   386 |   500 | 1,299 | 1,287 |
-| anon-person-random.ben.xml   |   576 |   838 | 1,514 | 1,736 |
-| anon-person-constant.ben.xml | 2,210 | 2,745 | 2,646 | 2,162 |
-
-!!! note
-
-    The numbers are million entities generated/anonymized per hour.
-
-Compared to CE 1.1.2's generation engine,
-
-CE 3.0.0 is **1.5-2 times faster** 
-
-and EE 3.0.0 with 4 threads is roughly **4 times faster** 
-
-and **scales further** with the number of CPUs on your machine.
-
-
-### Benerator Community Edition (CE)
-
-Benerator started as an open-source project and is committed to further improve and extend
-with and from the feedback of its user base and its contributors.
-It is the most powerful open-source data generator and is competitive with all commercial
-products.
-
-However, it has two historic limitations:
-
-- No neat graphical user interface
-- Only single-threaded generation and anonymization
-
-Though, Benerator Community Edition still has an impressive performance.
-
-### Benerator Light & Professional Edition
-
-The rapiddweller Benerator Light & Professional Editions aim at providing an easy and effortless 
-start for using Benerator and to benerate model-based realistic data in simple as well as complex scenarios. This includes:
-
-- Benerator UI
-- Ready-to-use templates
-- Demos
-- Best practices from countless benerator projects 
-- A powerful RESTful / JSON API
-- Container support for Docker / Kubernetes / OpenShift
-- And much more.
-
-#### Benerator UI
-
-Benerator UI is an integrated graphical development environment with 
-
-- Auto-generation of Benerator models (e.g. from JSON files)
-- Auto-scanning and model generation from connected databases
-- Multiple Wizards
-- Editing support by context-sensitive auto-completion
-- Code snippets for many use-cases
-- Templates for projects and files
-- Project management and project collaboration 
-- Task management
-- Data preview
-- Log analysis and guidance on errors
-- And much more.
-
-
-### Benerator Enterprise Edition (EE)
-
-Extends Benerator Community Edition and improves it in many respects. 
-With highly-optimized engine and generation-related components 
-and with multithreaded execution support, its performance on a single
-machine is about 10x the performance of the Community Edition 
-and Benerator can easily scale over multiple machines in your private cloud / cluster setup.
-
-Improvements against the Community Edition are
-
-- Improved performance on single threading
-- Multithreaded data generation and anonymization
-- Anonymization Reporting supports you in compliance checking
-- Benerator UI: An integrated graphical development environment with editing support, project and task management
-- JSON support
-- JMS support: ActiveMQ, RabbitMQ and more
-- Kafka support
-- Industry modules: Logistics, Insurance, Finance, ...
-
-!!! note
-
-    Learn more about all editions and its features on **[www.benerator.de](https://www.benerator.de)** or 
-    **[Book a Demo](https://info.rapiddweller.com/meetings/rapiddweller/benerator-demo)**.
+For an actively developed enterprise platform, see **[DATAMIMIC](https://datamimic.io)**, the successor
+to Benerator's model-driven engine, which is available as a free Community Edition and a commercial
+Platform offering.

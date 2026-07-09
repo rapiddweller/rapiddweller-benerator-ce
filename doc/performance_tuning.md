@@ -5,18 +5,10 @@ Benerator logs a short summary of the data generation tasks in the file `benerat
 If you have performance issues in a complex data generation project, an analysis of 
 this file should quickly exhibit which generation section causes the performance issues.
 
-## Using Enterprise Edition
-
-Benerator Enterprise Edition enables you to generate and anonymize data concurrently,
-in multiple threads. More than this, its engine and many specialized data generators 
-had significant performance improvements compared to the Community Edition. 
-See the [Benchmark Tool Documentations](command_line_tools.md#benchmark-tool) 
-to get some performance comparisons.
-
 ## pageSize (database and other transactional systems only)
 
 'pageSize' is Benerator's abstraction of a kind of bracket put around a group of data objects, 
-for databases and Kafka usually this bracket is mapped to a transaction. 
+for databases usually this bracket is mapped to a transaction. 
 For example a pageSize of 10 for a database means that each group of 10 objects is committed 
 to the database in one transaction. Transactions incur processing overhead, so performance 
 improves if the number of transactions is reduced. This is achieved by using a larger pageSize.
@@ -180,9 +172,8 @@ not been assessed properly.
 This is what prototype-based generation was invented for!
 
 Only **after** you have set up anonymization that fits consistency
-requirements, checked for other JVMs, have applied other performance
-improvement strategies, maybe tried scaling over multiple threads
-in Enterprise Edition, you may fiddle around with anonymization
+requirements, checked for other JVMs, and have applied other performance
+improvement strategies, you may fiddle around with anonymization
 of single fields according to the following information.
 
 Here some anonymization approaches in the order of increasing performance:
@@ -301,16 +292,6 @@ need to take special care:
 
 Choose an id generation strategy that is able to create unique ids under these circumstances 
 (see '[Generating IDs](generating_unique_data.md#id-generation)').
-
-
-## Distributed Anonymization
-
-You can distribute anonymization over several machines. 
-A simple and scalable approach is the use of a Kafka cluster: 
-Using a Kafka connector, you can export the data you need to anonymize(eg. from a database table) 
-to a Kafka queue and run several machines with Benerator instances that listen to the Kafka queue, 
-import data, anonymize it and export it to the destination system directly or indirectly 
-via another Kafka queue and Kafka connector.
 
 
 ## Ask the experts

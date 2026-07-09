@@ -38,7 +38,6 @@ You can specify the following options on the command line:
 | --list <type> | List the available environments or systems. &lt;type&gt; may be `env`, `db` or `kafka`. | |
 | --clearCaches | Clear all caches | |
 | --mode <spec> | Activate Benerator mode `strict`, `lenient` or `turbo` | default is `lenient` |
-| --anonReport <pct> | Verify 'pct' percent of anonymized data and display an anonymization report. 'pct' is an integer, 100 for complete tracking | Enterprise Edition only |
 
 
 ## DB Snapshot Tool
@@ -74,8 +73,7 @@ of a typical generation or anonymization approaches.
 
 It is of special use for you if you want to assess the generation/anonymization 
 performance of different hard- and software settings, like numbers of cores, 
-operating system, Java virtual machine, system software configuration and 
-Benerator Enterprise Edition's multithreading configuration.
+operating system, Java virtual machine and system software configuration.
 
 The different benchmarks used perform a list of predefined typical generation 
 and anonymization tasks. 
@@ -86,8 +84,7 @@ or terminal and enter
 `benerator-benchmark`
 
 Then the benchmark runs for a few minutes and prints a measurement summary.
-In Benerator Consumer Edition, only single-threaded execution is supported, 
-so the report will look something like this:
+The report will look something like this:
 
 ```text
 +---------------------------------------------------------------------------+
@@ -125,64 +122,6 @@ This means for example that the `anon-person-constant.ben.xml` anonymizes
 
 The performance numbers above have been measured on a plain Macbook Air M1 of 2020.
 
-For a Benerator Enterprise Edition installation running on a machine with several cores, 
-the benchmark is executed for several characteristic executionMode settings in order to 
-find the sweet spot of executionMode settings. 
-
-A benchmark runs on the same system with Benerator Enterprise Edition yields 
-the following result:
-
-```text
-+-----------------------------------------------------------------------------+
-| Benchmark throughput of Benerator Enterprise Edition 3.1.0-jdk-11           |
-| on a Mac OS X 11.4 x86_64 with 8 cores                                      |
-| Java version 11.0.11                                                        |
-| OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)                           |
-| Date/Time: 2021-09-17T10:09:44.460364+02:00[Europe/Berlin]                  |
-|                                                                             |
-| Numbers are reported in million entities generated per hour                 |
-+------------------------------+----------+-----------+-----------+-----------+
-| Benchmark                    | 1 Thread | 2 Threads | 4 Threads | 6 Threads |
-+------------------------------+----------+-----------+-----------+-----------+
-| gen-string.ben.xml           |      243 |       379 |       809 |       747 |
-+------------------------------+----------+-----------+-----------+-----------+
-| gen-person-showcase.ben.xml  |       88 |       162 |       249 |       193 |
-+------------------------------+----------+-----------+-----------+-----------+
-| anon-person-showcase.ben.xml |       83 |       165 |       241 |       187 |
-+------------------------------+----------+-----------+-----------+-----------+
-| anon-person-regex.ben.xml    |      684 |     1,008 |     1,145 |       794 |
-+------------------------------+----------+-----------+-----------+-----------+
-| anon-person-hash.ben.xml     |      923 |     1,344 |     1,142 |     1,187 |
-+------------------------------+----------+-----------+-----------+-----------+
-| anon-person-random.ben.xml   |    1,250 |     1,655 |     1,254 |     1,274 |
-+------------------------------+----------+-----------+-----------+-----------+
-| anon-person-constant.ben.xml |    1,926 |     2,533 |     1,522 |     1,503 |
-+------------------------------+----------+-----------+-----------+-----------+
-```
-
-Note that we not only have improved the performance of the Community Edition, 
-but optimized the Enterprise Edition to be even several times faster than 
-the Community Edition.
-
-For your performance optimization in Enterprise Edition, note that with additional 
-threads' comes additional performance, but after a certain level of concurrency 
-is reached, performance does not improve or even may deteriorate seriously. This 
-may have one or more out of several reasons: 
-
-- Coordination and synchronization overhead
-
-- More congestion of threads waiting at bottlenecks
-
-- Having serious work load on more threads than CPUs are available: The more threads between a CPU has to switch back and forth, the more time is lost on each context switch and you may end up spending more time switching than working.
-
-- With more threads comes higher throughput, but also higher storage needs. When critical buffer size limits are exceeded, a system's processing capacity may go down significantly though the overall CPU load looks relatively low. 
-
-The sweet spot where you have optimum performance with low concurrency usually 
-is where the number of threads equals the number of cores, or is only slightly larger. 
-As you might guess from the performance, the test laptop has 4 cores. 
-Actually, it has more, but its 4 high-performance cores are the only ones that matter 
-for generation and anonymization performance.
-
 The Benchmark Tool has some command line parameters to configure its test runs. 
 For a short summary, type ```benerator-benchmark --help```
 
@@ -205,10 +144,8 @@ The command line options are as follows:
 
 | Option | Meaning | Default Setting |
 | --- | --- | --- |
-| --ce | Run on Benerator Community Edition (CE) | `true` on CE |
-| --ee | Run on Benerator Enterprise Edition (EE) | `true` EE and only available there |
 | --minSecs n | Choose a workload to have the benchmark run at least n seconds | 10 |
-| --maxThreads k | Use only up to k cores for testing (only on EE) | a bit more than the number of reported cores |
+| --maxThreads k | Use only up to k cores for testing | a bit more than the number of reported cores |
 | --env &lt;spec&gt;  | Runs the tests applicable to the specified system(s). &lt;spec&gt; may be an environment name, a system (denoted by environment#system) or a comma-separated list of these (without whitespace) |
 | --mode m | activates Benerator mode `strict`, `lenient` or `turbo` | `lenient` |
 | --list   | lists the names of the predefined benchmarks |
@@ -238,7 +175,7 @@ instead of 10 threads it would have taken by default.
 
 The reports above have been created using
 
-`benerator-benchmark --ce --minDurationSecs 30 --maxThreads 6`
+`benerator-benchmark --minDurationSecs 30 --maxThreads 6`
 
 
 ### Assessing Database Performance
@@ -268,35 +205,6 @@ reading (up to a factor of 20), so that you need to write data for 10 minutes in
 data for 30 seconds. The database benchmarks alleviate that a bit, by performing two reads for 
 each write (effectively halving execution time), but still will take long time. 
 So please be patient.
-
-
-### Assessing Kafka Performance
-
-Testing Kafka performance is a bit tricky, so the Benchmark tool needs one dedicated topic per test. 
-You can reuse pre-existing topics, but they must be empty when starting the tests. 
-Otherwise, the benchmark may read pre-existing data leading to wrong performance metrics. 
-
-Currently, there are two Kafka benchmarks:
-
-| Name | required 'system' name | Description |
-| --- | --- | --- |
-| kafka-small-entity | kafka_small_entity | Reads and writes messages with small entities in JSON format |
-| kafka-big-entity  | kafka_big_entity   | Reads and writes messages with big entities in JSON format (several KBs) |
-
-A `dev` environment file might look like this, and you can use it to map the system names to topic names 
-which are actually available on your Kafka cluster (`dev.env.properties`):
-
-```properties
-kafka_small_entity.kafka.bootstrap.servers=localhost:9092
-# use the following line to specify a topic for the kafka-small-entity benchmark
-kafka_small_entity.kafka.topic=kafkaQueue1
-kafka_small_entity.kafka.format=json
-
-kafka_big_entity.kafka.bootstrap.servers=localhost:9092
-# use the following line to specify a topic for the kafka-big-entity benchmark
-kafka_big_entity.kafka.topic=kafkaQueue2
-kafka_big_entity.kafka.format=json
-```
 
 
 ## XML Creator
