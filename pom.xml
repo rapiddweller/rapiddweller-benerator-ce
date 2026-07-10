@@ -561,11 +561,11 @@
                     <skipTests>${skipUTs}</skipTests>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <excludes>
-                        <exclude>**/*ShopDemoIntegrationExtDBTest*.class</exclude>
-                        <exclude>**/*PostgresDataTypeIntegrationTest*.class</exclude>
-                        <exclude>**/*MongoDBSimpleIntegrationTest*.class</exclude>
-                        <exclude>**/*JsonGenerationTest*.class</exclude>
-                        <exclude>**/*DataFakerDocTopicsIntegrationTest*.class</exclude>
+                        <exclude>**/ShopDemoIntegrationExtDBTest.java</exclude>
+                        <exclude>**/PostgresDataTypeIntegrationTest.java</exclude>
+                        <exclude>**/MongoDBSimpleIntegrationTest.java</exclude>
+                        <exclude>**/JsonGenerationTest.java</exclude>
+                        <exclude>**/DataFakerDocTopicsIntegrationTest.java</exclude>
                     </excludes>
                     <!--suppress UnresolvedMavenProperty -->
                     <!-- add-opens: PGcustomtype defines classes via javassist, which reflects into
@@ -579,12 +579,14 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.6.0-M1</version>
                 <configuration>
+                    <!-- .java patterns: failsafe/surefire >= 3.5 no longer match *.class patterns,
+                         which silently ran 0 integration tests (and cost sonar its IT coverage) -->
                     <includes>
-                        <include>**/*ShopDemoIntegrationExtDBTest.class</include>
-                        <include>**/*PostgresDataTypeIntegrationTest.class</include>
-                        <include>**/*MongoDBSimpleIntegrationTest.class</include>
-                        <include>**/*JsonGenerationTest.class</include>
-                        <include>**/*DataFakerDocTopicsIntegrationTest.class</include>
+                        <include>**/ShopDemoIntegrationExtDBTest.java</include>
+                        <include>**/PostgresDataTypeIntegrationTest.java</include>
+                        <include>**/MongoDBSimpleIntegrationTest.java</include>
+                        <include>**/JsonGenerationTest.java</include>
+                        <include>**/DataFakerDocTopicsIntegrationTest.java</include>
                     </includes>
                     <skipTests>${skipTests}</skipTests>
                     <skipITs>${skipITs}</skipITs>
