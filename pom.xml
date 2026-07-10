@@ -600,7 +600,9 @@
                         </goals>
                         <configuration>
                             <!--suppress UnresolvedMavenProperty -->
-                            <argLine>${failsafe.jacoco.args}</argLine>
+                            <!-- add-opens: PGcustomtype defines classes via javassist; needed on the
+                                 JDK-21 sonar runner, harmless on JDK 11 (same as surefire below) -->
+                            <argLine>${failsafe.jacoco.args} --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
                         </configuration>
                     </execution>
                 </executions>
