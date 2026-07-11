@@ -51,8 +51,32 @@ The 446, by report kind (top constructs in parentheses):
 | `new X(...)` bean generators / converters | `X(...)` (prefix stripped); `RandomDoubleGenerator` → `FloatGenerator`; `CaseConverter` → `UpperCase` | — |
 | `jdbc:h2/hsqldb:mem:` | SQLite (Python-connectable) | — |
 | `environment.env.properties` (JDBC URL) | `conf/environment.env.properties` (host/port/database/dbms) | — |
+| `<variable source="mem" type="X">` (memstore read) | `sourceEntity="X"` (was silently dropped → empty read) | — |
+| `<id type="int">` (no other mode) | `generator="IncrementGenerator()"` (was a repeating random int) | — |
+| `values="'A'^70,'B'^30"` (weighted-value literal) | `values="'A','B'" weights="70,30"` (was a hard crash) | — |
+| `<attribute source=".wgt.csv" unique="true">` | flagged with rewrite recipe (was a hard crash) | — |
+| `type="date"` bare ISO `min`/`max` (no time) | reparsed + reformatted to DATAMIMIC's fixed format (was a hard crash, already broken in 4.0.0) | — |
+| `type="date" pattern="…"` (date-bound format, not DATAMIMIC's regex `pattern`) | consumed to parse `min`/`max`, dropped (was silently hijacking the field into regex-generated garbage) | — |
+| `unique="true"` on `pattern`/native range/`generator=` (no `values`/`source`) | flagged and dropped (was a hard crash: DATAMIMIC's `unique` needs a finite pool) | — |
+| `<id type="int">` (or `IncrementalIdGenerator`) inside a `<part>` | `generator="IncrementGenerator()"` still emitted, PLUS a flag (Benerator counts globally, DATAMIMIC per-parent - a real value difference, not a crash) | — |
+| `unique="true"` with an explicit non-random `distribution` (`values=`-backed) | flagged and dropped, `distribution` kept (was a hard crash: DATAMIMIC's `unique` only combines with `distribution='random'`) | — |
 
 Net over the session: `element` 178→65, and the DB-backed round-trip now runs against a real postgres.
+Three later passes (4.0.1) found and closed eight more "converts clean, breaks at runtime" gaps by
+testing patterns the corpus didn't contain — two silent-wrong-data bugs (memstore entity binding, `<id>`
+uniqueness), four silent-crash bugs (weighted-value literals, unique+weighted-CSV, unique on a
+pattern/range/generator field, unique+non-random distribution), one bug already present in the shipped
+4.0.0 converter (date `min`/`max` bounds), and one correction to this release's OWN earlier `<id>` fix
+(nested ids inside `<part>` - found by cross-referencing DATAMIMIC's own authoring docs,
+`AGENTS.md`/`cheatsheet.md`, in its development repository) — see CHANGELOG.md. `FIELD_ATTR_KEEP` (every
+attribute the converter passes through without translation) was swept end to end for this same
+verbatim-passthrough risk class; the remainder (`separator`, `constant`, `minCount`/`maxCount`, numeric
+`min`/`max`/`granularity`, `minLength`/`maxLength`, `cyclic`) is confirmed semantically identical between
+the two engines or already covered by a dedicated (non-verbatim) conversion path. DATAMIMIC's own
+authoring cheatsheet (12 numbered "semantic rules that cause most authoring failures", rules DM201-DM401)
+was cross-checked rule by rule against the converter's output; every rule not already covered above was
+confirmed non-applicable (style-only, structurally already enforced, or no corresponding Benerator source
+attribute exists to translate).
 
 ## Remaining gaps (prioritised)
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  unique="true" converts cleanly and then hard-crashes DATAMIMIC's model validation at TWO distinct
+  Pydantic checks (not a task-init raise like the wgt.csv case):
+    - "'unique' requires 'values' or 'source' (a finite pool)" - native min/max ranges, regex 'pattern'
+      generation, and explicit generator= are all NEITHER, so this hits any Benerator field that reaches
+      for unique on a code/number generator - a common idiom for unique order codes, SKUs, or ids
+      (real-world hit: two fields in the IFTDGN2 EDI test fixture).
+    - "'unique' only combines with distribution='random'" - a finite-pool (values=) read with an EXPLICIT
+      non-random distribution (ordered/cumulated/...) also crashes there.
+  Asserted by DescriptorConverterTest: unique is dropped + flagged for all four non-conforming fields and
+  left alone (still runs) for the plain values-backed field.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <generate type="order" count="3" consumer="ConsoleExporter">
+        <attribute name="orderCode" type="string" pattern="[A-Z]{3}[0-9]{4}" unique="true"/>
+        <attribute name="sequenceNo" type="int" min="1" max="1000000" unique="true"/>
+        <attribute name="segment" values="'RETAIL','SME','CORP'" unique="true"/>
+        <variable name="orderedPick" values="'X','Y','Z'" unique="true" distribution="ordered"/>
+        <attribute name="orderedVal" script="orderedPick"/>
+    </generate>
+
+</setup>

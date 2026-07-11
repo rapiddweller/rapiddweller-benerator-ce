@@ -2,6 +2,125 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 4.0.1
+
+### Overview
+Converter fixes for constructs that converted cleanly and then either produced wrong data with no error
+at all, or hard-crashed the run on a descriptor that had parsed and converted fine — both are variants of
+the same failure mode a migration tool must avoid: nothing about the CONVERSION step tells you it's
+wrong. All were found by converting real-world-shaped patterns the gated corpus did not previously
+contain (aged Benerator idioms: memstore joins, weighted-value literals, unique CSV sampling, non-ISO
+date bounds, nested ids); the corpus now contains all of them, so they are re-verified against the real
+DATAMIMIC CE engine on every commit. One (date bounds, below) was already broken in the shipped 4.0.0
+converter for the single most common way Benerator projects write a date range — not something this
+release introduced. One (nested ids, below) is a correction to this release's OWN earlier `<id>` fix,
+found by cross-checking against DATAMIMIC's own authoring documentation
+(`AGENTS.md`/`cheatsheet.md`) in the engine's development repository, then confirmed against both real
+engines side by side.
+
+### Fixed
+- **The memstore entity binding is no longer dropped.** A store-reading `<variable source="mem"
+  type="customer">` names the ENTITY to read, not a field type. The `type` was silently discarded, so
+  DATAMIMIC resolved the lookup against the VARIABLE name, found nothing (`Data having entity 'cust' is
+  empty in memstore`) and produced unresolved references. It now converts to `sourceEntity="customer"`,
+  the same rule the store-reading `<iterate>` already followed.
+- **`<id type="int">` keeps its incremental semantics.** Benerator's `<id>` is an incremental unique id
+  (1, 2, 3, …); a bare DATAMIMIC `<id type="int">` is a plain random int that repeats. A mode-less
+  integer `<id>` now converts to `generator="IncrementGenerator()"`. Three descriptors in Benerator's own
+  demo suite were affected. Verified unique across 10,000 records spread over 10 DATAMIMIC pages.
+- **Weighted-value literals (`values="'A'^70,'B'^30"`) no longer crash the run.** This is Benerator's
+  documented `randomFromWeightLiteral` syntax — the weight rides inside the `values=` string. DATAMIMIC
+  has no `^` syntax: parsing the caret expression as a literal raises immediately at task startup, so a
+  verbatim pass-through hard-crashed every converted descriptor using it. The converter now splits it into
+  DATAMIMIC's native `values=`/`weights=` pair. Confirmed against the real engine: a 20-value draw at
+  40/35/25 produced RETAIL 9, SME 8, CORP 3.
+- **`unique="true"` on a weighted-CSV `<attribute source>` is flagged instead of crashing.**
+  DATAMIMIC's `<key source>` reads a `.wgt.csv` WITH replacement and explicitly rejects `unique` at
+  task-init, so this combination also converted clean and crashed on first run. A safe rewrite needs the
+  CSV's column header (which the converter never reads), so - consistent with the converter's
+  honest-reporting design - it is flagged with a concrete rewrite recipe (`<variable source unique="true">`
+  + a script picking the value column) rather than guessed or silently passed through to the crash. See
+  `MIGRATION_PLAYBOOK.md#unique-weighted-source`.
+- **A bare ISO date `min`/`max` (no time component) on a `type="date"` field no longer crashes.**
+  DATAMIMIC's `DateTimeGenerator` parses `min`/`max` with a FIXED `"%Y-%m-%d %H:%M:%S"` format; Benerator's
+  own default date-bound format (used whenever no `pattern` is given) is plain `"yyyy-MM-dd"` — the
+  single most common way real projects write a date range, e.g. `min="1970-01-01"`. This combination was
+  **already broken in the shipped 4.0.0 converter**, unrelated to any other change in this release. Bounds
+  are now reparsed at CONVERT TIME with Benerator's own format (its default, or an explicit `pattern`) and
+  re-emitted in DATAMIMIC's expected format. This also fixes a second, related bug: Benerator's `pattern`
+  on a date field is the `SimpleDateFormat` used to parse `min`/`max` — a completely different thing from
+  DATAMIMIC's `pattern`, which is *always* a regex for string generation regardless of `type=`. Passed
+  through verbatim, a European date pattern like `dd.MM.yyyy` silently hijacked the field into
+  regex-generated garbage instead of a date (confirmed against the real engine: output like
+  `"ddFMM9yyyy"`). `pattern` is now consumed when parsing date bounds and never reaches DATAMIMIC on a
+  date-typed field; a genuinely string-typed `pattern` (regex generation) is untouched.
+- **`unique="true"` on a regex `pattern`, a native min/max range, or a `generator=` is flagged instead of
+  crashing.** DATAMIMIC validates `unique` at the model level: it draws distinct values from a FINITE
+  POOL, which only `values=` or `source=` provide. A pattern/range/generator field converts clean and then
+  hard-crashes Pydantic validation (`'unique' requires 'values' or 'source'`) — confirmed against the real
+  engine, and hit for real by two fields in Benerator's own EDI test fixture (unique order/booking codes
+  via regex `pattern`, a very ordinary idiom). No safe universal rewrite exists (a numeric range can be
+  huge; a regex's value set isn't enumerable in general), so `unique` is dropped and flagged — the field
+  still generates, just no longer guaranteed distinct — rather than passed through to the crash. A
+  `values=`-backed field is untouched; DATAMIMIC natively supports unique sampling there — UNLESS it also
+  names an explicit non-random `distribution` (`ordered`/`cumulated`/...), which hits a second, distinct
+  crash ("'unique' only combines with distribution='random'"), also confirmed against the real engine and
+  also handled the same way: `unique` dropped and flagged, the explicit `distribution` kept.
+- **A nested `<id>` inside a `<part>` now flags a real value-level divergence this release's own earlier
+  `<id>` fix (above) did not account for.** Benerator's `<id>` is GLOBALLY incremental across the whole
+  run, including every invocation of an enclosing `<part>` — confirmed against the real Benerator engine:
+  3 parent records × 2 children each gives child ids 1,2 / 3,4 / 5,6. DATAMIMIC's `IncrementGenerator`
+  resets to 1 for every PARENT record inside a `nestedKey` instead — confirmed against the real DATAMIMIC
+  engine on the identical shape: 1,2 / 1,2 / 1,2 — and is documented, intentional DATAMIMIC behavior
+  (`AGENTS.md`/`cheatsheet.md` rule DM315: "IncrementGenerator counts per parent"), not something to
+  "fix" in DATAMIMIC. Per-parent-local ids are frequently exactly what a child list wants, and a safe
+  automatic global rewrite doesn't exist (it would need a multiplier bound above any realistic per-parent
+  count, which the converter cannot know), so this is not dropped or changed — only flagged, under its
+  own `migration-summary.md` section ("Verify nested id uniqueness"), with the composite-key recipe
+  DATAMIMIC's own docs recommend. Scoped to `<part>` specifically after checking the other nesting shape
+  DM315 also names, a `<generate>` nested inside a `<generate>`: there, BOTH engines reset the id per
+  parent (confirmed on real Benerator: 1,2 / 1,2 / 1,2; confirmed on real DATAMIMIC: identical) — a
+  separate nested `<generate>` is its own independent product/consume cycle in Benerator, unlike a
+  `<part>` sub-structure sharing the enclosing entity's generator tree, so no divergence and no flag
+  needed there.
+
+### Also verified, no gap found
+Investigated as plausible silent-corruption candidates and confirmed CORRECT against the real engine, so
+no converter change was needed:
+- `<part minCount="N" maxCount="M">` → `<nestedKey type="list">`: DATAMIMIC honors both bounds and
+  varies the list length per record (measured: 30 records, lengths spread across the full 1–5 range).
+- `<generate threads="N">` → `numProcess="N"` combined with the new `IncrementGenerator()` id fix:
+  ids stay unique with zero duplicates across multiple worker processes (measured: 20,000 records over 4
+  processes).
+- A nested `<generate>` referencing an ancestor 3+ levels up, and a nested field name that shadows an
+  ancestor's type name: DATAMIMIC resolves ancestor scopes by their original name at every depth, so both
+  resolve correctly even where the converter's own scope-rewrite only rewrites the immediate parent/root.
+- A `type="timestamp"`/`"datetime"` `min`/`max` WITH an explicit time-of-day `pattern` (e.g.
+  `pattern="yyyy-MM-dd HH:mm:ss"`) round-trips correctly, time-of-day included (measured: bounds
+  08:00–18:00 held across 10 generated timestamps). Benerator's OWN default date-bound parser
+  (`DescriptorUtil.getPatternAsDateFormat`) silently truncates any time-of-day component when no
+  `pattern` is given, for `date` AND `timestamp` alike (verified: `SimpleDateFormat("yyyy-MM-dd")` parses
+  `"2020-01-01 12:30:00"` to midnight without error) — the converter's no-pattern fallback reproduces this
+  faithfully rather than introducing a new divergence.
+- `separator` (CSV column separator) and `constant` (literal passthrough) — swept the rest of
+  `FIELD_ATTR_KEEP` for the same verbatim-passthrough risk class as the fixes above; both engines agree on
+  these unconditionally, no format-translation boundary exists to diverge on.
+- Benerator has no `<setup>`-level seed/reproducibility attribute at all (confirmed: zero matches for
+  "seed" anywhere in the descriptor schema or docs beyond unrelated generator class names like
+  `SeedWordGenerator`) — so DATAMIMIC's `rngSeed` (which forces single-process execution) has nothing to
+  receive from a converted descriptor and never conflicts with the converter's `threads=`→`numProcess=`
+  mapping. Checked because DATAMIMIC's own authoring docs (`AGENTS.md`) flag seeded-vs-multiprocess as a
+  common authoring mistake; not a converter gap since there is no Benerator source attribute to translate.
+
+### Added
+- **`migration-summary.md` flags row-count risk.** Benerator tolerates drawing more values from a source
+  than it holds; DATAMIMIC reads a source once and stops, so a `<generate>` requesting more records than
+  its source silently emits fewer. This is an engine default difference, not a conversion error (`cyclic`
+  converts verbatim), but it is invisible without counting rows — so every `<variable>`/`<reference>` read
+  that declares no `cyclic` is now counted under a "Verify your row counts" heading.
+- The memstore cross-entity reference (`memstore.ben.xml`) joins the CI round-trip corpus, so both fixes
+  are asserted against the real DATAMIMIC CE engine on every commit.
+
 ## 4.0.0
 
 ### Overview

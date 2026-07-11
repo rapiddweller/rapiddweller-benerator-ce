@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Benerator's weighted-value literal (doc: randomFromWeightLiteral) embeds the weight IN the values
+  string: 'A'^70,'B'^30. DATAMIMIC has no '^' syntax - ast.literal_eval on a caret expression is not a
+  literal and THROWS at task-init, so passing it through verbatim hard-crashes every run. Asserted by
+  DescriptorConverterTest: the converter splits it into native values=/weights=.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <generate type="customer" count="200" consumer="ConsoleExporter">
+        <attribute name="segment" values="'RETAIL'^40,'SME'^35,'CORP'^25"/>
+    </generate>
+
+</setup>

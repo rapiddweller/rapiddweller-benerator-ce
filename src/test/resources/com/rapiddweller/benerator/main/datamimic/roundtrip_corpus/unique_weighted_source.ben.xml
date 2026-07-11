@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  <attribute source=".wgt.csv" unique="true"> converts cleanly and then hard-crashes: DATAMIMIC's
+  <key source> for a .wgt.csv samples WITH replacement and explicitly rejects unique at task-init.
+  A safe auto-rewrite would need the CSV header (which column is the value) that this converter never
+  reads, so it is flagged instead of guessed - asserted by DescriptorConverterTest. The field is
+  commented out of the generated output, so this still runs clean through DATAMIMIC (just missing
+  'country'), proving the flag doesn't collaterally break the rest of the descriptor.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <generate type="customer" count="20" consumer="ConsoleExporter">
+        <attribute name="country" source="countries.wgt.csv" unique="true"/>
+        <attribute name="segment" values="'RETAIL','SME','CORP'"/>
+    </generate>
+
+</setup>

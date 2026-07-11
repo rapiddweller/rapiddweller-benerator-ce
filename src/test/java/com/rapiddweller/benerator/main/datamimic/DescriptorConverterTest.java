@@ -65,6 +65,243 @@ public class DescriptorConverterTest {
     assertFalse("maxLength passes through natively, not flagged", rep.contains("maxLength"));
   }
 
+  /**
+   * The two ways a memstore cross-entity reference converts cleanly, runs without error, and is still
+   * WRONG - both silent, so neither shows up as a crash:
+   * <ul>
+   *   <li>a dropped {@code type} on a store-reading {@code <variable>} makes DATAMIMIC resolve the lookup
+   *       against the variable name and read nothing ("Data having entity 'cust' is empty in memstore"),</li>
+   *   <li>a bare {@code <id type="int">} is incremental in Benerator but a repeating random int in DATAMIMIC.</li>
+   * </ul>
+   */
+  @Test
+  public void carriesMemstoreEntityBindingAndIncrementalIds() throws Exception {
+    File in = new File("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/memstore.ben.xml");
+    File out = File.createTempFile("memstore", ".datamimic.xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    Element variable = (Element) doc.getElementsByTagName("variable").item(0);
+    assertEquals("the memstore entity to read must survive as sourceEntity",
+        "customer", variable.getAttribute("sourceEntity"));
+    assertEquals("type is not a DATAMIMIC <variable> attribute", "", variable.getAttribute("type"));
+    assertEquals("cyclic converts verbatim", "true", variable.getAttribute("cyclic"));
+
+    NodeList ids = doc.getElementsByTagName("id");
+    assertEquals(2, ids.getLength());
+    for (int i = 0; i < ids.getLength(); i++) {
+      Element id = (Element) ids.item(i);
+      assertEquals("a mode-less int <id> is incremental in Benerator",
+          "IncrementGenerator()", id.getAttribute("generator"));
+      assertEquals("a type= alongside the generator would re-randomize the id",
+          "", id.getAttribute("type"));
+    }
+  }
+
+  /**
+   * Benerator's weighted-value literal ({@code values="'A'^70,'B'^30"}, doc: randomFromWeightLiteral)
+   * embeds the weight IN the values string. DATAMIMIC has no '^' syntax - {@code ast.literal_eval} on a
+   * caret expression is not a literal and raises at task-init, so a verbatim pass-through hard-crashes
+   * every run (verified against the real engine). DATAMIMIC's equivalent is a separate {@code weights=}
+   * attribute (plain numbers, same order).
+   */
+  @Test
+  public void splitsWeightedValueLiteralIntoValuesAndWeights() throws Exception {
+    File in = new File("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/weighted_values.ben.xml");
+    File out = File.createTempFile("weighted", ".datamimic.xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    Element key = (Element) doc.getElementsByTagName("key").item(0);
+    assertEquals("'RETAIL','SME','CORP'", key.getAttribute("values"));
+    assertEquals("the caret weight rides along as a separate native attribute",
+        "40,35,25", key.getAttribute("weights"));
+    assertFalse("no leftover '^' anywhere in the emitted values", key.getAttribute("values").contains("^"));
+  }
+
+  /**
+   * {@code unique="true"} on a {@code <key source=".wgt.csv">} converts cleanly and then hard-crashes:
+   * DATAMIMIC's weighted-CSV key read is sample-WITH-replacement and explicitly rejects unique at
+   * task-init (verified against the real engine). A safe auto-rewrite needs the CSV header (which
+   * column is the value) that this converter never reads, so it is flagged - not guessed, not passed
+   * through to the crash.
+   */
+  @Test
+  public void flagsUniqueOnWeightedSourceInsteadOfCrashing() throws Exception {
+    File in = new File("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/unique_weighted_source.ben.xml");
+    File out = File.createTempFile("uniquesrc", ".datamimic.xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    NodeList keys = doc.getElementsByTagName("key");
+    for (int i = 0; i < keys.getLength(); i++) {
+      assertFalse("the crashing field must not reach the output as a <key>",
+          "country".equals(((Element) keys.item(i)).getAttribute("name")));
+    }
+    String rep = report.format();
+    assertTrue("flagged as manual work with a concrete rewrite recipe",
+        rep.contains("samples WITH replacement and rejects unique"));
+  }
+
+  /**
+   * DATAMIMIC's DateTimeGenerator parses {@code min}/{@code max} with a FIXED
+   * {@code "%Y-%m-%d %H:%M:%S"} format. A bare ISO date with no time component - Benerator's OWN
+   * default (TimeUtil.createDefaultDateFormat) and the single most common way real projects write date
+   * bounds - already crashed there before this fix (verified against the real engine). A Benerator
+   * {@code pattern} makes it worse: DATAMIMIC's {@code pattern} attribute is an UNRELATED thing (regex
+   * string generation via exrex), so passing it through hijacked the field into garbage output instead
+   * of a date. Both bounds must be reparsed at CONVERT TIME with Benerator's own format (its default, or
+   * an explicit {@code pattern}) and re-emitted in DATAMIMIC's format; {@code pattern} on a genuinely
+   * string-typed field (regex generation) must still pass through untouched.
+   */
+  @Test
+  public void reformatsDateBoundsAndConsumesDateFormatPattern() throws Exception {
+    File in = new File("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/date_bounds.ben.xml");
+    File out = File.createTempFile("datebounds", ".datamimic.xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    NodeList keys = doc.getElementsByTagName("key");
+    Element isoKey = null;
+    Element euroKey = null;
+    Element strKey = null;
+    for (int i = 0; i < keys.getLength(); i++) {
+      Element k = (Element) keys.item(i);
+      switch (k.getAttribute("name")) {
+        case "isoBirthdate": isoKey = k; break;
+        case "euroBirthdate": euroKey = k; break;
+        case "orderCode": strKey = k; break;
+        default: break;
+      }
+    }
+    assertNotNull(isoKey);
+    assertNotNull(euroKey);
+    assertNotNull(strKey);
+
+    assertEquals("a bare ISO date (no time) must gain the time component DATAMIMIC's parser requires",
+        "DateTimeGenerator(min='1970-01-01 00:00:00', max='2000-12-31 00:00:00')", isoKey.getAttribute("generator"));
+    assertEquals("a 'pattern'-formatted bound reparses to the same DATAMIMIC-native format",
+        "DateTimeGenerator(min='1970-01-01 00:00:00', max='2000-12-31 00:00:00')", euroKey.getAttribute("generator"));
+    assertFalse("'pattern' is consumed by date-bound parsing, not passed through", euroKey.hasAttribute("pattern"));
+    assertFalse("'min'/'max' are folded into the generator string, not left as bare attributes",
+        euroKey.hasAttribute("min") || euroKey.hasAttribute("max"));
+
+    assertEquals("a genuinely string-typed field keeps 'pattern' as DATAMIMIC's native regex mode",
+        "[A-Z]{3}[0-9]{4}", strKey.getAttribute("pattern"));
+    assertEquals("string", strKey.getAttribute("type"));
+  }
+
+  /**
+   * DATAMIMIC validates {@code unique="true"} at the model level: it draws distinct values from a FINITE
+   * POOL, which only {@code values=} or {@code source=} provide. A regex {@code pattern}, a native
+   * min/max range, and an explicit {@code generator=} are none of those - all three convert cleanly and
+   * then hard-crash Pydantic validation ("'unique' requires 'values' or 'source'"), verified against the
+   * real engine. Two fields in Benerator's own EDI test fixture (IFTDGN2.ben.xml) hit exactly this. A
+   * safe universal rewrite doesn't exist (a numeric range can be huge; a regex's value set isn't
+   * enumerable in general), so unique is dropped and flagged - same policy as the wgt.csv+unique case -
+   * rather than passed through to the crash. A values-backed field is untouched (DATAMIMIC natively
+   * supports unique sampling there) UNLESS it also names an explicit non-random distribution
+   * ({@code ordered}/{@code cumulated}/...), which hits a SECOND, distinct Pydantic check ("'unique' only
+   * combines with distribution='random'") - also verified against the real engine, also dropped+flagged
+   * (the explicit distribution is kept; it is the more clearly deliberate of the two attributes).
+   */
+  @Test
+  public void dropsUniqueOnNonPoolModesInsteadOfCrashing() throws Exception {
+    File in = new File("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/unique_non_pool_modes.ben.xml");
+    File out = File.createTempFile("uniquenonpool", ".datamimic.xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    NodeList keys = doc.getElementsByTagName("key");
+    Element patternKey = null;
+    Element rangeKey = null;
+    Element valuesKey = null;
+    for (int i = 0; i < keys.getLength(); i++) {
+      Element k = (Element) keys.item(i);
+      switch (k.getAttribute("name")) {
+        case "orderCode": patternKey = k; break;
+        case "sequenceNo": rangeKey = k; break;
+        case "segment": valuesKey = k; break;
+        default: break;
+      }
+    }
+    assertNotNull(patternKey);
+    assertNotNull(rangeKey);
+    assertNotNull(valuesKey);
+
+    assertFalse("pattern (regex) has no finite pool - unique dropped", patternKey.hasAttribute("unique"));
+    assertEquals("the field itself still generates", "[A-Z]{3}[0-9]{4}", patternKey.getAttribute("pattern"));
+    assertFalse("a native min/max range has no finite pool - unique dropped", rangeKey.hasAttribute("unique"));
+    assertEquals("1", rangeKey.getAttribute("min"));
+    assertEquals("values=... IS DATAMIMIC's finite pool - left alone", "true", valuesKey.getAttribute("unique"));
+
+    Element orderedVar = (Element) doc.getElementsByTagName("variable").item(0);
+    assertEquals("orderedPick", orderedVar.getAttribute("name"));
+    assertFalse("unique + an explicit non-random distribution also crashes - unique dropped",
+        orderedVar.hasAttribute("unique"));
+    assertEquals("the explicit distribution choice is kept", "ordered", orderedVar.getAttribute("distribution"));
+    assertEquals("values=... is untouched", "'X','Y','Z'", orderedVar.getAttribute("values"));
+
+    String rep = report.format();
+    assertTrue("flagged as manual work with a concrete explanation",
+        rep.contains("DATAMIMIC only supports unique sampling from a finite pool"));
+    assertTrue("the distribution-conflict case gets its own concrete explanation",
+        rep.contains("DATAMIMIC's unique only combines with distribution='random'"));
+  }
+
+  /**
+   * Benerator's {@code <id>} is GLOBALLY incremental across the whole run, including every invocation of
+   * an enclosing {@code <part>} (confirmed against the real Benerator engine: 3 accounts x 2 cards each
+   * gives cardIds 1,2 / 3,4 / 5,6). DATAMIMIC's {@code IncrementGenerator} resets to 1 for every PARENT
+   * record inside a {@code nestedKey} (confirmed against the real engine: same shape gives 1,2 / 1,2 /
+   * 1,2 - documented, intentional DATAMIMIC behavior, not a bug there). Not a crash and often exactly
+   * what a child list wants, so it must not become blocking manual work - but it is a real value-level
+   * divergence, so it must be visible.
+   */
+  @Test
+  public void flagsNestedIncrementGeneratorAsInfoNotManualWork() throws Exception {
+    File in = new File("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/nested_id.ben.xml");
+    File out = File.createTempFile("nestedid", ".datamimic.xml");
+    out.deleteOnExit();
+
+    MigrationReport report = new MigrationReport();
+    new DescriptorConverter(report).convert(in, out);
+    Document doc = XMLUtil.parse(out.getAbsolutePath());
+
+    NodeList ids = doc.getElementsByTagName("id");
+    assertEquals(2, ids.getLength());
+    for (int i = 0; i < ids.getLength(); i++) {
+      assertEquals("still generates - the field is not dropped or changed",
+          "IncrementGenerator()", ((Element) ids.item(i)).getAttribute("generator"));
+    }
+
+    long nestedIdFindings = report.items().stream().filter(it -> "nested-id".equals(it.kind)).count();
+    assertEquals("exactly the nested cardId, not the top-level accountId", 1, nestedIdFindings);
+    assertTrue("must not block the 'no manual work' claim - it's informational", report.attention().stream()
+        .noneMatch(it -> "nested-id".equals(it.kind)));
+  }
+
   @Test
   public void convertsShopReferencesAndSources() throws Exception {
     File in = new File("src/demo/resources/demo/shop/shop-hsqlmem.ben.xml");
