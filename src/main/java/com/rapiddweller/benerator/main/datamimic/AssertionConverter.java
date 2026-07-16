@@ -52,7 +52,7 @@ class AssertionConverter {
     }
     Element assertEl = out.createElement("assert");
     if (test != null) {
-      assertEl.setAttribute("condition", "not (" + test + ")");
+      assertEl.setAttribute("condition", "not (" + ExpressionMapper.rewriteScript(test) + ")");
     } else {
       report.add(path, "if", "<if> without a test condition - review");
     }

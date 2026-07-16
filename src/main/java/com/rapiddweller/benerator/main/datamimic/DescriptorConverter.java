@@ -1835,7 +1835,7 @@ public class DescriptorConverter {
     Map<String, String> attrs = attributes(src);
     String test = attrs.get("test");
     if (test != null) {
-      out.setAttribute("condition", test);
+      out.setAttribute("condition", ExpressionMapper.rewriteScript(test));
     } else {
       report.add(path, "while", "<while> without a test condition - review");
     }
@@ -1854,7 +1854,7 @@ public class DescriptorConverter {
     Element ifEl = out.createElement("if");
     String test = attributes(src).get("test");
     if (test != null) {
-      ifEl.setAttribute("condition", test);
+      ifEl.setAttribute("condition", ExpressionMapper.rewriteScript(test, enclosingScopeName(src)));
     } else {
       report.add(path, "if", "<if> without a test condition - review");
     }

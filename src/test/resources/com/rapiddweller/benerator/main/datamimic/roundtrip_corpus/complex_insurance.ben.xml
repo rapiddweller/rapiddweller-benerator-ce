@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ================================================================================
+  ADVANCED MIGRATION DEMO 5: Insurance Underwriting & Policy Administration
+  ================================================================================
+  A full life/health insurance pipeline: applicants are underwritten with multi-factor
+  risk scoring, policies are issued with hash-based identifiers, premiums are calculated
+  via while-loop amortization, and claims are adjudicated with nested condition logic.
+
+  NEW patterns exercised (not in demos 1-4):
+    - Hash converters: SHA256Hash, SHA1Hash → Hash('sha256','hex'), Hash('sha1','hex')
+    - Person entity with constructor args: femaleQuota, nobleQuota, academicTitleQuota
+    - AcademicTitleGenerator, NobilityTitleGenerator, BirthdateGenerator
+    - SSNGenerator for tax identification
+    - Mask converter for sensitive data (SSN display masking)
+    - Substring converter for extracting policy year from ID
+    - Append converter for building composite identifiers
+    - Conditions inside nestedKey (coverage eligibility per benefit)
+    - Converter chains (generator + converter on same field)
+    - Global patterns: multiple entity references, complex boolean expressions
+  ================================================================================
+-->
+<setup
+    xmlns="https://www.benerator.de/schema/3.0.0"
+    defaultDataset="US"
+    defaultLocale="en_US">
+
+    <memstore id="store"/>
+
+    <!-- ========================================================================
+         PHASE 1: Applicant Registry
+         Person entity with demographic quotas. Risk factors: age, BMI,
+         smoker status, occupation hazard level, family history.
+         ======================================================================== -->
+    <generate type="applicant" count="40" consumer="store">
+        <variable name="person" generator="new PersonGenerator{
+            minAgeYears='25', maxAgeYears='75',
+            femaleQuota='0.48', nobleQuota='0.005',
+            academicTitleQuota='0.25'}"/>
+        <variable name="addr" generator="AddressGenerator" dataset="US"/>
+        <id name="id" type="int"/>
+        <!-- SSN masked for display (only last 4 visible) -->
+        <attribute name="ssn" generator="SSNGenerator" converter="Mask"/>
+        <attribute name="fullName" script="person.givenName + ' ' + person.familyName"/>
+        <attribute name="academicTitle" generator="AcademicTitleGenerator"/>
+        <attribute name="nobilityTitle" generator="NobilityTitleGenerator"/>
+        <attribute name="birthDate" generator="BirthdateGenerator"/>
+        <attribute name="gender" script="person.gender"/>
+        <attribute name="age" type="int" min="25" max="75"/>
+        <!-- Risk factors -->
+        <attribute name="bmi" type="double" min="18.0" max="45.0" granularity="0.1"/>
+        <attribute name="isSmoker" type="boolean"/>
+        <attribute name="occupationHazard"
+            values="'low'^50,'medium'^30,'high'^15,'extreme'^5"/>
+        <attribute name="hasFamilyHistory" type="boolean"/>
+        <attribute name="annualIncome" type="double" min="25000" max="500000" granularity="1000"/>
+        <attribute name="state" script="addr.state"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 2: Underwriting Engine
+         Multi-factor risk scoring with cumulative conditions.
+         Risk score determines premium class and eligibility.
+         ======================================================================== -->
+    <generate type="policy" count="35" consumer="store">
+        <variable name="app" source="store" type="applicant"
+            distribution="cumulated" cyclic="true"/>
+        <id name="id" type="int"/>
+        <!-- Policy ID: hashed for uniqueness (SHA256) -->
+        <attribute name="policyNumber" pattern="POL-[0-9]{4}-[A-Z]{4}" converter="SHA256Hash"/>
+        <!-- Substring: extract first 12 chars of the hash as display ID -->
+        <attribute name="displayId" script="policyNumber" converter="new SubstringExtractor(0,12)"/>
+        <attribute name="applicantId" script="app.id"/>
+        <attribute name="applicantName" script="app.fullName"/>
+        <attribute name="applicantAge" script="app.age"/>
+        <attribute name="applicantBmi" script="app.bmi"/>
+        <attribute name="isSmoker" script="app.isSmoker"/>
+        <attribute name="occupationHazard" script="app.occupationHazard"/>
+
+        <!-- Risk scoring: compound base + modifiers -->
+        <attribute name="riskScore" type="int" constant="0"/>
+        <!-- Age risk: +10 for 50+, +20 for 65+ -->
+        <if test="app.age &gt;= 65">
+            <then><attribute name="riskScore" script="riskScore + 20"/></then>
+            <else>
+                <if test="app.age &gt;= 50">
+                    <then><attribute name="riskScore" script="riskScore + 10"/></then>
+                </if>
+            </else>
+        </if>
+        <!-- BMI risk: +15 for obese (>=30), +25 for morbid (>=40) -->
+        <if test="app.bmi &gt;= 40">
+            <then><attribute name="riskScore" script="riskScore + 25"/></then>
+            <else>
+                <if test="app.bmi &gt;= 30">
+                    <then><attribute name="riskScore" script="riskScore + 15"/></then>
+                </if>
+            </else>
+        </if>
+        <!-- Smoker: +30 -->
+        <if test="app.isSmoker == True">
+            <then><attribute name="riskScore" script="riskScore + 30"/></then>
+        </if>
+        <!-- Occupation hazard: +5/+15/+30 -->
+        <if test="occupationHazard == 'extreme'">
+            <then><attribute name="riskScore" script="riskScore + 30"/></then>
+            <else>
+                <if test="occupationHazard == 'high'">
+                    <then><attribute name="riskScore" script="riskScore + 15"/></then>
+                    <else>
+                        <if test="occupationHazard == 'medium'">
+                            <then><attribute name="riskScore" script="riskScore + 5"/></then>
+                        </if>
+                    </else>
+                </if>
+            </else>
+        </if>
+        <!-- Family history: +10 -->
+        <if test="app.hasFamilyHistory == True">
+            <then><attribute name="riskScore" script="riskScore + 10"/></then>
+        </if>
+
+        <!-- Premium class based on risk score -->
+        <if test="riskScore &gt;= 60">
+            <then>
+                <attribute name="premiumClass" constant="DECLINED"/>
+                <attribute name="monthlyPremium" type="double" constant="0"/>
+            </then>
+            <else>
+                <if test="riskScore &gt;= 40">
+                    <then>
+                        <attribute name="premiumClass" constant="HIGH_RISK"/>
+                        <attribute name="monthlyPremium" type="double" min="400" max="800" granularity="10"/>
+                    </then>
+                    <else>
+                        <if test="riskScore &gt;= 20">
+                            <then>
+                                <attribute name="premiumClass" constant="STANDARD"/>
+                                <attribute name="monthlyPremium" type="double" min="150" max="400" granularity="10"/>
+                            </then>
+                            <else>
+                                <attribute name="premiumClass" constant="PREFERRED"/>
+                                <attribute name="monthlyPremium" type="double" min="50" max="150" granularity="5"/>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 3: Coverage Benefits (nested under policy)
+         Each policy has 1-5 benefits with individual coverage limits.
+         Conditions INSIDE nestedKey: benefit eligibility depends on
+         premium class and applicant profile.
+         ======================================================================== -->
+    <generate type="benefit" count="80" consumer="store">
+        <variable name="pol" source="store" type="policy"
+            distribution="cumulated" cyclic="true"/>
+        <variable name="app" source="store" type="applicant"
+            distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="policyId" script="pol.id"/>
+        <attribute name="displayId" script="pol.displayId"/>
+        <attribute name="premiumClass" script="pol.premiumClass"/>
+        <attribute name="benefitType"
+            values="'hospitalization','surgery','prescription_drugs',
+                   'dental','vision','mental_health','preventive_care'"/>
+
+        <!-- Coverage amount depends on premium class -->
+        <if test="premiumClass == 'PREFERRED'">
+            <then>
+                <attribute name="coverageLimit" type="double" min="100000" max="1000000" granularity="50000"/>
+                <attribute name="copay" type="double" constant="10"/>
+            </then>
+            <else>
+                <if test="premiumClass == 'STANDARD'">
+                    <then>
+                        <attribute name="coverageLimit" type="double" min="50000" max="250000" granularity="25000"/>
+                        <attribute name="copay" type="double" constant="25"/>
+                    </then>
+                    <else>
+                        <attribute name="coverageLimit" type="double" min="25000" max="100000" granularity="10000"/>
+                        <attribute name="copay" type="double" constant="50"/>
+                    </else>
+                </if>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 4: Claims Adjudication
+         Multi-condition claim evaluation. Compound boolean logic with
+         nested if/else chains. SHA1 hash for claim reference integrity.
+         ======================================================================== -->
+    <generate type="claim" count="50" consumer="store">
+        <variable name="pol" source="store" type="policy"
+            distribution="random" cyclic="true"/>
+        <variable name="app" source="store" type="applicant"
+            distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <!-- SHA1 hash for claim reference -->
+        <attribute name="claimRef" pattern="CLM-[A-Z0-9]{10}" converter="SHA1Hash"/>
+        <attribute name="policyId" script="pol.id"/>
+        <attribute name="premiumClass" script="pol.premiumClass"/>
+        <attribute name="riskScore" script="pol.riskScore"/>
+        <attribute name="claimAmount" type="double" min="500" max="50000" granularity="100"/>
+        <attribute name="claimType"
+            values="'hospitalization'^30,'surgery'^25,
+                   'prescription'^20,'diagnostic'^15,'preventive'^10"/>
+
+        <!-- Adjudication: auto-approve low-risk, low-amount; flag others -->
+        <if test="riskScore &lt;= 20 &amp;&amp; claimAmount &lt;= 5000">
+            <then>
+                <attribute name="status" constant="AUTO_APPROVED"/>
+                <attribute name="paidAmount" script="claimAmount * 0.9"/>
+            </then>
+            <else>
+                <if test="riskScore &gt;= 40 || claimAmount &gt;= 25000">
+                    <then>
+                        <attribute name="status" constant="MANUAL_REVIEW"/>
+                        <attribute name="paidAmount" constant="0"/>
+                    </then>
+                    <else>
+                        <attribute name="status" constant="PENDING"/>
+                        <attribute name="paidAmount" script="claimAmount * 0.7"/>
+                    </else>
+                </if>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 5: Premium Amortization (While-Loop Calculation)
+         Simulates premium payment schedule: annual premium is amortized
+         over monthly payments with compound interest.
+         ======================================================================== -->
+    <generate type="amortization" count="20" consumer="store">
+        <variable name="pol" source="store" type="policy"
+            distribution="ordered"/>
+        <id name="id" type="int"/>
+        <attribute name="policyId" script="pol.id"/>
+        <attribute name="annualPremium" type="double" min="600" max="9600" granularity="60"/>
+        <attribute name="balance" script="annualPremium"/>
+        <attribute name="monthsPaid" type="int" min="0" max="0"/>
+        <attribute name="totalPaid" type="double" min="0" max="0"/>
+
+        <!-- Amortize over max 24 months with 3% annual interest -->
+        <while test="balance &gt; 0 &amp;&amp; monthsPaid &lt; 24">
+            <attribute name="balance" script="balance * 1.0025 - pol.monthlyPremium"/>
+            <attribute name="totalPaid" script="totalPaid + pol.monthlyPremium"/>
+            <attribute name="monthsPaid" script="monthsPaid + 1"/>
+        </while>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 6: Underwriting Dashboard
+         Risk distribution and premium class summary
+         ======================================================================== -->
+    <generate type="dashboard" count="10" consumer="ConsoleExporter">
+        <variable name="pol" source="store" type="policy"
+            distribution="ordered"/>
+        <attribute name="displayId" script="pol.displayId"/>
+        <attribute name="class" script="pol.premiumClass"/>
+        <attribute name="risk" script="pol.riskScore"/>
+        <attribute name="premium" script="pol.monthlyPremium"/>
+        <attribute name="age" script="pol.applicantAge"/>
+        <attribute name="bmi" script="pol.applicantBmi"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 7: Compliance Assertions
+         ======================================================================== -->
+    <generate type="compliance" count="1" consumer="ConsoleExporter">
+        <attribute name="checkId" constant="uw-compliance-2026q3"/>
+        <attribute name="totalApplicants" type="int" constant="40"/>
+        <attribute name="totalPolicies" type="int" constant="35"/>
+        <attribute name="totalClaims" type="int" constant="50"/>
+        <if test="totalApplicants != 40">
+            <error>Applicant count mismatch — underwriting pipeline failure</error>
+        </if>
+        <if test="totalPolicies != 35">
+            <error>Policy count mismatch — issuance pipeline failure</error>
+        </if>
+    </generate>
+
+</setup>

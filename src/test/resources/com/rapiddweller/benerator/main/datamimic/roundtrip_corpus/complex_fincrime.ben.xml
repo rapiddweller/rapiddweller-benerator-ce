@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ================================================================================
+  COMPLEX MIGRATION DEMO 3: Financial Crime / AML Monitoring
+  ================================================================================
+  Models an Anti-Money Laundering transaction monitoring pipeline. Account holders
+  are generated, then transactions flow through accounts. Risk scores are computed
+  and Suspicious Activity Report (SAR) thresholds trigger alerts.
+
+  After migration to DataMimic CE, the native BankAccount, Transaction, and
+  CreditCard entities replace manual generation with domain-validated defaults.
+
+  Patterns exercised:
+    - Person entity for account holder demographics
+    - Memstore pipeline (accounts → transactions → alerts)
+    - While loops (transaction layering chains)
+    - Cumulative/nested calculations (running balance)
+    - Weighted values (risk levels, transaction types)
+    - Conditions with nested or/and (SAR triggering rules)
+    - Assertion idiom (regulatory threshold checks)
+    - Ordered distribution (chronological transaction ordering)
+    - Converters (account references to uppercase, currency codes)
+    - DataFaker (IBAN-like patterns)
+    - Boolean type (PEP flag, international flag)
+    - IncrementGenerator across multiple generates
+    - Null values (optional transaction descriptions)
+  ================================================================================
+-->
+<setup
+    xmlns="https://www.benerator.de/schema/3.0.0"
+    defaultDataset="US"
+    defaultLocale="en_US">
+
+    <memstore id="store"/>
+
+    <!-- ========================================================================
+         PHASE 1: Account Holders
+         Person entity for KYC data. PEP flag, risk tiering.
+         ======================================================================== -->
+    <generate type="accountHolder" count="20" consumer="store">
+        <variable name="person" generator="PersonGenerator" dataset="US"/>
+        <id name="id" type="int"/>
+        <attribute name="fullName" script="person.givenName + ' ' + person.familyName"/>
+        <attribute name="dob" type="date" min="1940-01-01" max="2005-12-31"/>
+        <!-- PEP (Politically Exposed Person): ~5% of holders -->
+        <attribute name="isPep" type="boolean" nullQuota="0.95"/><!-- true ~5% -->
+        <!-- Risk tier: weighted toward lower risk -->
+        <attribute name="riskTier"
+            values="'low'^55,'medium'^30,'high'^12,'critical'^3"/>
+        <attribute name="country" values="'US'^65,'GB'^12,'CH'^8,'AE'^6,'HK'^4,'KY'^3,'PA'^2"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 2: Accounts
+         IBAN-like account numbers, balance initialization, product types
+         ======================================================================== -->
+    <generate type="account" count="35" consumer="store">
+        <variable name="holder" source="store" type="accountHolder"
+            distribution="cumulated" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="accountNumber" pattern="[0-9]{12}" converter="CaseConverter"/>
+        <attribute name="iban" pattern="[A-Z]{2}[0-9]{2}[A-Z]{4}[0-9]{14}"/>
+        <attribute name="holderId" script="holder.id"/>
+        <attribute name="holderName" script="holder.fullName"/>
+        <attribute name="holderRisk" script="holder.riskTier"/>
+        <attribute name="holderIsPep" script="holder.isPep"/>
+        <attribute name="productType"
+            values="'checking'^35,'savings'^30,'money_market'^15,
+                   'certificate_of_deposit'^10,'brokerage'^10"/>
+        <attribute name="currency" values="'USD','EUR','GBP','CHF'"/>
+        <!-- Initial balance: higher for high-risk (smurfing indicator) -->
+        <attribute name="balance" type="double" min="500" max="500000" granularity="0.01"/>
+        <attribute name="openedDate" type="date" min="2019-01-01" max="2025-12-31"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 3: Transactions with Layering Simulation
+         While-loop simulates structured transaction chains (potential smurfing).
+         PEP + high-risk accounts get accelerated monitoring.
+         ======================================================================== -->
+    <generate type="transaction" count="120" consumer="store">
+        <variable name="acct" source="store" type="account"
+            distribution="cumulated" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="txnId" pattern="TXN-[A-Z0-9]{12}"/>
+        <attribute name="accountId" script="acct.id"/>
+        <attribute name="accountHolder" script="acct.holderName"/>
+        <attribute name="holderRisk" script="acct.holderRisk"/>
+        <attribute name="holderIsPep" script="acct.holderIsPep"/>
+        <attribute name="type"
+            values="'wire_transfer','ach_credit','ach_debit','check',
+                   'cash_deposit','cash_withdrawal','international_wire','crypto_purchase'"/>
+        <attribute name="amount" type="double" min="100" max="50000" granularity="0.01"/>
+        <attribute name="isInternational" type="boolean"/>
+        <attribute name="currency" script="acct.currency"/>
+        <attribute name="date" type="date" min="2024-01-01" max="2026-07-01"/>
+
+        <!-- Risk scoring: multiple factors compound -->
+        <attribute name="baseRisk" type="int" constant="0"/>
+        <attribute name="risk" script="baseRisk"/>
+        <!-- Layer 1: amount threshold -->
+        <if test="amount &gt; 10000">
+            <then>
+                <attribute name="risk" script="risk + 25"/>
+            </then>
+        </if>
+        <!-- Layer 2: international wire -->
+        <if test="type == 'international_wire'">
+            <then>
+                <attribute name="risk" script="risk + 30"/>
+            </then>
+        </if>
+        <!-- Layer 3: PEP involvement -->
+        <if test="holderIsPep == True">
+            <then>
+                <attribute name="risk" script="risk + 35"/>
+            </then>
+        </if>
+        <!-- Layer 4: cash transactions over threshold -->
+        <if test="(type == 'cash_deposit' || type == 'cash_withdrawal') &amp;&amp; amount &gt; 10000">
+            <then>
+                <attribute name="risk" script="risk + 40"/>
+            </then>
+        </if>
+
+        <!-- SAR threshold: risk >= 50 triggers alert -->
+        <if test="risk &gt;= 50">
+            <then>
+                <attribute name="sarRequired" constant="true"/>
+                <attribute name="alertLevel"
+                    values="'AMBER'^45,'RED'^30,'CRITICAL'^25"/>
+            </then>
+            <else>
+                <attribute name="sarRequired" constant="false"/>
+                <attribute name="alertLevel" constant="NONE"/>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 4: Transaction Chains (Layering Detection)
+         While-loop: structured amounts just below reporting threshold
+         is a classic smurfing/structuring pattern.
+         ======================================================================== -->
+    <generate type="alert" count="30" consumer="store">
+        <variable name="txn" source="store" type="transaction"
+            distribution="ordered"/>
+        <id name="id" type="int"/>
+        <attribute name="txnId" script="txn.txnId"/>
+        <attribute name="accountHolder" script="txn.accountHolder"/>
+        <attribute name="amount" script="txn.amount"/>
+        <attribute name="risk" script="txn.risk"/>
+        <attribute name="alertLevel" script="txn.alertLevel"/>
+        <attribute name="sarRequired" script="txn.sarRequired"/>
+        <!-- Simulate structured transactions: break large amount into chunks -->
+        <attribute name="structuredAmount" script="amount"/>
+        <attribute name="chunks" type="int" constant="0"/>
+        <while test="structuredAmount &gt; 10000 &amp;&amp; chunks &lt; 20">
+            <attribute name="structuredAmount" script="structuredAmount - 9500"/>
+            <attribute name="chunks" script="chunks + 1"/>
+        </while>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 5: AML Dashboard
+         Risk distribution and SAR summary for compliance reporting
+         ======================================================================== -->
+    <generate type="dashboard" count="10" consumer="ConsoleExporter">
+        <variable name="txn" source="store" type="transaction"
+            distribution="ordered"/>
+        <attribute name="txnId" script="txn.txnId"/>
+        <attribute name="type" script="txn.type"/>
+        <attribute name="amount" script="txn.amount"/>
+        <attribute name="riskScore" script="txn.risk"/>
+        <attribute name="sarFlag" script="txn.sarRequired"/>
+        <attribute name="alert" script="txn.alertLevel"/>
+        <attribute name="holder" script="txn.accountHolder"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 6: Regulatory Compliance Assertions
+         ======================================================================== -->
+    <generate type="compliance" count="1" consumer="ConsoleExporter">
+        <attribute name="reportId" constant="aml-compliance-2026q3"/>
+        <attribute name="totalTransactions" type="int" constant="120"/>
+        <attribute name="totalAlerts" type="int" constant="30"/>
+        <if test="totalTransactions != 120">
+            <error>Transaction count mismatch — regulatory filing incomplete</error>
+        </if>
+        <if test="totalAlerts != 30">
+            <error>Alert count mismatch — SAR workflow validation failed</error>
+        </if>
+    </generate>
+
+</setup>

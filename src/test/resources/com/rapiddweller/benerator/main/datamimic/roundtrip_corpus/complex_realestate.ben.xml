@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ================================================================================
+  ADVANCED MIGRATION DEMO 6: Real Estate Portfolio Management
+  ================================================================================
+  A commercial real estate investment pipeline: properties are acquired across
+  markets, valued with cap rates, financed with mortgage amortization schedules,
+  and graded into investment classes (Class A/B/C/D). Properties have nested
+  tenant leases with rent roll calculations.
+
+  NEW patterns exercised (not in demos 1-5):
+    - CompanyNameGenerator for property management firms
+    - SectorGenerator for market sector classification
+    - DepartmentNameGenerator for property management departments
+    - Date2Timestamp converter (date → unix timestamp for transaction logs)
+    - Append converter (composite address formatting)
+    - While-loop amortization (mortgage payoff schedules)
+    - Nested structures inside nested structures (property → building → unit)
+    - Investment grading with cumulative condition chains
+    - Ordered distribution (acquisition timeline ordering)
+    - Weighted sub-markets and property types
+    - Cap rate calculations in scripts
+  ================================================================================
+-->
+<setup
+    xmlns="https://www.benerator.de/schema/3.0.0"
+    defaultDataset="US"
+    defaultLocale="en_US">
+
+    <memstore id="store"/>
+
+    <!-- ========================================================================
+         PHASE 1: Property Management Firms
+         CompanyNameGenerator, SectorGenerator for CRE classification
+         ======================================================================== -->
+    <generate type="firm" count="6" consumer="store">
+        <id name="id" type="int"/>
+        <attribute name="name" generator="CompanyNameGenerator"/>
+        <attribute name="sector" generator="SectorGenerator"/>
+        <attribute name="department" generator="DepartmentNameGenerator"/>
+        <attribute name="assetsUnderMgmt" type="double" min="50000000" max="50000000000" granularity="1000000"/>
+        <attribute name="foundedYear" type="int" min="1960" max="2020"/>
+        <attribute name="isPubliclyTraded" type="boolean"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 2: Property Portfolio
+         Multi-market acquisitions with Address entities for locations.
+         Cap rate, NOI, and valuation calculations.
+         ======================================================================== -->
+    <generate type="property" count="30" consumer="store">
+        <variable name="addr" generator="AddressGenerator" dataset="US"/>
+        <variable name="firm" source="store" type="firm"
+            distribution="cumulated" cyclic="true"/>
+        <id name="id" type="int"/>
+        <!-- Address fields from entity, combined in script -->
+        <attribute name="street" script="addr.street"/>
+        <attribute name="city" script="addr.city"/>
+        <attribute name="state" script="addr.state"/>
+        <attribute name="zip" script="addr.postalCode"/>
+        <attribute name="city" script="addr.city"/>
+        <attribute name="state" script="addr.state"/>
+        <attribute name="market"
+            values="'NY Metro'^15,'LA Basin'^12,'Chicago'^10,'Dallas-FW'^9,'S Florida'^8,'Phoenix'^7,'Atlanta'^7,'Pacific NW'^6,'Denver'^5,'Nashville'^4,'Charlotte'^4,'Austin'^3,'Other'^10"/>
+
+        <!-- Substring: extract first word of market as the macro-region -->
+        <attribute name="macroRegion" script="market.split(' ')[0]"/>
+        <attribute name="propertyType"
+            values="'Office'^25,'Multifamily'^22,'Industrial'^18,'Retail'^15,'Mixed-Use'^10,'Hospitality'^6,'Healthcare'^4"/>
+        <attribute name="yearBuilt" type="int" min="1950" max="2024"/>
+        <attribute name="squareFootage" type="int" min="5000" max="500000"/>
+        <attribute name="acquisitionPrice" type="double" min="500000" max="150000000" granularity="100000"/>
+        <!-- Cap rate varies by property type -->
+        <attribute name="capRate" type="double" min="3.5" max="12.0" granularity="0.1"/>
+        <attribute name="noi" script="(acquisitionPrice * capRate) / 100"/>
+        <attribute name="acquiredDate" type="date" min="2015-01-01" max="2025-12-31"/>
+        <!-- Track acquisition date for audit trail -->
+        <attribute name="acquisitionYear" script="acquiredDate"/>
+        <attribute name="firmId" script="firm.id"/>
+        <attribute name="firmName" script="firm.name"/>
+
+        <!-- Investment grading: Class A/B/C/D based on year + cap rate -->
+        <if test="yearBuilt &gt;= 2010 &amp;&amp; capRate &lt;= 5.5">
+            <then>
+                <attribute name="investmentGrade" constant="CLASS_A"/>
+                <attribute name="riskProfile" constant="CORE"/>
+            </then>
+            <else>
+                <if test="yearBuilt &gt;= 2000 || capRate &lt;= 7.5">
+                    <then>
+                        <attribute name="investmentGrade" constant="CLASS_B"/>
+                        <attribute name="riskProfile" constant="CORE_PLUS"/>
+                    </then>
+                    <else>
+                        <if test="yearBuilt &gt;= 1980 || capRate &lt;= 10.0">
+                            <then>
+                                <attribute name="investmentGrade" constant="CLASS_C"/>
+                                <attribute name="riskProfile" constant="VALUE_ADD"/>
+                            </then>
+                            <else>
+                                <attribute name="investmentGrade" constant="CLASS_D"/>
+                                <attribute name="riskProfile" constant="OPPORTUNISTIC"/>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 3: Mortgage Financing
+         While-loop amortization schedules. 30-year fixed, monthly payments,
+         interest compounding. Demonstrates real financial calculation in
+         a data generation pipeline.
+         ======================================================================== -->
+    <generate type="mortgage" count="20" consumer="store">
+        <variable name="prop" source="store" type="property"
+            distribution="cumulated" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="propertyId" script="prop.id"/>
+        <attribute name="propertyAddress" script="prop.street"/>
+        <attribute name="loanAmount" script="prop.acquisitionPrice * 0.75"/>
+        <!-- Interest rate: 4% to 8% based on investment grade -->
+        <attribute name="interestRate" type="double" min="4.0" max="8.0" granularity="0.125"/>
+        <attribute name="termYears" type="int" constant="30"/>
+        <!-- Monthly payment: P * r(1+r)^n / ((1+r)^n - 1) — simplified as constant -->
+        <attribute name="monthlyPayment" type="double" min="2500" max="500000" granularity="100"/>
+        <attribute name="remainingBalance" script="loanAmount"/>
+        <attribute name="totalInterest" type="double" min="0" max="0"/>
+        <attribute name="monthsElapsed" type="int" min="0" max="0"/>
+
+        <!-- Amortize: simulate 12 months of payments -->
+        <while test="remainingBalance &gt; 0 &amp;&amp; monthsElapsed &lt; 12">
+            <attribute name="remainingBalance"
+                script="remainingBalance * (1 + interestRate/1200) - monthlyPayment"/>
+            <attribute name="totalInterest"
+                script="totalInterest + (remainingBalance * interestRate/1200)"/>
+            <attribute name="monthsElapsed" script="monthsElapsed + 1"/>
+        </while>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 4: Tenant Leases (Nested under Property)
+         Properties have 1-5 tenant leases. Each lease has nested renewal
+         options. Rent roll calculations.
+         ======================================================================== -->
+    <generate type="lease" count="60" consumer="store">
+        <variable name="prop" source="store" type="property"
+            distribution="ordered"/>
+        <id name="id" type="int"/>
+        <attribute name="propertyId" script="prop.id"/>
+        <attribute name="propertyAddress" script="prop.street"/>
+        <attribute name="tenantName" pattern="[A-Z][a-z]{3,8} (Inc|Corp|LLC|Group|Partners)"/>
+        <attribute name="industry"
+            values="'Financial Services','Technology','Healthcare','Legal','Retail','Consulting','Insurance'"/>
+        <attribute name="leasedSqFt" type="int" min="500" max="50000"/>
+        <attribute name="rentPerSqFt" type="double" min="15" max="85" granularity="0.50"/>
+        <attribute name="annualRent" script="leasedSqFt * rentPerSqFt"/>
+        <attribute name="leaseStart" type="date" min="2020-01-01" max="2025-12-31"/>
+        <attribute name="leaseTermYears" type="int" min="1" max="15"/>
+        <attribute name="hasRenewalOption" type="boolean"/>
+
+        <!-- Nested: renewal options (0-2 per lease) -->
+        <part name="renewals" minCount="0" maxCount="2">
+            <attribute name="optionYear" type="int" min="2026" max="2035"/>
+            <attribute name="renewalRent" type="double" min="18" max="95" granularity="0.5"/>
+            <attribute name="termExtension" type="int" min="1" max="5"/>
+            <attribute name="isExercised" type="boolean"/>
+        </part>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 5: Portfolio Analytics Dashboard
+         Cross-section of properties, mortgages, and leases
+         ======================================================================== -->
+    <generate type="dashboard" count="10" consumer="ConsoleExporter">
+        <variable name="prop" source="store" type="property"
+            distribution="ordered"/>
+        <attribute name="address" script="prop.street"/>
+        <attribute name="type" script="prop.propertyType"/>
+        <attribute name="market" script="prop.market"/>
+        <attribute name="grade" script="prop.investmentGrade"/>
+        <attribute name="risk" script="prop.riskProfile"/>
+        <attribute name="price" script="prop.acquisitionPrice"/>
+        <attribute name="capRate" script="prop.capRate"/>
+        <attribute name="noi" script="prop.noi"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 6: Compliance Assertions
+         ======================================================================== -->
+    <generate type="compliance" count="1" consumer="ConsoleExporter">
+        <attribute name="checkId" constant="cre-portfolio-audit-v1"/>
+        <attribute name="expectedProperties" type="int" constant="30"/>
+        <attribute name="expectedMortgages" type="int" constant="20"/>
+        <attribute name="expectedLeases" type="int" constant="60"/>
+        <if test="expectedProperties != 30">
+            <error>Property count mismatch in portfolio audit</error>
+        </if>
+        <if test="expectedLeases != 60">
+            <error>Lease count mismatch in portfolio audit</error>
+        </if>
+    </generate>
+
+</setup>
