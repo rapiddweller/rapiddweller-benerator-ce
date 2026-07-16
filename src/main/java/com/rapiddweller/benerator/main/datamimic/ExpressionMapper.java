@@ -338,12 +338,47 @@ class ExpressionMapper {
     }
     String s = rewriteTernary(expr);
     s = javaLiteralsToPython(s); // true/false/null -> True/False/None
+    s = rewriteBooleanOps(s); // || -> or, && -> and (Python keywords, not Java/JS operators)
     s = s.replaceAll("\\.name\\(\\)", ""); // gender.name() -> gender (Java enum -> already a string)
     if (enclosingScope != null && !enclosingScope.isEmpty()) {
       // Self-reference by the enclosing scope's own name -> `this` (the current-scope alias).
       s = s.replaceAll("\\b" + java.util.regex.Pattern.quote(enclosingScope) + "\\.", "this.");
     }
     return s;
+  }
+
+  /**
+   * Java/JS boolean operators {@code ||} and {@code &&} -&gt; Python {@code or} and {@code and},
+   * respecting string literals so a {@code '||'} inside a quoted string stays untouched.
+   */
+  private static String rewriteBooleanOps(String expr) {
+    StringBuilder sb = new StringBuilder();
+    char quote = 0;
+    int i = 0;
+    while (i < expr.length()) {
+      char ch = expr.charAt(i);
+      if (quote != 0) {
+        sb.append(ch);
+        if (ch == quote) {
+          quote = 0;
+        }
+        i++;
+      } else if (ch == '\'' || ch == '"') {
+        quote = ch;
+        sb.append(ch);
+        i++;
+      } else if (ch == '|' && i + 1 < expr.length() && expr.charAt(i + 1) == '|') {
+        sb.append("or");
+        i += 2;
+      } else if (ch == '&' && i + 1 < expr.length() && expr.charAt(i + 1) == '&') {
+        sb.append("and");
+        i += 2;
+      } else {
+        sb.append(ch);
+        i++;
+      }
+    }
+    return sb.toString();
   }
 
   /**

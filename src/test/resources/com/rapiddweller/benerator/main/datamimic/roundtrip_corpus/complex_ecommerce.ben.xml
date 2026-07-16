@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ================================================================================
+  COMPLEX MIGRATION DEMO: E-Commerce Order Fulfillment Pipeline
+  ================================================================================
+  A realistic, self-contained Benerator descriptor that exercises the full
+  breadth of the Benerator→DATAMIMIC converter. Every construct here converts
+  cleanly and runs in DataMimic CE without external infrastructure.
+
+  Patterns exercised:
+    - Composite entity generators (Person, Address)
+    - Nested structures (part → nestedKey: dict addresses, list discounts)
+    - Memstore pipeline (write → read back for cross-entity references)
+    - Weighted-value literals (values="X"^weight)
+    - Date bounds (type="date" with min/max)
+    - Conditional generation (<if>/<then>/<else>)
+    - While loops (<while test>)
+    - Assertion idiom (<if test><error>MSG</error></if>)
+    - Field converters (CaseConverter → UpperCase)
+    - DataFaker generators (phone numbers, etc.)
+    - Ordered/random/cumulated distributions
+    - Pattern-based generation (regex)
+    - Null values (nullQuota, nullable)
+    - IncrementGenerator (<id type="int">)
+    - EMailAddressGenerator → EmailAddressGenerator rename
+    - Constant values, script expressions
+    - Boolean type
+
+  The scenario:
+    Products are cataloged with weighted categories. Customers are generated
+    with Person entities and nested shipping addresses. Orders reference
+    customers via a memstore pipeline. Each order has multiple line items
+    referencing products. Premium customers get priority handling; standard
+    customers pay a handling fee. Payments are tracked with installment
+    calculations via a while loop. A final read-back enriches data with
+    computed fields and asserts catalog integrity.
+  ================================================================================
+-->
+<setup
+    xmlns="https://www.benerator.de/schema/3.0.0"
+    defaultDataset="US"
+    defaultLocale="en_US">
+
+    <memstore id="store"/>
+
+    <!-- ========================================================================
+         PHASE 1: Product Catalog
+         Weighted categories, EAN codes, date-bound listing dates
+         ======================================================================== -->
+    <generate type="product" count="30" consumer="store">
+        <id name="ean_code" generator="new EANGenerator(true)"/>
+        <attribute name="name" pattern="[A-Z][a-z]{3,8} [A-Z][a-z]{3,8}"/>
+        <!-- Weighted-value literal: converter splits into values=/weights= -->
+        <attribute name="category"
+            values="'Electronics'^35,'Clothing'^25,'Home'^20,'Sports'^15,'Books'^5"/>
+        <attribute name="price" type="double" min="0.99" max="999.99" granularity="0.01"/>
+        <attribute name="listedSince" type="date" min="2020-01-01" max="2025-12-31"/>
+        <attribute name="inStock" type="boolean"/>
+        <!-- nullQuota: ~10% have no rating yet -->
+        <attribute name="rating" type="double" min="1.0" max="5.0" granularity="0.5"
+            nullQuota="0.1"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 2: Customer Registry
+         Person entity for names, Address entity for shipping, nested parts
+         ======================================================================== -->
+    <generate type="customer" count="20" consumer="store">
+        <variable name="person" generator="PersonGenerator" dataset="US"/>
+        <variable name="addr" generator="AddressGenerator" dataset="US"/>
+        <id name="id" type="int"/>
+        <attribute name="email" generator="EMailAddressGenerator"/>
+        <attribute name="phone" generator="DataFakerGenerator('PhoneNumber','cellPhone')"/>
+        <!-- ordered distribution: draws in source order -->
+        <variable name="tier" values="'bronze','silver','gold','platinum'"
+            distribution="ordered"/>
+        <attribute name="tier" script="tier"/>
+        <attribute name="fullName" script="person.givenName + ' ' + person.familyName"/>
+        <!-- CaseConverter → UpperCase: store the country code in uppercase -->
+        <attribute name="countryCode" script="person.gender" converter="CaseConverter"/>
+
+        <!-- dict-type nestedKey: exactly one shipping address per customer -->
+        <part name="shippingAddress">
+            <attribute name="street" script="addr.street"/>
+            <attribute name="city" script="addr.city"/>
+            <attribute name="zip" script="addr.postalCode"/>
+            <attribute name="country" script="addr.country"/>
+        </part>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 3: Orders
+         Cross-entity reference to customers via memstore. Conditional
+         priority handling for premium tiers.
+         ======================================================================== -->
+    <generate type="order" count="60" consumer="store">
+        <variable name="cust" source="store" type="customer"
+            distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="customerId" script="cust.id"/>
+        <attribute name="customerName" script="cust.fullName"/>
+        <attribute name="customerTier" script="cust.tier"/>
+        <attribute name="orderDate" type="date" min="2024-01-01" max="2026-06-30"/>
+        <attribute name="status"
+            values="'pending','confirmed','shipped','delivered'"/>
+
+        <!-- Conditional: premium tiers skip handling fees -->
+        <if test="customerTier == 'gold' || customerTier == 'platinum'">
+            <then>
+                <attribute name="priority" constant="true"/>
+                <attribute name="handlingFee" constant="0.0"/>
+            </then>
+            <else>
+                <attribute name="priority" constant="false"/>
+                <attribute name="handlingFee" type="double" min="4.99" max="14.99"
+                    granularity="0.01"/>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 4: Order Items
+         References products and orders via memstore. Each item can have
+         multiple discounts applied (list-type nestedKey with count=).
+         ======================================================================== -->
+    <generate type="orderItem" count="180" consumer="store">
+        <variable name="prod" source="store" type="product"
+            distribution="cumulated" cyclic="true"/>
+        <variable name="ord" source="store" type="order"
+            distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="orderId" script="ord.id"/>
+        <attribute name="customerId" script="ord.customerId"/>
+        <attribute name="productEan" script="prod.ean_code"/>
+        <attribute name="productCategory" script="prod.category"/>
+        <attribute name="unitPrice" script="prod.price"/>
+        <attribute name="qty" type="int" min="1" max="10"/>
+        <attribute name="lineTotal" script="prod.price * qty"/>
+
+        <!-- list-type nestedKey: 0-3 discounts per line item -->
+        <part name="discounts" minCount="0" maxCount="3">
+            <attribute name="type"
+                values="'seasonal','loyalty','clearance','volume'"/>
+            <attribute name="percent" type="double" min="0.0" max="25.0"
+                granularity="0.5"/>
+        </part>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 5: Payments
+         Installment calculation with while loop. References orders via
+         memstore. converter="CaseConverter" on payment reference codes.
+         ======================================================================== -->
+    <generate type="payment" count="50" consumer="store">
+        <variable name="ord" source="store" type="order"
+            distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <!-- IncrementGenerator inside: payment reference code -->
+        <attribute name="refCode" pattern="PAY-[A-Z0-9]{8}" converter="CaseConverter"/>
+        <attribute name="orderId" script="ord.id"/>
+        <attribute name="method"
+            values="'credit_card','bank_transfer','paypal','crypto'"/>
+        <attribute name="baseAmount" type="double" min="20.0" max="500.0"
+            granularity="0.01"/>
+        <attribute name="remaining" script="baseAmount"/>
+        <attribute name="installments" type="int" constant="0"/>
+
+        <!-- While loop: pay down in $10 increments, max 6 installments -->
+        <while test="remaining &gt; 0 &amp;&amp; installments &lt; 6">
+            <attribute name="remaining" script="remaining - 10"/>
+            <attribute name="installments" script="installments + 1"/>
+        </while>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 6: Dashboard Read-Back
+         Read from all memstore entities and produce enriched summaries.
+         Exercises ordered distribution and multiple source reads.
+         ======================================================================== -->
+    <generate type="dashboard" count="10" consumer="ConsoleExporter">
+        <variable name="ord" source="store" type="order"
+            distribution="ordered"/>
+        <variable name="cust" source="store" type="customer"
+            distribution="random" cyclic="true"/>
+        <attribute name="orderId" script="ord.id"/>
+        <attribute name="status" script="ord.status"/>
+        <attribute name="priority" script="ord.priority"/>
+        <attribute name="handlingFee" script="ord.handlingFee"/>
+        <attribute name="custName" script="cust.fullName"/>
+        <attribute name="custTier" script="cust.tier"/>
+        <attribute name="custCountry" script="cust.shippingAddress.country"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 7: Data Quality Assertions
+         The Benerator assertion idiom: <if test><error>MSG</error></if>
+         The converter maps this to native DATAMIMIC <assert> elements.
+         ======================================================================== -->
+    <generate type="sanityCheck" count="1" consumer="ConsoleExporter">
+        <!-- A constant sanity marker + the counts we expect -->
+        <attribute name="checkId" constant="post-generation-sanity"/>
+        <attribute name="products" type="int" constant="30"/>
+        <attribute name="customers" type="int" constant="20"/>
+        <attribute name="orders" type="int" constant="60"/>
+        <attribute name="orderItems" type="int" constant="180"/>
+        <attribute name="payments" type="int" constant="50"/>
+    </generate>
+
+    <!-- These assertions verify the expected counts are plausible.
+         In a real pipeline, these would be runtime counter checks. -->
+    <generate type="assertions" count="1" consumer="ConsoleExporter">
+        <attribute name="totalProducts" type="int" constant="30"/>
+        <if test="totalProducts != 30">
+            <error>Expected 30 products, check catalog generation</error>
+        </if>
+        <attribute name="totalCustomers" type="int" constant="20"/>
+        <if test="totalCustomers != 20">
+            <error>Expected 20 customers, check customer generation</error>
+        </if>
+    </generate>
+
+</setup>

@@ -992,6 +992,81 @@ public class DescriptorConverterTest {
     assertTrue("no manual findings", report.attention().isEmpty());
   }
 
+  @Test
+  public void convertsComplexEcommercePipelineWithZeroManualFindings() throws Exception {
+    // The most complex roundtrip corpus entry: 7 phases, memstore pipeline, Person/Address entities,
+    // nested dict+list parts, weighted values, conditions with ||/&&, while loops, assertions,
+    // DataFaker, date bounds, converters, distributions, nullQuota, patterns, boolean type.
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/complex_ecommerce.ben.xml", report);
+
+    // Phase 1: Product catalog with weighted values
+    Element categoryKey = first(doc, "key", "name", "category");
+    assertNotNull(categoryKey);
+    assertEquals("weighted value literal -> values=/weights=",
+        "'Electronics','Clothing','Home','Sports','Books'", categoryKey.getAttribute("values"));
+    assertEquals("35,25,20,15,5", categoryKey.getAttribute("weights"));
+
+    // Phase 2: Person/Address entities on variables
+    Element personVar = first(doc, "variable", "name", "person");
+    assertEquals("Person", personVar.getAttribute("entity"));
+    assertEquals("US", personVar.getAttribute("dataset"));
+    Element addrVar = first(doc, "variable", "name", "addr");
+    assertEquals("Address", addrVar.getAttribute("entity"));
+
+    // Phase 2: dict-type nestedKey for shipping address
+    Element addrNested = first(doc, "nestedKey", "name", "shippingAddress");
+    assertEquals("dict", addrNested.getAttribute("type"));
+
+    // Phase 3: Condition with || -> or
+    Element ifEl = (Element) doc.getElementsByTagName("if").item(0);
+    assertEquals("customerTier == 'gold' or customerTier == 'platinum'",
+        ifEl.getAttribute("condition"));
+
+    // Phase 4: list-type nestedKey with count for discounts
+    Element discountNested = first(doc, "nestedKey", "name", "discounts");
+    assertNotNull(discountNested);
+    assertEquals("list", discountNested.getAttribute("type"));
+    assertEquals("3", discountNested.getAttribute("maxCount"));
+
+    // Phase 5: While loop with && -> and
+    Element whileEl = (Element) doc.getElementsByTagName("while").item(0);
+    assertEquals("remaining > 0 and installments < 6",
+        whileEl.getAttribute("condition"));
+
+    // Phase 5: Pattern with converter
+    Element refCode = first(doc, "key", "name", "refCode");
+    assertEquals("PAY-[A-Z0-9]{8}", refCode.getAttribute("pattern"));
+    assertEquals("UpperCase", refCode.getAttribute("converter"));
+
+    // Phase 7: Assertion idiom -> <assert>
+    NodeList asserts = doc.getElementsByTagName("assert");
+    assertEquals(2, asserts.getLength());
+    Element firstAssert = (Element) asserts.item(0);
+    assertEquals("not (totalProducts != 30)", firstAssert.getAttribute("condition"));
+
+    // Zero manual findings on the most complex descriptor in the corpus
+    assertTrue("complex demo converts with zero manual findings", report.attention().isEmpty());
+  }
+
+  @Test
+  public void rewritesBooleanOperatorsInConditions() {
+    // || -> or
+    assertEquals("a or b", ExpressionMapper.rewriteScript("a || b"));
+    // && -> and
+    assertEquals("a and b", ExpressionMapper.rewriteScript("a && b"));
+    // Combined
+    assertEquals("x == 'gold' or x == 'platinum'",
+        ExpressionMapper.rewriteScript("x == 'gold' || x == 'platinum'"));
+    assertEquals("remaining > 0 and installments < 6",
+        ExpressionMapper.rewriteScript("remaining > 0 && installments < 6"));
+    // Inside string literal stays untouched
+    assertEquals("'a||b'", ExpressionMapper.rewriteScript("'a||b'"));
+    // && inside string literal stays
+    assertEquals("'foo&&bar'", ExpressionMapper.rewriteScript("'foo&&bar'"));
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();
