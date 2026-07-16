@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Exercises IncrementGenerator (via <id type="int">), distribution="ordered"
+  on a <variable>, and the memstore pipeline end-to-end: write into memstore,
+  read back from it. The converter maps:
+    - <id type="int"> -> IncrementGenerator()
+    - <variable source="mem" type="X"> -> sourceEntity="X"
+    - The memstore cross-entity pattern (producer + consumer) converts and runs.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <memstore id="mem"/>
+
+    <!-- Producer: writes 10 items into memstore -->
+    <generate type="item" count="10" consumer="mem">
+        <id name="id" type="int"/>
+        <attribute name="label" pattern="[A-Z]{2}[0-9]{4}"/>
+        <attribute name="category" values="'A','B','C'"/>
+    </generate>
+
+    <!-- Consumer: reads items back from memstore and enriches them -->
+    <generate type="enriched" count="5" consumer="ConsoleExporter">
+        <variable name="src" source="mem" type="item" distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="originalLabel" script="src.label"/>
+        <attribute name="originalCategory" script="src.category"/>
+        <attribute name="enriched" constant="yes"/>
+    </generate>
+
+</setup>

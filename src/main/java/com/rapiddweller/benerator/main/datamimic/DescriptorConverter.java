@@ -33,6 +33,10 @@ public class DescriptorConverter {
   /** all store ids (&lt;database&gt;/&lt;mongodb&gt;), so an &lt;iterate type=coll source=store&gt; keeps its
    *  source collection/table in {@code type} (DATAMIMIC needs it to read from a store). */
   private final java.util.Set<String> storeIds = new java.util.LinkedHashSet<>();
+  /** {@code <memstore id>}s. Kept apart from storeIds: a memstore is neither a relational store (it must
+   *  not resolve a bare DBSequenceGenerator) nor a DDL-backed consumer, but it IS entity-addressable,
+   *  so a store-reading variable/iterate needs its sourceEntity just like a db does. */
+  private final java.util.Set<String> memstoreIds = new java.util.LinkedHashSet<>();
   private File descriptorDir;
   private File outputDir;
   /** environment name -> (system prefix -> "db"|"mongo") collected from <database>/<mongodb> elements,
@@ -372,6 +376,9 @@ public class DescriptorConverter {
     if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("id")) {
       storeIds.add(el.getAttribute("id"));
     }
+    if (tag.equals("memstore") && el.hasAttribute("id")) {
+      memstoreIds.add(el.getAttribute("id"));
+    }
     if ((tag.equals("database") || tag.equals("mongodb")) && el.hasAttribute("id")
         && !(tag.equals("database") && el.hasAttribute("url") && !el.hasAttribute("environment"))) {
       // DATAMIMIC resolves <system>.<systemType>.* from conf/<environment>.env.properties; system
@@ -623,6 +630,22 @@ public class DescriptorConverter {
         && ExpressionMapper.isDynamicSelector(el.getAttribute("selector"))) {
       return dynamicSelectorFieldFragment(out, el, path);
     }
+    // unique="true" on a <key source=".wgt.csv"> converts cleanly and then HARD-CRASHES the whole run:
+    // DATAMIMIC's <key source> is sample-WITH-replacement (WeightedDataSource.generate() draws one row
+    // every call) and explicitly rejects unique at task-init. A safe rewrite would need the .wgt.csv
+    // header (which column is the value) that this converter never reads, so - same policy as an
+    // untyped DB-metadata field below - flag it instead of guessing or passing through to the crash.
+    if ((tag.equals("attribute") || tag.equals("id")) && "true".equals(el.getAttribute("unique"))
+        && el.getAttribute("source").endsWith(".wgt.csv")) {
+      String fieldName = el.getAttribute("name");
+      report.add(path, "attribute", "<" + tag + " name='" + fieldName + "' source='" + el.getAttribute("source")
+          + "' unique='true'> - DATAMIMIC <key source> samples WITH replacement and rejects unique; rewrite as "
+          + "<variable source='" + el.getAttribute("source") + "' unique=\"true\"/> + <" + tag
+          + " script='<variable>.<value column>'>");
+      return out.createComment(" TODO(datamimic-migration): <" + tag + " name=\"" + fieldName
+          + "\"> unique read from a weighted CSV - rewrite as <variable source unique=\"true\"> "
+          + "+ a script picking the value column, see MIGRATION_PLAYBOOK.md#unique-weighted-source ");
+    }
     // mode="ignored" excludes the field from the generated output entirely - the DATAMIMIC
     // equivalent is simply not declaring the key.
     if ((tag.equals("attribute") || tag.equals("id")) && "ignored".equals(el.getAttribute("mode"))) {
@@ -695,7 +718,8 @@ public class DescriptorConverter {
         // looks the name up in the parent product (KeyError). List when the part repeats (count/source).
         if (tag.equals("part") && !result.hasAttribute("type") && !result.hasAttribute("source")
             && !result.hasAttribute("script")) {
-          boolean many = el.hasAttribute("count") || el.hasAttribute("source") || el.hasAttribute("minCount");
+          boolean many = el.hasAttribute("count") || el.hasAttribute("source") || el.hasAttribute("minCount")
+              || "list".equals(el.getAttribute("container")) || "array".equals(el.getAttribute("container"));
           result.setAttribute("type", many ? "list" : "dict");
         }
         // A field that ends up with no generation mode at all (Benerator derives its type from DB
@@ -914,6 +938,7 @@ public class DescriptorConverter {
         case "name":
         case "pageSize":
         case "offset": // skips the first N source rows - native in DATAMIMIC
+        case "sourceScripted": // native DATAMIMIC attr (scripted source evaluation)
           out.setAttribute(key, val);
           break;
         case "count":
@@ -995,10 +1020,16 @@ public class DescriptorConverter {
     // the type->name mapping alone loses it. It must be sourceEntity, not type: DATAMIMIC rejects
     // source+type+selector together, and on the write side (targetEntity -> type -> name) a type would
     // override a CRUD-renamed name and re-insert into the source collection.
-    if (local(src).equals("iterate") && storeIds.contains(src2) && src.hasAttribute("type")) {
+    if (local(src).equals("iterate") && isEntityAddressableStore(src2) && src.hasAttribute("type")) {
       out.removeAttribute("type");
       out.setAttribute("sourceEntity", src.getAttribute("type"));
     }
+  }
+
+  /** True when a {@code source="X"} names a store whose records are addressed by ENTITY (db/mongo/memstore),
+   *  so a reading {@code <iterate>}/{@code <variable>} must carry its {@code type} over as sourceEntity. */
+  private boolean isEntityAddressableStore(String id) {
+    return storeIds.contains(id) || memstoreIds.contains(id);
   }
 
   /**
@@ -1067,26 +1098,81 @@ public class DescriptorConverter {
             + "' at conversion (DATAMIMIC does not interpolate it at runtime)");
       }
     }
+    // On a date/datetime/timestamp field, Benerator's 'pattern' is NOT a generation mode - it is the
+    // SimpleDateFormat used to parse 'min'/'max' bounds (DescriptorUtil.getPatternAsDateFormat), same
+    // string as DATAMIMIC's regex-string 'pattern' attribute name but a completely different meaning.
+    // Only count it as a competing mode (DATAMIMIC's regex-string generation) when nothing else claims
+    // the field - the DateTimeGenerator synthesis below is what actually consumes it here.
+    String dateTypeCheck = attrs.get("type");
+    boolean isDateType = "date".equals(dateTypeCheck) || "datetime".equals(dateTypeCheck) || "timestamp".equals(dateTypeCheck);
+    boolean patternIsDateBoundFormat = isDateType && attrs.containsKey("pattern");
     // Does another attribute already produce the value? Then an unmapped type= is cosmetic, not a gap.
     boolean hasMode = attrs.containsKey("script") || attrs.containsKey("source") || attrs.containsKey("values")
-        || attrs.containsKey("generator") || attrs.containsKey("constant") || attrs.containsKey("pattern");
+        || attrs.containsKey("generator") || attrs.containsKey("constant")
+        || (attrs.containsKey("pattern") && !patternIsDateBoundFormat);
+    // A store-reading <variable source="mem" type="customer"> names the ENTITY to read, not a field type.
+    // Dropping it (type is not a DATAMIMIC <variable> attr) makes DATAMIMIC resolve the lookup against the
+    // VARIABLE name instead and find nothing ("Data having entity 'cust' is empty in memstore"), so it has
+    // to ride along as sourceEntity - same rule as the store-reading <iterate> above.
+    if (tag.equals("variable") && attrs.containsKey("type") && isEntityAddressableStore(attrs.get("source"))) {
+      out.setAttribute("sourceEntity", attrs.get("type"));
+      attrs = new LinkedHashMap<>(attrs);
+      attrs.remove("type"); // consumed - not a field type, so keep mapType away from it
+    }
+    // Benerator tolerates drawing more values from a source than it holds; DATAMIMIC does a SINGLE pass and
+    // stops when it runs out, so the consuming generate silently emits fewer rows. Not a conversion bug -
+    // cyclic converts verbatim - but a descriptor leaning on Benerator's implicit default needs it spelled
+    // out. A .wgt.csv samples with replacement in DATAMIMIC and never runs out.
+    if (tag.equals("variable") && attrs.containsKey("source") && !attrs.containsKey("cyclic")
+        && !attrs.get("source").endsWith(".wgt.csv")) {
+      report.info(path, "cyclic", "<variable source='" + attrs.get("source") + "'> has no cyclic - DATAMIMIC "
+          + "reads the source once and stops when it is exhausted; add cyclic=\"true\" if the generate can "
+          + "request more records than the source holds");
+    }
+    // Benerator's <id> is an incremental unique id by default (1, 2, 3, ...); DATAMIMIC's <id type="int">
+    // is a plain random int and silently repeats. Only a mode-less integer <id> is affected - an explicit
+    // generator/script/source/sequence already says how the id is produced.
+    // (TYPE/INTEGER_TYPES are Map.of/Set.of - a null lookup THROWS, so the type must be checked first.)
+    if (tag.equals("id") && !hasMode && attrs.containsKey("type")
+        && VocabularyMap.INTEGER_TYPES.contains(VocabularyMap.TYPE.getOrDefault(attrs.get("type"), ""))) {
+      out.setAttribute("generator", "IncrementGenerator()");
+      report.info(path, "id", "<id type='" + attrs.get("type") + "'> -> IncrementGenerator() "
+          + "(Benerator ids are incremental by default; a bare DATAMIMIC int id repeats)");
+      hasMode = true;
+      attrs = new LinkedHashMap<>(attrs);
+      attrs.remove("type"); // the generator produces the value; a type= would re-randomize it
+    }
     // Benerator gives type="date" a built-in default date generator; DATAMIMIC has no 'date' type but has
     // DateTimeGenerator. A bare <attribute type="date"> (no other mode) becomes generator="DateTimeGenerator(...)"
     // (honoring min/max) instead of an invalid mode-less <key>.
     String benType = attrs.get("type");
-    if (!hasMode && ("date".equals(benType) || "datetime".equals(benType) || "timestamp".equals(benType))) {
+    if (!hasMode && isDateType) {
+      // Benerator parses min/max with 'pattern' if given, else its own default "yyyy-MM-dd"
+      // (TimeUtil.createDefaultDateFormat). DATAMIMIC's DateTimeGenerator parses min/max with a FIXED
+      // default "%Y-%m-%d %H:%M:%S" - a bare ISO date with no time component (the common case, and
+      // Benerator's own default) already fails there, regardless of whether 'pattern' was given. Reparse
+      // with Benerator's format and re-emit in DATAMIMIC's default so it never needs an override, and so
+      // 'pattern' - which DATAMIMIC would otherwise read as an UNRELATED regex-string generation mode -
+      // never reaches the output.
+      String benDateFormat = attrs.containsKey("pattern") ? attrs.get("pattern") : "yyyy-MM-dd";
       StringBuilder g = new StringBuilder("DateTimeGenerator(");
-      if (attrs.containsKey("min")) {
-        g.append("min='").append(attrs.get("min")).append("'");
+      String min = reformatDateBound(attrs.get("min"), benDateFormat, path, "min");
+      String max = reformatDateBound(attrs.get("max"), benDateFormat, path, "max");
+      if (min != null) {
+        g.append("min='").append(min).append("'");
       }
-      if (attrs.containsKey("max")) {
-        g.append(g.length() > "DateTimeGenerator(".length() ? ", " : "").append("max='").append(attrs.get("max")).append("'");
+      if (max != null) {
+        g.append(g.length() > "DateTimeGenerator(".length() ? ", " : "").append("max='").append(max).append("'");
       }
       out.setAttribute("generator", g.append(")").toString());
-      report.info(path, "type", "type='" + benType + "' -> DateTimeGenerator (DATAMIMIC has no date type)");
+      report.info(path, "type", "type='" + benType + "' -> DateTimeGenerator (DATAMIMIC has no date type)"
+          + (attrs.containsKey("pattern") ? "; 'pattern' consumed to parse min/max, not passed through" : ""));
       hasMode = true;
       attrs = new LinkedHashMap<>(attrs);
       attrs.remove("type"); // consumed - do not let mapType flag it
+      attrs.remove("min");
+      attrs.remove("max");
+      attrs.remove("pattern"); // folded into the generator string, not a DATAMIMIC <key> attribute
     }
     // A mode-less <attribute name="X"> inside a source-backed <generate>/<iterate> overlays the source
     // column X - Benerator's anonymization/enrichment pattern. Read it via script="X" so a converter can
@@ -1149,6 +1235,22 @@ public class DescriptorConverter {
         continue; // folded into the generator call below
       }
       switch (key) {
+        case "values":
+          // Benerator's weighted-value literal (values="'A'^70,'B'^30", doc: randomFromWeightLiteral)
+          // embeds the weight IN the values string. DATAMIMIC has no '^' syntax - ast.literal_eval on
+          // a caret expression is not a literal and THROWS at task-init - so a verbatim pass-through
+          // hard-crashes every run. DATAMIMIC's equivalent is a separate 'weights=' attribute (plain
+          // numbers, same order), so split the two apart when every entry carries a weight.
+          String weights = weightedValuesToWeights(val);
+          if (weights != null) {
+            out.setAttribute("values", stripWeights(val));
+            out.setAttribute("weights", weights);
+            report.info(path, "values", "weighted value literal 'A'^70,... -> values=/weights= "
+                + "(DATAMIMIC has no '^' weight syntax)");
+          } else {
+            out.setAttribute("values", val);
+          }
+          break;
         case "generator":
           if (entityName != null) {
             // Benerator composite generator on a <variable> -> DATAMIMIC entity; script field access is
@@ -1200,7 +1302,10 @@ public class DescriptorConverter {
           out.setAttribute("selector", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
           break;
         case "converter":
-          out.setAttribute("converter", expressions.mapConverter(val, path));
+          String mappedConverter = expressions.mapConverter(val, path);
+          if (mappedConverter != null && !mappedConverter.isEmpty()) {
+            out.setAttribute("converter", mappedConverter);
+          }
           break;
         case "nullable":
           // DATAMIMIC fields are non-null by default, so nullable="false" needs nothing; nullable="true"
@@ -1208,6 +1313,18 @@ public class DescriptorConverter {
           if (!"false".equals(val)) {
             report.info(path, "attribute", "nullable=\"true\" -> add nullQuota to emit nulls (DATAMIMIC defaults to non-null)");
           }
+          break;
+        case "minInclusive":
+        case "maxInclusive":
+          // Benerator boolean flags that modify min/max bounds; DATAMIMIC bounds are always inclusive
+          // (the Benerator default). Drop the flag, keep the actual bound.
+          report.info(path, "attribute", "'" + key + "'=" + val + " dropped (DATAMIMIC bounds are always inclusive)");
+          break;
+        case "container":
+          // consumed by the part->nestedKey type detection above; silently drop the attr
+          break;
+        case "default":
+          out.setAttribute("defaultValue", val); // Benerator 'default' -> DATAMIMIC 'defaultValue'
           break;
         default:
           if (key.equals("cyclic") && !tag.equals("variable")) {
@@ -1230,6 +1347,48 @@ public class DescriptorConverter {
           }
           break;
       }
+    }
+    // DATAMIMIC validates 'unique' at the model level: it draws distinct values from a FINITE POOL, which
+    // only 'values' or 'source' provide - not a generator=, a regex 'pattern', or a bare type= range/random
+    // draw. Those all convert clean and then hard-crash Pydantic validation ("'unique' requires 'values' or
+    // 'source'"). A safe universal rewrite doesn't exist (a numeric range can be huge; a regex's value set
+    // isn't enumerable in general), so - same policy as the wgt.csv+unique case above and 'distribution' on
+    // a plain <key> below - it is dropped and flagged rather than passed through to the crash. The field
+    // itself stays and still generates values, just no longer guaranteed distinct.
+    if ("true".equals(out.getAttribute("unique")) && !out.hasAttribute("values") && !out.hasAttribute("source")) {
+      out.removeAttribute("unique");
+      report.add(path, "attribute", "<" + tag + " name='" + out.getAttribute("name")
+          + "'> unique='true' with no 'values'/'source' - DATAMIMIC only supports unique sampling from a "
+          + "finite pool (values=... or source=...), not from a generator/pattern/range; dropped, "
+          + "uniqueness is no longer guaranteed. Enumerate as values= for a small domain, or dedupe downstream.");
+    } else if ("true".equals(out.getAttribute("unique")) && out.hasAttribute("distribution")
+        && !"random".equals(out.getAttribute("distribution"))) {
+      // A finite-pool unique read (values=/source=) ALSO needs distribution='random' (or unset - random is
+      // the default) - DATAMIMIC's unique sampling "implies distinct random order" and rejects
+      // ordered/cumulated/etc at the same model-validation layer as the no-pool case above (confirmed
+      // against the real engine). The explicit distribution choice is more clearly deliberate than the
+      // (often incidental) unique flag, so it is kept; unique is dropped.
+      String droppedDist = out.getAttribute("distribution");
+      out.removeAttribute("unique");
+      report.add(path, "attribute", "<" + tag + " name='" + out.getAttribute("name") + "'> unique='true' with "
+          + "distribution='" + droppedDist + "' - DATAMIMIC's unique only combines with distribution='random' "
+          + "(it implies distinct random order); 'unique' dropped, '" + droppedDist
+          + "' kept - add manual dedup if both are required");
+    }
+    // Benerator's <id>/IncrementalIdGenerator is GLOBALLY incremental across the whole run, including
+    // every invocation of an enclosing <part> (confirmed against the real engine: 3 accounts x 2 cards
+    // -> cardIds 1,2 / 3,4 / 5,6). DATAMIMIC's IncrementGenerator resets to 1 for every PARENT record
+    // inside a nestedKey (confirmed against the real engine: same shape -> 1,2 / 1,2 / 1,2) - documented,
+    // intentional DATAMIMIC behavior (AGENTS.md/cheatsheet.md rule DM315), not a bug there, but a real
+    // value-level divergence from Benerator. Per-parent-local ids are often exactly what's wanted for a
+    // child list and are NOT dropped/changed here (auto-composing a global key would need a multiplier
+    // safely above any realistic per-parent count, which the converter cannot know) - just flagged so the
+    // user can add a script="parent.<id> * K + this.<local>" composite key if global uniqueness matters.
+    if (out.getAttribute("generator").startsWith("IncrementGenerator") && isNestedInPart(src)) {
+      report.info(path, "nested-id", "<" + tag + " name='" + out.getAttribute("name")
+          + "'> IncrementGenerator() inside <part> resets PER PARENT in DATAMIMIC (1,2,1,2,...), unlike "
+          + "Benerator's globally incremental <id> (1,2,3,4,...) - fine if only local uniqueness is needed, "
+          + "else compose script=\"parent.<id> * K + this.<local sequence>\" for a global key");
     }
   }
 
@@ -1385,6 +1544,77 @@ public class DescriptorConverter {
     return null;
   }
 
+  /** The comma-separated weight of each entry in a Benerator weighted-value literal
+   *  ({@code 'A'^70,'B'^30}, doc: randomFromWeightLiteral), or null when the string isn't ONE
+   *  (every entry needs a top-level '^' with a plain-number weight, or it is left untouched). */
+  private static String weightedValuesToWeights(String values) {
+    List<String> entries = ArgSplitter.splitTopLevel(values);
+    if (entries.isEmpty()) {
+      return null;
+    }
+    List<String> weights = new java.util.ArrayList<>();
+    for (String entry : entries) {
+      int caret = topLevelCaret(entry);
+      if (caret < 0) {
+        return null;
+      }
+      String weight = entry.substring(caret + 1).trim();
+      if (!weight.matches("[0-9]+(\\.[0-9]+)?")) {
+        return null;
+      }
+      weights.add(weight);
+    }
+    return String.join(",", weights);
+  }
+
+  /** The bare literals of a weighted-value literal, weight (and '^') removed. Only meaningful when
+   *  {@link #weightedValuesToWeights} returned non-null for the same string. */
+  private static String stripWeights(String values) {
+    List<String> literals = new java.util.ArrayList<>();
+    for (String entry : ArgSplitter.splitTopLevel(values)) {
+      int caret = topLevelCaret(entry);
+      literals.add((caret < 0 ? entry : entry.substring(0, caret)).trim());
+    }
+    return String.join(",", literals);
+  }
+
+  /** Index of the first '^' outside quotes, or -1. A quoted literal may legitimately contain '^'. */
+  private static int topLevelCaret(String entry) {
+    char quote = 0;
+    for (int i = 0; i < entry.length(); i++) {
+      char c = entry.charAt(i);
+      if (quote != 0) {
+        if (c == quote) {
+          quote = 0;
+        }
+      } else if (c == '\'' || c == '"') {
+        quote = c;
+      } else if (c == '^') {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  /** Reparse a Benerator date/time bound (given in {@code benFormat}, Java SimpleDateFormat syntax) into
+   *  DATAMIMIC DateTimeGenerator's fixed default parse format ("yyyy-MM-dd HH:mm:ss"). Null when the
+   *  bound is absent. Flagged (not thrown) when the bound doesn't match benFormat - passing an
+   *  unparseable literal through would crash DATAMIMIC's own strptime just as badly, so the bound is
+   *  dropped instead (DateTimeGenerator falls back to its own default range) and the user is told why. */
+  private String reformatDateBound(String value, String benFormat, String path, String bound) {
+    if (value == null) {
+      return null;
+    }
+    try {
+      java.util.Date parsed = new java.text.SimpleDateFormat(benFormat).parse(value);
+      return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(parsed);
+    } catch (java.text.ParseException e) {
+      report.add(path, "type", "date '" + bound + "'='" + value + "' does not match pattern '" + benFormat
+          + "' - could not reformat for DATAMIMIC, dropped; set it as a literal date matching the pattern");
+      return null;
+    }
+  }
+
   private String mapType(String beneratorType, String tag, boolean hasMode, String path) {
     if (beneratorType == null) {
       return null;
@@ -1445,6 +1675,20 @@ public class DescriptorConverter {
     }
     String tag = local((Element) n);
     return tag.equals("generate") || tag.equals("iterate");
+  }
+
+  /** True when a field sits inside a Benerator {@code <part>} (nested list/dict), directly or through
+   *  further nesting - the scope where DATAMIMIC's {@code IncrementGenerator} resets to 1 for every
+   *  PARENT record, while Benerator's own {@code <id>}/{@code IncrementalIdGenerator} stays globally
+   *  incremental across the WHOLE run (confirmed against both real engines: Benerator gives a 3-account,
+   *  2-cards-each run cardIds 1,2 / 3,4 / 5,6; DATAMIMIC's IncrementGenerator gives 1,2 / 1,2 / 1,2). */
+  private static boolean isNestedInPart(Element field) {
+    for (Node p = field.getParentNode(); p instanceof Element; p = p.getParentNode()) {
+      if (local((Element) p).equals("part")) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** True when {@code path} makes the element a direct child of a {@code <setup>} (e.g. "/setup/if"). */

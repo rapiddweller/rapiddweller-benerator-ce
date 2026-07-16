@@ -123,6 +123,14 @@ class ReferenceConverter {
     }
     if (attrs.containsKey("cyclic")) {
       ref.setAttribute("cyclic", attrs.get("cyclic"));
+    } else if (attrs.containsKey("source")) {
+      // Benerator tolerates drawing more values than the source holds; DATAMIMIC reads it once and stops,
+      // so the generate silently emits fewer rows. cyclic converts verbatim - this only catches descriptors
+      // that leaned on Benerator's implicit default instead of declaring it. Only a reference that actually
+      // READS a source can be exhausted (constant/script ones already returned as <key> above).
+      report.info(path, "cyclic", "reference '" + name + "' has no cyclic - DATAMIMIC reads the source once "
+          + "and stops when it is exhausted; add cyclic=\"true\" if the generate can request more records "
+          + "than the source holds");
     }
     // The FK column type comes from the referenced source column in DATAMIMIC, so dropping type= loses
     // (almost) nothing - informational, not manual work.

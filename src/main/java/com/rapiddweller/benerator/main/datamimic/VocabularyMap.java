@@ -104,13 +104,16 @@ public final class VocabularyMap {
   /** &lt;setup&gt; attributes DATAMIMIC understands under the same name (see CE setup_model). */
   public static final Set<String> SETUP_ATTR_KEEP = Set.of(
       "defaultSeparator", "defaultDataset", "defaultLocale", "defaultLineSeparator",
-      "defaultSourceScripted");
+      "defaultSourceScripted", "defaultVariablePrefix", "defaultVariableSuffix",
+      "rngSeed");
 
   /** Field (&lt;key&gt;/&lt;id&gt;/&lt;nestedKey&gt;/&lt;variable&gt;) attributes DATAMIMIC accepts verbatim. */
   public static final Set<String> FIELD_ATTR_KEEP = Set.of(
       "name", "pattern", "values", "constant", "script", "source", "selector",
       "separator", "unique", "nullQuota", "converter", "minCount", "maxCount",
-      "min", "max", "granularity", "minLength", "maxLength", "dataset", "locale", "cyclic");
+      "min", "max", "granularity", "minLength", "maxLength", "dataset", "locale", "cyclic",
+      "defaultValue", "variablePrefix", "variableSuffix", "inDateFormat", "outDateFormat",
+      "sourceScripted");
 
   /**
    * Benerator composite generator -&gt; DATAMIMIC entity name (validated against CE's entity registry,
@@ -315,7 +318,8 @@ public final class VocabularyMap {
   /** Benerator converter -&gt; DATAMIMIC converter name. */
   public static final Map<String, String> CONVERTER_RENAME = Map.of(
       "CaseConverter", "UpperCase", // Benerator CaseConverter defaults to upper-casing
-      "SubstringExtractor", "Substring"); // python slice semantics (DM PR #172)
+      "SubstringExtractor", "Substring", // python slice semantics (DM PR #172)
+      "ToStringConverter", ""); // Benerator toString is implicit in DATAMIMIC's type system - dropped
 
   /** Benerator hash converter -&gt; DATAMIMIC {@code Hash(algorithm, output_format)} full expression. */
   public static final Map<String, String> CONVERTER_EXPANSION = Map.ofEntries(

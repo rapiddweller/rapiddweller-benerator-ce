@@ -199,6 +199,31 @@ public final class DatamimicConverter {
       }
       sb.append('\n');
     }
+    // Row counts are the one thing a converted descriptor can get wrong while still converting and running
+    // cleanly: Benerator tolerates over-drawing a source, DATAMIMIC reads it once and stops. Nothing in the
+    // conversion is wrong here, so this is not manual-work - but it is the only failure the user cannot see
+    // without counting rows, so it gets its own line instead of vanishing into the informational count.
+    long noCyclic = report.items().stream().filter(it -> "cyclic".equals(it.kind)).count();
+    if (noCyclic > 0) {
+      sb.append("## Verify your row counts\n\n")
+          .append(noCyclic).append(" source read(s) declare no `cyclic`. Benerator lets a `<variable>`/`<reference>` ")
+          .append("draw more values than its source holds; DATAMIMIC reads the source once and stops, so the ")
+          .append("consuming `<generate>` silently emits fewer records. Add `cyclic=\"true\"` wherever the ")
+          .append("requested count can exceed the source.\n\n");
+    }
+    // Benerator's <id> stays globally incremental across the whole run, including every invocation of an
+    // enclosing <part>; DATAMIMIC's IncrementGenerator resets to 1 for every PARENT record inside a
+    // nestedKey (documented, intentional DATAMIMIC behavior - not a bug there). Often exactly what's
+    // wanted for a child list (per-parent-local ids), so not manual-work either - but a value-level change
+    // the user cannot see without inspecting nested ids, so it gets its own line too.
+    long nestedIds = report.items().stream().filter(it -> "nested-id".equals(it.kind)).count();
+    if (nestedIds > 0) {
+      sb.append("## Verify nested id uniqueness\n\n")
+          .append(nestedIds).append(" id(s) inside a `<part>` use `IncrementGenerator()`. DATAMIMIC resets it to 1 ")
+          .append("for every parent record; Benerator's `<id>` counts globally across the whole run. Fine if only ")
+          .append("per-parent uniqueness is needed; otherwise compose a global key with ")
+          .append("`script=\"parent.<id> * K + this.<local sequence>\"`.\n\n");
+    }
     long infos = report.items().size() - report.attention().size();
     if (infos > 0) {
       sb.append(infos).append(" finding(s) were converted automatically (informational, no action).\n");
@@ -222,6 +247,8 @@ public final class DatamimicConverter {
         return "unknown-generators";
       case "reference":
         return "reference-selector-type";
+      case "attribute":
+        return item.detail.contains("unique='true'>") ? "unique-weighted-source" : null;
       case "element": // the flagged tag is the first <...> in the detail text
         int lt = item.detail.indexOf('<');
         int gt = item.detail.indexOf('>', lt);

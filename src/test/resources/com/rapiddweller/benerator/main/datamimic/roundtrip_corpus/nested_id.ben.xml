@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Benerator's <id> is GLOBALLY incremental across the whole run, including every invocation of an
+  enclosing <part> (confirmed against the real Benerator engine: 3 accounts x 2 cards each -> cardIds
+  1,2 / 3,4 / 5,6, not reset per account). DATAMIMIC's IncrementGenerator resets to 1 for every PARENT
+  record inside a nestedKey (confirmed against the real DATAMIMIC engine, and documented as intentional
+  DATAMIMIC behavior - AGENTS.md/cheatsheet.md rule DM315: "IncrementGenerator counts per parent"). Not a
+  crash and often exactly what's wanted for a child list, but a real value-level divergence the user
+  cannot see without inspecting nested ids - asserted by DescriptorConverterTest: flagged under its own
+  migration-summary.md section, not counted as blocking manual work.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <generate type="account" count="3" consumer="ConsoleExporter">
+        <id name="accountId" type="int"/>
+        <part name="cards" minCount="2" maxCount="2">
+            <id name="cardId" type="int"/>
+        </part>
+    </generate>
+
+</setup>

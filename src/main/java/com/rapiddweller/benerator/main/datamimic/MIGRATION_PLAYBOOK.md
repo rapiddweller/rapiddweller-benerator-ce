@@ -160,3 +160,21 @@ explicitly. Fill them in by hand. A `selector=`-driven reference becomes a
 <variable name="open_order" source="db" selector="select id from orders where state='OPEN'"/>
 <key name="order_id" script="open_order.id"/>
 ```
+
+## unique-weighted-source
+
+A Benerator `<attribute source="x.wgt.csv" unique="true">` draws distinct values from a weighted CSV
+(no repeats within the run). DATAMIMIC's `<key source>` for a `.wgt.csv` is sample-**with**-replacement
+(it draws one row per call and never runs out) and explicitly rejects `unique` at task startup - the
+converted descriptor parses fine and then hard-crashes on the first run. Move the read onto a
+`<variable source unique="true">` (DATAMIMIC's distinct-sampling form; it loads the whole file and
+serves each row once) and pick the value column with a script. Replace `<value column>` below with the
+actual column name from the CSV header - the converter does not read the file to know it.
+
+```xml
+<!-- before -->
+<attribute name="country" source="countries.wgt.csv" unique="true"/>
+<!-- after -->
+<variable name="_country_pool" source="countries.wgt.csv" unique="true"/>
+<key name="country" script="_country_pool.<value column>"/>
+```

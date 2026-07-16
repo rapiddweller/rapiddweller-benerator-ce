@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The memstore cross-entity reference: generate into a memstore, then read it back from a second
+  <generate> through a <variable>. Two things here are silent-corruption traps and are asserted by
+  DescriptorConverterTest:
+    - <variable source="mem" type="customer"> names the ENTITY to read (-> sourceEntity), not a field type.
+      Dropping it makes DATAMIMIC resolve the lookup against the VARIABLE name and read nothing.
+    - <id type="int"> is INCREMENTAL in Benerator but a plain random int in DATAMIMIC (-> IncrementGenerator).
+  cyclic is declared because 200 orders draw from 50 customers: DATAMIMIC reads a source once and stops.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <memstore id="mem"/>
+
+    <generate type="customer" count="50" consumer="mem">
+        <id name="id" type="int"/>
+        <attribute name="country" values="'DE','AT','CH'"/>
+    </generate>
+
+    <generate type="order" count="200" consumer="ConsoleExporter">
+        <variable name="cust" source="mem" type="customer" distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="customer_id" script="cust.id"/>
+        <attribute name="country" script="cust.country"/>
+        <attribute name="amount" type="double" min="10" max="5000" granularity="0.01"/>
+    </generate>
+
+</setup>

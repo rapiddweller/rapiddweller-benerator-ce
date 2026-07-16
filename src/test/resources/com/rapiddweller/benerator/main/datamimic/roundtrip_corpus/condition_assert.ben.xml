@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Conditional generation (<if>/<else> -> <condition>) and the assertion idiom
+  (<if test><error>MSG</error></if> -> <assert>). Also exercises boolean type -> bool mapping.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <generate type="product" count="5" consumer="ConsoleExporter">
+        <attribute name="isPremium" type="boolean"/>
+
+        <if test="isPremium == True">
+            <then>
+                <attribute name="label" constant="PREMIUM"/>
+            </then>
+            <else>
+                <attribute name="label" constant="standard"/>
+            </else>
+        </if>
+        <attribute name="price" type="double" min="1" max="100"/>
+    </generate>
+
+    <!-- Assertion idiom: <if test><error>MSG</error></if> -> <assert condition="not (...)"/> -->
+    <generate type="order" count="3" consumer="ConsoleExporter">
+        <attribute name="total" type="double" min="50" max="200"/>
+        <if test="total &lt;= 0"><error>Order total must be positive: ${total}</error></if>
+    </generate>
+
+</setup>

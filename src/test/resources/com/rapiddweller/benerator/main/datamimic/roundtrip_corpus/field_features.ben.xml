@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Field converters, nullQuota, defaultValue, pattern (regex), constant values.
+  Also exercises distribution="ordered" on a <variable> reading from a values list.
+  All patterns the converter maps and DATAMIMIC CE supports natively.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <generate type="customer" count="5" consumer="ConsoleExporter">
+        <!-- CaseConverter -> UpperCase: the name should arrive uppercased -->
+        <attribute name="code" pattern="[A-Z]{3}" converter="CaseConverter"/>
+        <!-- nullQuota: ~20% of records get None in this field -->
+        <attribute name="optionalNote" type="string" minLength="5" maxLength="20" nullQuota="0.2"/>
+        <!-- defaultValue: when source is empty, this value is used (here always constant) -->
+        <attribute name="status" constant="active"/>
+        <!-- numeric range with granularity -->
+        <attribute name="score" type="double" min="0.0" max="100.0" granularity="0.5"/>
+        <!-- ordered distribution: values drawn in source order, not shuffled -->
+        <variable name="tier" values="'basic','pro','enterprise'" distribution="ordered"/>
+        <attribute name="plan" script="tier"/>
+    </generate>
+
+</setup>

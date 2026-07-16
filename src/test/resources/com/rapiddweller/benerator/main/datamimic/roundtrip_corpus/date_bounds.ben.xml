@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Two ways min/max on a date-typed field converted cleanly and then hard-crashed the run (already
+  shipped in 4.0.0, unrelated to any single-commit regression): DATAMIMIC's DateTimeGenerator parses
+  min/max with a FIXED "%Y-%m-%d %H:%M:%S" format. A bare ISO date with no time component (Benerator's
+  OWN default - TimeUtil.createDefaultDateFormat - and the single most common way real projects write
+  date bounds) already fails there; a Benerator 'pattern' (a DIFFERENT thing in DATAMIMIC: unconditional
+  regex-string generation, see the strPattern field below) made it worse. Asserted by
+  DescriptorConverterTest: both bounds are reparsed at CONVERT TIME and re-emitted in DATAMIMIC's format.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0">
+
+    <generate type="customer" count="30" consumer="ConsoleExporter">
+        <attribute name="isoBirthdate" type="date" min="1970-01-01" max="2000-12-31"/>
+        <attribute name="euroBirthdate" type="date" pattern="dd.MM.yyyy" min="01.01.1970" max="31.12.2000"/>
+        <attribute name="orderCode" type="string" pattern="[A-Z]{3}[0-9]{4}"/>
+    </generate>
+
+</setup>
