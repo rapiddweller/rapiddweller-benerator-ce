@@ -450,7 +450,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.7.0.6970:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce -Dsonar.scanner.skipJreProvisioning=true
+        # SonarCloud API occasionally returns 504 (gateway timeout) — retry up to 3 times
+        run: |
+          for i in 1 2 3; do
+            echo "SonarCloud analysis attempt $i/3"
+            if mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.7.0.6970:sonar \
+                 -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce \
+                 -Dsonar.scanner.skipJreProvisioning=true; then
+              echo "SonarCloud analysis succeeded on attempt $i"
+              exit 0
+            fi
+            if [ "$i" -lt 3 ]; then
+              echo "SonarCloud analysis failed, retrying in 30s..."
+              sleep 30
+            fi
+          done
+          echo "SonarCloud analysis failed after 3 attempts"
+          exit 1
 
   ###################### Assembly ######################
 
