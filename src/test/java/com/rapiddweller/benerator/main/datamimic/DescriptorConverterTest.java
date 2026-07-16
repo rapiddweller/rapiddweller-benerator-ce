@@ -868,6 +868,130 @@ public class DescriptorConverterTest {
         .noneMatch(i -> i.detail.contains("cyclic")));
   }
 
+  @Test
+  public void convertsEntityPersonGeneratorToEntityVariable() throws Exception {
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/entity_person.ben.xml", new MigrationReport());
+    // PersonGenerator on a <variable> -> entity="Person" (not a literal generator string)
+    Element personVar = first(doc, "variable", "name", "person");
+    assertNotNull("person variable kept", personVar);
+    assertEquals("Person", personVar.getAttribute("entity"));
+    assertEquals("DE", personVar.getAttribute("dataset"));
+    assertEquals("no bare generator attribute left", "", personVar.getAttribute("generator"));
+    // EMailAddressGenerator -> EmailAddressGenerator
+    Element email = first(doc, "key", "name", "email");
+    assertNotNull(email);
+    assertEquals("EmailAddressGenerator", email.getAttribute("generator"));
+    // Entity field access: person.givenName / person.familyName survive as scripts
+    assertEquals("person.givenName", first(doc, "key", "name", "firstName").getAttribute("script"));
+    assertEquals("person.familyName", first(doc, "key", "name", "lastName").getAttribute("script"));
+  }
+
+  @Test
+  public void convertsConditionAndAssertionIdiom() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/condition_assert.ben.xml", report);
+
+    // <if test="isPremium == True"><then>..<else>..</if> -> <condition><if condition=...><else>
+    NodeList conditions = doc.getElementsByTagName("condition");
+    assertTrue("condition element present", conditions.getLength() > 0);
+    Element condition = (Element) conditions.item(0);
+    Element ifEl = (Element) condition.getElementsByTagName("if").item(0);
+    assertNotNull("if inside condition", ifEl);
+    assertEquals("isPremium == True", ifEl.getAttribute("condition"));
+    Element elseEl = (Element) condition.getElementsByTagName("else").item(0);
+    assertNotNull("else inside condition", elseEl);
+    // the PREMIUM constant is in the <if> branch, "standard" in the <else>
+    Element premiumKey = (Element) ifEl.getElementsByTagName("key").item(0);
+    assertEquals("PREMIUM", premiumKey.getAttribute("constant"));
+    Element standardKey = (Element) elseEl.getElementsByTagName("key").item(0);
+    assertEquals("standard", standardKey.getAttribute("constant"));
+
+    // <if test><error>MSG</error></if> -> <assert condition="not (...)" message="..."/>
+    Element assertEl = first(doc, "assert", "condition", "not (total <= 0)");
+    assertNotNull("assertion idiom -> <assert>", assertEl);
+    assertEquals("Order total must be positive: ${total}", assertEl.getAttribute("message"));
+
+    // No manual work on either construct
+    assertTrue("no manual findings", report.attention().isEmpty());
+  }
+
+  @Test
+  public void convertsFieldFeaturesConvertersNullQuotaAndDefault() throws Exception {
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/field_features.ben.xml", new MigrationReport());
+
+    // CaseConverter -> UpperCase (on a pattern field)
+    Element code = first(doc, "key", "name", "code");
+    assertNotNull(code);
+    assertEquals("[A-Z]{3}", code.getAttribute("pattern"));
+    assertEquals("UpperCase", code.getAttribute("converter"));
+
+    // nullQuota passes through
+    Element note = first(doc, "key", "name", "optionalNote");
+    assertEquals("0.2", note.getAttribute("nullQuota"));
+
+    // constant passes through
+    Element status = first(doc, "key", "name", "status");
+    assertEquals("active", status.getAttribute("constant"));
+
+    // distribution="ordered" on a <variable> with values
+    Element tier = first(doc, "variable", "name", "tier");
+    assertEquals("ordered", tier.getAttribute("distribution"));
+    assertEquals("'basic','pro','enterprise'", tier.getAttribute("values"));
+  }
+
+  @Test
+  public void mapsDataFakerMethodsAndEmailRename() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/datafaker.ben.xml", report);
+
+    // DataFakerGenerator('Name','firstName') -> DataFakerGenerator('first_name')
+    Element fn = first(doc, "key", "name", "firstName");
+    assertEquals("DataFakerGenerator('first_name')", fn.getAttribute("generator"));
+    // DataFakerGenerator('Name','lastName') -> DataFakerGenerator('last_name')
+    Element ln = first(doc, "key", "name", "lastName");
+    assertEquals("DataFakerGenerator('last_name')", ln.getAttribute("generator"));
+    // EMailAddressGenerator -> EmailAddressGenerator
+    assertEquals("EmailAddressGenerator", first(doc, "key", "name", "email").getAttribute("generator"));
+    // DataFakerGenerator('Address','cityName') -> DataFakerGenerator('city') (method rename)
+    assertEquals("DataFakerGenerator('city')", first(doc, "key", "name", "city").getAttribute("generator"));
+    // UUIDGenerator stays
+    assertEquals("UUIDGenerator", first(doc, "key", "name", "externalId").getAttribute("generator"));
+
+    assertTrue("no manual findings", report.attention().isEmpty());
+  }
+
+  @Test
+  public void convertsMemstorePipelineWithSourceEntityAndIncrementId() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/reference_distribution.ben.xml", report);
+
+    // Producer: <generate type="item" consumer="mem"> -> name="item" target="mem"
+    Element prod = first(doc, "generate", "name", "item");
+    assertNotNull(prod);
+    assertEquals("mem", prod.getAttribute("target"));
+    // <id type="int"> -> IncrementGenerator()
+    assertEquals("IncrementGenerator()", first(doc, "id", "name", "id").getAttribute("generator"));
+
+    // Consumer: <variable source="mem" type="item"> -> sourceEntity="item"
+    Element srcVar = first(doc, "variable", "name", "src");
+    assertNotNull(srcVar);
+    assertEquals("mem", srcVar.getAttribute("source"));
+    assertEquals("item", srcVar.getAttribute("sourceEntity"));
+    assertEquals("random", srcVar.getAttribute("distribution"));
+    assertEquals("true", srcVar.getAttribute("cyclic"));
+
+    // Script access to source entity fields
+    assertEquals("src.label", first(doc, "key", "name", "originalLabel").getAttribute("script"));
+    assertEquals("src.category", first(doc, "key", "name", "originalCategory").getAttribute("script"));
+
+    assertTrue("no manual findings", report.attention().isEmpty());
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();

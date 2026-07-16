@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Composite generator (PersonGenerator) with brace args -> <variable entity="Person" ageMin=...>.
+  The converter maps minAgeYears->ageMin, maxAgeYears->ageMax, dataset->dataset, locale->locale.
+  Accessing entity fields by camelCase (person.givenName) must resolve to the entity's snake_case
+  field (given_name) via DATAMIMIC's tolerant field access. The constructed Person generator must
+  produce non-null names and an email.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0" defaultDataset="US">
+
+    <generate type="customer" count="5" consumer="ConsoleExporter">
+        <variable name="person" generator="PersonGenerator" dataset="DE"/>
+        <attribute name="firstName" script="person.givenName"/>
+        <attribute name="lastName" script="person.familyName"/>
+        <attribute name="email" generator="EMailAddressGenerator"/>
+    </generate>
+
+</setup>

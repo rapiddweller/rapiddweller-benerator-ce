@@ -6,28 +6,26 @@ for manual migration, and **gates the totals against `gap-baseline.properties`**
 the build; lowering the baseline is a deliberate commit). All numbers below come from the generated
 `target/gap-report.txt` — do not edit them by hand, re-run the sweep.
 
-## Coverage (sweep of 2026-07-03)
+## Coverage (sweep of 2026-07-16)
 
-**303 files · 298 convert · 5 throw** (the 5 are non-standalone / deliberately-malformed XML
+**316 files · 311 convert · 5 throw** (the 5 are non-standalone / deliberately-malformed XML
 fixtures, not descriptors). No descriptor fails to produce output.
 
 The report is tiered: `report.add(...)` = genuinely needs manual work; `report.info(...)` = converted
 automatically, shown for transparency only (dropped `<import>`, a `<reference>` emitted as a `<key>`, a
 defaulted `sourceKey`, an assertion converted to `<assert>`, an inlined generator `<bean>`,
-`<variable generator>` → entity). Across the full corpus: **446 need manual attention, 1568 informational** (info grew with the
-corpus-driven faker vocabulary and honest reclassifications; manual now includes previously
-runtime-dead constructs like Benerator counter checks and dbunit sources, each with a recipe).
+`<variable generator>` → entity). Across the full corpus: **337 need manual attention, 1821 informational**.
 
-The 446, by report kind (top constructs in parentheses):
-- **attribute** 94 (`<attribute>` 43, `<part>` 20, `<setup>` 17): unmapped attributes on mapped elements.
-- **element** 65 (`<bean>` 33, `<value>` 11, `<pre-parse-generate>` 8, `<transcodingTask>` 5): no equivalent.
-- **execute** 57 (`type='js'` 40, no-type 14): no JS engine in DATAMIMIC — rewrite python/sql/bash.
-- **database** 42 (`'db'` 24 + schema/env variants): env-specific connection setup — flagged by design.
-- **generator** 40 (`MongoDBObjectIdGenerator` 9, `AddressGenerator` 9, `new RegexStringGenerator{…}` 4):
-  brace-arg generators outside `<variable>` + genuinely unsupported generators.
-- **reference** 39 (`order_id` 16, `'x'` 8, `'ref'` 7): references without a `targetType` (selector-only,
-  untyped) — column/selector must be migrated manually.
-- **consumer** 28 (`NoConsumer` 11, `MultiExporter` 7, `new XLSEntityExporter(…)`): exporters with no
+The 337, by report kind (top constructs in parentheses):
+- **attribute** 87 (`<attribute>` 36, `<setup>` 17, `<attribute name='name'>` 8): unmapped attributes on mapped elements.
+- **element** 45 (`<bean>` 23, `<value>` 11, `<transcodingTask>` 5): no equivalent.
+- **execute** 43 (`type='js'` 40): no JS engine in DATAMIMIC — rewrite python/sql/bash.
+- **condition** 26 (`<if>` 26): setup-level control flow with non-error body — no DATAMIMIC home.
+- **reference** 19 (`'x'` 8, `'ref'` 7): references without a `targetType` (selector-only, untyped).
+- **generator** 18 (`new RegexStringGenerator{…}` 4 + genuinely unsupported generators).
+- **database** 14 (`'db'` 11): env-specific connection setup — flagged by design.
+- **evaluate** 14 (`<evaluate>` without assert): side-effect evaluation, manual migration.
+- **consumer** 13 (`MultiExporter` 7): exporters with no
   DATAMIMIC counterpart or inline Java instantiation.
 - **condition `<if>`** 22 (setup-level with a non-`<error>` body) + **`<evaluate>` without `assert`** 14:
   side-effect control flow with no DATAMIMIC home.
@@ -60,8 +58,15 @@ The 446, by report kind (top constructs in parentheses):
 | `unique="true"` on `pattern`/native range/`generator=` (no `values`/`source`) | flagged and dropped (was a hard crash: DATAMIMIC's `unique` needs a finite pool) | — |
 | `<id type="int">` (or `IncrementalIdGenerator`) inside a `<part>` | `generator="IncrementGenerator()"` still emitted, PLUS a flag (Benerator counts globally, DATAMIMIC per-parent - a real value difference, not a crash) | — |
 | `unique="true"` with an explicit non-random `distribution` (`values=`-backed) | flagged and dropped, `distribution` kept (was a hard crash: DATAMIMIC's `unique` only combines with `distribution='random'`) | — |
+| `<part container="list">` / `<part container="array">` | consumed, type="list" on `<nestedKey>` (was flagged as an unmapped attribute) | ~17 |
+| `<attribute minInclusive=...>` / `<attribute maxInclusive=...>` | `min=` / `max=` (same semantics; was flagged) | ~8 |
+| `<attribute default="...">` | `defaultValue="..."` (native DATAMIMIC `<key>` attr; was flagged) | ~74 |
+| `converter="ToStringConverter"` | dropped (implicit in DATAMIMIC's type system; was flagged as unknown) | ~4 |
+| `SETUP_ATTR_KEEP`: `rngSeed`, `defaultVariablePrefix`, `defaultVariableSuffix` | passed through (native DATAMIMIC `<setup>` attrs) | — |
+| `FIELD_ATTR_KEEP`: `defaultValue`, `variablePrefix`, `variableSuffix`, `inDateFormat`, `outDateFormat`, `sourceScripted` | passed through (native DATAMIMIC key/variable attrs) | — |
 
-Net over the session: `element` 178→65, and the DB-backed round-trip now runs against a real postgres.
+Net over the session: `element` 178→65, `attribute` 117→87 (`<part>` 20→0, `<attribute>` 44→36), manual
+findings overall 436→337. The DB-backed round-trip now runs against a real postgres.
 Three later passes (4.0.1) found and closed eight more "converts clean, breaks at runtime" gaps by
 testing patterns the corpus didn't contain — two silent-wrong-data bugs (memstore entity binding, `<id>`
 uniqueness), four silent-crash bugs (weighted-value literals, unique+weighted-CSV, unique on a
@@ -77,6 +82,30 @@ authoring cheatsheet (12 numbered "semantic rules that cause most authoring fail
 was cross-checked rule by rule against the converter's output; every rule not already covered above was
 confirmed non-applicable (style-only, structurally already enforced, or no corresponding Benerator source
 attribute exists to translate).
+
+### Roundtrip corpus (CI gate)
+
+The CI workflow (`datamimic-migration.yml`) gates the converter against the real DATAMIMIC CE engine:
+every file in `roundtrip_corpus/` is converted and then executed via `datamimic run`. The corpus is
+expanded each session with self-contained patterns the converter claims to map — a converter that emits
+parseable-but-broken DATAMIMIC is caught here, not in a unit test.
+
+| File | Pattern exercised |
+|---|---|
+| `numbers.ben.xml` | numeric types, granularity, maxLength, setup defaults |
+| `people.ben.xml` | generators (GivenName, EMailAddress), int range |
+| `features.ben.xml` | `<while>`, `<setting>`, `<execute type="shell">` |
+| `date_bounds.ben.xml` | date min/max formatting, pattern-as-date-format |
+| `memstore.ben.xml` | memstore entity binding, increment id, cyclic |
+| `nested_id.ben.xml` | nested `<id>` inside `<part>` (per-parent flag) |
+| `weighted_values.ben.xml` | weighted-value literal → values=/weights= |
+| `unique_non_pool_modes.ben.xml` | unique on non-pool modes (dropped+flagged) |
+| `unique_weighted_source.ben.xml` | unique on weighted CSV source (dropped+flagged) |
+| `entity_person.ben.xml` **(new)** | PersonGenerator → entity="Person", dataset attr, EMailAddressGenerator |
+| `condition_assert.ben.xml` **(new)** | `<if>/<else>` → `<condition>`, assertion idiom → `<assert>` |
+| `field_features.ben.xml` **(new)** | converter (CaseConverter→UpperCase), nullQuota, constant, ordered distribution |
+| `datafaker.ben.xml` **(new)** | DataFakerGenerator method mapping, UUIDGenerator, EMailAddress rename |
+| `reference_distribution.ben.xml` **(new)** | memstore pipeline, sourceEntity, IncrementGenerator, cyclic |
 
 ## Remaining gaps (prioritised)
 

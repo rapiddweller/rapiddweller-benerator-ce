@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DataFakerGenerator: Benerator's provider+method call maps to DATAMIMIC's flat faker.method().
+  Also exercises the EMailAddressGenerator rename, and the reference element with distribution.
+  The converter maps: DataFakerGenerator('Name','firstName') -> DataFakerGenerator('first_name')
+  and EMailAddressGenerator -> EmailAddressGenerator.
+-->
+<setup xmlns="https://www.benerator.de/schema/3.0.0" defaultLocale="en_US">
+
+    <generate type="user" count="5" consumer="ConsoleExporter">
+        <!-- DataFaker: provider dropped, method camelCase->snake_case -->
+        <attribute name="firstName" generator="DataFakerGenerator('Name','firstName')"/>
+        <attribute name="lastName" generator="DataFakerGenerator('Name','lastName')"/>
+        <!-- EMailAddressGenerator -> EmailAddressGenerator -->
+        <attribute name="email" generator="EMailAddressGenerator"/>
+        <!-- Native DATAMIMIC generators that also exist in Benerator -->
+        <attribute name="phone" generator="PhoneNumberGenerator"/>
+        <attribute name="city" generator="DataFakerGenerator('Address','cityName')"/>
+        <!-- UUID generator works in both engines -->
+        <attribute name="externalId" generator="UUIDGenerator"/>
+    </generate>
+
+</setup>

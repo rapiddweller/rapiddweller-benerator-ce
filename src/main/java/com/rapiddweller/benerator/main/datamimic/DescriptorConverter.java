@@ -718,7 +718,8 @@ public class DescriptorConverter {
         // looks the name up in the parent product (KeyError). List when the part repeats (count/source).
         if (tag.equals("part") && !result.hasAttribute("type") && !result.hasAttribute("source")
             && !result.hasAttribute("script")) {
-          boolean many = el.hasAttribute("count") || el.hasAttribute("source") || el.hasAttribute("minCount");
+          boolean many = el.hasAttribute("count") || el.hasAttribute("source") || el.hasAttribute("minCount")
+              || "list".equals(el.getAttribute("container")) || "array".equals(el.getAttribute("container"));
           result.setAttribute("type", many ? "list" : "dict");
         }
         // A field that ends up with no generation mode at all (Benerator derives its type from DB
@@ -937,6 +938,7 @@ public class DescriptorConverter {
         case "name":
         case "pageSize":
         case "offset": // skips the first N source rows - native in DATAMIMIC
+        case "sourceScripted": // native DATAMIMIC attr (scripted source evaluation)
           out.setAttribute(key, val);
           break;
         case "count":
@@ -1300,7 +1302,10 @@ public class DescriptorConverter {
           out.setAttribute("selector", ExpressionMapper.selectorToInterpolated(val, enclosingScopeName(src)));
           break;
         case "converter":
-          out.setAttribute("converter", expressions.mapConverter(val, path));
+          String mappedConverter = expressions.mapConverter(val, path);
+          if (mappedConverter != null && !mappedConverter.isEmpty()) {
+            out.setAttribute("converter", mappedConverter);
+          }
           break;
         case "nullable":
           // DATAMIMIC fields are non-null by default, so nullable="false" needs nothing; nullable="true"
@@ -1308,6 +1313,18 @@ public class DescriptorConverter {
           if (!"false".equals(val)) {
             report.info(path, "attribute", "nullable=\"true\" -> add nullQuota to emit nulls (DATAMIMIC defaults to non-null)");
           }
+          break;
+        case "minInclusive":
+        case "maxInclusive":
+          // Benerator boolean flags that modify min/max bounds; DATAMIMIC bounds are always inclusive
+          // (the Benerator default). Drop the flag, keep the actual bound.
+          report.info(path, "attribute", "'" + key + "'=" + val + " dropped (DATAMIMIC bounds are always inclusive)");
+          break;
+        case "container":
+          // consumed by the part->nestedKey type detection above; silently drop the attr
+          break;
+        case "default":
+          out.setAttribute("defaultValue", val); // Benerator 'default' -> DATAMIMIC 'defaultValue'
           break;
         default:
           if (key.equals("cyclic") && !tag.equals("variable")) {

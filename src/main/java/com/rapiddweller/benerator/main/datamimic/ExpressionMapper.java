@@ -74,6 +74,10 @@ class ExpressionMapper {
       return expansion;
     }
     String mapped = VocabularyMap.CONVERTER_RENAME.getOrDefault(cls, cls);
+    if (mapped.isEmpty()) { // ToStringConverter etc. — implicit in DATAMIMIC's type system, dropped
+      report.info(path, "converter", "converter '" + cls + "' is implicit in DATAMIMIC - dropped");
+      return null;
+    }
     if (mapped.equals("Substring")) {
       // Benerator SubstringExtractor(from, 0) with a negative from means "to the end" -> Substring(from).
       java.util.List<String> parts = ArgSplitter.splitTopLevel(args.replaceAll("^\\(|\\)$", ""));
