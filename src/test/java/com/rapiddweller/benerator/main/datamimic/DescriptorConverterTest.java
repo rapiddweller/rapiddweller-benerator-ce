@@ -1067,6 +1067,78 @@ public class DescriptorConverterTest {
     assertEquals("'foo&&bar'", ExpressionMapper.rewriteScript("'foo&&bar'"));
   }
 
+  @Test
+  public void convertsHealthcareClaimsWithZeroManualFindings() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/complex_healthcare.ben.xml", report);
+
+    // Person entity -> entity="Person"
+    assertEquals("Person", first(doc, "variable", "name", "person").getAttribute("entity"));
+    // Blood type weighted values
+    Element blood = first(doc, "key", "name", "bloodType");
+    assertTrue(blood.getAttribute("values").contains("O+"));
+    assertTrue(blood.getAttribute("weights").contains("37"));
+    // Nested diagnoses (list-type nestedKey)
+    Element diag = first(doc, "nestedKey", "name", "diagnoses");
+    assertEquals("list", diag.getAttribute("type"));
+    // Condition with || -> or
+    Element ifEl = (Element) doc.getElementsByTagName("if").item(0);
+    assertEquals("proc.isSurgical == True or proc.cost > 5000", ifEl.getAttribute("condition"));
+    // While loop with && -> and
+    Element whileEl = (Element) doc.getElementsByTagName("while").item(0);
+    assertEquals("remaining > 0 and cycles < 12", whileEl.getAttribute("condition"));
+    // Assertions
+    assertEquals(2, doc.getElementsByTagName("assert").getLength());
+    assertTrue("zero manual findings", report.attention().isEmpty());
+  }
+
+  @Test
+  public void convertsFinCrimeAmlWithZeroManualFindings() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/complex_fincrime.ben.xml", report);
+
+    // Risk scoring with nested conditions
+    NodeList ifs = doc.getElementsByTagName("if");
+    assertTrue("multiple conditional layers for risk scoring", ifs.getLength() >= 4);
+    // SAR threshold condition
+    boolean sarCheck = false;
+    for (int i = 0; i < ifs.getLength(); i++) {
+      if ("risk >= 50".equals(((Element) ifs.item(i)).getAttribute("condition"))) {
+        sarCheck = true;
+      }
+    }
+    assertTrue("SAR threshold condition present", sarCheck);
+    // While loop for structured amounts
+    Element whileEl = (Element) doc.getElementsByTagName("while").item(0);
+    assertEquals("structuredAmount > 10000 and chunks < 20", whileEl.getAttribute("condition"));
+    // Assertions
+    assertEquals(2, doc.getElementsByTagName("assert").getLength());
+    assertTrue("zero manual findings", report.attention().isEmpty());
+  }
+
+  @Test
+  public void convertsSupplyChainWithZeroManualFindings() throws Exception {
+    MigrationReport report = new MigrationReport();
+    Document doc = convert("src/test/resources/com/rapiddweller/benerator/main/datamimic/"
+        + "roundtrip_corpus/complex_supplychain.ben.xml", report);
+
+    // Address entity for warehouses
+    assertEquals("Address", first(doc, "variable", "name", "addr").getAttribute("entity"));
+    // Nested packages (list-type nestedKey)
+    Element pkg = first(doc, "nestedKey", "name", "packages");
+    assertEquals("list", pkg.getAttribute("type"));
+    // Restock alert condition
+    Element ifEl = (Element) doc.getElementsByTagName("if").item(0);
+    assertEquals("quantity < reorderPoint", ifEl.getAttribute("condition"));
+    // Tracking number pattern
+    assertNotNull(first(doc, "key", "name", "trackingNumber"));
+    // Assertions
+    assertEquals(2, doc.getElementsByTagName("assert").getLength());
+    assertTrue("zero manual findings", report.attention().isEmpty());
+  }
+
   private static Document convert(String input, MigrationReport report) throws Exception {
     File out = File.createTempFile("converted", ".datamimic.xml");
     out.deleteOnExit();

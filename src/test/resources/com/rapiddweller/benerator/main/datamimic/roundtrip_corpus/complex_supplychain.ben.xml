@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ================================================================================
+  COMPLEX MIGRATION DEMO 4: Supply Chain & Inventory Management
+  ================================================================================
+  Models a multi-warehouse inventory and shipment tracking system. Products are
+  stocked across warehouses, orders are fulfilled, and shipments tracked with
+  FIFO (first-in-first-out) distribution. Restock alerts trigger when inventory
+  drops below reorder thresholds.
+
+  Patterns exercised:
+    - Address entity for warehouse locations
+    - Product entity (manual generation with SKUs, categories, dimensions)
+    - Memstore pipeline (warehouses → inventory → orders → shipments)
+    - Ordered distribution (FIFO inventory rotation)
+    - Conditions (restock alerts, express vs standard routing)
+    - While loops (inventory depletion simulation)
+    - Assertion idiom (stock-level compliance)
+    - Converters (SKU codes, warehouse codes to uppercase)
+    - Pattern generation (tracking numbers, lot numbers)
+    - Date bounds (manufacturing dates, expiry dates)
+    - Boolean type (hazmat flag, perishable flag)
+    - Weighted values (shipping priority, product categories)
+    - Null values (optional batch notes)
+    - Nested structures (shipment items as list-type nestedKey)
+    - Distributions (cumulated for popular products)
+  ================================================================================
+-->
+<setup
+    xmlns="https://www.benerator.de/schema/3.0.0"
+    defaultDataset="US"
+    defaultLocale="en_US">
+
+    <memstore id="store"/>
+
+    <!-- ========================================================================
+         PHASE 1: Warehouse Network
+         Address entities for locations, capacity and zone data
+         ======================================================================== -->
+    <generate type="warehouse" count="8" consumer="store">
+        <variable name="addr" generator="AddressGenerator" dataset="US"/>
+        <id name="id" type="int"/>
+        <attribute name="code" pattern="WH-[A-Z]{3}" converter="CaseConverter"/>
+        <attribute name="name" script="addr.city + ' Distribution Center'"/>
+        <attribute name="city" script="addr.city"/>
+        <attribute name="state" script="addr.state"/>
+        <attribute name="country" script="addr.country"/>
+        <attribute name="zone" values="'East','Central','West','South'"/>
+        <attribute name="capacity" type="int" min="5000" max="50000"/>
+        <attribute name="hasColdStorage" type="boolean"/>
+        <attribute name="isActive" type="boolean"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 2: Product Catalog
+         SKUs, categories, dimensions, hazmat/perishable flags
+         ======================================================================== -->
+    <generate type="product" count="40" consumer="store">
+        <id name="id" type="int"/>
+        <attribute name="sku" pattern="[A-Z]{3}-[0-9]{5}" converter="CaseConverter"/>
+        <attribute name="name"
+            values="'Industrial Bearing 6205','LED Panel Light 60W',
+                   'Stainless Steel Bolt M10','Hydraulic Hose 1/2in',
+                   'Circuit Board Rev3','Aluminum Sheet 2mm',
+                   'Safety Goggles ANSI','Welding Rod E6011',
+                   'Conveyor Belt Segment','Pressure Gauge 0-100psi'"/>
+        <attribute name="category"
+            values="'Bearings'^20,'Electrical'^18,'Fasteners'^16,'Hydraulics'^14,'Electronics'^12,'Raw Materials'^10,'Safety'^6,'Welding'^4"/>
+        <attribute name="unitPrice" type="double" min="0.50" max="5000" granularity="0.01"/>
+        <attribute name="weightKg" type="double" min="0.1" max="250" granularity="0.1"/>
+        <attribute name="isHazmat" type="boolean"/>
+        <attribute name="isPerishable" type="boolean"/>
+        <attribute name="reorderPoint" type="int" min="10" max="200"/>
+        <attribute name="leadTimeDays" type="int" min="1" max="45"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 3: Inventory Stock Levels
+         Cross-references warehouses and products. Tracks quantities with
+         manufacturing/expiry dates for FIFO rotation.
+         ======================================================================== -->
+    <generate type="inventory" count="80" consumer="store">
+        <variable name="wh" source="store" type="warehouse"
+            distribution="random" cyclic="true"/>
+        <variable name="prod" source="store" type="product"
+            distribution="cumulated" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="warehouseId" script="wh.id"/>
+        <attribute name="warehouseCode" script="wh.code"/>
+        <attribute name="zone" script="wh.zone"/>
+        <attribute name="sku" script="prod.sku"/>
+        <attribute name="productName" script="prod.name"/>
+        <attribute name="category" script="prod.category"/>
+        <attribute name="quantity" type="int" min="0" max="500"/>
+        <attribute name="reorderPoint" script="prod.reorderPoint"/>
+        <attribute name="lotNumber" pattern="LOT-[0-9]{6}"/>
+        <attribute name="manufacturedDate" type="date" min="2023-01-01" max="2025-12-31"/>
+        <attribute name="expiryDate" type="date" min="2025-01-01" max="2028-12-31"/>
+
+        <!-- Condition: stock below reorder point triggers restock alert -->
+        <if test="quantity &lt; reorderPoint">
+            <then>
+                <attribute name="restockAlert" constant="true"/>
+                <attribute name="restockQty" script="reorderPoint * 3 - quantity"/>
+            </then>
+            <else>
+                <attribute name="restockAlert" constant="false"/>
+                <attribute name="restockQty" type="int" constant="0"/>
+            </else>
+        </if>
+
+        <!-- Condition: hazmat AND perishable needs special handling -->
+        <if test="prod.isHazmat == True &amp;&amp; prod.isPerishable == True">
+            <then>
+                <attribute name="storageClass" constant="HAZMAT-REFRIGERATED"/>
+            </then>
+            <else>
+                <if test="prod.isHazmat == True">
+                    <then>
+                        <attribute name="storageClass" constant="HAZMAT"/>
+                    </then>
+                    <else>
+                        <if test="prod.isPerishable == True">
+                            <then>
+                                <attribute name="storageClass" constant="REFRIGERATED"/>
+                            </then>
+                            <else>
+                                <attribute name="storageClass" constant="STANDARD"/>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 4: Order Fulfillment
+         Orders draw from inventory with FIFO (ordered) distribution.
+         Nested shipment items per order.
+         ======================================================================== -->
+    <generate type="order" count="50" consumer="store">
+        <variable name="inv" source="store" type="inventory"
+            distribution="ordered"/>
+        <id name="id" type="int"/>
+        <attribute name="orderRef" pattern="ORD-[0-9]{8}"/>
+        <attribute name="warehouseCode" script="inv.warehouseCode"/>
+        <attribute name="zone" script="inv.zone"/>
+        <attribute name="productSku" script="inv.sku"/>
+        <attribute name="productName" script="inv.productName"/>
+        <attribute name="lotNumber" script="inv.lotNumber"/>
+        <attribute name="qty" type="int" min="1" max="50"/>
+        <attribute name="unitPrice" script="inv.reorderPoint * 0"/>
+        <attribute name="totalValue" script="0.0"/>
+        <attribute name="orderedDate" type="date" min="2025-01-01" max="2026-06-01"/>
+
+        <!-- While loop: deplete inventory (simplified) -->
+        <attribute name="remaining" script="qty"/>
+        <attribute name="picked" type="int" constant="0"/>
+        <while test="remaining &gt; 0 &amp;&amp; picked &lt; 10">
+            <attribute name="remaining" script="remaining - 5"/>
+            <attribute name="picked" script="picked + 1"/>
+        </while>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 5: Shipment Tracking
+         Multi-item shipments with tracking numbers, carrier selection,
+         and conditional express routing.
+         ======================================================================== -->
+    <generate type="shipment" count="30" consumer="store">
+        <variable name="ord" source="store" type="order"
+            distribution="ordered"/>
+        <id name="id" type="int"/>
+        <attribute name="orderRef" script="ord.orderRef"/>
+        <attribute name="trackingNumber" pattern="1Z[A-Z0-9]{16}"/>
+        <attribute name="carrier"
+            values="'UPS','FedEx','DHL','USPS'"/>
+        <attribute name="origin" script="ord.warehouseCode"/>
+        <attribute name="weightKg" type="double" min="0.5" max="500" granularity="0.1"/>
+        <attribute name="shipDate" type="date" min="2025-01-02" max="2026-06-15"/>
+        <attribute name="estimatedDelivery" type="date" min="2025-01-05" max="2026-06-30"/>
+
+        <!-- Conditional: express (>100kg or specific carriers) vs standard -->
+        <if test="weightKg &gt; 100 || carrier == 'FedEx'">
+            <then>
+                <attribute name="serviceLevel" constant="EXPRESS"/>
+                <attribute name="shippingCost" script="weightKg * 2.5"/>
+            </then>
+            <else>
+                <attribute name="serviceLevel" constant="STANDARD"/>
+                <attribute name="shippingCost" script="weightKg * 1.2"/>
+            </else>
+        </if>
+
+        <!-- Nested list: shipment items (1-4 packages per shipment) -->
+        <part name="packages" minCount="1" maxCount="4">
+            <attribute name="packageId" pattern="PKG-[0-9]{4}"/>
+            <attribute name="weight" type="double" min="0.5" max="50" granularity="0.1"/>
+            <attribute name="isFragile" type="boolean"/>
+        </part>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 6: Supply Chain Dashboard
+         Inventory health, order status, shipment tracking
+         ======================================================================== -->
+    <generate type="dashboard" count="8" consumer="ConsoleExporter">
+        <variable name="ship" source="store" type="shipment"
+            distribution="ordered"/>
+        <attribute name="tracking" script="ship.trackingNumber"/>
+        <attribute name="carrier" script="ship.carrier"/>
+        <attribute name="service" script="ship.serviceLevel"/>
+        <attribute name="cost" script="ship.shippingCost"/>
+        <attribute name="origin" script="ship.origin"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 7: Compliance Assertions
+         ======================================================================== -->
+    <generate type="compliance" count="1" consumer="ConsoleExporter">
+        <attribute name="checkId" constant="supply-chain-audit-v1"/>
+        <attribute name="expectedProducts" type="int" constant="40"/>
+        <attribute name="expectedInventory" type="int" constant="80"/>
+        <attribute name="expectedOrders" type="int" constant="50"/>
+        <if test="expectedProducts != 40">
+            <error>Product count mismatch in supply chain audit</error>
+        </if>
+        <if test="expectedOrders != 50">
+            <error>Order count mismatch in supply chain audit</error>
+        </if>
+    </generate>
+
+</setup>

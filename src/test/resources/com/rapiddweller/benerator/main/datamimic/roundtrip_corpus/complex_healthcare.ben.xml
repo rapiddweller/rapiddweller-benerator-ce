@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ================================================================================
+  COMPLEX MIGRATION DEMO 2: Healthcare Claims Processing
+  ================================================================================
+  A realistic medical claims pipeline. Benerator users build patient registries,
+  procedure catalogs, and claims workflows from scratch — Person entities for
+  patient names, patterns for medical codes, conditions for claim adjudication.
+  DataMimic CE natively adds Patient, Doctor, MedicalProcedure entities post-migration.
+
+  Patterns exercised:
+    - Person/Address entities for patient and provider names
+    - Nested list-type structures (diagnosis codes per claim)
+    - Weighted values (claim outcomes with probability weights)
+    - Conditions (claim approval logic with or/and operators)
+    - Memstore pipeline (patient registry → claims processing)
+    - Assertion idiom (compliance checks)
+    - Converters (diagnosis codes → uppercase, dates)
+    - DataFaker generators (patient contact info)
+    - Ordered distribution (triage priority ordering)
+    - Boolean type (pre-existing condition flag)
+    - Date bounds (admission/discharge dates)
+    - While loop (deductible tracking)
+    - Null values (optional procedure notes)
+  ================================================================================
+-->
+<setup
+    xmlns="https://www.benerator.de/schema/3.0.0"
+    defaultDataset="US"
+    defaultLocale="en_US">
+
+    <memstore id="store"/>
+
+    <!-- ========================================================================
+         PHASE 1: Patient Registry
+         Person entity for demographics, nested medical history
+         ======================================================================== -->
+    <generate type="patient" count="25" consumer="store">
+        <variable name="person" generator="PersonGenerator" dataset="US"/>
+        <variable name="addr" generator="AddressGenerator" dataset="US"/>
+        <id name="id" type="int"/>
+        <!-- Generate an MRN-like identifier -->
+        <attribute name="mrn" pattern="MRN-[0-9]{8}"/>
+        <attribute name="fullName" script="person.givenName + ' ' + person.familyName"/>
+        <attribute name="gender" script="person.gender"/>
+        <!-- Age range typical for healthcare: 18-90 -->
+        <attribute name="age" type="int" min="18" max="90"/>
+        <!-- Weighted blood types -->
+        <attribute name="bloodType"
+            values="'O+'^37,'A+'^33,'B+'^18,'AB+'^5,'O-'^4,'A-'^2,'B-'^1"/>
+        <attribute name="hasPreExisting" type="boolean"/>
+        <attribute name="city" script="addr.city"/>
+        <attribute name="state" script="addr.state"/>
+
+        <!-- Nested list: 0-4 diagnosis codes per patient -->
+        <part name="diagnoses" minCount="0" maxCount="4">
+            <attribute name="code" pattern="[A-TV-Z][0-9]{2}\.[0-9]{1,2}" converter="CaseConverter"/>
+            <attribute name="description"
+                values="'Essential hypertension','Type 2 diabetes mellitus',
+                       'Asthma, unspecified','Major depressive disorder',
+                       'Chronic kidney disease','Atrial fibrillation'"/>
+            <attribute name="diagnosedYear" type="int" min="2015" max="2025"/>
+        </part>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 2: Procedure Catalog
+         CPT-like codes with weighted categories, cost ranges, duration
+         ======================================================================== -->
+    <generate type="procedure" count="40" consumer="store">
+        <id name="id" type="int"/>
+        <attribute name="cptCode" pattern="[0-9]{5}" converter="CaseConverter"/>
+        <attribute name="name"
+            values="'Office visit, established patient',
+                   'Comprehensive metabolic panel',
+                   'Chest X-ray, 2 views',
+                   'MRI lumbar spine w/o contrast',
+                   'Colonoscopy, diagnostic',
+                   'Cataract surgery, unilateral',
+                   'Total knee arthroplasty',
+                   'Cardiac stress test',
+                   'Echocardiogram, complete',
+                   'Physical therapy evaluation'"/>
+        <!-- Weighted categories reflecting real-world distribution -->
+        <attribute name="category"
+            values="'Evaluation &amp; Management'^45,'Radiology'^18,
+                    'Surgery'^12,'Laboratory'^15,'Medicine'^10"/>
+        <attribute name="cost" type="double" min="75" max="25000" granularity="0.01"/>
+        <attribute name="durationMin" type="int" min="10" max="480"/>
+        <attribute name="isSurgical" type="boolean"/>
+        <!-- 15% null: optional note not always present -->
+        <attribute name="note" type="string" minLength="10" maxLength="50" nullQuota="0.15"/>
+        <attribute name="effectiveDate" type="date" min="2023-01-01" max="2025-12-31"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 3: Provider Registry
+         Healthcare providers with specialties and NPI-like identifiers
+         ======================================================================== -->
+    <generate type="provider" count="12" consumer="store">
+        <variable name="person" generator="PersonGenerator" dataset="US"/>
+        <id name="id" type="int"/>
+        <attribute name="npi" pattern="[0-9]{10}"/>
+        <attribute name="name" script="person.givenName + ' ' + person.familyName"/>
+        <attribute name="specialty"
+            values="'Cardiology','Dermatology','Family Medicine',
+                   'Internal Medicine','Neurology','Orthopedics',
+                   'Pediatrics','Psychiatry','Radiology','Surgery'"/>
+        <attribute name="yearsExperience" type="int" min="1" max="35"/>
+        <attribute name="acceptingPatients" type="boolean"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 4: Claims Adjudication
+         Cross-references patients, providers, and procedures via memstore.
+         Conditional approval logic simulating real payer rules.
+         ======================================================================== -->
+    <generate type="claim" count="80" consumer="store">
+        <variable name="pat" source="store" type="patient"
+            distribution="cumulated" cyclic="true"/>
+        <variable name="proc" source="store" type="procedure"
+            distribution="random" cyclic="true"/>
+        <variable name="prov" source="store" type="provider"
+            distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="claimNumber" pattern="CL-[A-Z0-9]{10}"/>
+        <attribute name="patientId" script="pat.id"/>
+        <attribute name="patientMrn" script="pat.mrn"/>
+        <attribute name="patientAge" script="pat.age"/>
+        <attribute name="providerNpi" script="prov.npi"/>
+        <attribute name="providerSpecialty" script="prov.specialty"/>
+        <attribute name="cptCode" script="proc.cptCode" converter="CaseConverter"/>
+        <attribute name="procedureName" script="proc.name"/>
+        <attribute name="billedAmount" script="proc.cost"/>
+        <attribute name="filedDate" type="date" min="2024-01-01" max="2026-07-01"/>
+
+        <!-- Adjudication logic: surgical or high-cost claims need review -->
+        <if test="proc.isSurgical == True || proc.cost &gt; 5000">
+            <then>
+                <attribute name="reviewRequired" constant="true"/>
+                <attribute name="autoApproved" constant="false"/>
+            </then>
+            <else>
+                <attribute name="reviewRequired" constant="false"/>
+                <attribute name="autoApproved" constant="true"/>
+            </else>
+        </if>
+
+        <!-- Second condition: denied if patient has pre-existing AND procedure is surgical -->
+        <if test="pat.hasPreExisting == True &amp;&amp; proc.isSurgical == True">
+            <then>
+                <attribute name="denialRisk" constant="HIGH"/>
+            </then>
+            <else>
+                <attribute name="denialRisk" constant="LOW"/>
+            </else>
+        </if>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 5: Payment Processing
+         While-loop simulates deductible/co-pay tracking for approved claims
+         ======================================================================== -->
+    <generate type="payment" count="40" consumer="store">
+        <variable name="cl" source="store" type="claim"
+            distribution="random" cyclic="true"/>
+        <id name="id" type="int"/>
+        <attribute name="claimNumber" script="cl.claimNumber"/>
+        <attribute name="billedAmount" script="cl.billedAmount"/>
+        <attribute name="deductible" type="double" min="0" max="5000" granularity="100"/>
+        <attribute name="remaining" script="billedAmount - deductible"/>
+        <attribute name="paid" type="double" constant="0"/>
+        <attribute name="cycles" type="int" constant="0"/>
+
+        <!-- Simulate installment payments with co-pay of $250 per cycle -->
+        <while test="remaining &gt; 0 &amp;&amp; cycles &lt; 12">
+            <attribute name="remaining" script="remaining - 250"/>
+            <attribute name="paid" script="paid + 250"/>
+            <attribute name="cycles" script="cycles + 1"/>
+        </while>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 6: Analytics Dashboard
+         Revenue by specialty, patient age distribution sample
+         ======================================================================== -->
+    <generate type="dashboard" count="8" consumer="ConsoleExporter">
+        <variable name="cl" source="store" type="claim" distribution="ordered"/>
+        <attribute name="claimId" script="cl.id"/>
+        <attribute name="specialty" script="cl.providerSpecialty"/>
+        <attribute name="procedure" script="cl.procedureName"/>
+        <attribute name="billed" script="cl.billedAmount"/>
+        <attribute name="risk" script="cl.denialRisk"/>
+        <attribute name="autoApproved" script="cl.autoApproved"/>
+    </generate>
+
+    <!-- ========================================================================
+         PHASE 7: Compliance Assertions
+         ======================================================================== -->
+    <generate type="compliance" count="1" consumer="ConsoleExporter">
+        <attribute name="checkId" constant="claims-compliance-v1"/>
+        <attribute name="expectedPatients" type="int" constant="25"/>
+        <attribute name="expectedClaims" type="int" constant="80"/>
+        <if test="expectedPatients != 25">
+            <error>Patient count mismatch in compliance check</error>
+        </if>
+        <if test="expectedClaims != 80">
+            <error>Claim count mismatch in compliance check</error>
+        </if>
+    </generate>
+
+</setup>
