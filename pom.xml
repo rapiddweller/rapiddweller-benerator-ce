@@ -150,7 +150,7 @@
         <dependency_log4j.version>2.26.1</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scriptengine_freemarker.version>2.3.32</scriptengine_freemarker.version>
-        <scriptengine_graalvm.version>22.3.1</scriptengine_graalvm.version>
+        <scriptengine_graalvm.version>25.2.4</scriptengine_graalvm.version>
         <test_junit.version>4.13.2</test_junit.version>
         <dependency_javassist.version>3.32.0-GA</dependency_javassist.version>
     </properties>
